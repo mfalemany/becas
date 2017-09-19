@@ -22,4 +22,40 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	NULL, --descripcion
 	'22'  --punto_montaje
 );
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'14', --consulta_php
+	'co_tipos_documento', --clase
+	'co_tipos_documento', --archivo_clase
+	'consultas/co_tipos_documento.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'15', --consulta_php
+	'co_paises', --clase
+	'co_paises', --archivo_clase
+	'consultas/co_paises.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'16', --consulta_php
+	'co_provincias', --clase
+	'co_provincias', --archivo_clase
+	'consultas/co_provincias.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'17', --consulta_php
+	'co_localidades', --clase
+	'co_localidades', --archivo_clase
+	'consultas/co_localidades.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
 --- FIN Grupo de desarrollo 0
