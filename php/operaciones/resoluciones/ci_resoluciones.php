@@ -2,7 +2,7 @@
 class ci_resoluciones extends becas_ci
 {
 	protected $s__datos_filtro;
-
+	protected $s__datos_resol;
 
 	//---- Filtro -----------------------------------------------------------------------
 
@@ -54,6 +54,7 @@ class ci_resoluciones extends becas_ci
 	function conf__formulario(toba_ei_formulario $form)
 	{
 		if ($this->dep('datos')->esta_cargada()) {
+			$this->s__datos_resol = $this->dep('datos')->tabla('be_resoluciones')->get();
 			$form->set_datos($this->dep('datos')->tabla('be_resoluciones')->get());
 		} else {
 			$this->pantalla()->eliminar_evento('eliminar');
@@ -64,17 +65,19 @@ class ci_resoluciones extends becas_ci
 	{
 		//asigno el nombre que le corresponde al PDF ("aÃ±o"-"mes"-"dia"-"id_tipo_resol"-"nro_resol".pdf)
 		$pdf = $datos['anio'].'-'.$datos['nro_resol'].'-'.$this->get_tipo_resol_corto($datos['id_tipo_resol']).'.pdf';
-		if (isset($datos['archivo_pdf'])) {
+		
+		//si la persona selecciona un PDF, directamente hay que asignarlo y guardarlo
+		if ($datos['archivo_pdf'] != NULL) {
 			$img = toba::proyecto()->get_www()['path']."/resoluciones/".$pdf;
 			move_uploaded_file($datos['archivo_pdf']['tmp_name'], $img);
 			$datos['archivo_pdf'] = $pdf;
 		}else{
-			//si el archivo llega NULL, puede ser porque no se eligió, o porque no se modificó el que ya existía (en ese caso, si ya existe, hay que ajustar el nombre)
-			$viejo = toba::consulta_php('co_resoluciones')->get_archivo_pdf($datos['anio'],$datos['nro_resol'],$datos['id_tipo_resol']);
-			if(file_exists(toba::proyecto()->get_www()['path']."/resoluciones/".$viejo)){
-				rename(toba::proyecto()->get_www()['path']."/resoluciones/".$viejo,toba::proyecto()->get_www()['path']."/resoluciones/".$pdf);
-			}
-		}
+			//se cumple cuando se cargó un archivo pero no se modificó
+			if($this->s__datos_resol['archivo_pdf'] != NULL){
+				rename(toba::proyecto()->get_www()['path']."/resoluciones/".$this->s__datos_resol['archivo_pdf'],toba::proyecto()->get_www()['path']."/resoluciones/".$pdf);
+				$datos['archivo_pdf'] = $pdf;
+			}		
+		}	
 		$this->dep('datos')->tabla('be_resoluciones')->set($datos);
 	}
 
@@ -126,7 +129,7 @@ class ci_resoluciones extends becas_ci
 
 	function get_tipo_resol_corto($id_tipo_resol)
 	{
-		return str_replace(array(' ','.'),'',toba::consulta_php('co_tipos_resolucion')->get_nombre_corto($id_tipo_resol));
+		return strtolower(str_replace(array(' ','.'),'',toba::consulta_php('co_tipos_resolucion')->get_nombre_corto($id_tipo_resol)));
 	}
 
 	//---- EVENTOS CI -------------------------------------------------------------------

@@ -7,7 +7,7 @@ class co_tipos_resolucion{
 			t_btr.tipo_resol,
 			t_btr.tipo_resol_corto
 		FROM
-			be_tipos_resolucion as t_btr
+			tipos_resolucion as t_btr
 		ORDER BY tipo_resol";
 		return toba::db('becas')->consultar($sql);
 	}
@@ -17,7 +17,7 @@ class co_tipos_resolucion{
 		$sql = "SELECT
 			t_btr.tipo_resol_corto
 		FROM
-			be_tipos_resolucion as t_btr
+			tipos_resolucion as t_btr
 		WHERE id_tipo_resol = $id_tipo_resol";
 		$resultado = toba::db('becas')->consultar_fila($sql);
 		return $resultado['tipo_resol_corto'];

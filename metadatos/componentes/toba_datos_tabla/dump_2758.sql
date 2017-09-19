@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2758]--  be_resoluciones 
+--[2758]--  DT - resoluciones 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'be_resoluciones', --nombre
+	'DT - resoluciones', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -49,19 +49,19 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'2758', --objeto
 	NULL, --max_registros
 	NULL, --min_registros
-	NULL, --punto_montaje
+	'22', --punto_montaje
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'be_resoluciones', --tabla
+	'resoluciones', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
-	NULL, --modificar_claves
+	'0', --modificar_claves
 	'becas', --fuente_datos_proyecto
 	'becas', --fuente_datos
 	'1', --permite_actualizacion_automatica
 	NULL, --esquema
-	NULL  --esquema_ext
+	'public'  --esquema_ext
 );
 
 ------------------------------------------------------------
@@ -72,71 +72,71 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2758', --objeto
-	'1201', --col_id
+	'1206', --col_id
 	'nro_resol', --columna
 	'E', --tipo
 	'1', --pk
-	NULL, --secuencia
+	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'1', --no_nulo_db
+	'0', --externa
+	'resoluciones'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2758', --objeto
-	'1202', --col_id
+	'1207', --col_id
 	'anio', --columna
 	'E', --tipo
 	'1', --pk
-	NULL, --secuencia
+	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'1', --no_nulo_db
+	'0', --externa
+	'resoluciones'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2758', --objeto
-	'1203', --col_id
+	'1208', --col_id
 	'fecha', --columna
 	'F', --tipo
-	NULL, --pk
-	NULL, --secuencia
+	'0', --pk
+	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'0', --no_nulo_db
+	'0', --externa
+	'resoluciones'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2758', --objeto
-	'1204', --col_id
+	'1209', --col_id
 	'archivo_pdf', --columna
 	'C', --tipo
-	NULL, --pk
-	NULL, --secuencia
-	NULL, --largo
+	'0', --pk
+	'', --secuencia
+	'100', --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'0', --no_nulo_db
+	'0', --externa
+	'resoluciones'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2758', --objeto
-	'1205', --col_id
+	'1210', --col_id
 	'id_tipo_resol', --columna
-	'C', --tipo
-	NULL, --pk
-	NULL, --secuencia
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'0', --no_nulo_db
+	'0', --externa
+	'resoluciones'  --tabla
 );
 --- FIN Grupo de desarrollo 0
