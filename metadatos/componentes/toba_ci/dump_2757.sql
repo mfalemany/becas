@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_tipos_de_resolucion', --subclase
-	'operaciones/tipos_de_resolucion/ci_tipos_de_resolucion.php', --subclase_archivo
+	'opciones/documentos/tipos_de_resolucion/ci_tipos_de_resolucion.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Tipos de Resolucion - CI', --nombre

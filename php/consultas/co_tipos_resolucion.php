@@ -23,5 +23,11 @@ class co_tipos_resolucion{
 		return $resultado['tipo_resol_corto'];
 	}
 
+	function get_descripciones()
+	{
+		$sql = "SELECT id_tipo_resol, tipo_resol FROM tipos_resolucion ORDER BY tipo_resol";
+		return toba::db('becas')->consultar($sql);
+	}
+
 }
 ?>

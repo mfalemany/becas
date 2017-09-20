@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[3592]--  Operaciones 
+--[3592]--  Opciones 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,12 +23,12 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Operaciones', --nombre
+	'Opciones', --nombre
 	NULL, --descripcion
 	NULL, --punto_montaje
 	NULL, --actividad_accion
 	'1', --menu
-	NULL, --orden
+	'70', --orden
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obs_tipo_proyecto
 	NULL, --solicitud_obs_tipo

@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_paises', --subclase
-	'operaciones/paises/ci_paises.php', --subclase_archivo
+	'opciones/lugares/paises/ci_paises.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Paises - CI', --nombre

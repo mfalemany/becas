@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_tipos_de_documento', --subclase
-	'operaciones/tipos_de_documento/ci_tipos_de_documento.php', --subclase_archivo
+	'opciones/tipos_de_documento/ci_tipos_de_documento.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Tipos de Documento - CI', --nombre

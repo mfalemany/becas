@@ -17,15 +17,15 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_cambiar_clave', --subclase
-	'operaciones/modificar_mis_datos/ci_cambiar_clave.php', --subclase_archivo
+	'opciones/modificar_mis_datos/ci_cambiar_clave.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Cambiar mi clave', --nombre
 	'Modificación de datos personales', --titulo
 	'0', --colapsable
 	NULL, --descripcion
-	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	NULL, --fuente_datos_proyecto
+	NULL, --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion

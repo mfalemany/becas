@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ei_formulario', --clase
 	'22', --punto_montaje
 	'form_cambio_clave', --subclase
-	'operaciones/modificar_mis_datos/form_cambio_clave.php', --subclase_archivo
+	'opciones/modificar_mis_datos/form_cambio_clave.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Cambiar mi clave - form_cambio_clave', --nombre

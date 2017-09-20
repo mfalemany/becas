@@ -477,8 +477,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'get_descripciones', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
-	'2753', --carga_dt
-	NULL, --carga_consulta_php
+	NULL, --carga_dt
+	'13', --carga_consulta_php
 	NULL, --carga_sql
 	'becas', --carga_fuente
 	NULL, --carga_lista

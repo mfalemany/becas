@@ -23,5 +23,11 @@ class co_paises
 		return toba::db('becas')->consultar($sql);
 	}
 
+	function get_descripciones()
+	{
+		$sql = "SELECT id_pais, pais FROM paises ORDER BY pais";
+		return toba::db('becas')->consultar($sql);
+	}
+
 }
 ?>

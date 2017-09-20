@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_resoluciones', --subclase
-	'operaciones/resoluciones/ci_resoluciones.php', --subclase_archivo
+	'opciones/documentos/resoluciones/ci_resoluciones.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Resoluciones - CI', --nombre
