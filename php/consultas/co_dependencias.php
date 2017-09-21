@@ -31,19 +31,14 @@ class co_dependencias
 		return toba::db('becas')->consultar($sql);
 	}
 
-	//retorna las dependencias que NO tiene asignada una determinada carrera
-	function dep_disponibles_carrera($id_carrera = NULL)
+	function get_univ_dependencias()
 	{
-		$sql = "SELECT dep.id_dependencia
+		$sql = "SELECT dep.id_dependencia, uni.sigla||' - '||dep.nombre as nombre
 				FROM dependencias AS dep
-				LEFT JOIN universidades AS uni ON uni.id_universidad = dep.id_universidad";
-		if($id_carrera){
-			$sql .= " WHERE NOT EXISTS (SELECT * 
-									   FROM carrera_dependencia 
-									   WHERE id_carrera = $id_carrera 
-									   AND id_dependencia = dep.id_dependencia)";
-		}
+				LEFT JOIN universidades AS uni ON uni.id_universidad = dep.id_universidad
+				ORDER BY nombre";
 		return toba::db('becas')->consultar($sql);
+
 	}
 
 }
