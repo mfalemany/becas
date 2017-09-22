@@ -85,4 +85,49 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	NULL, --descripcion
 	'22'  --punto_montaje
 );
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'21', --consulta_php
+	'co_niveles_academicos', --clase
+	'co_niveles_academicos', --archivo_clase
+	'consultas/co_niveles_academicos.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'22', --consulta_php
+	'co_personas', --clase
+	'co_personas', --archivo_clase
+	'consultas/co_personas.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'23', --consulta_php
+	'co_areas_dependencia', --clase
+	'co_areas_dependencia', --archivo_clase
+	'consultas/co_areas_dependencia.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'24', --consulta_php
+	'co_categorias_incentivos', --clase
+	'co_categorias_incentivos', --archivo_clase
+	'consultas/co_categorias_incentivos.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'25', --consulta_php
+	'co_docentes', --clase
+	'co_docentes', --archivo_clase
+	'consultas/co_docentes.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
 --- FIN Grupo de desarrollo 0

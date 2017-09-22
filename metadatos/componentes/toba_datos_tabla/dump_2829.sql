@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2769]--  tipo_documento 
+--[2829]--  categorias_incentivos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,7 +9,7 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'becas', --proyecto
-	'2769', --objeto
+	'2829', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'tipo_documento', --nombre
+	'categorias_incentivos', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -36,7 +36,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2017-09-19 09:44:22', --creacion
+	'2017-09-22 11:24:57', --creacion
 	NULL  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
@@ -46,14 +46,14 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 ------------------------------------------------------------
 INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, min_registros, punto_montaje, ap, ap_clase, ap_archivo, tabla, tabla_ext, alias, modificar_claves, fuente_datos_proyecto, fuente_datos, permite_actualizacion_automatica, esquema, esquema_ext) VALUES (
 	'becas', --objeto_proyecto
-	'2769', --objeto
+	'2829', --objeto
 	NULL, --max_registros
 	NULL, --min_registros
 	'22', --punto_montaje
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'tipo_documento', --tabla
+	'categorias_incentivos', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
@@ -71,12 +71,12 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
-	'2769', --objeto
-	'1214', --col_id
-	'id_tipo_doc', --columna
+	'2829', --objeto
+	'1257', --col_id
+	'id_cat_incentivos', --columna
 	'E', --tipo
 	'1', --pk
-	'be_tipo_documento_id_tipo_doc_seq', --secuencia
+	'be_categorias_incentivos_id_cat_incentivos_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	NULL, --no_nulo_db
@@ -85,9 +85,23 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
-	'2769', --objeto
-	'1215', --col_id
-	'tipo_doc', --columna
+	'2829', --objeto
+	'1258', --col_id
+	'nro_categoria', --columna
+	'E', --tipo
+	NULL, --pk
+	NULL, --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	NULL, --no_nulo_db
+	NULL, --externa
+	NULL  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2829', --objeto
+	'1259', --col_id
+	'categoria', --columna
 	'C', --tipo
 	NULL, --pk
 	NULL, --secuencia

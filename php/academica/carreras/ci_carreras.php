@@ -71,38 +71,10 @@ class ci_carreras extends becas_ci
 		}
 	}
 
-	/*function evt__ml_carrera_dependencia__modificacion($datos)
+	function evt__ml_carrera_dependencia__modificacion($datos)
 	{
-		foreach($datos as $clave => $registro){
-			if($registro['apex_ei_analisis_fila'] == 'A'){
-
-			}
-			if($registro['apex_ei_analisis_fila'] == 'M'){
-				
-			}
-			if($registro['apex_ei_analisis_fila'] == 'B'){
-				
-			}
-		}
-		
-		
-	}*/
-	function evt__ml_carrera_dependencia__registro_alta($registro, $id)
-    {
-        $this->dep('datos')->tabla('carrera_dependencia')->nueva_fila($registro);
-
-    }
-
-    function evt__ml_carrera_dependencia__registro_baja($id)
-    {
-        $this->dep('datos')->tabla('carrera_dependencia')->eliminar_fila($id);
-    }
-
-    function evt__ml_carrera_dependencia__registro_modificacion($reg, $id)
-    {
-    	//para permitir esta modificacion, en Toba_editor debe estar tildado "Permitir mod. de claves" en el datos_tabla
-        $this->dep('datos')->tabla('carrera_dependencia')->modificar_fila($id,array('id_dependencia'=>$reg['id_dependencia']));
-    }
+		$this->dep('datos')->tabla('carrera_dependencia')->procesar_filas($datos);
+	}
 
 	//---- EVENTOS CI -------------------------------------------------------------------
 

@@ -2,3 +2,17 @@
 	padding: 4px 0px 4px 5px;
 	font: 1.1em;
 }
+.ei-cuadro-col-tit{
+	text-align:center;
+	font-weight: bold;
+	padding: 4px 0px 4px 0px;
+}
+.barra-superior-tit{
+	text-align: center;
+}
+.item-barra{
+	width: 100%;
+	font-size: 1.3em;
+	text-shadow: 0px 0px 2px #222;
+}
+
