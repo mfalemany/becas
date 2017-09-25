@@ -36,7 +36,11 @@ class ci_docentes extends becas_ci
 
 	function evt__cuadro__seleccion($datos)
 	{
-		$this->dep('datos')->cargar($datos);
+		$this->dep('datos')->cargar(
+			array('id_tipo_doc' => $datos['id_tipo_doc'] , 'nro_documento' => $datos['nro_documento'])
+		);
+
+
 		$this->set_pantalla('pant_edicion');
 	}
 
@@ -84,6 +88,11 @@ class ci_docentes extends becas_ci
 	{
 		$this->dep('datos')->sincronizar();
 		$this->resetear();
+	}
+
+	function datos()
+	{
+		return $this->dep('datos');
 	}
 
 }

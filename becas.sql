@@ -985,16 +985,38 @@ ALTER SEQUENCE motivos_baja_id_motivo_baja_seq OWNED BY motivos_baja.id_motivo_b
 
 
 --
--- Name: nivel_posgrado; Type: TABLE; Schema: public; Owner: postgres
+-- Name: niveles_academicos; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE nivel_posgrado (
-    id_nivel_posgrado numeric(2,0) NOT NULL,
-    nivel_posgrado character varying(50)
+CREATE TABLE niveles_academicos (
+    nivel_academico character varying(50) NOT NULL,
+    orden numeric(2,0) NOT NULL,
+    id_nivel_academico smallint NOT NULL
 );
 
 
-ALTER TABLE nivel_posgrado OWNER TO postgres;
+ALTER TABLE niveles_academicos OWNER TO postgres;
+
+--
+-- Name: niveles_academicos_id_nivel_academico_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE niveles_academicos_id_nivel_academico_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE niveles_academicos_id_nivel_academico_seq OWNER TO postgres;
+
+--
+-- Name: niveles_academicos_id_nivel_academico_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE niveles_academicos_id_nivel_academico_seq OWNED BY niveles_academicos.id_nivel_academico;
+
 
 --
 -- Name: personas; Type: TABLE; Schema: public; Owner: postgres
@@ -1013,7 +1035,7 @@ CREATE TABLE personas (
     id_localidad smallint,
     id_provincia smallint,
     id_pais smallint,
-    id_nivel_posgrado numeric(2,0)
+    id_nivel_academico smallint
 );
 
 
@@ -1148,6 +1170,13 @@ ALTER TABLE ONLY localidades ALTER COLUMN id_localidad SET DEFAULT nextval('be_l
 
 
 --
+-- Name: id_nivel_academico; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY niveles_academicos ALTER COLUMN id_nivel_academico SET DEFAULT nextval('niveles_academicos_id_nivel_academico_seq'::regclass);
+
+
+--
 -- Name: id_provincia; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1187,6 +1216,528 @@ ALTER TABLE ONLY tipos_resolucion ALTER COLUMN id_tipo_resol SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY universidades ALTER COLUMN id_universidad SET DEFAULT nextval('be_universidades_id_universidad_seq'::regclass);
+
+
+--
+-- Data for Name: area_conocimiento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY area_conocimiento (id_area_conocimiento, area_conocimiento) FROM stdin;
+\.
+
+
+--
+-- Data for Name: areas_dependencia; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY areas_dependencia (id_area, area, id_dependencia) FROM stdin;
+1	Departamento de Matemática	1
+2	Departamento de Ingeniería Aplicada	6
+\.
+
+
+--
+-- Data for Name: avance_beca; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY avance_beca (id_avance, fecha, tipo_avance, nro_documento, id_tipo_doc, id_convocatoria, id_categoria, id_resultado, observaciones) FROM stdin;
+\.
+
+
+--
+-- Data for Name: baja_becas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY baja_becas (nro_documento_titular, id_tipo_doc_titular, id_convocatoria_titular, id_categoria_titular, nro_documento_suplente, id_tipo_doc_suplente, id_convocatoria_suplente, id_categoria_suplente, fecha_baja, id_motivo_baja, observaciones) FROM stdin;
+\.
+
+
+--
+-- Name: be_area_conocimiento_id_area_conocimiento_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_area_conocimiento_id_area_conocimiento_seq', 1, false);
+
+
+--
+-- Name: be_areas_dependencia_id_area_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_areas_dependencia_id_area_seq', 2, true);
+
+
+--
+-- Name: be_avance_beca_id_avance_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_avance_beca_id_avance_seq', 1, false);
+
+
+--
+-- Name: be_cargos_docente_id_cargo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_cargos_docente_id_cargo_seq', 1, false);
+
+
+--
+-- Name: be_cargos_unne_id_cargo_unne_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_cargos_unne_id_cargo_unne_seq', 1, false);
+
+
+--
+-- Name: be_carreras_id_carrera_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_carreras_id_carrera_seq', 1, true);
+
+
+--
+-- Name: be_cat_conicet_docente_id_cat_conicet_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_cat_conicet_docente_id_cat_conicet_seq', 1, false);
+
+
+--
+-- Name: be_categoria_beca_id_categoria_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_categoria_beca_id_categoria_seq', 1, false);
+
+
+--
+-- Name: be_categorias_incentivos_id_cat_incentivos_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_categorias_incentivos_id_cat_incentivos_seq', 5, true);
+
+
+--
+-- Name: be_convocatoria_beca_id_convocatoria_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_convocatoria_beca_id_convocatoria_seq', 1, false);
+
+
+--
+-- Name: be_dedicacion_id_dedicacion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_dedicacion_id_dedicacion_seq', 1, false);
+
+
+--
+-- Name: be_dependencias_id_dependencia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_dependencias_id_dependencia_seq', 6, true);
+
+
+--
+-- Name: be_localidades_id_localidad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_localidades_id_localidad_seq', 7, true);
+
+
+--
+-- Name: be_paises_id_pais_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_paises_id_pais_seq', 1, false);
+
+
+--
+-- Name: be_provincias_id_provincia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_provincias_id_provincia_seq', 13, true);
+
+
+--
+-- Name: be_resultado_avance_id_resultado_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_resultado_avance_id_resultado_seq', 1, false);
+
+
+--
+-- Name: be_tipo_cumpl_obligacion_id_tipo_cumpl_oblig_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_tipo_cumpl_obligacion_id_tipo_cumpl_oblig_seq', 1, false);
+
+
+--
+-- Name: be_tipo_documento_id_tipo_doc_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_tipo_documento_id_tipo_doc_seq', 5, true);
+
+
+--
+-- Name: be_tipos_resolucion_id_tipo_resol_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_tipos_resolucion_id_tipo_resol_seq', 4, true);
+
+
+--
+-- Name: be_universidades_id_universidad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('be_universidades_id_universidad_seq', 4, true);
+
+
+--
+-- Data for Name: becas_otorgadas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY becas_otorgadas (nro_resol, anio, nro_documento, id_tipo_doc, id_convocatoria, id_categoria, fecha_desde, fecha_hasta, fecha_toma_posesion) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cargos_docente; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY cargos_docente (id_dependencia, id_dedicacion, id_cargo_unne, legajo, id_cargo) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cargos_unne; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY cargos_unne (cargo, id_cargo_unne) FROM stdin;
+\.
+
+
+--
+-- Data for Name: carrera_dependencia; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY carrera_dependencia (id_dependencia, id_carrera) FROM stdin;
+5	1
+6	1
+\.
+
+
+--
+-- Data for Name: carreras; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY carreras (id_carrera, carrera, cod_araucano) FROM stdin;
+1	Ingenieria Agronómica	102
+\.
+
+
+--
+-- Data for Name: cat_conicet_docente; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY cat_conicet_docente (id_cat_conicet, legajo, id_dependencia) FROM stdin;
+\.
+
+
+--
+-- Data for Name: categoria_beca; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY categoria_beca (id_categoria, categoria, duracion_meses, meses_present_avance) FROM stdin;
+\.
+
+
+--
+-- Data for Name: categorias_conicet; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY categorias_conicet (id_cat_conicet, nro_categoria, categoria) FROM stdin;
+\.
+
+
+--
+-- Name: categorias_conicet_id_cat_conicet_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('categorias_conicet_id_cat_conicet_seq', 1, false);
+
+
+--
+-- Data for Name: categorias_incentivos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY categorias_incentivos (id_cat_incentivos, nro_categoria, categoria) FROM stdin;
+1	1	Categoría I
+2	2	Categoría II
+3	3	Categoría III
+4	4	Categoría IV
+5	5	Categoría V
+\.
+
+
+--
+-- Data for Name: comision_asesora; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY comision_asesora (id_area_conocimiento, id_convocatoria) FROM stdin;
+\.
+
+
+--
+-- Data for Name: convocatoria_beca; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY convocatoria_beca (id_convocatoria, convocatoria) FROM stdin;
+\.
+
+
+--
+-- Data for Name: convocatoria_categoria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY convocatoria_categoria (id_convocatoria, id_categoria, fecha_desde, fecha_hasta, cupo_maximo, color_carpeta) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cumplimiento_obligacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY cumplimiento_obligacion (id_tipo_doc, nro_documento, mes, anio, id_tipo_cumpl_oblig, fecha_cumplimiento) FROM stdin;
+\.
+
+
+--
+-- Data for Name: dedicacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY dedicacion (dedicacion, id_dedicacion) FROM stdin;
+\.
+
+
+--
+-- Data for Name: dependencias; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad) FROM stdin;
+1	Facultad de Ciencias Agrarias	FCA	1
+2	Facultad de Ciencias Exactas, Naturales y Agrimensura	FACENA	1
+3	Facultad de Arquitectura	FA	2
+4	Facultad de Humanidades	FHum	3
+5	Departamento de Idiomas Modernos	DIM	1
+6	Facultad de Ingeniería	FIng	3
+\.
+
+
+--
+-- Data for Name: direccion_beca; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY direccion_beca (legajo, nro_documento, id_tipo_doc, id_convocatoria, tipo, id_categoria) FROM stdin;
+\.
+
+
+--
+-- Data for Name: docentes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos) FROM stdin;
+32405039	1	1	2
+55241374	1	2	1
+\.
+
+
+--
+-- Data for Name: inscripcion_conv_beca; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, id_categoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones) FROM stdin;
+\.
+
+
+--
+-- Data for Name: integrante_comision_asesora; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY integrante_comision_asesora (nro_documento, id_tipo_doc, id_convocatoria, id_area_conocimiento) FROM stdin;
+\.
+
+
+--
+-- Data for Name: localidades; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY localidades (id_provincia, id_pais, id_localidad, localidad) FROM stdin;
+1	54	1	Corrientes
+6	54	2	Lomas de Zamora
+2	54	3	Resistencia
+5	54	4	Parana
+3	54	5	Clorinda
+1	54	6	Ituzaingo
+6	54	7	Ituzaingo
+\.
+
+
+--
+-- Data for Name: motivos_baja; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY motivos_baja (id_motivo_baja, motivo_baja) FROM stdin;
+\.
+
+
+--
+-- Name: motivos_baja_id_motivo_baja_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('motivos_baja_id_motivo_baja_seq', 1, false);
+
+
+--
+-- Data for Name: niveles_academicos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY niveles_academicos (nivel_academico, orden, id_nivel_academico) FROM stdin;
+Secundario	1	3
+Pre-Grado	2	4
+Grado	3	5
+Especialización	4	6
+Maestría	5	7
+Doctorado	6	8
+Posdoctorado	7	9
+\.
+
+
+--
+-- Name: niveles_academicos_id_nivel_academico_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('niveles_academicos_id_nivel_academico_seq', 10, true);
+
+
+--
+-- Data for Name: paises; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY paises (id_pais, pais) FROM stdin;
+54	Argentina
+591	Bolivia
+595	Paraguay
+598	Uruguay
+55	Brasil
+51	Peru
+56	Chile
+57	Colombia
+593	Ecuador
+\.
+
+
+--
+-- Data for Name: personas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, celular, email, telefono, id_localidad, id_provincia, id_pais, id_nivel_academico) FROM stdin;
+31255073	1	Morales	Susana Beatriz	27-31255073-9	1984-11-23	0379-154551427	susanabeatrizmorales1@gmail.com	No tiene	4	5	54	3
+32405039	1	Alemany	Marcelo Federico	20-32405039-7	1986-07-17	0379-154844649	mfalemany@gmail.com	No tiene	1	1	54	4
+55241374	1	Alemany	Marcelo Ricardo	20-55241374-7	2016-02-16	\N	\N	\N	1	1	54	9
+\.
+
+
+--
+-- Data for Name: provincias; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY provincias (id_pais, id_provincia, provincia) FROM stdin;
+54	1	Corrientes
+54	2	Chaco
+54	3	Formosa
+54	4	Misiones
+54	5	Entre Rios
+54	6	Buenos Aires
+54	7	Santiago del Estero
+54	8	Jujuy
+54	9	Catamarca
+54	10	Santa Fe
+54	12	Mendoza
+\.
+
+
+--
+-- Data for Name: requisitos_conv_categoria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY requisitos_conv_categoria (id_convocatoria, id_categoria, id_requisito, requisito, obligatorio) FROM stdin;
+\.
+
+
+--
+-- Data for Name: resoluciones; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY resoluciones (nro_resol, anio, fecha, archivo_pdf, id_tipo_resol) FROM stdin;
+988	1993	1993-06-13	1993-988-cdfca.pdf	2
+162	2003	2017-09-18	2003-162-cdfce.pdf	3
+1	2000	2000-01-10	2000-1-cdfca.pdf	2
+161	2003	2017-09-18	2003-161-cs.pdf	1
+2	2002	2002-01-01	2002-2-cs.pdf	1
+\.
+
+
+--
+-- Data for Name: resultado_avance; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY resultado_avance (id_resultado, resultado, activo) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tipo_cumpl_obligacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tipo_cumpl_obligacion (id_tipo_cumpl_oblig, tipo_cumpl_oblig) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tipo_documento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tipo_documento (id_tipo_doc, tipo_doc) FROM stdin;
+1	DNI
+2	Pasaporte
+3	DNI Temporario
+4	Libreta Civica
+5	Libreta de Enrolamiento
+\.
+
+
+--
+-- Data for Name: tipos_resolucion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tipos_resolucion (id_tipo_resol, tipo_resol, tipo_resol_corto) FROM stdin;
+2	Consejo Directivo - Facultad de Ciencias Agrarias	C.D. F.C.A
+1	Consejo Superior	C.S.
+3	Consejo Directivo - Facultad de Ciencias Económicas	C.D. F.C.E.
+4	Consejo Directivo - Facultad de Ciencias Exactas	C.D. F.C.Ex.
+\.
+
+
+--
+-- Data for Name: universidades; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY universidades (id_universidad, universidad, id_pais, sigla) FROM stdin;
+1	Universidad Nacional del Nordeste	54	UNNE
+2	Universidad Nacional de Misiones	54	UNAM
+3	Universidad Nacional de Santiago del Estero	54	UNSE
+4	Universidad Nacional de Jujuy	54	UNJU
+\.
 
 
 --
@@ -1390,11 +1941,11 @@ ALTER TABLE ONLY motivos_baja
 
 
 --
--- Name: pk_nivel_posgrado; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pk_niveles_academicos; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY nivel_posgrado
-    ADD CONSTRAINT pk_nivel_posgrado PRIMARY KEY (id_nivel_posgrado);
+ALTER TABLE ONLY niveles_academicos
+    ADD CONSTRAINT pk_niveles_academicos PRIMARY KEY (id_nivel_academico);
 
 
 --
@@ -1483,6 +2034,14 @@ ALTER TABLE ONLY universidades
 
 ALTER TABLE ONLY provincias
     ADD CONSTRAINT uk_provincia_pais UNIQUE (id_pais, provincia);
+
+
+--
+-- Name: uq_nivel_academico; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY niveles_academicos
+    ADD CONSTRAINT uq_nivel_academico UNIQUE (nivel_academico);
 
 
 --
@@ -1766,11 +2325,11 @@ ALTER TABLE ONLY personas
 
 
 --
--- Name: fk_personas_nivel_posgrado; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_personas_nivel_academico; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY personas
-    ADD CONSTRAINT fk_personas_nivel_posgrado FOREIGN KEY (id_nivel_posgrado) REFERENCES nivel_posgrado(id_nivel_posgrado) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT fk_personas_nivel_academico FOREIGN KEY (id_nivel_academico) REFERENCES niveles_academicos(id_nivel_academico) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

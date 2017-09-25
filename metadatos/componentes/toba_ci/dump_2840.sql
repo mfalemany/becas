@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_edicion_docente', --subclase
-	'docentes/ci_edicion_docente.php', --subclase_archivo
+	'docentes/docentes/ci_edicion_docente.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Docentes - CI - ci_edicion_docente', --nombre
@@ -49,7 +49,7 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 	'2840', --objeto_mt_me
 	NULL, --ev_procesar_etiq
 	NULL, --ev_cancelar_etiq
-	'98%', --ancho
+	'90%', --ancho
 	NULL, --alto
 	NULL, --posicion_botonera
 	'tab_h', --tipo_navegacion
