@@ -130,4 +130,49 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	NULL, --descripcion
 	'22'  --punto_montaje
 );
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'26', --consulta_php
+	'co_cargos', --clase
+	'co_cargos', --archivo_clase
+	'consultas/co_cargos.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'27', --consulta_php
+	'co_dedicaciones', --clase
+	'co_dedicaciones', --archivo_clase
+	'consultas/co_dedicaciones.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'28', --consulta_php
+	'co_categorias_conicet', --clase
+	'co_categorias_conicet', --archivo_clase
+	'consultas/co_categorias_conicet.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'29', --consulta_php
+	'co_tipos_cumpl_oblig', --clase
+	'co_tipos_cumpl_oblig', --archivo_clase
+	'consultas/co_tipos_cumpl_oblig.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'30', --consulta_php
+	'co_cumplim_obligaciones', --clase
+	'co_cumplim_obligaciones', --archivo_clase
+	'consultas/co_cumplim_obligaciones.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
 --- FIN Grupo de desarrollo 0

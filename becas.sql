@@ -197,7 +197,10 @@ CREATE TABLE cargos_docente (
     id_dedicacion smallint,
     id_cargo_unne smallint,
     legajo character varying(20),
-    id_cargo smallint NOT NULL
+    id_cargo smallint NOT NULL,
+    fecha_desde date NOT NULL,
+    fecha_hasta date,
+    estado character(1) NOT NULL
 );
 
 
@@ -289,40 +292,6 @@ ALTER TABLE be_carreras_id_carrera_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE be_carreras_id_carrera_seq OWNED BY carreras.id_carrera;
-
-
---
--- Name: cat_conicet_docente; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE cat_conicet_docente (
-    id_cat_conicet smallint NOT NULL,
-    legajo character varying(20) NOT NULL,
-    id_dependencia smallint
-);
-
-
-ALTER TABLE cat_conicet_docente OWNER TO postgres;
-
---
--- Name: be_cat_conicet_docente_id_cat_conicet_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE be_cat_conicet_docente_id_cat_conicet_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE be_cat_conicet_docente_id_cat_conicet_seq OWNER TO postgres;
-
---
--- Name: be_cat_conicet_docente_id_cat_conicet_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE be_cat_conicet_docente_id_cat_conicet_seq OWNED BY cat_conicet_docente.id_cat_conicet;
 
 
 --
@@ -899,7 +868,9 @@ CREATE TABLE docentes (
     nro_documento character varying(15),
     id_tipo_doc smallint,
     legajo character varying(20) NOT NULL,
-    id_cat_incentivos smallint
+    id_cat_incentivos smallint,
+    id_cat_conicet smallint,
+    id_dependencia_conicet smallint
 );
 
 
@@ -1114,13 +1085,6 @@ ALTER TABLE ONLY carreras ALTER COLUMN id_carrera SET DEFAULT nextval('be_carrer
 
 
 --
--- Name: id_cat_conicet; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY cat_conicet_docente ALTER COLUMN id_cat_conicet SET DEFAULT nextval('be_cat_conicet_docente_id_cat_conicet_seq'::regclass);
-
-
---
 -- Name: id_categoria; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1233,6 +1197,8 @@ COPY area_conocimiento (id_area_conocimiento, area_conocimiento) FROM stdin;
 COPY areas_dependencia (id_area, area, id_dependencia) FROM stdin;
 1	Departamento de Matemática	1
 2	Departamento de Ingeniería Aplicada	6
+3	Area contable	3
+4	Departamento de Economía	4
 \.
 
 
@@ -1263,7 +1229,7 @@ SELECT pg_catalog.setval('be_area_conocimiento_id_area_conocimiento_seq', 1, fal
 -- Name: be_areas_dependencia_id_area_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_areas_dependencia_id_area_seq', 2, true);
+SELECT pg_catalog.setval('be_areas_dependencia_id_area_seq', 4, true);
 
 
 --
@@ -1277,14 +1243,14 @@ SELECT pg_catalog.setval('be_avance_beca_id_avance_seq', 1, false);
 -- Name: be_cargos_docente_id_cargo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_cargos_docente_id_cargo_seq', 1, false);
+SELECT pg_catalog.setval('be_cargos_docente_id_cargo_seq', 2, true);
 
 
 --
 -- Name: be_cargos_unne_id_cargo_unne_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_cargos_unne_id_cargo_unne_seq', 1, false);
+SELECT pg_catalog.setval('be_cargos_unne_id_cargo_unne_seq', 6, true);
 
 
 --
@@ -1292,13 +1258,6 @@ SELECT pg_catalog.setval('be_cargos_unne_id_cargo_unne_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('be_carreras_id_carrera_seq', 1, true);
-
-
---
--- Name: be_cat_conicet_docente_id_cat_conicet_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('be_cat_conicet_docente_id_cat_conicet_seq', 1, false);
 
 
 --
@@ -1326,7 +1285,7 @@ SELECT pg_catalog.setval('be_convocatoria_beca_id_convocatoria_seq', 1, false);
 -- Name: be_dedicacion_id_dedicacion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_dedicacion_id_dedicacion_seq', 1, false);
+SELECT pg_catalog.setval('be_dedicacion_id_dedicacion_seq', 3, true);
 
 
 --
@@ -1368,7 +1327,7 @@ SELECT pg_catalog.setval('be_resultado_avance_id_resultado_seq', 1, false);
 -- Name: be_tipo_cumpl_obligacion_id_tipo_cumpl_oblig_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_tipo_cumpl_obligacion_id_tipo_cumpl_oblig_seq', 1, false);
+SELECT pg_catalog.setval('be_tipo_cumpl_obligacion_id_tipo_cumpl_oblig_seq', 4, true);
 
 
 --
@@ -1404,7 +1363,9 @@ COPY becas_otorgadas (nro_resol, anio, nro_documento, id_tipo_doc, id_convocator
 -- Data for Name: cargos_docente; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY cargos_docente (id_dependencia, id_dedicacion, id_cargo_unne, legajo, id_cargo) FROM stdin;
+COPY cargos_docente (id_dependencia, id_dedicacion, id_cargo_unne, legajo, id_cargo, fecha_desde, fecha_hasta, estado) FROM stdin;
+3	3	3	12000	1	2017-09-26	2017-09-26	A
+3	3	3	12000	2	2017-09-26	\N	A
 \.
 
 
@@ -1413,6 +1374,12 @@ COPY cargos_docente (id_dependencia, id_dedicacion, id_cargo_unne, legajo, id_ca
 --
 
 COPY cargos_unne (cargo, id_cargo_unne) FROM stdin;
+Titular	1
+Suplente	2
+Adjunto	3
+Interino	4
+Jefe de Trabajos Prácticos	5
+Auxiliar de Docencia	6
 \.
 
 
@@ -1436,14 +1403,6 @@ COPY carreras (id_carrera, carrera, cod_araucano) FROM stdin;
 
 
 --
--- Data for Name: cat_conicet_docente; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY cat_conicet_docente (id_cat_conicet, legajo, id_dependencia) FROM stdin;
-\.
-
-
---
 -- Data for Name: categoria_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -1456,6 +1415,11 @@ COPY categoria_beca (id_categoria, categoria, duracion_meses, meses_present_avan
 --
 
 COPY categorias_conicet (id_cat_conicet, nro_categoria, categoria) FROM stdin;
+6	1	Investigador Asistente
+7	2	Investigador Adjunto
+8	3	Investigador Independiente
+9	4	Investigador Principal
+10	5	Investigador Superior
 \.
 
 
@@ -1463,7 +1427,7 @@ COPY categorias_conicet (id_cat_conicet, nro_categoria, categoria) FROM stdin;
 -- Name: categorias_conicet_id_cat_conicet_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('categorias_conicet_id_cat_conicet_seq', 1, false);
+SELECT pg_catalog.setval('categorias_conicet_id_cat_conicet_seq', 10, true);
 
 
 --
@@ -1508,6 +1472,7 @@ COPY convocatoria_categoria (id_convocatoria, id_categoria, fecha_desde, fecha_h
 --
 
 COPY cumplimiento_obligacion (id_tipo_doc, nro_documento, mes, anio, id_tipo_cumpl_oblig, fecha_cumplimiento) FROM stdin;
+1	32405039	8	2017	3	2017-09-26
 \.
 
 
@@ -1516,6 +1481,9 @@ COPY cumplimiento_obligacion (id_tipo_doc, nro_documento, mes, anio, id_tipo_cum
 --
 
 COPY dedicacion (dedicacion, id_dedicacion) FROM stdin;
+Simple	1
+Semi-Exclusiva	2
+Exclusiva	3
 \.
 
 
@@ -1545,9 +1513,10 @@ COPY direccion_beca (legajo, nro_documento, id_tipo_doc, id_convocatoria, tipo, 
 -- Data for Name: docentes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos) FROM stdin;
-32405039	1	1	2
-55241374	1	2	1
+COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_conicet, id_dependencia_conicet) FROM stdin;
+32405039	1	1	1	7	3
+31255073	1	12000	1	7	5
+55241374	1	2	1	10	6
 \.
 
 
@@ -1700,6 +1669,10 @@ COPY resultado_avance (id_resultado, resultado, activo) FROM stdin;
 --
 
 COPY tipo_cumpl_obligacion (id_tipo_cumpl_oblig, tipo_cumpl_oblig) FROM stdin;
+1	Personal Investigación - Apoyo
+2	Becario Interno SGCyT
+3	Becario EVC-CIN
+4	Becario UNNE-CONICET
 \.
 
 
@@ -1818,14 +1791,6 @@ ALTER TABLE ONLY carrera_dependencia
 
 ALTER TABLE ONLY carreras
     ADD CONSTRAINT pk_carreras PRIMARY KEY (id_carrera);
-
-
---
--- Name: pk_cat_conicet_docente; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY cat_conicet_docente
-    ADD CONSTRAINT pk_cat_conicet_docente PRIMARY KEY (id_cat_conicet, legajo);
 
 
 --
@@ -2141,30 +2106,6 @@ ALTER TABLE ONLY carrera_dependencia
 
 
 --
--- Name: fk_cat_conicet_docente_categorias_conicet; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY cat_conicet_docente
-    ADD CONSTRAINT fk_cat_conicet_docente_categorias_conicet FOREIGN KEY (id_cat_conicet) REFERENCES categorias_conicet(id_cat_conicet) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: fk_cat_conicet_docente_dependencias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY cat_conicet_docente
-    ADD CONSTRAINT fk_cat_conicet_docente_dependencias FOREIGN KEY (id_dependencia) REFERENCES dependencias(id_dependencia) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: fk_cat_conicet_docente_docentes; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY cat_conicet_docente
-    ADD CONSTRAINT fk_cat_conicet_docente_docentes FOREIGN KEY (legajo) REFERENCES docentes(legajo) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
 -- Name: fk_comision_asesora_area_conocimiento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2234,6 +2175,22 @@ ALTER TABLE ONLY direccion_beca
 
 ALTER TABLE ONLY direccion_beca
     ADD CONSTRAINT fk_direccion_beca_inscripcion_conv_beca FOREIGN KEY (nro_documento, id_tipo_doc, id_convocatoria, id_categoria) REFERENCES inscripcion_conv_beca(nro_documento, id_tipo_doc, id_convocatoria, id_categoria) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: fk_docente_cat_conicet; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentes
+    ADD CONSTRAINT fk_docente_cat_conicet FOREIGN KEY (id_cat_conicet) REFERENCES categorias_conicet(id_cat_conicet) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_docente_dep_conicet; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentes
+    ADD CONSTRAINT fk_docente_dep_conicet FOREIGN KEY (id_dependencia_conicet) REFERENCES dependencias(id_dependencia) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
