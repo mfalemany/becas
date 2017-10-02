@@ -1,32 +1,49 @@
 <?php
 class co_cumplim_obligaciones
 {
-	public $meses = array('','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+	public $meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
 	function get_cumplimientos($filtro=array())
 	{
 		$where = array();
 		if (isset($filtro['nro_documento'])) {
-			$where[] = "nro_documento = ".quote($filtro['nro_documento']);
+			$where[] = "cum.nro_documento = ".quote($filtro['nro_documento']);
 		}
 		if (isset($filtro['mes'])) {
-			$where[] = "mes = ".quote($filtro['mes']);
+			$where[] = "cum.mes = ".quote($filtro['mes']);
 		}
 		if (isset($filtro['anio'])) {
-			$where[] = "anio = ".quote($filtro['anio']);
+			$where[] = "cum.anio = ".quote($filtro['anio']);
 		}
 		if (isset($filtro['id_tipo_cumpl_oblig'])) {
-			$where[] = "id_tipo_cumpl_oblig = ".quote($filtro['id_tipo_cumpl_oblig']);
+			$where[] = "cum.id_tipo_cumpl_oblig = ".quote($filtro['id_tipo_cumpl_oblig']);
 		}
 		$sql = "SELECT
 			cum.id_tipo_doc,
+			per.apellido||', '||per.nombres as becario,
 			cum.nro_documento,
 			cum.mes,
-			$this->meses['mes'] as descripcion,
+			CASE mes 
+				WHEN 1 THEN 'Enero'
+				WHEN 2 THEN 'Febrero'
+				WHEN 3 THEN 'Marzo'
+				WHEN 4 THEN 'Abril'
+				WHEN 5 THEN 'Mayo'
+				WHEN 6 THEN 'Junio'
+				WHEN 7 THEN 'Julio'
+				WHEN 8 THEN 'Agosto'
+				WHEN 9 THEN 'Septiembre'
+				WHEN 10 THEN 'Octubre'
+				WHEN 11 THEN 'Noviembre'
+				WHEN 12 THEN 'Diciembre'
+				END as mes_desc,
 			cum.anio,
 			tip.tipo_cumpl_oblig as id_tipo_cumpl_oblig_nombre,
 			cum.fecha_cumplimiento
 		FROM
-			cumplimiento_obligacion as cum	LEFT OUTER JOIN tipo_cumpl_obligacion as tip ON (cum.id_tipo_cumpl_oblig = tip.id_tipo_cumpl_oblig)";
+			cumplimiento_obligacion as cum	
+			LEFT OUTER JOIN tipo_cumpl_obligacion as tip ON (cum.id_tipo_cumpl_oblig = tip.id_tipo_cumpl_oblig)
+			LEFT JOIN personas as per on per.nro_documento = cum.nro_documento and per.id_tipo_doc = cum.id_tipo_doc
+			";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
@@ -36,10 +53,8 @@ class co_cumplim_obligaciones
 	function get_meses()
 	{
 		$meses = array();
-		foreach($this->meses as $i => $mes){
-			if($i!=0){
-				$meses[] = array('mes'=>$i,'descripcion'=>$mes);
-			}
+		for($i=1 ; $i<=12 ; $i++){
+			$meses[] = array('mes'=>$i,'descripcion'=>$this->meses[$i-1]);
 		}
 		return $meses;
 	}

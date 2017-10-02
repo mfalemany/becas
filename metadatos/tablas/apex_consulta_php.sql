@@ -175,4 +175,58 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	NULL, --descripcion
 	'22'  --punto_montaje
 );
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'31', --consulta_php
+	'co_convocatoria_beca', --clase
+	'co_convocatoria_beca', --archivo_clase
+	'consultas/co_convocatoria_beca.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'32', --consulta_php
+	'co_categoria_beca', --clase
+	'co_categoria_beca', --archivo_clase
+	'consultas/co_categoria_beca.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'33', --consulta_php
+	'co_convocatoria_categoria', --clase
+	'co_convocatoria_categoria', --archivo_clase
+	'consultas/co_convocatoria_categoria.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'34', --consulta_php
+	'co_comision_asesora', --clase
+	'co_comision_asesora', --archivo_clase
+	'consultas/co_comision_asesora.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'35', --consulta_php
+	'co_areas_conocimiento', --clase
+	'co_areas_conocimiento', --archivo_clase
+	'consultas/co_areas_conocimiento.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'36', --consulta_php
+	'co_color_carpeta', --clase
+	'co_color_carpeta', --archivo_clase
+	'consultas/co_color_carpeta.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
 --- FIN Grupo de desarrollo 0
