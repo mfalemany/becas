@@ -167,7 +167,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'1482', --objeto_cuadro_col
 	'anio', --clave
 	'4', --orden
-	'Anio', --titulo
+	'Año', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'col-cen-s1', --estilo
 	'5%', --ancho

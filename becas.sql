@@ -113,7 +113,8 @@ CREATE TABLE baja_becas (
     id_convocatoria smallint NOT NULL,
     fecha_baja date,
     id_motivo_baja smallint,
-    observaciones character varying(300)
+    observaciones character varying(300),
+    id_categoria smallint NOT NULL
 );
 
 
@@ -295,9 +296,7 @@ ALTER SEQUENCE be_carreras_id_carrera_seq OWNED BY carreras.id_carrera;
 
 CREATE TABLE categoria_beca (
     id_categoria smallint NOT NULL,
-    categoria character varying(100),
-    duracion_meses numeric(3,0),
-    meses_present_avance numeric(3,0)
+    categoria character varying(100)
 );
 
 
@@ -399,7 +398,10 @@ CREATE TABLE dependencias (
     id_dependencia smallint NOT NULL,
     nombre character varying(150),
     descripcion_corta character varying(30),
-    id_universidad smallint
+    id_universidad smallint,
+    id_pais smallint,
+    id_provincia smallint,
+    id_localidad smallint
 );
 
 
@@ -434,7 +436,8 @@ CREATE TABLE localidades (
     id_provincia smallint NOT NULL,
     id_pais smallint NOT NULL,
     id_localidad smallint NOT NULL,
-    localidad character varying(100)
+    localidad character varying(100),
+    codigo_postal character varying(10)
 );
 
 
@@ -710,7 +713,8 @@ CREATE TABLE becas_otorgadas (
     fecha_desde date,
     fecha_hasta date,
     fecha_toma_posesion date,
-    id_tipo_resol smallint
+    id_tipo_resol smallint,
+    id_categoria smallint NOT NULL
 );
 
 
@@ -812,13 +816,10 @@ ALTER TABLE comision_asesora OWNER TO postgres;
 --
 
 CREATE TABLE convocatoria_beca (
-    id_categoria smallint NOT NULL,
     fecha_desde date,
     fecha_hasta date,
-    cupo_maximo numeric(4,0),
     limite_movimientos date NOT NULL,
     id_convocatoria smallint NOT NULL,
-    id_color smallint NOT NULL,
     convocatoria character varying(300)
 );
 
@@ -847,6 +848,22 @@ ALTER SEQUENCE convocatoria_beca_id_convocatoria_seq OWNED BY convocatoria_beca.
 
 
 --
+-- Name: convocatoria_categoria; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE convocatoria_categoria (
+    id_categoria smallint NOT NULL,
+    id_convocatoria smallint NOT NULL,
+    duracion_meses numeric(3,0),
+    meses_present_avance numeric(3,0),
+    id_color smallint,
+    cupo_maximo numeric(4,0)
+);
+
+
+ALTER TABLE convocatoria_categoria OWNER TO postgres;
+
+--
 -- Name: cumplimiento_obligacion; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -867,12 +884,13 @@ ALTER TABLE cumplimiento_obligacion OWNER TO postgres;
 --
 
 CREATE TABLE direccion_beca (
-    legajo character varying(20),
     nro_documento character varying(15) NOT NULL,
     id_tipo_doc smallint NOT NULL,
     id_convocatoria smallint NOT NULL,
     tipo character(1) NOT NULL,
-    id_categoria smallint NOT NULL
+    id_categoria smallint NOT NULL,
+    id_tipo_doc_dir smallint,
+    nro_documento_dir character varying(15)
 );
 
 
@@ -922,7 +940,8 @@ CREATE TABLE inscripcion_conv_beca (
     observaciones character varying(200),
     estado character(1) NOT NULL,
     cant_fojas numeric(3,0),
-    es_titular character(1) NOT NULL
+    es_titular character(1) NOT NULL,
+    id_categoria smallint NOT NULL
 );
 
 
@@ -1287,7 +1306,7 @@ COPY avance_beca (id_avance, fecha, tipo_avance, nro_documento, id_tipo_doc, id_
 -- Data for Name: baja_becas; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY baja_becas (nro_documento, id_tipo_doc, id_convocatoria, fecha_baja, id_motivo_baja, observaciones) FROM stdin;
+COPY baja_becas (nro_documento, id_tipo_doc, id_convocatoria, fecha_baja, id_motivo_baja, observaciones, id_categoria) FROM stdin;
 \.
 
 
@@ -1316,7 +1335,7 @@ SELECT pg_catalog.setval('be_avance_beca_id_avance_seq', 1, false);
 -- Name: be_cargos_docente_id_cargo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_cargos_docente_id_cargo_seq', 3, true);
+SELECT pg_catalog.setval('be_cargos_docente_id_cargo_seq', 4, true);
 
 
 --
@@ -1421,7 +1440,7 @@ SELECT pg_catalog.setval('be_universidades_id_universidad_seq', 5, true);
 -- Data for Name: becas_otorgadas; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY becas_otorgadas (nro_resol, anio, nro_documento, id_tipo_doc, id_convocatoria, fecha_desde, fecha_hasta, fecha_toma_posesion, id_tipo_resol) FROM stdin;
+COPY becas_otorgadas (nro_resol, anio, nro_documento, id_tipo_doc, id_convocatoria, fecha_desde, fecha_hasta, fecha_toma_posesion, id_tipo_resol, id_categoria) FROM stdin;
 \.
 
 
@@ -1433,6 +1452,7 @@ COPY cargos_docente (id_dependencia, id_dedicacion, id_cargo_unne, id_cargo, fec
 3	3	3	1	2017-09-26	2017-09-26	A	\N	\N
 3	3	3	2	2017-09-26	\N	A	\N	\N
 5	3	3	3	2017-10-02	2018-10-08	A	1	31255073
+5	3	3	4	2017-10-09	2017-10-26	A	1	32405039
 \.
 
 
@@ -1475,9 +1495,9 @@ COPY carreras (id_carrera, carrera, cod_araucano) FROM stdin;
 -- Data for Name: categoria_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY categoria_beca (id_categoria, categoria, duracion_meses, meses_present_avance) FROM stdin;
-1	Beca Interna de SGCyT - UNNE	24	6
-2	Becas EVC-CIN	24	6
+COPY categoria_beca (id_categoria, categoria) FROM stdin;
+1	Beca Interna de SGCyT - UNNE
+2	Becas EVC-CIN
 \.
 
 
@@ -1537,7 +1557,7 @@ SELECT pg_catalog.setval('color_carpeta_id_color_seq', 3, true);
 --
 
 COPY comision_asesora (id_area_conocimiento, id_convocatoria) FROM stdin;
-5	2
+4	2
 \.
 
 
@@ -1545,8 +1565,9 @@ COPY comision_asesora (id_area_conocimiento, id_convocatoria) FROM stdin;
 -- Data for Name: convocatoria_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY convocatoria_beca (id_categoria, fecha_desde, fecha_hasta, cupo_maximo, limite_movimientos, id_convocatoria, id_color, convocatoria) FROM stdin;
-1	2017-10-02	2017-10-30	150	2017-11-10	2	1	Primera Convocatoria a Becas de CyT UNNE
+COPY convocatoria_beca (fecha_desde, fecha_hasta, limite_movimientos, id_convocatoria, convocatoria) FROM stdin;
+2017-10-02	2017-10-30	2017-11-10	2	Convocatoria CyT - UNNE - 2016
+2017-10-01	2017-10-26	2017-11-03	3	Convocatoria EVC-CIN - 2017
 \.
 
 
@@ -1554,7 +1575,15 @@ COPY convocatoria_beca (id_categoria, fecha_desde, fecha_hasta, cupo_maximo, lim
 -- Name: convocatoria_beca_id_convocatoria_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('convocatoria_beca_id_convocatoria_seq', 2, true);
+SELECT pg_catalog.setval('convocatoria_beca_id_convocatoria_seq', 3, true);
+
+
+--
+-- Data for Name: convocatoria_categoria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY convocatoria_categoria (id_categoria, id_convocatoria, duracion_meses, meses_present_avance, id_color, cupo_maximo) FROM stdin;
+\.
 
 
 --
@@ -1583,14 +1612,14 @@ Exclusiva	3
 -- Data for Name: dependencias; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad) FROM stdin;
-1	Facultad de Ciencias Agrarias	FCA	1
-2	Facultad de Ciencias Exactas, Naturales y Agrimensura	FACENA	1
-3	Facultad de Arquitectura	FA	2
-4	Facultad de Humanidades	FHum	3
-5	Departamento de Idiomas Modernos	DIM	1
-6	Facultad de Ingeniería	FIng	3
-7	Facultad de Ingeniería	FIng	5
+COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad, id_pais, id_provincia, id_localidad) FROM stdin;
+1	Facultad de Ciencias Agrarias	FCA	1	\N	\N	\N
+2	Facultad de Ciencias Exactas, Naturales y Agrimensura	FACENA	1	\N	\N	\N
+3	Facultad de Arquitectura	FA	2	\N	\N	\N
+4	Facultad de Humanidades	FHum	3	\N	\N	\N
+6	Facultad de Ingeniería	FIng	3	\N	\N	\N
+7	Facultad de Ingeniería	FIng	5	\N	\N	\N
+5	Departamento de Idiomas Modernos	DIM	1	54	2	3
 \.
 
 
@@ -1598,7 +1627,7 @@ COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad) FR
 -- Data for Name: direccion_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY direccion_beca (legajo, nro_documento, id_tipo_doc, id_convocatoria, tipo, id_categoria) FROM stdin;
+COPY direccion_beca (nro_documento, id_tipo_doc, id_convocatoria, tipo, id_categoria, id_tipo_doc_dir, nro_documento_dir) FROM stdin;
 \.
 
 
@@ -1607,9 +1636,9 @@ COPY direccion_beca (legajo, nro_documento, id_tipo_doc, id_convocatoria, tipo, 
 --
 
 COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_conicet, id_dependencia_conicet) FROM stdin;
-32405039	1	1	1	7	3
 31255073	1	12000	1	7	5
 55241374	1	2	1	10	6
+32405039	1	1	1	7	\N
 \.
 
 
@@ -1617,7 +1646,7 @@ COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_con
 -- Data for Name: inscripcion_conv_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones, estado, cant_fojas, es_titular) FROM stdin;
+COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones, estado, cant_fojas, es_titular, id_categoria) FROM stdin;
 \.
 
 
@@ -1626,6 +1655,9 @@ COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convo
 --
 
 COPY integrante_comision_asesora (nro_documento, id_tipo_doc, id_convocatoria, id_area_conocimiento) FROM stdin;
+32405039	1	2	4
+55241374	1	2	4
+31255073	1	2	4
 \.
 
 
@@ -1633,14 +1665,14 @@ COPY integrante_comision_asesora (nro_documento, id_tipo_doc, id_convocatoria, i
 -- Data for Name: localidades; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY localidades (id_provincia, id_pais, id_localidad, localidad) FROM stdin;
-1	54	1	Corrientes
-6	54	2	Lomas de Zamora
-2	54	3	Resistencia
-5	54	4	Parana
-3	54	5	Clorinda
-1	54	6	Ituzaingo
-6	54	7	Ituzaingo
+COPY localidades (id_provincia, id_pais, id_localidad, localidad, codigo_postal) FROM stdin;
+6	54	2	Lomas de Zamora	\N
+2	54	3	Resistencia	\N
+5	54	4	Parana	\N
+3	54	5	Clorinda	\N
+1	54	6	Ituzaingo	\N
+6	54	7	Ituzaingo	\N
+1	54	1	Corrientes	3400
 \.
 
 
@@ -1703,9 +1735,9 @@ COPY paises (id_pais, pais) FROM stdin;
 --
 
 COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, celular, email, telefono, id_localidad, id_provincia, id_pais, id_nivel_academico) FROM stdin;
-31255073	1	Morales	Susana Beatriz	27-31255073-9	1984-11-23	0379-154551427	susanabeatrizmorales1@gmail.com	No tiene	4	5	54	3
-32405039	1	Alemany	Marcelo Federico	20-32405039-7	1986-07-17	0379-154844649	mfalemany@gmail.com	No tiene	1	1	54	4
-55241374	1	Alemany	Marcelo Ricardo	20-55241374-7	2016-02-16	\N	\N	\N	1	1	54	9
+32405039	1	Alemany	Marcelo Federico	20324050397	1986-07-17	0379-154844649	mfalemany@gmail.com	No tiene	1	1	54	4
+31255073	1	Morales	Susana Beatriz	27312550739	1984-11-23	0379-154551427	susanabeatrizmorales1@gmail.com	No tiene	4	5	54	3
+55241374	1	Alemany Morales	Marcelo Ricardo	20552413742	2016-02-16	\N	\N	\N	1	1	54	9
 \.
 
 
@@ -1845,7 +1877,7 @@ ALTER TABLE ONLY avance_beca
 --
 
 ALTER TABLE ONLY baja_becas
-    ADD CONSTRAINT pk_baja_becas PRIMARY KEY (id_tipo_doc, nro_documento, id_convocatoria);
+    ADD CONSTRAINT pk_baja_becas PRIMARY KEY (id_tipo_doc, nro_documento, id_convocatoria, id_categoria);
 
 
 --
@@ -1853,7 +1885,7 @@ ALTER TABLE ONLY baja_becas
 --
 
 ALTER TABLE ONLY becas_otorgadas
-    ADD CONSTRAINT pk_becas_otorgadas PRIMARY KEY (id_tipo_doc, nro_documento, id_convocatoria);
+    ADD CONSTRAINT pk_becas_otorgadas PRIMARY KEY (id_tipo_doc, nro_documento, id_convocatoria, id_categoria);
 
 
 --
@@ -1937,6 +1969,14 @@ ALTER TABLE ONLY convocatoria_beca
 
 
 --
+-- Name: pk_convocatoria_categoria; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY convocatoria_categoria
+    ADD CONSTRAINT pk_convocatoria_categoria PRIMARY KEY (id_categoria, id_convocatoria);
+
+
+--
 -- Name: pk_cumplimiento_obligacion; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1981,7 +2021,7 @@ ALTER TABLE ONLY docentes
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
-    ADD CONSTRAINT pk_inscripcion_conv_beca PRIMARY KEY (id_convocatoria, id_tipo_doc, nro_documento);
+    ADD CONSTRAINT pk_inscripcion_conv_beca PRIMARY KEY (id_tipo_doc, nro_documento, id_convocatoria, id_categoria);
 
 
 --
@@ -2133,7 +2173,7 @@ ALTER TABLE ONLY avance_beca
 --
 
 ALTER TABLE ONLY baja_becas
-    ADD CONSTRAINT fk_baja_becas_inscripcion FOREIGN KEY (id_tipo_doc, nro_documento, id_convocatoria) REFERENCES inscripcion_conv_beca(id_tipo_doc, nro_documento, id_convocatoria) ON UPDATE CASCADE ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_baja_becas_inscripcion FOREIGN KEY (id_tipo_doc, nro_documento, id_convocatoria, id_categoria) REFERENCES inscripcion_conv_beca(id_tipo_doc, nro_documento, id_convocatoria, id_categoria);
 
 
 --
@@ -2142,22 +2182,6 @@ ALTER TABLE ONLY baja_becas
 
 ALTER TABLE ONLY baja_becas
     ADD CONSTRAINT fk_baja_becas_motivo FOREIGN KEY (id_motivo_baja) REFERENCES motivos_baja(id_motivo_baja) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: fk_becas_otorgadas_convocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY becas_otorgadas
-    ADD CONSTRAINT fk_becas_otorgadas_convocatoria FOREIGN KEY (id_convocatoria) REFERENCES convocatoria_beca(id_convocatoria) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: fk_becas_otorgadas_persona; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY becas_otorgadas
-    ADD CONSTRAINT fk_becas_otorgadas_persona FOREIGN KEY (nro_documento, id_tipo_doc) REFERENCES personas(nro_documento, id_tipo_doc);
 
 
 --
@@ -2233,19 +2257,27 @@ ALTER TABLE ONLY comision_asesora
 
 
 --
--- Name: fk_convocatoria_categoria_categoria_beca; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_conv_cat_categoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY convocatoria_beca
-    ADD CONSTRAINT fk_convocatoria_categoria_categoria_beca FOREIGN KEY (id_categoria) REFERENCES categoria_beca(id_categoria) ON UPDATE CASCADE ON DELETE SET NULL;
+ALTER TABLE ONLY convocatoria_categoria
+    ADD CONSTRAINT fk_conv_cat_categoria FOREIGN KEY (id_categoria) REFERENCES categoria_beca(id_categoria) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
--- Name: fk_convocatoria_color_carpeta; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_conv_cat_convocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY convocatoria_beca
-    ADD CONSTRAINT fk_convocatoria_color_carpeta FOREIGN KEY (id_color) REFERENCES color_carpeta(id_color) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY convocatoria_categoria
+    ADD CONSTRAINT fk_conv_cat_convocatoria FOREIGN KEY (id_convocatoria) REFERENCES convocatoria_beca(id_convocatoria) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_conv_cat_idcolor; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY convocatoria_categoria
+    ADD CONSTRAINT fk_conv_cat_idcolor FOREIGN KEY (id_color) REFERENCES color_carpeta(id_color) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -2265,11 +2297,27 @@ ALTER TABLE ONLY cumplimiento_obligacion
 
 
 --
+-- Name: fk_dependencia_localidad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY dependencias
+    ADD CONSTRAINT fk_dependencia_localidad FOREIGN KEY (id_pais, id_provincia, id_localidad) REFERENCES localidades(id_pais, id_provincia, id_localidad) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
 -- Name: fk_dependencias_universidades; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY dependencias
     ADD CONSTRAINT fk_dependencias_universidades FOREIGN KEY (id_universidad) REFERENCES universidades(id_universidad) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: fk_direccion_beca_docente; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY direccion_beca
+    ADD CONSTRAINT fk_direccion_beca_docente FOREIGN KEY (id_tipo_doc_dir, nro_documento) REFERENCES docentes(id_tipo_doc, nro_documento) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -2305,6 +2353,14 @@ ALTER TABLE ONLY docentes
 
 
 --
+-- Name: fk_inscconv_convcat; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY inscripcion_conv_beca
+    ADD CONSTRAINT fk_inscconv_convcat FOREIGN KEY (id_convocatoria, id_categoria) REFERENCES convocatoria_categoria(id_convocatoria, id_categoria) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
 -- Name: fk_inscripcion_conv_beca_area_conocimiento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2318,14 +2374,6 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 ALTER TABLE ONLY inscripcion_conv_beca
     ADD CONSTRAINT fk_inscripcion_conv_beca_dependencias FOREIGN KEY (id_dependencia) REFERENCES dependencias(id_dependencia) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: fk_inscripcion_conv_beca_id_convocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY inscripcion_conv_beca
-    ADD CONSTRAINT fk_inscripcion_conv_beca_id_convocatoria FOREIGN KEY (id_convocatoria) REFERENCES convocatoria_beca(id_convocatoria) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

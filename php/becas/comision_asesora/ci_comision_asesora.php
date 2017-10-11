@@ -1,11 +1,13 @@
 <?php
 class ci_comision_asesora extends becas_ci
 {
+	protected $s__filtro;
 	//---- Cuadro -----------------------------------------------------------------------
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
-		$cuadro->set_datos(toba::consulta_php('co_comision_asesora')->get_comisiones_asesoras());
+		$filtro = (isset($this->s__filtro)) ? $this->s__filtro : array();		
+		$cuadro->set_datos(toba::consulta_php('co_comision_asesora')->get_comisiones_asesoras($filtro));	
 	}
 
 	function evt__cuadro__eliminar($datos)
@@ -25,7 +27,7 @@ class ci_comision_asesora extends becas_ci
 	//---- Formulario -------------------------------------------------------------------
 
 	function conf__formulario(toba_ei_formulario $form)
-	{
+	{ 	
 		if ($this->dep('datos')->esta_cargada()) {
 			$form->set_datos($this->dep('datos')->tabla('comision_asesora')->get());
 		} else {
@@ -68,6 +70,26 @@ class ci_comision_asesora extends becas_ci
 		$this->resetear();
 	}
 
-}
+	//-----------------------------------------------------------------------------------
+	//---- filtro -----------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
 
+	function conf__filtro(becas_ei_formulario $form)
+	{
+		if(isset($this->s__filtro)){
+			$form->set_datos($this->s__filtro);
+		}
+	}
+
+	function evt__filtro__filtrar($datos)
+	{
+		$this->s__filtro = $datos;
+	}
+
+	function evt__filtro__cancelar()
+	{
+		unset($this->s__filtro);
+	}
+
+}
 ?>

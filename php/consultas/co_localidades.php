@@ -14,6 +14,9 @@ class co_localidades
 		if (isset($filtro['id_provincia'])) {
 			$where[] = "loc.id_provincia = ".quote("%{$filtro['id_provincia']}%");
 		}
+		if (isset($filtro['codigo_postal'])) {
+			$where[] = "loc.codigo_postal = ".quote("%{$filtro['codigo_postal']}%");
+		}
 		$sql = "SELECT
 			loc.id_provincia,
 			loc.id_pais,

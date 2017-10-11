@@ -6,9 +6,7 @@ class co_categoria_beca
 	{
 		$sql = "SELECT
 			cat.id_categoria,
-			cat.categoria,
-			cat.duracion_meses,
-			cat.meses_present_avance
+			cat.categoria
 		FROM
 			categoria_beca as cat
 		ORDER BY categoria";

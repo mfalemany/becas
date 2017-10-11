@@ -14,14 +14,23 @@ class co_dependencias
 		if (isset($filtro['id_universidad'])) {
 			$where[] = "t_d.id_universidad = ".quote($filtro['id_universidad']);
 		}
-		if (isset($filtro['id_dependencia'])) {
-			$where[] = "t_d.id_dependencia = ".quote($filtro['id_dependencia']);
+		if (isset($filtro['id_pais'])) {
+			$where[] = "t_d.id_pais = ".quote($filtro['id_pais']);
+		}
+		if (isset($filtro['id_localidad'])) {
+			$where[] = "t_d.id_localidad = ".quote($filtro['id_localidad']);
+		}
+		if (isset($filtro['id_provincia'])) {
+			$where[] = "t_d.id_provincia = ".quote($filtro['id_provincia']);
 		}
 		$sql = "SELECT
 			t_d.id_dependencia,
 			t_d.nombre,
 			t_d.descripcion_corta,
-			t_u.universidad as id_universidad_nombre
+			t_u.universidad as id_universidad_nombre,
+			t_d.id_pais,
+			t_d.id_provincia,
+			t_d.id_localidad
 		FROM
 			dependencias as t_d	LEFT OUTER JOIN universidades as t_u ON (t_d.id_universidad = t_u.id_universidad)
 		ORDER BY nombre";

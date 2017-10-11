@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2817]--  personas 
+--[2817]--  alumno 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'personas', --nombre
+	'alumno', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion

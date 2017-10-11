@@ -63,5 +63,50 @@ class co_personas
 		return toba::db('becas')->consultar($sql);
 	}
 
+	function get_personas_busqueda($filtro = NULL)
+	{
+		if( ! $filtro){
+			return;
+		}
+		extract($filtro);
+		$sql = "SELECT
+			per.id_tipo_doc,
+			per.nro_documento,
+			per.apellido||', '||per.nombres as persona
+		FROM personas as per
+		WHERE 1=1";
+		if($id_tipo_doc){
+			$sql .= " AND per.id_tipo_doc = ".quote($id_tipo_doc);
+		}
+		if($nro_documento){
+			$sql .= " AND per.nro_documento = ".quote($nro_documento);
+		}
+		$sql .= "ORDER BY persona";
+		return toba::db('becas')->consultar($sql);
+	}
+
+	/**
+	 * Retorna el apellido y nombres de una persona específica según tipo y nro de documento
+	 * @param  [string] $params [recibe un string con formato [id_tipo_doc]||[nro_documento]  ]
+	 * @return [string]         [retorna un string simple con formato [Apellido],[nombres]  ]
+	 */
+	static function get_ayn($params)
+	{
+		//toba::logger()->var_dump($params);
+
+
+
+		$filtro = explode('||',$params);
+		$sql = "SELECT
+			per.apellido||', '||per.nombres as persona
+		FROM personas as per
+		WHERE per.id_tipo_doc = $filtro[0]
+		AND per.nro_documento = ".quote($filtro[1]);
+		$resultado = toba::db('becas')->consultar_fila($sql);
+		if(count($resultado)){
+			return $resultado['persona'];
+		}
+	}
+
 }
 ?>

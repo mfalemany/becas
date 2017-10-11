@@ -19,19 +19,19 @@ class co_convocatoria_beca
 		}
 		$sql = "SELECT
 			cat.categoria as id_categoria_nombre,
+			conv.id_convocatoria,
 			conv.convocatoria,
 			conv.fecha_desde,
 			conv.fecha_hasta,
-			conv.cupo_maximo,
-			conv.id_color,
+			conv_cat.cupo_maximo,
+			conv_cat.id_color,
 			col.color,
-			conv.limite_movimientos,
-			conv.id_convocatoria
+			conv.limite_movimientos
 		FROM convocatoria_beca as conv
-		LEFT JOIN categoria_beca as cat on cat.id_categoria = conv.id_categoria
-		LEFT JOIN color_carpeta as col on col.id_color = conv.id_color
-		WHERE
-				conv.id_categoria = cat.id_categoria
+		LEFT JOIN convocatoria_categoria as conv_cat on conv_cat.id_convocatoria = conv.id_convocatoria
+		LEFT JOIN categoria_beca as cat on cat.id_categoria = conv_cat.id_categoria
+		LEFT JOIN color_carpeta as col on col.id_color = conv_cat.id_color
+		WHERE 1=1
 		ORDER BY color";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
