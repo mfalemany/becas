@@ -104,9 +104,6 @@ class ci_convocatorias extends becas_ci
 		if($fecha_hasta > $limite_movimientos){
 			$errores[] = 'El campo \'Limite de Movimientos\' debe ser mayor o igual que el campo \'Fecha Hasta\'';
 		}
-		if($cupo_maximo <= 0){
-			$errores[] = 'El campo \'Cupo Máximo\' debe ser mayor a cero';	
-		}
 		return $errores;
 		
 	}

@@ -1,11 +1,11 @@
 <?php
-class ci_categorias extends becas_ci
+class ci_tipos_de_beca extends becas_ci
 {
 	//---- Cuadro -----------------------------------------------------------------------
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
-		$cuadro->set_datos(toba::consulta_php('co_categoria_beca')->get_categorias_beca());
+		$cuadro->set_datos(toba::consulta_php('co_tipos_beca')->get_tipos_beca());
 	}
 
 	function evt__cuadro__eliminar($datos)
@@ -27,7 +27,7 @@ class ci_categorias extends becas_ci
 	function conf__formulario(toba_ei_formulario $form)
 	{
 		if ($this->dep('datos')->esta_cargada()) {
-			$form->set_datos($this->dep('datos')->tabla('categoria_beca')->get());
+			$form->set_datos($this->dep('datos')->tabla('tipos_beca')->get());
 		} else {
 			$this->pantalla()->eliminar_evento('eliminar');
 		}
@@ -35,7 +35,7 @@ class ci_categorias extends becas_ci
 
 	function evt__formulario__modificacion($datos)
 	{
-		$this->dep('datos')->tabla('categoria_beca')->set($datos);
+		$this->dep('datos')->tabla('tipos_beca')->set($datos);
 	}
 
 	function resetear()

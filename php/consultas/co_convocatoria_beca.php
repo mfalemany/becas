@@ -5,34 +5,27 @@ class co_convocatoria_beca
 	function get_convocatorias($filtro=array())
 	{
 		$where = array();
-		if (isset($filtro['id_categoria'])) {
-			$where[] = "conv.id_categoria = ".quote($filtro['id_categoria']);
+		if (isset($filtro['id_tipo_convocatoria'])) {
+			$where[] = "conv.id_tipo_convocatoria = ".quote($filtro['id_tipo_convocatoria']);
 		}
 		if (isset($filtro['convocatoria'])) {
 			$where[] = "conv.convocatoria ILIKE ".quote('%'.$filtro['convocatoria'].'%');
 		}
-		if (isset($filtro['fecha_desde'])) {
-			$where[] = "conv.fecha_desde = ".quote($filtro['fecha_desde']);
+		if (isset($filtro['anio'])) {
+			$where[] = quote($filtro['anio'])." between extract(year from conv.fecha_desde) and extract(year from conv.fecha_hasta)";
 		}
-		if (isset($filtro['fecha_hasta'])) {
-			$where[] = "conv.fecha_hasta = ".quote($filtro['fecha_hasta']);
-		}
+		
 		$sql = "SELECT
-			cat.categoria as id_categoria_nombre,
 			conv.id_convocatoria,
+			tip.id_tipo_convocatoria,
+			tip.tipo_convocatoria,
 			conv.convocatoria,
 			conv.fecha_desde,
 			conv.fecha_hasta,
-			conv_cat.cupo_maximo,
-			conv_cat.id_color,
-			col.color,
 			conv.limite_movimientos
 		FROM convocatoria_beca as conv
-		LEFT JOIN convocatoria_categoria as conv_cat on conv_cat.id_convocatoria = conv.id_convocatoria
-		LEFT JOIN categoria_beca as cat on cat.id_categoria = conv_cat.id_categoria
-		LEFT JOIN color_carpeta as col on col.id_color = conv_cat.id_color
-		WHERE 1=1
-		ORDER BY color";
+		LEFT JOIN tipos_convocatoria as tip on tip.id_tipo_convocatoria = conv.id_tipo_convocatoria
+		WHERE 1=1";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}

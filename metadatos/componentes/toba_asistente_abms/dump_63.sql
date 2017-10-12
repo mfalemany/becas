@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[52]--  Tipos de Cumpl. de Oblig. 
+--[63]--  Tipos de Convocatoria 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,12 +9,12 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_molde_operacion (proyecto, molde, operacion_tipo, nombre, item, carpeta_archivos, prefijo_clases, fuente, punto_montaje) VALUES (
 	'becas', --proyecto
-	'52', --molde
+	'63', --molde
 	'10', --operacion_tipo
-	'Tipos de Cumpl. de Oblig.', --nombre
-	'3620', --item
-	'becas/tipos_de_cumpl__de_oblig_', --carpeta_archivos
-	'_tipos_de_cumpl__de_oblig_', --prefijo_clases
+	'Tipos de Convocatoria', --nombre
+	'3634', --item
+	'becas/convocatorias/tipos_de_convocatoria', --carpeta_archivos
+	'_tipos_de_convocatoria', --prefijo_clases
 	'becas', --fuente
 	'22'  --punto_montaje
 );
@@ -25,25 +25,25 @@ INSERT INTO apex_molde_operacion (proyecto, molde, operacion_tipo, nombre, item,
 ------------------------------------------------------------
 INSERT INTO apex_molde_operacion_abms (proyecto, molde, tabla, gen_usa_filtro, gen_separar_pantallas, filtro_comprobar_parametros, cuadro_eof, cuadro_eliminar_filas, cuadro_id, cuadro_forzar_filtro, cuadro_carga_origen, cuadro_carga_sql, cuadro_carga_php_include, cuadro_carga_php_clase, cuadro_carga_php_metodo, datos_tabla_validacion, apdb_pre, punto_montaje) VALUES (
 	'becas', --proyecto
-	'52', --molde
-	'tipo_cumpl_obligacion', --tabla
+	'63', --molde
+	'tipos_convocatoria', --tabla
 	'0', --gen_usa_filtro
 	'0', --gen_separar_pantallas
 	NULL, --filtro_comprobar_parametros
-	'No se han cargado tipos de cumplimiento de obligaciones.', --cuadro_eof
+	'No se han definido tipos de convocatoria.', --cuadro_eof
 	'1', --cuadro_eliminar_filas
-	'id_tipo_cumpl_oblig', --cuadro_id
+	'id_tipo_convocatoria', --cuadro_id
 	NULL, --cuadro_forzar_filtro
 	'consulta_php', --cuadro_carga_origen
 	'SELECT
-	tip.id_tipo_cumpl_oblig,
-	tip.tipo_cumpl_oblig
+	t_tc.id_tipo_convocatoria,
+	t_tc.tipo_convocatoria
 FROM
-	tipo_cumpl_obligacion as tip
-ORDER BY tipo_cumpl_oblig', --cuadro_carga_sql
-	'consultas/co_tipos_cumpl_oblig.php', --cuadro_carga_php_include
-	'co_tipos_cumpl_oblig', --cuadro_carga_php_clase
-	'get_tipos_cumplimiento', --cuadro_carga_php_metodo
+	tipos_convocatoria as t_tc
+ORDER BY tipo_convocatoria', --cuadro_carga_sql
+	'consultas/co_tipos_convocatoria.php', --cuadro_carga_php_include
+	'co_tipos_convocatoria', --cuadro_carga_php_clase
+	'get_tipos_convocatoria', --cuadro_carga_php_metodo
 	NULL, --datos_tabla_validacion
 	NULL, --apdb_pre
 	NULL  --punto_montaje
@@ -56,12 +56,12 @@ ORDER BY tipo_cumpl_oblig', --cuadro_carga_sql
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_molde_operacion_abms_fila (proyecto, molde, fila, orden, columna, asistente_tipo_dato, etiqueta, en_cuadro, en_form, en_filtro, filtro_operador, cuadro_estilo, cuadro_formato, dt_tipo_dato, dt_largo, dt_secuencia, dt_pk, elemento_formulario, ef_obligatorio, ef_desactivar_modificacion, ef_procesar_javascript, ef_carga_origen, ef_carga_sql, ef_carga_php_include, ef_carga_php_clase, ef_carga_php_metodo, ef_carga_tabla, ef_carga_col_clave, ef_carga_col_desc, punto_montaje) VALUES (
 	'becas', --proyecto
-	'52', --molde
-	'189', --fila
+	'63', --molde
+	'252', --fila
 	'1', --orden
-	'id_tipo_cumpl_oblig', --columna
+	'id_tipo_convocatoria', --columna
 	'1000003', --asistente_tipo_dato
-	'Id Tipo Cumpl Oblig', --etiqueta
+	'Id Tipo Convocatoria', --etiqueta
 	'0', --en_cuadro
 	'0', --en_form
 	'0', --en_filtro
@@ -70,7 +70,7 @@ INSERT INTO apex_molde_operacion_abms_fila (proyecto, molde, fila, orden, column
 	'7', --cuadro_formato
 	'E', --dt_tipo_dato
 	NULL, --dt_largo
-	'be_tipo_cumpl_obligacion_id_tipo_cumpl_oblig_seq', --dt_secuencia
+	'tipos_convocatoria_id_tipo_convocatoria_seq', --dt_secuencia
 	'1', --dt_pk
 	'ef_editable_numero', --elemento_formulario
 	'0', --ef_obligatorio
@@ -88,12 +88,12 @@ INSERT INTO apex_molde_operacion_abms_fila (proyecto, molde, fila, orden, column
 );
 INSERT INTO apex_molde_operacion_abms_fila (proyecto, molde, fila, orden, columna, asistente_tipo_dato, etiqueta, en_cuadro, en_form, en_filtro, filtro_operador, cuadro_estilo, cuadro_formato, dt_tipo_dato, dt_largo, dt_secuencia, dt_pk, elemento_formulario, ef_obligatorio, ef_desactivar_modificacion, ef_procesar_javascript, ef_carga_origen, ef_carga_sql, ef_carga_php_include, ef_carga_php_clase, ef_carga_php_metodo, ef_carga_tabla, ef_carga_col_clave, ef_carga_col_desc, punto_montaje) VALUES (
 	'becas', --proyecto
-	'52', --molde
-	'190', --fila
+	'63', --molde
+	'253', --fila
 	'2', --orden
-	'tipo_cumpl_oblig', --columna
+	'tipo_convocatoria', --columna
 	'1000001', --asistente_tipo_dato
-	'Tipo Cumpl Oblig', --etiqueta
+	'Tipo Convocatoria', --etiqueta
 	'1', --en_cuadro
 	'1', --en_form
 	'0', --en_filtro
@@ -105,7 +105,7 @@ INSERT INTO apex_molde_operacion_abms_fila (proyecto, molde, fila, orden, column
 	'', --dt_secuencia
 	'0', --dt_pk
 	'ef_editable', --elemento_formulario
-	'1', --ef_obligatorio
+	'0', --ef_obligatorio
 	NULL, --ef_desactivar_modificacion
 	NULL, --ef_procesar_javascript
 	NULL, --ef_carga_origen
