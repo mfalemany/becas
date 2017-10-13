@@ -18,6 +18,17 @@ class co_tipos_beca
 		return toba::db('becas')->consultar($sql);
 	}
 
+	function get_tipos_beca_por_tipo_convocatoria($id_convocatoria)
+	{
+		$sql = "SELECT tb.id_tipo_beca, tb.tipo_beca
+				FROM convocatoria_beca as cb
+				LEFT JOIN tipos_convocatoria as tc on tc.id_tipo_convocatoria = cb.id_tipo_convocatoria
+				LEFT JOIN tipos_beca as tb on tb.id_tipo_convocatoria = cb.id_tipo_convocatoria
+				WHERE cb.id_convocatoria = ".quote($id_convocatoria)."
+				AND tb.estado = 'A'";
+		return toba::db()->consultar($sql);
+	}
+
 
 }
 ?>

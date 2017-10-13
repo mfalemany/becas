@@ -64,6 +64,20 @@ class ci_convocatorias extends becas_ci
 		
 	}
 
+	//---- ml_requisitos -------------------------------------------------------------------
+
+	function conf__ml_requisitos(toba_ei_formulario_ml $form)
+	{
+		if ($this->dep('datos')->esta_cargada()) {
+			$form->set_datos($this->dep('datos')->tabla('requisitos_convocatoria')->get_filas());
+		}
+	}	
+
+	function evt__ml_requisitos__modificacion($datos)
+	{
+		$this->dep('datos')->tabla('requisitos_convocatoria')->procesar_filas($datos);	
+	}
+
 	function resetear()
 	{
 		$this->dep('datos')->resetear();

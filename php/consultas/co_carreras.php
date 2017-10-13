@@ -29,7 +29,7 @@ class co_carreras
 		return toba::db('becas')->consultar($sql);
 	}
 
-	function get_carrera_cascadas($id_dep = NULL) 
+	function get_carreras_por_dependencia($id_dep = NULL) 
 	{
 		if( ! $id_dep){
 			return; 

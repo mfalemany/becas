@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2897]--  Convocatorias - DR 
+--[2947]--  Inscripción - DR 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,7 +9,7 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'becas', --proyecto
-	'2897', --objeto
+	'2947', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'Convocatorias - DR', --nombre
+	'Inscripción - DR', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -36,7 +36,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2017-10-02 09:42:53', --creacion
+	'2017-10-13 09:19:47', --creacion
 	NULL  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
@@ -46,7 +46,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 ------------------------------------------------------------
 INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_montaje, ap_clase, ap_archivo, sinc_susp_constraints, sinc_orden_automatico, sinc_lock_optimista) VALUES (
 	'becas', --proyecto
-	'2897', --objeto
+	'2947', --objeto
 	'0', --debug
 	NULL, --clave
 	'2', --ap
@@ -65,27 +65,27 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'1756', --dep_id
-	'2897', --objeto_consumidor
-	'2890', --objeto_proveedor
-	'convocatoria_beca', --identificador
+	'1821', --dep_id
+	'2947', --objeto_consumidor
+	'2952', --objeto_proveedor
+	'alumno', --identificador
+	'1', --parametros_a
+	'1', --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'2'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1811', --dep_id
+	'2947', --objeto_consumidor
+	'2946', --objeto_proveedor
+	'inscripcion_conv_beca', --identificador
 	'1', --parametros_a
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
 	'1'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becas', --proyecto
-	'1810', --dep_id
-	'2897', --objeto_consumidor
-	'2945', --objeto_proveedor
-	'requisitos_convocatoria', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'2'  --orden
 );
 --- FIN Grupo de desarrollo 0
 
@@ -96,16 +96,16 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
 	'becas', --proyecto
-	'2897', --objeto
-	'81', --asoc_id
+	'2947', --objeto
+	'82', --asoc_id
 	NULL, --identificador
 	'becas', --padre_proyecto
-	'2890', --padre_objeto
-	'convocatoria_beca', --padre_id
+	'2952', --padre_objeto
+	'alumno', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
-	'2945', --hijo_objeto
-	'requisitos_convocatoria', --hijo_id
+	'2946', --hijo_objeto
+	'inscripcion_conv_beca', --hijo_id
 	NULL, --hijo_clave
 	NULL, --cascada
 	'1'  --orden
@@ -117,10 +117,19 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 ------------------------------------------------------------
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
-	'2897', --objeto
-	'81', --asoc_id
-	'2890', --padre_objeto
-	'1368', --padre_clave
-	'2945', --hijo_objeto
-	'1375'  --hijo_clave
+	'2947', --objeto
+	'82', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2946', --hijo_objeto
+	'1382'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'82', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2946', --hijo_objeto
+	'1383'  --hijo_clave
 );

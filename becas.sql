@@ -1040,7 +1040,8 @@ CREATE TABLE tipos_beca (
     duracion_meses numeric(3,0),
     meses_present_avance numeric(3,0),
     cupo_maximo numeric(5,0),
-    id_color smallint
+    id_color smallint,
+    estado character(1) DEFAULT 'A'::bpchar
 );
 
 
@@ -1410,7 +1411,7 @@ SELECT pg_catalog.setval('be_tipos_resolucion_id_tipo_resol_seq', 4, true);
 -- Name: be_universidades_id_universidad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_universidades_id_universidad_seq', 5, true);
+SELECT pg_catalog.setval('be_universidades_id_universidad_seq', 7, true);
 
 
 --
@@ -1455,6 +1456,7 @@ COPY carrera_dependencia (id_dependencia, id_carrera) FROM stdin;
 5	1
 6	1
 7	2
+1	1
 \.
 
 
@@ -1533,9 +1535,9 @@ COPY comision_asesora (id_area_conocimiento, id_convocatoria) FROM stdin;
 --
 
 COPY convocatoria_beca (fecha_desde, fecha_hasta, limite_movimientos, id_convocatoria, convocatoria, id_tipo_convocatoria) FROM stdin;
-2017-10-01	2017-10-26	2017-11-03	3	Convocatoria EVC-CIN - 2017	1
 2016-01-01	2016-12-30	2016-12-31	4	Becas Cofinanciadas UNNE-CONICET 2016	3
-2017-10-02	2017-10-30	2017-11-10	2	Convocatoria CyT - UNNE - 2016	3
+2017-10-01	2017-10-26	2017-11-03	3	Convocatoria EVC-CIN - 2017	2
+2017-10-02	2017-10-30	2017-11-10	2	Convocatoria CyT - UNNE - 2016	1
 \.
 
 
@@ -1723,6 +1725,14 @@ COPY provincias (id_pais, id_provincia, provincia) FROM stdin;
 --
 
 COPY requisitos_convocatoria (id_convocatoria, requisito, obligatorio, id_requisito) FROM stdin;
+2	Fotocopia de DNI	0	1
+2	Aval de la autoridad de la Facultad o Instituto	1	2
+3	Fotocopia de DNI	1	3
+3	Fotocopia de Partida de Nacimiento	0	4
+3	Constancia de Alumno Regular	0	5
+4	Copia de Partida de Nacimiento	0	6
+4	Constancia de Grupo Sanguíneo	1	7
+4	Titulo Universitario	1	8
 \.
 
 
@@ -1730,7 +1740,7 @@ COPY requisitos_convocatoria (id_convocatoria, requisito, obligatorio, id_requis
 -- Name: requisitos_convocatoria_id_requisito_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('requisitos_convocatoria_id_requisito_seq', 1, false);
+SELECT pg_catalog.setval('requisitos_convocatoria_id_requisito_seq', 8, true);
 
 
 --
@@ -1772,12 +1782,12 @@ COPY tipo_documento (id_tipo_doc, tipo_doc) FROM stdin;
 -- Data for Name: tipos_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY tipos_beca (id_tipo_beca, id_tipo_convocatoria, tipo_beca, duracion_meses, meses_present_avance, cupo_maximo, id_color) FROM stdin;
-1	1	Pre-grado	\N	\N	\N	\N
-5	2	Pre-Grado	\N	\N	\N	\N
-4	3	Cofinanciadas UNNE-CONICET	60	12	150	1
-2	1	Iniciación	12	6	250	3
-3	1	Perfeccionamiento	36	18	20	2
+COPY tipos_beca (id_tipo_beca, id_tipo_convocatoria, tipo_beca, duracion_meses, meses_present_avance, cupo_maximo, id_color, estado) FROM stdin;
+1	1	Pre-grado	\N	\N	\N	\N	A
+5	2	Pre-Grado	\N	\N	\N	\N	A
+4	3	Cofinanciadas UNNE-CONICET	60	12	150	1	A
+2	1	Iniciación	12	6	250	3	A
+3	1	Perfeccionamiento	36	18	20	2	I
 \.
 
 
@@ -1828,6 +1838,7 @@ COPY universidades (id_universidad, universidad, id_pais, sigla) FROM stdin;
 3	Universidad Nacional de Santiago del Estero	54	UNSE
 4	Universidad Nacional de Jujuy	54	UNJU
 5	Universidad Nacional de Buenos Aires	54	UBA
+6	Universidad Nacional de la Plata	54	UNP
 \.
 
 
@@ -2125,6 +2136,14 @@ ALTER TABLE ONLY provincias
 
 ALTER TABLE ONLY niveles_academicos
     ADD CONSTRAINT uq_nivel_academico UNIQUE (nivel_academico);
+
+
+--
+-- Name: uq_universidades_universidad; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY universidades
+    ADD CONSTRAINT uq_universidades_universidad UNIQUE (universidad, id_pais);
 
 
 --

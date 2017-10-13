@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2875]--  categoria_beca 
+--[2945]--  DT - requisitos_convocatoria 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,7 +9,7 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'becas', --proyecto
-	'2875', --objeto
+	'2945', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'categoria_beca', --nombre
+	'DT - requisitos_convocatoria', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -36,7 +36,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2017-09-27 09:39:11', --creacion
+	'2017-10-13 09:08:44', --creacion
 	NULL  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
@@ -46,14 +46,14 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 ------------------------------------------------------------
 INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, min_registros, punto_montaje, ap, ap_clase, ap_archivo, tabla, tabla_ext, alias, modificar_claves, fuente_datos_proyecto, fuente_datos, permite_actualizacion_automatica, esquema, esquema_ext) VALUES (
 	'becas', --objeto_proyecto
-	'2875', --objeto
+	'2945', --objeto
 	NULL, --max_registros
 	NULL, --min_registros
 	'22', --punto_montaje
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'categoria_beca', --tabla
+	'requisitos_convocatoria', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
@@ -71,58 +71,58 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
-	'2875', --objeto
-	'1293', --col_id
-	'id_categoria', --columna
+	'2945', --objeto
+	'1375', --col_id
+	'id_convocatoria', --columna
 	'E', --tipo
 	'1', --pk
-	'be_categoria_beca_id_categoria_seq', --secuencia
+	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'1', --no_nulo_db
+	'0', --externa
+	'requisitos_convocatoria'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
-	'2875', --objeto
-	'1294', --col_id
-	'categoria', --columna
+	'2945', --objeto
+	'1376', --col_id
+	'requisito', --columna
 	'C', --tipo
-	NULL, --pk
-	NULL, --secuencia
-	NULL, --largo
+	'0', --pk
+	'', --secuencia
+	'100', --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'0', --no_nulo_db
+	'0', --externa
+	'requisitos_convocatoria'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
-	'2875', --objeto
-	'1295', --col_id
-	'duracion_meses', --columna
-	'N', --tipo
-	NULL, --pk
-	NULL, --secuencia
-	NULL, --largo
+	'2945', --objeto
+	'1377', --col_id
+	'obligatorio', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'1', --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'0', --no_nulo_db
+	'0', --externa
+	'requisitos_convocatoria'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
-	'2875', --objeto
-	'1296', --col_id
-	'meses_present_avance', --columna
-	'N', --tipo
-	NULL, --pk
-	NULL, --secuencia
+	'2945', --objeto
+	'1378', --col_id
+	'id_requisito', --columna
+	'E', --tipo
+	'1', --pk
+	'requisitos_convocatoria_id_requisito_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'1', --no_nulo_db
+	'0', --externa
+	'requisitos_convocatoria'  --tabla
 );
 --- FIN Grupo de desarrollo 0
