@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_ei_formulario', --clase
 	'22', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'form_inscripcion', --subclase
+	'becas/inscripcion/form_inscripcion.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Inscripción - Form', --nombre
@@ -211,6 +211,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 				<td>
 					[ef id=nro_documento_codir]</td>
 			</tr>
+			
 		</tbody>
 	</table>
 </fieldset>
@@ -244,7 +245,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_convocatoria', --identificador
 	'ef_combo', --elemento_formulario
 	'id_convocatoria', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
 	'Convocatoria', --etiqueta
@@ -324,7 +325,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_beca', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_beca', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
 	'Tipo Beca', --etiqueta
@@ -484,7 +485,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nro_documento', --identificador
 	'ef_editable', --elemento_formulario
 	'nro_documento', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'5', --orden
 	'Nro Documento', --etiqueta
@@ -564,7 +565,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_doc', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_doc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'4', --orden
 	'Tipo Doc', --etiqueta
@@ -1444,7 +1445,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_doc_dir', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_doc_dir', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'16', --orden
 	'Tipo Documento', --etiqueta
@@ -1524,7 +1525,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nro_documento_dir', --identificador
 	'ef_editable', --elemento_formulario
 	'nro_documento_dir', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'17', --orden
 	'Nro. Documento', --etiqueta
