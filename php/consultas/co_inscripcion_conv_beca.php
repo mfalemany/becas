@@ -39,15 +39,9 @@ class co_inscripcion_conv_beca
 		FROM inscripcion_conv_beca as insc	
 		LEFT JOIN convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
 		LEFT JOIN personas as becario on becario.id_tipo_doc = insc.id_tipo_doc AND becario.nro_documento = insc.nro_documento
-		LEFT JOIN direccion_beca as dir_bec 
-			ON dir_bec.nro_documento = insc.nro_documento
-			AND dir_bec.id_tipo_doc = insc.id_tipo_doc
-			AND dir_bec.id_convocatoria = insc.id_convocatoria 
-			AND dir_bec.id_tipo_beca = insc.id_tipo_beca
-			AND dir_bec.tipo = 'D'
 		LEFT JOIN personas as director 
-			ON director.id_tipo_doc = dir_bec.id_tipo_doc_dir
-			AND director.nro_documento = dir_bec.nro_documento_dir
+			ON director.id_tipo_doc = insc.id_tipo_doc_dir
+			AND director.nro_documento = insc.nro_documento_dir
 		LEFT JOIN tipos_beca as tip_bec on tip_bec.id_tipo_beca = insc.id_tipo_beca
 		LEFT JOIN dependencias as dep ON (insc.id_dependencia = dep.id_dependencia)
 		LEFT JOIN area_conocimiento as area ON (insc.id_area_conocimiento = area.id_area_conocimiento)

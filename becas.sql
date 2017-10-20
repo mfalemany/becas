@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.9
--- Dumped by pg_dump version 9.5.9
+-- Dumped from database version 9.6.4
+-- Dumped by pg_dump version 9.6.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -802,23 +803,6 @@ CREATE TABLE cumplimiento_obligacion (
 ALTER TABLE cumplimiento_obligacion OWNER TO postgres;
 
 --
--- Name: direccion_beca; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE direccion_beca (
-    nro_documento character varying(15) NOT NULL,
-    id_tipo_doc smallint NOT NULL,
-    id_convocatoria smallint NOT NULL,
-    tipo character(1) NOT NULL,
-    id_tipo_doc_dir smallint,
-    nro_documento_dir character varying(15),
-    id_tipo_beca smallint NOT NULL
-);
-
-
-ALTER TABLE direccion_beca OWNER TO postgres;
-
---
 -- Name: docentes; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -870,7 +854,13 @@ CREATE TABLE inscripcion_conv_beca (
     anio_egreso numeric(4,0),
     fecha_insc_posgrado date,
     lugar_trabajo_becario smallint,
-    area_trabajo character varying(300)
+    area_trabajo character varying(300),
+    id_tipo_doc_dir smallint,
+    nro_documento_dir character varying(15),
+    id_tipo_doc_codir smallint,
+    nro_documento_codir character varying(15),
+    id_tipo_doc_subdir smallint,
+    nro_documento_subdir character varying(15)
 );
 
 
@@ -1124,154 +1114,154 @@ ALTER SEQUENCE tipos_convocatoria_id_tipo_convocatoria_seq OWNED BY tipos_convoc
 
 
 --
--- Name: id_area_conocimiento; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: area_conocimiento id_area_conocimiento; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY area_conocimiento ALTER COLUMN id_area_conocimiento SET DEFAULT nextval('be_area_conocimiento_id_area_conocimiento_seq'::regclass);
 
 
 --
--- Name: id_area; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: areas_dependencia id_area; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY areas_dependencia ALTER COLUMN id_area SET DEFAULT nextval('be_areas_dependencia_id_area_seq'::regclass);
 
 
 --
--- Name: id_avance; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: avance_beca id_avance; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY avance_beca ALTER COLUMN id_avance SET DEFAULT nextval('be_avance_beca_id_avance_seq'::regclass);
 
 
 --
--- Name: id_cargo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: cargos_docente id_cargo; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_docente ALTER COLUMN id_cargo SET DEFAULT nextval('be_cargos_docente_id_cargo_seq'::regclass);
 
 
 --
--- Name: id_cargo_unne; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: cargos_unne id_cargo_unne; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_unne ALTER COLUMN id_cargo_unne SET DEFAULT nextval('be_cargos_unne_id_cargo_unne_seq'::regclass);
 
 
 --
--- Name: id_carrera; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: carreras id_carrera; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY carreras ALTER COLUMN id_carrera SET DEFAULT nextval('be_carreras_id_carrera_seq'::regclass);
 
 
 --
--- Name: id_cat_conicet; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: categorias_conicet id_cat_conicet; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY categorias_conicet ALTER COLUMN id_cat_conicet SET DEFAULT nextval('categorias_conicet_id_cat_conicet_seq'::regclass);
 
 
 --
--- Name: id_cat_incentivos; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: categorias_incentivos id_cat_incentivos; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY categorias_incentivos ALTER COLUMN id_cat_incentivos SET DEFAULT nextval('be_categorias_incentivos_id_cat_incentivos_seq'::regclass);
 
 
 --
--- Name: id_color; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: color_carpeta id_color; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY color_carpeta ALTER COLUMN id_color SET DEFAULT nextval('color_carpeta_id_color_seq'::regclass);
 
 
 --
--- Name: id_convocatoria; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: convocatoria_beca id_convocatoria; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY convocatoria_beca ALTER COLUMN id_convocatoria SET DEFAULT nextval('convocatoria_beca_id_convocatoria_seq'::regclass);
 
 
 --
--- Name: id_dedicacion; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: dedicacion id_dedicacion; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY dedicacion ALTER COLUMN id_dedicacion SET DEFAULT nextval('be_dedicacion_id_dedicacion_seq'::regclass);
 
 
 --
--- Name: id_dependencia; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: dependencias id_dependencia; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY dependencias ALTER COLUMN id_dependencia SET DEFAULT nextval('be_dependencias_id_dependencia_seq'::regclass);
 
 
 --
--- Name: id_localidad; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: localidades id_localidad; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY localidades ALTER COLUMN id_localidad SET DEFAULT nextval('be_localidades_id_localidad_seq'::regclass);
 
 
 --
--- Name: id_nivel_academico; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: niveles_academicos id_nivel_academico; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY niveles_academicos ALTER COLUMN id_nivel_academico SET DEFAULT nextval('niveles_academicos_id_nivel_academico_seq'::regclass);
 
 
 --
--- Name: id_provincia; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: provincias id_provincia; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY provincias ALTER COLUMN id_provincia SET DEFAULT nextval('be_provincias_id_provincia_seq'::regclass);
 
 
 --
--- Name: id_requisito; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: requisitos_convocatoria id_requisito; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY requisitos_convocatoria ALTER COLUMN id_requisito SET DEFAULT nextval('requisitos_convocatoria_id_requisito_seq'::regclass);
 
 
 --
--- Name: id_resultado; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: resultado_avance id_resultado; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY resultado_avance ALTER COLUMN id_resultado SET DEFAULT nextval('be_resultado_avance_id_resultado_seq'::regclass);
 
 
 --
--- Name: id_tipo_doc; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tipo_documento id_tipo_doc; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipo_documento ALTER COLUMN id_tipo_doc SET DEFAULT nextval('be_tipo_documento_id_tipo_doc_seq'::regclass);
 
 
 --
--- Name: id_tipo_beca; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tipos_beca id_tipo_beca; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_beca ALTER COLUMN id_tipo_beca SET DEFAULT nextval('tipos_beca_id_tipo_beca_seq'::regclass);
 
 
 --
--- Name: id_tipo_convocatoria; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tipos_convocatoria id_tipo_convocatoria; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_convocatoria ALTER COLUMN id_tipo_convocatoria SET DEFAULT nextval('tipos_convocatoria_id_tipo_convocatoria_seq'::regclass);
 
 
 --
--- Name: id_tipo_resol; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tipos_resolucion id_tipo_resol; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_resolucion ALTER COLUMN id_tipo_resol SET DEFAULT nextval('be_tipos_resolucion_id_tipo_resol_seq'::regclass);
 
 
 --
--- Name: id_universidad; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: universidades id_universidad; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY universidades ALTER COLUMN id_universidad SET DEFAULT nextval('be_universidades_id_universidad_seq'::regclass);
@@ -1605,18 +1595,6 @@ COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad, id
 
 
 --
--- Data for Name: direccion_beca; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY direccion_beca (nro_documento, id_tipo_doc, id_convocatoria, tipo, id_tipo_doc_dir, nro_documento_dir, id_tipo_beca) FROM stdin;
-32405039	1	2	D	1	31255073	1
-32405039	1	3	C	1	31255073	5
-31255073	1	2	D	1	32405039	1
-55241374	1	2	D	1	32405039	2
-\.
-
-
---
 -- Data for Name: docentes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -1631,11 +1609,11 @@ COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_con
 -- Data for Name: inscripcion_conv_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones, estado, cant_fojas, es_titular, id_tipo_beca, id_proyecto, es_egresado, anio_ingreso, anio_egreso, fecha_insc_posgrado, lugar_trabajo_becario, area_trabajo) FROM stdin;
-7	32405039	1	2	\N	\N	\N	\N	10	1	\N	2	1	1	1.00	1.00	\N	\N	\N	\N	\N	A	\N	S	1	455	0	2005	\N	\N	\N	\N
-7	32405039	1	3	\N	\N	\N	\N	10	Algo	\N	2	1	1	1.00	1.00	\N	\N	\N	\N	\N	A	\N	S	5	446	0	1	\N	\N	3	Área de Sarasa
-7	31255073	1	2	\N	\N	\N	\N	10	Algo	\N	2	2	2	2.00	2.00	\N	\N	\N	\N	\N	A	\N	S	1	66	0	2005	\N	\N	7	asdas
-1	55241374	1	2	\N	\N	\N	\N	1	Titulo cualquiera	\N	1	2	2	2.00	2.00	\N	\N	\N	\N	\N	A	\N	S	2	229	0	2	\N	\N	1	Dpto Matematica
+COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones, estado, cant_fojas, es_titular, id_tipo_beca, id_proyecto, es_egresado, anio_ingreso, anio_egreso, fecha_insc_posgrado, lugar_trabajo_becario, area_trabajo, id_tipo_doc_dir, nro_documento_dir, id_tipo_doc_codir, nro_documento_codir, id_tipo_doc_subdir, nro_documento_subdir) FROM stdin;
+7	32405039	1	2	\N	\N	\N	\N	10	1	\N	2	1	1	1.00	1.00	\N	\N	\N	\N	\N	A	\N	S	1	455	0	2005	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+7	31255073	1	2	\N	\N	\N	\N	10	Algo	\N	2	2	2	2.00	2.00	\N	\N	\N	\N	\N	A	\N	S	1	66	0	2005	\N	\N	7	asdas	1	31255073	\N	\N	\N	\N
+7	32405039	1	3	\N	\N	\N	\N	10	Algo	\N	2	1	1	1.00	1.00	\N	\N	\N	\N	\N	A	\N	S	5	446	0	1	\N	\N	3	Área de Sarasa	1	55241374	\N	\N	\N	\N
+1	55241374	1	2	\N	\N	\N	\N	1	Titulo cualquiera	Tiene moneda	1	2	2	2.00	2.00	\N	\N	\N	\N	\N	A	\N	S	2	229	0	2	\N	\N	1	Dpto Matematica	1	55241374	1	31255073	\N	\N
 \.
 
 
@@ -2455,7 +2433,7 @@ COPY universidades (id_universidad, universidad, id_pais, sigla) FROM stdin;
 
 
 --
--- Name: pk_area_conocimiento; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: area_conocimiento pk_area_conocimiento; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY area_conocimiento
@@ -2463,7 +2441,7 @@ ALTER TABLE ONLY area_conocimiento
 
 
 --
--- Name: pk_areas_dependencia; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: areas_dependencia pk_areas_dependencia; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY areas_dependencia
@@ -2471,7 +2449,7 @@ ALTER TABLE ONLY areas_dependencia
 
 
 --
--- Name: pk_avance_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: avance_beca pk_avance_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY avance_beca
@@ -2479,7 +2457,7 @@ ALTER TABLE ONLY avance_beca
 
 
 --
--- Name: pk_baja_becas; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: baja_becas pk_baja_becas; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY baja_becas
@@ -2487,7 +2465,7 @@ ALTER TABLE ONLY baja_becas
 
 
 --
--- Name: pk_becas_otorgadas; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: becas_otorgadas pk_becas_otorgadas; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY becas_otorgadas
@@ -2495,7 +2473,7 @@ ALTER TABLE ONLY becas_otorgadas
 
 
 --
--- Name: pk_cargos_docente; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cargos_docente pk_cargos_docente; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_docente
@@ -2503,7 +2481,7 @@ ALTER TABLE ONLY cargos_docente
 
 
 --
--- Name: pk_cargos_unne; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cargos_unne pk_cargos_unne; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_unne
@@ -2511,7 +2489,7 @@ ALTER TABLE ONLY cargos_unne
 
 
 --
--- Name: pk_carrera_dependencia; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: carrera_dependencia pk_carrera_dependencia; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY carrera_dependencia
@@ -2519,7 +2497,7 @@ ALTER TABLE ONLY carrera_dependencia
 
 
 --
--- Name: pk_carreras; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: carreras pk_carreras; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY carreras
@@ -2527,7 +2505,7 @@ ALTER TABLE ONLY carreras
 
 
 --
--- Name: pk_categorias_conicet; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: categorias_conicet pk_categorias_conicet; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY categorias_conicet
@@ -2535,7 +2513,7 @@ ALTER TABLE ONLY categorias_conicet
 
 
 --
--- Name: pk_categorias_incentivos; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: categorias_incentivos pk_categorias_incentivos; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY categorias_incentivos
@@ -2543,7 +2521,7 @@ ALTER TABLE ONLY categorias_incentivos
 
 
 --
--- Name: pk_color_carpeta; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: color_carpeta pk_color_carpeta; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY color_carpeta
@@ -2551,7 +2529,7 @@ ALTER TABLE ONLY color_carpeta
 
 
 --
--- Name: pk_comision_asesora; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: comision_asesora pk_comision_asesora; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY comision_asesora
@@ -2559,7 +2537,7 @@ ALTER TABLE ONLY comision_asesora
 
 
 --
--- Name: pk_convocatoria_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: convocatoria_beca pk_convocatoria_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY convocatoria_beca
@@ -2567,7 +2545,7 @@ ALTER TABLE ONLY convocatoria_beca
 
 
 --
--- Name: pk_cumplimiento_obligacion; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cumplimiento_obligacion pk_cumplimiento_obligacion; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cumplimiento_obligacion
@@ -2575,7 +2553,7 @@ ALTER TABLE ONLY cumplimiento_obligacion
 
 
 --
--- Name: pk_dedicacion; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: dedicacion pk_dedicacion; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY dedicacion
@@ -2583,7 +2561,7 @@ ALTER TABLE ONLY dedicacion
 
 
 --
--- Name: pk_dependencias; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: dependencias pk_dependencias; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY dependencias
@@ -2591,15 +2569,7 @@ ALTER TABLE ONLY dependencias
 
 
 --
--- Name: pk_direccion_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY direccion_beca
-    ADD CONSTRAINT pk_direccion_beca PRIMARY KEY (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca, tipo);
-
-
---
--- Name: pk_docentes; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: docentes pk_docentes; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY docentes
@@ -2607,7 +2577,7 @@ ALTER TABLE ONLY docentes
 
 
 --
--- Name: pk_inscripcion_conv_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca pk_inscripcion_conv_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -2615,7 +2585,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: pk_integrante_comision_asesora; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: integrante_comision_asesora pk_integrante_comision_asesora; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY integrante_comision_asesora
@@ -2623,7 +2593,7 @@ ALTER TABLE ONLY integrante_comision_asesora
 
 
 --
--- Name: pk_localidades; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: localidades pk_localidades; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY localidades
@@ -2631,7 +2601,7 @@ ALTER TABLE ONLY localidades
 
 
 --
--- Name: pk_motivos_baja; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: motivos_baja pk_motivos_baja; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY motivos_baja
@@ -2639,7 +2609,7 @@ ALTER TABLE ONLY motivos_baja
 
 
 --
--- Name: pk_niveles_academicos; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: niveles_academicos pk_niveles_academicos; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY niveles_academicos
@@ -2647,7 +2617,7 @@ ALTER TABLE ONLY niveles_academicos
 
 
 --
--- Name: pk_paises; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: paises pk_paises; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY paises
@@ -2655,7 +2625,7 @@ ALTER TABLE ONLY paises
 
 
 --
--- Name: pk_personas; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: personas pk_personas; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY personas
@@ -2663,7 +2633,7 @@ ALTER TABLE ONLY personas
 
 
 --
--- Name: pk_provincias; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: provincias pk_provincias; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY provincias
@@ -2671,7 +2641,7 @@ ALTER TABLE ONLY provincias
 
 
 --
--- Name: pk_proyectos; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: proyectos pk_proyectos; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY proyectos
@@ -2679,7 +2649,7 @@ ALTER TABLE ONLY proyectos
 
 
 --
--- Name: pk_requisitos_convocatoria; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: requisitos_convocatoria pk_requisitos_convocatoria; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY requisitos_convocatoria
@@ -2687,7 +2657,7 @@ ALTER TABLE ONLY requisitos_convocatoria
 
 
 --
--- Name: pk_resoluciones; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: resoluciones pk_resoluciones; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY resoluciones
@@ -2695,7 +2665,7 @@ ALTER TABLE ONLY resoluciones
 
 
 --
--- Name: pk_resultado_avance; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: resultado_avance pk_resultado_avance; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY resultado_avance
@@ -2703,7 +2673,7 @@ ALTER TABLE ONLY resultado_avance
 
 
 --
--- Name: pk_tipo_documento; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tipo_documento pk_tipo_documento; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipo_documento
@@ -2711,7 +2681,7 @@ ALTER TABLE ONLY tipo_documento
 
 
 --
--- Name: pk_tipos_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tipos_beca pk_tipos_beca; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_beca
@@ -2719,7 +2689,7 @@ ALTER TABLE ONLY tipos_beca
 
 
 --
--- Name: pk_tipos_convocatoria; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tipos_convocatoria pk_tipos_convocatoria; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_convocatoria
@@ -2727,7 +2697,7 @@ ALTER TABLE ONLY tipos_convocatoria
 
 
 --
--- Name: pk_tipos_resolucion; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tipos_resolucion pk_tipos_resolucion; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_resolucion
@@ -2735,7 +2705,7 @@ ALTER TABLE ONLY tipos_resolucion
 
 
 --
--- Name: pk_universidades; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: universidades pk_universidades; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY universidades
@@ -2743,7 +2713,7 @@ ALTER TABLE ONLY universidades
 
 
 --
--- Name: uk_provincia_pais; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: provincias uk_provincia_pais; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY provincias
@@ -2751,7 +2721,7 @@ ALTER TABLE ONLY provincias
 
 
 --
--- Name: uq_nivel_academico; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: niveles_academicos uq_nivel_academico; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY niveles_academicos
@@ -2759,7 +2729,7 @@ ALTER TABLE ONLY niveles_academicos
 
 
 --
--- Name: uq_proyectos_proyecto; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: proyectos uq_proyectos_proyecto; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY proyectos
@@ -2767,7 +2737,7 @@ ALTER TABLE ONLY proyectos
 
 
 --
--- Name: uq_universidades_universidad; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: universidades uq_universidades_universidad; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY universidades
@@ -2775,7 +2745,7 @@ ALTER TABLE ONLY universidades
 
 
 --
--- Name: fk_areas_dependencia_dependencia; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: areas_dependencia fk_areas_dependencia_dependencia; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY areas_dependencia
@@ -2783,7 +2753,7 @@ ALTER TABLE ONLY areas_dependencia
 
 
 --
--- Name: fk_avance_beca_resultado_avance; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: avance_beca fk_avance_beca_resultado_avance; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY avance_beca
@@ -2791,7 +2761,7 @@ ALTER TABLE ONLY avance_beca
 
 
 --
--- Name: fk_baja_becas_becasotorgadas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: baja_becas fk_baja_becas_becasotorgadas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY baja_becas
@@ -2799,7 +2769,7 @@ ALTER TABLE ONLY baja_becas
 
 
 --
--- Name: fk_baja_becas_motivo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: baja_becas fk_baja_becas_motivo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY baja_becas
@@ -2807,7 +2777,7 @@ ALTER TABLE ONLY baja_becas
 
 
 --
--- Name: fk_becas_otorgadas_inscconvbeca; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: becas_otorgadas fk_becas_otorgadas_inscconvbeca; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY becas_otorgadas
@@ -2815,7 +2785,7 @@ ALTER TABLE ONLY becas_otorgadas
 
 
 --
--- Name: fk_becas_otorgadas_resol; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: becas_otorgadas fk_becas_otorgadas_resol; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY becas_otorgadas
@@ -2823,7 +2793,7 @@ ALTER TABLE ONLY becas_otorgadas
 
 
 --
--- Name: fk_cargos_doc_dedicacion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cargos_docente fk_cargos_doc_dedicacion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_docente
@@ -2831,7 +2801,7 @@ ALTER TABLE ONLY cargos_docente
 
 
 --
--- Name: fk_cargos_docente_cargo_unne; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cargos_docente fk_cargos_docente_cargo_unne; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_docente
@@ -2839,7 +2809,7 @@ ALTER TABLE ONLY cargos_docente
 
 
 --
--- Name: fk_cargos_docente_dependencias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cargos_docente fk_cargos_docente_dependencias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_docente
@@ -2847,7 +2817,7 @@ ALTER TABLE ONLY cargos_docente
 
 
 --
--- Name: fk_cargos_docente_docente; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cargos_docente fk_cargos_docente_docente; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cargos_docente
@@ -2855,7 +2825,7 @@ ALTER TABLE ONLY cargos_docente
 
 
 --
--- Name: fk_carrera_dependencia_carreras; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: carrera_dependencia fk_carrera_dependencia_carreras; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY carrera_dependencia
@@ -2863,7 +2833,7 @@ ALTER TABLE ONLY carrera_dependencia
 
 
 --
--- Name: fk_carrera_dependencia_dependencias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: carrera_dependencia fk_carrera_dependencia_dependencias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY carrera_dependencia
@@ -2871,7 +2841,7 @@ ALTER TABLE ONLY carrera_dependencia
 
 
 --
--- Name: fk_comision_asesora_area_conocimiento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: comision_asesora fk_comision_asesora_area_conocimiento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY comision_asesora
@@ -2879,7 +2849,7 @@ ALTER TABLE ONLY comision_asesora
 
 
 --
--- Name: fk_comision_asesora_convocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: comision_asesora fk_comision_asesora_convocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY comision_asesora
@@ -2887,7 +2857,7 @@ ALTER TABLE ONLY comision_asesora
 
 
 --
--- Name: fk_convocatoria_beca_tipoconvocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: convocatoria_beca fk_convocatoria_beca_tipoconvocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY convocatoria_beca
@@ -2895,7 +2865,7 @@ ALTER TABLE ONLY convocatoria_beca
 
 
 --
--- Name: fk_cumplimiento_obligacion_becaotorgada; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cumplimiento_obligacion fk_cumplimiento_obligacion_becaotorgada; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY cumplimiento_obligacion
@@ -2903,7 +2873,7 @@ ALTER TABLE ONLY cumplimiento_obligacion
 
 
 --
--- Name: fk_dependencia_localidad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: dependencias fk_dependencia_localidad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY dependencias
@@ -2911,7 +2881,7 @@ ALTER TABLE ONLY dependencias
 
 
 --
--- Name: fk_dependencias_universidades; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: dependencias fk_dependencias_universidades; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY dependencias
@@ -2919,23 +2889,7 @@ ALTER TABLE ONLY dependencias
 
 
 --
--- Name: fk_direccion_beca_docente; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY direccion_beca
-    ADD CONSTRAINT fk_direccion_beca_docente FOREIGN KEY (id_tipo_doc_dir, nro_documento) REFERENCES docentes(id_tipo_doc, nro_documento) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: fk_direccion_beca_inscripcion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY direccion_beca
-    ADD CONSTRAINT fk_direccion_beca_inscripcion FOREIGN KEY (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca) REFERENCES inscripcion_conv_beca(id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: fk_docente_cat_conicet; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: docentes fk_docente_cat_conicet; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY docentes
@@ -2943,7 +2897,7 @@ ALTER TABLE ONLY docentes
 
 
 --
--- Name: fk_docente_dep_conicet; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: docentes fk_docente_dep_conicet; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY docentes
@@ -2951,7 +2905,7 @@ ALTER TABLE ONLY docentes
 
 
 --
--- Name: fk_docentes_categorias_incentivos; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: docentes fk_docentes_categorias_incentivos; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY docentes
@@ -2959,7 +2913,7 @@ ALTER TABLE ONLY docentes
 
 
 --
--- Name: fk_docentes_personas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: docentes fk_docentes_personas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY docentes
@@ -2967,7 +2921,23 @@ ALTER TABLE ONLY docentes
 
 
 --
--- Name: fk_insc_conv_beca_idproyecto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_insc_conv_beca_codir; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY inscripcion_conv_beca
+    ADD CONSTRAINT fk_insc_conv_beca_codir FOREIGN KEY (id_tipo_doc_codir, nro_documento_codir) REFERENCES docentes(id_tipo_doc, nro_documento) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: inscripcion_conv_beca fk_insc_conv_beca_dir; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY inscripcion_conv_beca
+    ADD CONSTRAINT fk_insc_conv_beca_dir FOREIGN KEY (id_tipo_doc_dir, nro_documento_dir) REFERENCES docentes(id_tipo_doc, nro_documento) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: inscripcion_conv_beca fk_insc_conv_beca_idproyecto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -2975,7 +2945,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_insc_conv_beca_lugartrabajo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_insc_conv_beca_lugartrabajo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -2983,7 +2953,15 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_inscripcion_conv_beca_area_conocimiento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_insc_conv_beca_subdir; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY inscripcion_conv_beca
+    ADD CONSTRAINT fk_insc_conv_beca_subdir FOREIGN KEY (id_tipo_doc_subdir, nro_documento_subdir) REFERENCES docentes(id_tipo_doc, nro_documento) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: inscripcion_conv_beca fk_inscripcion_conv_beca_area_conocimiento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -2991,7 +2969,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_inscripcion_conv_beca_dependencias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_inscripcion_conv_beca_dependencias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -2999,7 +2977,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_inscripcion_conv_beca_idconvocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_inscripcion_conv_beca_idconvocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -3007,7 +2985,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_inscripcion_conv_beca_idtipobeca; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_inscripcion_conv_beca_idtipobeca; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -3015,7 +2993,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_inscripcion_conv_beca_personas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_inscripcion_conv_beca_personas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -3023,7 +3001,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_inscripcion_conv_becas_carrera; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: inscripcion_conv_beca fk_inscripcion_conv_becas_carrera; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY inscripcion_conv_beca
@@ -3031,7 +3009,7 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 
 --
--- Name: fk_integrante_comision_asesora_comision_asesora; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: integrante_comision_asesora fk_integrante_comision_asesora_comision_asesora; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY integrante_comision_asesora
@@ -3039,7 +3017,7 @@ ALTER TABLE ONLY integrante_comision_asesora
 
 
 --
--- Name: fk_integrante_comision_asesora_personas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: integrante_comision_asesora fk_integrante_comision_asesora_personas; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY integrante_comision_asesora
@@ -3047,7 +3025,7 @@ ALTER TABLE ONLY integrante_comision_asesora
 
 
 --
--- Name: fk_localidades_provincias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: localidades fk_localidades_provincias; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY localidades
@@ -3055,7 +3033,7 @@ ALTER TABLE ONLY localidades
 
 
 --
--- Name: fk_personas_localidades; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: personas fk_personas_localidades; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY personas
@@ -3063,7 +3041,7 @@ ALTER TABLE ONLY personas
 
 
 --
--- Name: fk_personas_nivel_academico; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: personas fk_personas_nivel_academico; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY personas
@@ -3071,7 +3049,7 @@ ALTER TABLE ONLY personas
 
 
 --
--- Name: fk_personas_tipo_documento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: personas fk_personas_tipo_documento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY personas
@@ -3079,7 +3057,7 @@ ALTER TABLE ONLY personas
 
 
 --
--- Name: fk_provincias_paises; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: provincias fk_provincias_paises; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY provincias
@@ -3087,7 +3065,7 @@ ALTER TABLE ONLY provincias
 
 
 --
--- Name: fk_requisitos_convocatoria_id_convocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: requisitos_convocatoria fk_requisitos_convocatoria_id_convocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY requisitos_convocatoria
@@ -3095,7 +3073,7 @@ ALTER TABLE ONLY requisitos_convocatoria
 
 
 --
--- Name: fk_resoluciones_id_tipo_resol; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: resoluciones fk_resoluciones_id_tipo_resol; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY resoluciones
@@ -3103,7 +3081,7 @@ ALTER TABLE ONLY resoluciones
 
 
 --
--- Name: fk_tipos_beca_idcolor; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tipos_beca fk_tipos_beca_idcolor; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_beca
@@ -3111,7 +3089,7 @@ ALTER TABLE ONLY tipos_beca
 
 
 --
--- Name: fk_tipos_beca_tipoconvocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tipos_beca fk_tipos_beca_tipoconvocatoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY tipos_beca
@@ -3119,21 +3097,11 @@ ALTER TABLE ONLY tipos_beca
 
 
 --
--- Name: fk_universidades_paises; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: universidades fk_universidades_paises; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY universidades
     ADD CONSTRAINT fk_universidades_paises FOREIGN KEY (id_pais) REFERENCES paises(id_pais) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
