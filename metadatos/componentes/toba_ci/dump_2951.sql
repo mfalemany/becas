@@ -49,7 +49,7 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 	'2951', --objeto_mt_me
 	NULL, --ev_procesar_etiq
 	NULL, --ev_cancelar_etiq
-	'100%', --ancho
+	'850px', --ancho
 	NULL, --alto
 	NULL, --posicion_botonera
 	'tab_h', --tipo_navegacion
@@ -114,6 +114,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2951', --objeto_consumidor
 	'2837', --objeto_proveedor
 	'form_codirector_docente', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1839', --dep_id
+	'2951', --objeto_consumidor
+	'2956', --objeto_proveedor
+	'form_codirector_justif', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -347,6 +359,13 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'2951', --objeto_ci
 	'1', --orden
 	'1833'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1405', --pantalla
+	'2951', --objeto_ci
+	'2', --orden
+	'1839'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'becas', --proyecto

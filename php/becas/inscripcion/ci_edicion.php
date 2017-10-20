@@ -16,13 +16,17 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-		ei_arbol($this->get_datos('inscripcion_conv_beca')->get());
+		/**
+		 * ACA ME QUEDÉ: hay que ver porque cuando selecciono una inscripcion desde el cuadro no se carga en el formulario de edicion.
+		 */
+		
+
+		
 		//obtengo datos de la inscripcion
 		if($this->get_datos('inscripcion_conv_beca')->get()){
 			$inscripcion = $this->get_datos('inscripcion_conv_beca')->get();
 		}
 
-		//ei_arbol($this->get_datos('director')->get());
 		//obtengo los datos del director
 		if($this->get_datos('director')->get()){
 			$tmp = $this->get_datos('director')->get();
@@ -42,22 +46,43 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
-		//cargo los datos del alumno
+		/* ====================== ALUMNO =============================*/
 		$this->get_datos('alumno')->cargar(
 			array('id_tipo_doc'   => $datos['id_tipo_doc'],
 				  'nro_documento' => $datos['nro_documento']));
 
+
+		/* ==================== INSCRIPCION ===========================*/
+		$copia = $datos;
+		unset($copia['id_tipo_doc_dir']);
+		unset($copia['nro_documento_dir']);
+		unset($copia['id_tipo_doc_codir']);
+		unset($copia['nro_documento_codir']);
+		unset($copia['id_tipo_doc_subdir']);
+		unset($copia['nro_documento_subdir']);
+		$copia['estado']     = 'A';
+		$copia['es_titular'] = 'S';
+		$this->get_datos('inscripcion_conv_beca')->set($copia);
+		unset($copia);
+
+		
+		/* ===================== DIRECTOR ============================*/
 		//cargo los datos del director
 		$this->get_datos('director')->cargar(
 			array('id_tipo_doc'   => $datos['id_tipo_doc_dir'],
 				  'nro_documento' => $datos['nro_documento_dir']));
-
 		//cargo los datos del director (datos de docente)
 		$this->get_datos('director_docente')->cargar(
 			array('id_tipo_doc'   => $datos['id_tipo_doc_dir'],
 				  'nro_documento' => $datos['nro_documento_dir']));
+		//cargo los datos del director (tabla direccion beca)
+		$this->get_datos('director_beca')->set(
+			array('id_tipo_doc_dir'   => $datos['id_tipo_doc_dir'],
+				  'nro_documento_dir' => $datos['nro_documento_dir'],
+				  'tipo'              => "D"));
 
 		
+		/* ==================== CO-DIRECTOR ===========================*/
 		if($datos['id_tipo_doc_codir'] && $datos['nro_documento_codir']){
 			//cargo los datos del codirector
 			$this->get_datos('codirector')->cargar(
@@ -67,11 +92,17 @@ class ci_edicion extends becas_ci
 			$this->get_datos('codirector_docente')->cargar(
 				array('id_tipo_doc'   => $datos['id_tipo_doc_codir'],
 					  'nro_documento' => $datos['nro_documento_codir']));
+			//cargo los datos del director (tabla direccion beca)
+			$this->get_datos('director_beca')->set(
+				array('id_tipo_doc_dir'   => $datos['id_tipo_doc_codir'],
+					  'nro_documento_dir' => $datos['nro_documento_codir'],
+					  'tipo'              => "C"));
 		}else{
 			$this->get_datos('codirector')->resetear();
 		}
 
-		
+
+		/* ==================== SUB-DIRECTOR ===========================*/
 		if($datos['id_tipo_doc_subdir'] && $datos['nro_documento_subdir']){
 			//cargo los datos del subdirector
 			$this->get_datos('subdirector')->cargar(
@@ -81,19 +112,14 @@ class ci_edicion extends becas_ci
 			$this->get_datos('subdirector_docente')->cargar(
 				array('id_tipo_doc'   => $datos['id_tipo_doc_subdir'],
 					  'nro_documento' => $datos['nro_documento_subdir']));
+			//cargo los datos del director (tabla direccion beca)
+			$this->get_datos('director_beca')->set(
+				array('id_tipo_doc_dir'   => $datos['id_tipo_doc_subdir'],
+					  'nro_documento_dir' => $datos['nro_documento_subdir'],
+					  'tipo'              => "S"));
 		}else{
 			$this->get_datos('subdirector')->resetear();
 		}
-
-		//elimino los datos que no corresponden a la tabla de inscripciones
-		unset($datos['id_tipo_doc_dir']);
-		unset($datos['nro_documento_dir']);
-		unset($datos['id_tipo_doc_codir']);
-		unset($datos['nro_documento_codir']);
-		unset($datos['id_tipo_doc_subdir']);
-		unset($datos['nro_documento_subdir']);
-		$this->get_datos('inscripcion_conv_beca')->set($datos);
-
 	}
 	//-----------------------------------------------------------------------------------
 	//---- form_alumno ------------------------------------------------------------------
@@ -126,7 +152,6 @@ class ci_edicion extends becas_ci
 
 	function evt__form_director__modificacion($datos)
 	{
-		//ver si se va a permitir la modificacion
 	}
 
 	function conf__form_director_docente(becas_ei_formulario $form)
@@ -211,11 +236,42 @@ class ci_edicion extends becas_ci
 
 
 
+	
+
+	//-----------------------------------------------------------------------------------
+	//---- form_admisibilidad -----------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_admisibilidad(becas_ei_formulario $form)
+	{
+		//obtengo datos de la inscripcion
+		if($this->get_datos('inscripcion_conv_beca')->get()){
+			$form->set_datos($this->get_datos('inscripcion_conv_beca')->get());
+		}
+	}
+
+	function evt__form_admisibilidad__modificacion($datos)
+	{
+		$this->get_datos('inscripcion_conv_beca')->set($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form_codirector_justif -------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_codirector_justif(becas_ei_formulario $form)
+	{
+	}
+
+	function evt__form_codirector_justif__modificacion($datos)
+	{
+	}
+
+
 	function get_datos($tabla)
 	{
 		return $this->controlador()->get_datos($tabla);
 	}
 
 }
-
 ?>

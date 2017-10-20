@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_datos_tabla', --clase
 	'22', --punto_montaje
-	'dt_dependencias', --subclase
-	'datos/dt_dependencias.php', --subclase_archivo
+	NULL, --subclase
+	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'dependencias', --nombre
@@ -162,6 +162,34 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'dependencias'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2798', --objeto
+	'1440', --col_id
+	'domicilio', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'350', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'dependencias'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2798', --objeto
+	'1441', --col_id
+	'telefono', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'75', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa

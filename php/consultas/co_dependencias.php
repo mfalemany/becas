@@ -40,12 +40,16 @@ class co_dependencias
 		return toba::db('becas')->consultar($sql);
 	}
 
-	function get_univ_dependencias()
+	function get_univ_dependencias($id_universidad = NULL)
 	{
+
 		$sql = "SELECT dep.id_dependencia, uni.sigla||' - '||dep.nombre as nombre
 				FROM dependencias AS dep
-				LEFT JOIN universidades AS uni ON uni.id_universidad = dep.id_universidad
-				ORDER BY nombre";
+				LEFT JOIN universidades AS uni ON uni.id_universidad = dep.id_universidad";
+		if($id_universidad){
+			$sql .= " WHERE dep.id_universidad = $id_universidad";
+		}
+		$sql .=	" ORDER BY nombre";
 		return toba::db('becas')->consultar($sql);
 
 	}
