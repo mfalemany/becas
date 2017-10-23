@@ -15,5 +15,10 @@
 	font-size: 1.3em;
 	text-shadow: 0px 0px 2px #222;
 }
+.etiqueta_importante{
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #F22;
+}
 
 

@@ -17,8 +17,11 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-		if($this->get_datos('inscripcion_conv_beca')->get()){
-			$form->set_datos($this->get_datos('inscripcion_conv_beca')->get());
+		$datos = $this->get_datos('inscripcion_conv_beca')->get();
+		if($datos){
+			$form->set_datos($datos);
+			$director = $datos['id_tipo_doc_dir'].'||'.$datos['nro_documento_dir'];
+			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
 		}
 	}
 
@@ -61,6 +64,8 @@ class ci_edicion extends becas_ci
 			));
 		}
 
+		$this->get_datos('inscripcion_conv_beca')->set(array('estado'    => 'A','fecha_hora'=> date('Y-m-d')));
+
 	}
 	//-----------------------------------------------------------------------------------
 	//---- form_alumno ------------------------------------------------------------------
@@ -90,6 +95,7 @@ class ci_edicion extends becas_ci
 		if($this->get_datos('director')->get()){
 			$form->set_datos($this->get_datos('director')->get());
 		}
+		$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_pais','id_provincia','id_localidad'));
 	}
 
 	function evt__form_director__modificacion($datos)
@@ -101,6 +107,7 @@ class ci_edicion extends becas_ci
 	{
 		if($this->get_datos('director_docente')->get()){
 			$form->set_datos($this->get_datos('director_docente')->get());
+			$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
 		}
 		
 	}
@@ -119,6 +126,7 @@ class ci_edicion extends becas_ci
 	{
 		if($this->get_datos('codirector')->get()){
 			$form->set_datos($this->get_datos('codirector')->get());
+			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_pais','id_provincia','id_localidad'));
 		}
 	}
 
@@ -130,6 +138,7 @@ class ci_edicion extends becas_ci
 	{
 		if($this->get_datos('codirector_docente')->get()){
 			$form->set_datos($this->get_datos('codirector_docente')->get());
+			$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
 		}
 	}
 
@@ -147,6 +156,7 @@ class ci_edicion extends becas_ci
 	{
 		if($this->get_datos('subdirector')->get()){
 			$form->set_datos($this->get_datos('subdirector')->get());
+			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_pais','id_provincia','id_localidad'));
 		}
 	}
 
@@ -159,6 +169,7 @@ class ci_edicion extends becas_ci
 	{
 		if($this->get_datos('subdirector_docente')->get()){
 			$form->set_datos($this->get_datos('subdirector_docente')->get());
+			$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
 		}
 	}
 
@@ -177,11 +188,20 @@ class ci_edicion extends becas_ci
 
 	function conf__form_admisibilidad(becas_ei_formulario $form)
 	{
-	
+		$insc = $this->get_datos('inscripcion_conv_beca')->get();
+		if($insc){
+			$resumen = $this->get_resumen_insc($insc['id_convocatoria'],$insc['id_tipo_beca'],$insc['id_tipo_doc'],$insc['nro_documento']);
+			$form->set_datos($insc);
+			$form->set_datos(array('resumen'=>$resumen));
+		}else{
+
+		}
+		
 	}
 
 	function evt__form_admisibilidad__modificacion($datos)
 	{
+		$this->get_datos('inscripcion_conv_beca')->set($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -205,6 +225,30 @@ class ci_edicion extends becas_ci
 	function get_datos($tabla)
 	{
 		return $this->controlador()->get_datos($tabla);
+	}
+
+	function ajax__get_persona($datos, toba_ajax_respuesta $respuesta)
+	{
+		$ayn = toba::consulta_php('co_personas')->get_ayn($datos['tipo'].'||'.$datos['nro']);
+		if( ! $ayn){
+			$respuesta->set(array('director'=>'Persona no encontrada'));
+		}else{
+			$respuesta->set(array('director'=>$ayn));
+		}
+		
+	}
+	/**
+	 * [get_resumen_insc Obtiene un resumen de los detalles de la inscripcion, que son útiles al momento del proceso de admisibilidad. ]
+	 * @param  integer $id_convocatoria id de la convocatoria donde se registra la inscripcion
+	 * @param  integer $id_tipo_beca    tipo de beca de la inscripcion
+	 * @param  integer $id_tipo_doc     tipo de documento del becario
+	 * @param  string $nro_documento   nro_documento del becario
+	 * @return array                  array con los detalles de la inscripción
+	 */
+	function get_resumen_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento)
+	{
+		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_resumen_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento);
+		return implode('------',$detalles[0]);
 	}
 
 }
