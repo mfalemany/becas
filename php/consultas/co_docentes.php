@@ -5,6 +5,9 @@ class co_docentes
 	function get_docentes($filtro=array())
 	{
 		$where = array();
+		if (isset($filtro['id_tipo_doc'])) {
+			$where[] = "doc.id_tipo_doc = ".quote("{$filtro['id_tipo_doc']}");
+		}
 		if (isset($filtro['nro_documento'])) {
 			$where[] = "doc.nro_documento ILIKE ".quote("%{$filtro['nro_documento']}%");
 		}
@@ -40,6 +43,28 @@ class co_docentes
 		}
 		return toba::db('becas')->consultar($sql);
 	}
+
+	function get_cargos_docente($id_tipo_doc,$nro_documento,$solo_vigentes = FALSE)
+	{
+		$sql = "SELECT car_unne.cargo,
+					   ded.dedicacion,
+					   dep.nombre as dependencia,
+					   car.fecha_desde,
+					   car.fecha_hasta
+				FROM cargos_docente AS car
+				LEFT JOIN cargos_unne AS car_unne on car_unne.id_cargo_unne = car.id_cargo_unne
+				LEFT JOIN dedicacion AS ded ON ded.id_dedicacion = car.id_dedicacion 
+				LEFT JOIN dependencias AS dep ON dep.id_dependencia = car.id_dependencia
+				WHERE car.id_tipo_doc = ".quote($id_tipo_doc)."
+				AND car.nro_documento = ".quote($nro_documento);
+				if($solo_vigentes){
+					$sql .= " AND current_date BETWEEN car.fecha_desde AND car.fecha_hasta";
+				}
+				$sql .= " ORDER BY car.fecha_desde"; 
+		return toba::db('becas')->consultar($sql);
+	}
+
+
 
 }
 ?>

@@ -50,20 +50,29 @@ class co_inscripcion_conv_beca
 		return toba::db('becas')->consultar($sql);
 	}
 
-	function get_resumen_insc($id_convocatoria, $id_tipo_beca, $id_tipo_doc, $nro_documento)
+	function get_detalles_director($id_convocatoria, $id_tipo_beca, $id_tipo_doc, $nro_documento)
 	{
-			$sql = "select doc.id_cat_incentivos,doc.id_cat_conicet,carunne.cargo,ded.dedicacion,car.fecha_desde,car.fecha_hasta
-			from inscripcion_conv_beca as insc
-			left join docentes as doc on doc.id_tipo_doc = insc.id_tipo_doc and doc.nro_documento = insc.nro_documento
-			left join cargos_docente as car on car.id_tipo_doc = doc.id_tipo_doc and car.nro_documento = doc.nro_documento
-			left join cargos_unne as carunne on carunne.id_cargo_unne = car.id_cargo_unne
-			left join dedicacion as ded on ded.id_dedicacion = car.id_dedicacion
-			where insc.id_tipo_doc = ".quote($id_tipo_doc)."
-			and insc.nro_documento = ".quote($nro_documento)."
-			and insc.id_convocatoria = ".quote($id_convocatoria)."
-			and insc.id_tipo_beca = ".quote($id_tipo_beca)."
-			and current_date between car.fecha_desde and car.fecha_hasta";
-		return toba::db('becas')->consultar($sql);
+			$sql = "SELECT dir.id_tipo_doc,
+						   td.tipo_doc,
+						   dir.nro_documento,
+						   dir.apellido,
+						   dir.nombres,
+						   dir.cuil,
+						   niv.nivel_academico,
+						   cat_inc.categoria as cat_incentivos,
+						   cat_con.categoria as cat_conicet
+			FROM inscripcion_conv_beca AS insc
+			LEFT JOIN docentes AS doc ON doc.nro_documento = insc.nro_documento_dir AND doc.id_tipo_doc = insc.id_tipo_doc_dir
+			LEFT JOIN categorias_incentivos AS cat_inc ON cat_inc.id_cat_incentivos = doc.id_cat_incentivos
+			LEFT JOIN categorias_conicet AS cat_con ON cat_con.id_cat_conicet = doc.id_cat_conicet
+			LEFT JOIN personas AS dir ON dir.nro_documento = insc.nro_documento_dir AND dir.id_tipo_doc = insc.id_tipo_doc_dir 
+			LEFT JOIN niveles_academicos AS niv ON niv.id_nivel_academico = dir.id_nivel_academico
+			LEFT JOIN tipo_documento AS td ON td.id_tipo_doc = dir.id_tipo_doc
+			WHERE insc.id_tipo_doc = ".quote($id_tipo_doc)."
+			AND insc.nro_documento = ".quote($nro_documento)."
+			AND insc.id_convocatoria = ".quote($id_convocatoria)."
+			AND insc.id_tipo_beca = ".quote($id_tipo_beca);
+			return toba::db('becas')->consultar_fila($sql);
 
 	}
 

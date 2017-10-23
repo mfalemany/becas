@@ -64,7 +64,9 @@ class ci_edicion extends becas_ci
 			));
 		}
 
-		$this->get_datos('inscripcion_conv_beca')->set(array('estado'    => 'A','fecha_hora'=> date('Y-m-d')));
+		$this->get_datos('inscripcion_conv_beca')->set(array('estado'    => 'A','fecha_hora'=> date('Y-m-d'),'es_titular'=>'S'));
+
+		$this->get_datos('inscripcion_conv_beca')->set(array('puntaje'=>$this->calcular_puntaje()));
 
 	}
 	//-----------------------------------------------------------------------------------
@@ -190,8 +192,9 @@ class ci_edicion extends becas_ci
 	{
 		$insc = $this->get_datos('inscripcion_conv_beca')->get();
 		if($insc){
-			$resumen = $this->get_resumen_insc($insc['id_convocatoria'],$insc['id_tipo_beca'],$insc['id_tipo_doc'],$insc['nro_documento']);
+			$detalles = $this->get_detalles_insc($insc['id_convocatoria'],$insc['id_tipo_beca'],$insc['id_tipo_doc'],$insc['nro_documento']);
 			$form->set_datos($insc);
+			$resumen = $this->formatear_resumen($detalles);
 			$form->set_datos(array('resumen'=>$resumen));
 		}else{
 
@@ -245,11 +248,42 @@ class ci_edicion extends becas_ci
 	 * @param  string $nro_documento   nro_documento del becario
 	 * @return array                  array con los detalles de la inscripción
 	 */
-	function get_resumen_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento)
+	function get_detalles_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento)
 	{
-		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_resumen_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento);
-		return implode('------',$detalles[0]);
+		$det_doc = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_director($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento);
+		$doc = array('id_tipo_doc'=>$det_doc['id_tipo_doc'],'nro_documento'=>$det_doc['nro_documento']);
+		$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($doc['id_tipo_doc'],$doc['nro_documento']);
+		return array_merge($det_doc,array('cargos'=>$detalles_cargos));
+	}
+
+	function formatear_resumen($detalles)
+	{
+		$resumen = "<p>Director: <b class='etiqueta_importante'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].": ".$detalles['nro_documento'].")</p>";
+		$resumen .= "<p>CUIL: ".$detalles['cuil']."</p>";
+		$resumen .= "<p>M&aacute;ximo Grado: ".$detalles['nivel_academico']."</p>";
+		$resumen .= "<p>Cat. Incentivos: ".$detalles['cat_incentivos']."</p>";
+		$resumen .= "<p>Cat. CONICET: ".$detalles['cat_conicet']."</p>";
+		$resumen .= "Cargos:<ul>";
+		foreach($detalles['cargos'] as $indice => $cargo){
+			$resumen .= "<li>Cargo: ".$cargo['cargo']." - Dedicaci&oacute;n: ".$cargo['dedicacion']." (".$cargo['dependencia'].").";
+			if($cargo['fecha_desde']){
+				$desde = new DateTime($cargo['fecha_desde']);
+				$resumen .= " Desde el ".$desde->format('d/m/Y');
+			}
+			if($cargo['fecha_hasta']){
+				$hasta = new DateTime($cargo['fecha_hasta']);
+				$resumen .= " y hasta el ".$hasta->format('d/m/Y');
+			}
+			$resumen .= "</li>";
+		}
+		$resumen .= "</ul>";
+		return $resumen;
+	}
+
+	function calcular_puntaje()
+	{
+		return "42.3";
 	}
 
 }
-?>
+?>	
