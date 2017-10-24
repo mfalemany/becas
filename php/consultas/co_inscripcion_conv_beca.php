@@ -52,9 +52,9 @@ class co_inscripcion_conv_beca
 
 	function get_detalles_director($id_convocatoria, $id_tipo_beca, $id_tipo_doc, $nro_documento)
 	{
-			$sql = "SELECT dir.id_tipo_doc,
+			$sql = "SELECT dir.id_tipo_doc as id_tipo_doc_dir,
 						   td.tipo_doc,
-						   dir.nro_documento,
+						   dir.nro_documento as nro_documento_dir,
 						   dir.apellido,
 						   dir.nombres,
 						   dir.cuil,

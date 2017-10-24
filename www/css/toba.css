@@ -18,7 +18,11 @@
 .etiqueta_importante{
 	font-weight: bold;
 	font-size: 1.1em;
-	color: #F22;
+	color: #22F;
+}
+.cargo_vigente{
+	color:#008400;
+
 }
 
 

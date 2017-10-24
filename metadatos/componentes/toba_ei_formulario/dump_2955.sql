@@ -101,7 +101,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase_proyecto
 	NULL, --clase
 	NULL, --auto_reset
-	'100%', --ancho
+	NULL, --ancho
 	'150px', --ancho_etiqueta
 	'0', --expandir_descripcion
 	NULL, --campo_bl
@@ -122,41 +122,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	'<fieldset>
-	<legend>Resumen de la Inscripci&oacute;n</legend> [ef id=resumen]</fieldset>
-<p>&nbsp;</p>
-<table>
-	<tbody>
-		<tr>
-			<td>
-				[ef id=admisible]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=fecha_hora]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=puntaje]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=beca_otorgada]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=nro_carpeta]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=observaciones]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=cant_fojas]</td>
-		</tr>
-	</tbody>
-</table>', --template
+	NULL, --template
 	NULL  --template_impresion
 );
 
@@ -255,7 +221,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
-	'Fecha y Hora', --etiqueta
+	'Fecha Inscrip.', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	'0', --colapsado

@@ -64,6 +64,21 @@ class co_docentes
 		return toba::db('becas')->consultar($sql);
 	}
 
+	static function get_ayn($params)
+	{
+		$filtro = explode('||',$params);
+		$sql = "SELECT
+			per.apellido||', '||per.nombres as docente
+		FROM docentes as doc 
+		LEFT JOIN personas as per ON per.id_tipo_doc = doc.id_tipo_doc AND per.nro_documento = doc.nro_documento
+		WHERE per.id_tipo_doc = $filtro[0]
+		AND per.nro_documento = ".quote($filtro[1]);
+		$resultado = toba::db('becas')->consultar_fila($sql);
+		if(count($resultado)){
+			return $resultado['docente'];
+		}
+	}
+
 
 
 }
