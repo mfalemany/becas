@@ -32,30 +32,43 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
+		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion_conv_beca')->set($datos);
+		
+		//se cargan los datos del alumno (si existen)
 		$this->get_datos('alumno')->cargar(array(
 			'nro_documento' => $datos['nro_documento'],
 			'id_tipo_doc'   => $datos['id_tipo_doc']
 		));
+
+		//se resetea y se vuelven a cargar los datos del director
 		$this->get_datos('director')->resetear();
 		$this->get_datos('director')->cargar(array(
 			'nro_documento' => $datos['nro_documento_dir'],
 			'id_tipo_doc'   => $datos['id_tipo_doc_dir']
 		));
+
+		//se resetea y se vuelven a cargar los datos del director (datos de docente)
 		$this->get_datos('director_docente')->resetear();
 		$this->get_datos('director_docente')->cargar(array(
 			'nro_documento' => $datos['nro_documento_dir'],
 			'id_tipo_doc'   => $datos['id_tipo_doc_dir']
 		));
 		if( ! $this->get_datos('director_docente')->get()){
-			toba::notificacion()->agregar("El Nro. de Documento del director que declar&oacute; no corresponde a un docente registrado. Por favor, comuniquese con la Secretar&iacute;a General de Ciencia y T&eacute;cnica de la UNNE");
+			throw new toba_error("El Nro. de Documento del director que declar&oacute; no corresponde a un docente registrado. Por favor, comuniquese con la Secretar&iacute;a General de Ciencia y T&eacute;cnica de la UNNE");
 		}
 		
+		
+		
 		if($datos['nro_documento_codir']){
+			//se resetea y se vuelven a cargar los datos del codirector
+			$this->get_datos('codirector')->resetear();
 			$this->get_datos('codirector')->cargar(array(
 				'nro_documento' => $datos['nro_documento_codir'],
 				'id_tipo_doc'   => $datos['id_tipo_doc_codir']
 			));
+			//se resetea y se vuelven a cargar los datos del codirector (datos de docente)
+			$this->get_datos('codirector_docente')->resetear();
 			$this->get_datos('codirector_docente')->cargar(array(
 				'nro_documento' => $datos['nro_documento_codir'],
 				'id_tipo_doc'   => $datos['id_tipo_doc_codir']
@@ -64,10 +77,14 @@ class ci_edicion extends becas_ci
 
 
 		if($datos['nro_documento_subdir']){
+			//se resetea y se vuelven a cargar los datos del subdirector
+			$this->get_datos('subdirector')->resetear();
 			$this->get_datos('subdirector')->cargar(array(
 				'nro_documento' => $datos['nro_documento_subdir'],
 				'id_tipo_doc'   => $datos['id_tipo_doc_subdir']
 			));
+			//se resetea y se vuelven a cargar los datos del subdirector (datos de docente)
+			$this->get_datos('subdirector_docente')->resetear();
 			$this->get_datos('subdirector_docente')->cargar(array(
 				'nro_documento' => $datos['nro_documento_subdir'],
 				'id_tipo_doc'   => $datos['id_tipo_doc_subdir']
@@ -79,6 +96,7 @@ class ci_edicion extends becas_ci
 		$this->get_datos('inscripcion_conv_beca')->set(array('puntaje'=>$this->calcular_puntaje()));
 
 	}
+	
 	//-----------------------------------------------------------------------------------
 	//---- form_alumno ------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -106,10 +124,12 @@ class ci_edicion extends becas_ci
 
 		if($this->get_datos('director')->get()){
 			$form->set_datos($this->get_datos('director')->get());
+
 		}
 		
 		
 		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_pais','id_provincia','id_localidad'));
+		$form->set_solo_lectura();
 	}
 
 	function evt__form_director__modificacion($datos)
