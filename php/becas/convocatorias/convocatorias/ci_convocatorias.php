@@ -56,8 +56,7 @@ class ci_convocatorias extends becas_ci
 		$errores = $this->validar($datos);
 		if(count($errores)){
 			$errores = implode('/n',$errores);
-			toba::notificacion()->agregar('Ocurrieron los siguientes erores: '.$errores);
-			return false;
+			throw new toba_error('Ocurrieron los siguientes erores: '.$errores,'','Ocurrieron algunos errores');
 		}else{
 			$this->dep('datos')->tabla('convocatoria_beca')->set($datos);	
 		}
