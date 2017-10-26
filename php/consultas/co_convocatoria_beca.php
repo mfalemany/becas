@@ -41,6 +41,15 @@ class co_convocatoria_beca
 		return toba::db('becas')->consultar($sql);
 	}
 
+	function existen_inscripciones($id_convocatoria,$id_tipo_beca)
+	{
+		$sql = "SELECT count(*) AS cantidad 
+		FROM inscripcion_conv_beca 
+		WHERE id_convocatoria = ".quote($id_convocatoria);
+		$resultado = toba::db()->consultar_fila($sql);
+		return ($resultado['cantidad'] > 0);
+	}
+
 
 }
 ?>

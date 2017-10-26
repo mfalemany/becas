@@ -20,8 +20,12 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
+
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
 		if($datos){
+			//si ya existen los registros en la tabla 'requisitos_insc', se cargan
+			$this->get_datos('requisitos_insc')->cargar();
+
 			$form->set_datos($datos);
 			$director = $datos['id_tipo_doc_dir'].'||'.$datos['nro_documento_dir'];
 			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
@@ -91,10 +95,31 @@ class ci_edicion extends becas_ci
 			));
 		}
 
+ 		//si se cumple esta condicion, es porque se está guardando por primera vez la inscripcion (o no fueron generados los registros correspondientes en la tabla 'requisitos_insc')
+		if( ! $this->get_datos('requisitos_insc')->esta_cargada()){
+			$this->generar_registros_relacionados();
+		}
+		
+
 		$this->get_datos('inscripcion_conv_beca')->set(array('estado'    => 'A','fecha_hora'=> date('Y-m-d'),'es_titular'=>'S'));
 
 		$this->get_datos('inscripcion_conv_beca')->set(array('puntaje'=>$this->calcular_puntaje()));
 
+	}
+	/**
+	 * Esta funcion genera los registros que tienen que ver con la inscriopcion, pero que pertenecen a otras tablas, 
+	 * como por ejemplo, los registros en la tabla 'requisitos_insc' que registra cuales de los requisitos de esa
+	 * convocatoria fueron entregados por el alumno
+	**/
+	function generar_registros_relacionados()
+	{
+		if( ! $this->get_datos('requisitos_insc')->esta_cargada()){
+			$datos = $this->get_datos('inscripcion_conv_beca')->get();
+			$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($datos['id_convocatoria']);
+			foreach($requisitos as $requisito){
+				$this->get_datos('requisitos_insc')->nueva_fila($requisito);
+			}
+		}
 	}
 	
 	//-----------------------------------------------------------------------------------

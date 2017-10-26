@@ -18,6 +18,34 @@ class ci_admisibilidad extends becas_ci
 		}
 		
 	}
+
+	function evt__form_admisibilidad__modificacion($datos)
+	{
+		$this->get_datos('inscripcion_conv_beca')->set($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- ml_requisitos ----------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__ml_requisitos(becas_ei_formulario_ml $form_ml)
+	{
+		//obtengo los detalles de la inscripcion
+		$insc = $this->get_datos('inscripcion_conv_beca')->get();
+
+		//cargo la tabla de requisitos
+		$this->get_datos('requisitos_insc')->cargar();
+		
+		//obtengo el estado de presentacion de requisitos del aspirante
+		$req = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($insc['id_convocatoria'],$insc['id_tipo_beca'],$insc['id_tipo_doc'],$insc['nro_documento']);
+		$form_ml->set_datos($req);
+	}
+
+	function evt__ml_requisitos__modificacion($datos)
+	{
+		$this->get_datos('requisitos_insc')->procesar_filas($datos);
+	}
+
 	//-----------------------------------------------------------------------------------
 	//---- Configuraciones --------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -78,10 +106,7 @@ class ci_admisibilidad extends becas_ci
 								</table>");
 	}
 
-	function evt__form_admisibilidad__modificacion($datos)
-	{
-		$this->get_datos('inscripcion_conv_beca')->set($datos);
-	}
+	
 
 
 	function get_datos($tabla = NULL)
@@ -89,26 +114,7 @@ class ci_admisibilidad extends becas_ci
 		return $this->controlador()->get_datos($tabla);
 	}
 
-	//-----------------------------------------------------------------------------------
-	//---- ml_requisitos ----------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-
-	function conf__ml_requisitos(becas_ei_formulario_ml $form_ml)
-	{
-		$datos = $this->get_datos('inscripcion_conv_beca')->get();
-		if($datos){
-			$form_ml->set_datos(toba::consulta_php('co_requisitos_insc')->get_requisitos_insc(
-				$datos['id_convocatoria'],
-				$datos['id_tipo_doc'],
-				$datos['nro_documento']
-			));
-		}
-	}
-
-	function evt__ml_requisitos__modificacion($datos)
-	{
-		$this->get_datos('requisitos_insc')->procesar_filas($datos);
-	}
+	
 
 }
 ?>

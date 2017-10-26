@@ -69,6 +69,18 @@ class ci_convocatorias extends becas_ci
 	{
 		if ($this->dep('datos')->esta_cargada()) {
 			$form->set_datos($this->dep('datos')->tabla('requisitos_convocatoria')->get_filas());
+
+			$datos = $this->dep('datos')->tabla('convocatoria_beca')->get(); 
+			if(toba::consulta_php('co_convocatoria_beca')->existen_inscripciones(
+				$datos['id_convocatoria'],
+				$datos['id_tipo_beca']
+			)){
+				$form->agregar_notificacion('No se pueden realizar modificaciones a los requisitos porque ya existen inscripciones registradas a esta convocatoria','warning');
+				$form->set_solo_lectura();
+				$form->desactivar_agregado_filas();
+			}
+			
+		
 		}
 	}	
 

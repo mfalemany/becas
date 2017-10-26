@@ -347,7 +347,7 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'becas', --proyecto
 	'1408', --pantalla
 	'2950', --objeto_ci
-	'2', --orden
+	'0', --orden
 	'1852'  --dep_id
 );
 
