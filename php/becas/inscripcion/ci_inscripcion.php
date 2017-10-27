@@ -1,12 +1,29 @@
 <?php
 class ci_inscripcion extends becas_ci
 {
+	function conf()
+	{
+		//si no existen convocatorias con inscripcion abierta, elimino el evento 'agregar (Nueva Inscripcion'
+		if( ! toba::consulta_php('co_convocatoria_beca')->existen_convocatorias_vigentes()){
+			$this->pantalla()->eliminar_evento('agregar');
+			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripci&oacute;n abierto');
+		}
+	}
 	//---- Cuadro -----------------------------------------------------------------------
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
-		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones());
+		$filtro = array();
+		
+		if(in_array('becario',toba::usuario()->get_perfiles_funcionales())){
+			$filtro = array('nro_documento' => toba::usuario()->get_id());
+			$cuadro->eliminar_evento('admitir');
+		}
+
+		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
+		
 	}
+	
 
 	function evt__cuadro__seleccion($datos)
 	{
@@ -61,5 +78,4 @@ class ci_inscripcion extends becas_ci
 	}
 
 }
-
 ?>

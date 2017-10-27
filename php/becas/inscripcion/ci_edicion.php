@@ -3,7 +3,32 @@ class ci_edicion extends becas_ci
 {
 	function conf()
 	{
+		//obtengo los datos de la inscripcion
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
+		
+		//si se está modificando una inscripcion, es necesario validar algunas cosas...
+		if($datos){
+			//y los datos de la convocatoria
+			$conv = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$datos['id_convocatoria']));
+			$conv=$conv[0];
+			
+			//si ya pasó la fecha de fin de la convocatoria, no se puede editar la inscripcion
+			if($conv['fecha_hasta'] < date('Y-m-d')){
+				//bloqueo el formulario para evitar que se modifiquen  los datos
+				$this->dep('form_inscripcion')->set_solo_lectura();
+				$this->dep('form_inscripcion')->agregar_notificacion('No se pueden modificar los datos de la inscripci&oacute;n debido a que finaliz&oacute; la convocatoria.','warning');
+
+				//elimino todas las pantallas que no sean el formulario de inscripción
+				$this->pantalla()->eliminar_tab('pant_alumno');
+				$this->pantalla()->eliminar_tab('pant_director');
+
+				//elimino los eventos que me permiten alterar los datos de la inscripcion
+				$this->controlador()->pantalla()->eliminar_evento('guardar');
+				$this->controlador()->pantalla()->eliminar_evento('eliminar');
+			}
+		}
+
+		//si no están cargados el codirector y/o subdirector, se deshabilitan las pestañas correspondientes
 		if( ! $datos['nro_documento_codir']){
 			$this->pantalla()->eliminar_tab('pant_codirector');
 		}
@@ -20,7 +45,14 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
+		$cliente = toba::servicio_web_rest('ws_unne')->guzzle();
+		$request = $cliente->get('agentes/32405039/datoscomedor');
 
+		$response = $request->send();
+		$personas = $response->json();
+
+		
+		ei_arbol($personas);
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
 		if($datos){
 			//si ya existen los registros en la tabla 'requisitos_insc', se cargan
@@ -36,6 +68,7 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
+
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion_conv_beca')->set($datos);
 		

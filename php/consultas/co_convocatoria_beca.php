@@ -8,6 +8,9 @@ class co_convocatoria_beca
 		if (isset($filtro['id_tipo_convocatoria'])) {
 			$where[] = "conv.id_tipo_convocatoria = ".quote($filtro['id_tipo_convocatoria']);
 		}
+		if (isset($filtro['id_convocatoria'])) {
+			$where[] = "conv.id_convocatoria = ".quote($filtro['id_convocatoria']);
+		}
 		if (isset($filtro['convocatoria'])) {
 			$where[] = "conv.convocatoria ILIKE ".quote('%'.$filtro['convocatoria'].'%');
 		}
@@ -48,6 +51,14 @@ class co_convocatoria_beca
 		WHERE id_convocatoria = ".quote($id_convocatoria);
 		$resultado = toba::db()->consultar_fila($sql);
 		return ($resultado['cantidad'] > 0);
+	}
+
+	function existen_convocatorias_vigentes()
+	{
+		$sql = "select count(*) as cant from convocatoria_beca where current_date between fecha_desde and fecha_hasta";
+		$resultado = toba::db()->consultar_fila($sql);
+		return ($resultado['cant'] > 0);
+
 	}
 
 

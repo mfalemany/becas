@@ -2,13 +2,19 @@
 class co_inscripcion_conv_beca
 {
 
-	function get_inscripciones()
+	function get_inscripciones($filtro = array())
 	{
+		$where = array();
+		if(isset($filtro['id_tipo_doc'])){
+			$where[] = 'insc.id_tipo_doc = '.quote($filtro['id_tipo_doc']);	
+		}
+		if(isset($filtro['nro_documento'])){
+			$where[] = 'insc.nro_documento = '.quote($filtro['nro_documento']);	
+		}
 		$sql = "SELECT
 			insc.id_dependencia,
 			dep.nombre as dependencia,
 			insc.id_tipo_beca,
-			tip_bec.tipo_beca,
 			insc.nro_documento,
 			becario.apellido||', '||becario.nombres as becario,
 			director.apellido||', '||director.nombres as director,
@@ -47,6 +53,10 @@ class co_inscripcion_conv_beca
 		LEFT JOIN area_conocimiento as area ON (insc.id_area_conocimiento = area.id_area_conocimiento)
 		LEFT JOIN carreras as carr ON (insc.id_carrera = carr.id_carrera)
 		ORDER BY admisible";
+		if(count($where)){
+			$sql = sql_concatenar_where($sql, $where);
+		}
+
 		return toba::db('becas')->consultar($sql);
 	}
 
