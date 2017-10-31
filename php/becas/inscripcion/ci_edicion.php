@@ -46,12 +46,9 @@ class ci_edicion extends becas_ci
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
 		$cliente = toba::servicio_web_rest('ws_unne')->guzzle();
-		$request = $cliente->get('agentes/32405039/datoscomedor');
+		$response = $cliente->get('agentes/20183344/datoscomedor');
+		$personas = array(rest_decode($response->json()));
 
-		$response = $request->send();
-		$personas = $response->json();
-
-		
 		ei_arbol($personas);
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
 		if($datos){
