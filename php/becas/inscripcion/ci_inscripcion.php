@@ -6,7 +6,7 @@ class ci_inscripcion extends becas_ci
 		//si no existen convocatorias con inscripcion abierta, elimino el evento 'agregar (Nueva Inscripcion'
 		if( ! toba::consulta_php('co_convocatoria_beca')->existen_convocatorias_vigentes()){
 			$this->pantalla()->eliminar_evento('agregar');
-			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripci&oacute;n abierto');
+			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripción abierto');
 		}
 	}
 	//---- Cuadro -----------------------------------------------------------------------
@@ -58,7 +58,8 @@ class ci_inscripcion extends becas_ci
 
 	function evt__eliminar()
 	{
-		$this->dep('datos')->eliminar_todo();
+		$this->dep('datos')->tabla('requisitos_insc')->eliminar();
+		$this->dep('datos')->tabla('inscripcion_conv_beca')->eliminar();
 		$this->resetear();
 	}
 

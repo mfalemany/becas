@@ -45,17 +45,20 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-		$cliente = toba::servicio_web_rest('ws_unne')->guzzle();
-		$response = $cliente->get('agentes/20183344/datoscomedor');
-		$personas = array(rest_decode($response->json()));
-
-		ei_arbol($personas);
+		///toba::consulta_php('co_personas')->existe_persona(1,'26649995');
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
 		if($datos){
+			$convocatoria = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$datos['id_convocatoria']),FALSE);
+
+			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
+			$form->set_solo_lectura(array('id_convocatoria','id_tipo_beca'));
+			
 			//si ya existen los registros en la tabla 'requisitos_insc', se cargan
 			$this->get_datos('requisitos_insc')->cargar();
 
 			$form->set_datos($datos);
+
+			//se completa el label que contiene el nombre y apellido del director
 			$director = $datos['id_tipo_doc_dir'].'||'.$datos['nro_documento_dir'];
 			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
 		}else{
@@ -65,15 +68,23 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
+		//Con la llamada a esta consulta me aseguro que la persona existe en la BD local
+		toba::consulta_php('co_personas')->existe_persona($datos['id_tipo_doc'],$datos['nro_documento']);
+		
+		
+
 
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion_conv_beca')->set($datos);
 		
+		
+
 		//se cargan los datos del alumno (si existen)
 		$this->get_datos('alumno')->cargar(array(
 			'nro_documento' => $datos['nro_documento'],
 			'id_tipo_doc'   => $datos['id_tipo_doc']
 		));
+
 
 		//se resetea y se vuelven a cargar los datos del director
 		$this->get_datos('director')->resetear();
@@ -351,8 +362,6 @@ class ci_edicion extends becas_ci
 	{
 		return "42.3";
 	}
-
-	
 
 }
 ?>

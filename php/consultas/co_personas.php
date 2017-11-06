@@ -108,5 +108,70 @@ class co_personas
 		}
 	}
 
+	/**
+	 * Este método consulta en  la BD local para verificar la existencia de la persona. En caso de no
+	 * encontrarla, se conecta al servicio web para obtener los datos y guardarlos en la BD local.
+	 * 
+	 * @param  varchar $nro_documento Número de documento de la persona que se está buscando
+	 * @return boolean                Retorna true en caso de encontrar la persona (en local o en el ws). Falso en caso contrario
+	 */
+	function existe_persona($id_tipo_doc,$nro_documento)
+	{
+		
+		if($this->existe_en_local($id_tipo_doc,$nro_documento)){
+			return true;
+		}else{
+			$persona = $this->buscar_en_ws($nro_documento); 
+			//ei_arbol($persona); return;
+			if($persona){
+				$this->guardar_en_local($id_tipo_doc,$persona);
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+
+	protected function existe_en_local($id_tipo_doc,$nro_documento)
+	{
+		$sql = "SELECT id_tipo_doc, nro_documento FROM personas WHERE nro_documento = ".quote($nro_documento)." AND id_tipo_doc = ".quote($id_tipo_doc);
+		$resultado = toba::db()->consultar_fila($sql);
+		return ( ! empty($resultado));
+	}
+
+	protected function buscar_en_ws($nro_documento)
+	{
+		$cliente = toba::servicio_web_rest('ws_unne')->guzzle();
+		$response = $cliente->get('agentes/'.$nro_documento.'/datoscomedor');
+		//ei_arbol(rest_decode($response->json()));
+		return rest_decode($response->json());
+	}
+	protected function guardar_en_local($id_tipo_doc, $persona)
+	{
+		if(array_key_exists('GUARANI', $persona)){
+			extract($this->array_a_minusculas($persona['GUARANI'][0]));
+			$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,email,sexo) 
+			        VALUES ($id_tipo_doc,'$nro_doc','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$email','$sexo')";
+			toba::db()->ejecutar($sql);
+		}
+		if(array_key_exists('MAPUCHE', $persona)){
+
+		}
+
+	}
+	private function array_a_minusculas($array)
+	{
+		$resultado = array();
+		foreach($array as $indice => $valor){
+			if(is_array($valor)){
+				$resultado[strtolower($indice)] = $this->array_a_minusculas($valor);
+			}else{
+				$resultado[strtolower($indice)] = $valor;
+			}
+		}
+		return $resultado;
+		
+	}
+
 }
 ?>

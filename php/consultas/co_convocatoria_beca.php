@@ -2,7 +2,7 @@
 class co_convocatoria_beca
 {
 
-	function get_convocatorias($filtro=array())
+	function get_convocatorias($filtro=array(),$solo_vigentes=TRUE)
 	{
 		$where = array();
 		if (isset($filtro['id_tipo_convocatoria'])) {
@@ -29,6 +29,7 @@ class co_convocatoria_beca
 		FROM convocatoria_beca as conv
 		LEFT JOIN tipos_convocatoria as tip on tip.id_tipo_convocatoria = conv.id_tipo_convocatoria
 		WHERE 1=1";
+		$sql .= $solo_vigentes ? " AND current_date BETWEEN conv.fecha_desde AND conv.fecha_hasta" : "";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
@@ -60,6 +61,21 @@ class co_convocatoria_beca
 		return ($resultado['cant'] > 0);
 
 	}
+
+	/*function get_convocatorias_seleccion($solo_vigentes=TRUE)
+	{
+		$sql = "SELECT id_convocatoria,convocatoria FROM convocatoria_beca AS conv WHERE 1=1" ;
+		$sql .= $solo_vigentes ? " AND current_date BETWEEN conv.fecha_desde AND conv.fecha_hasta" : "";
+		$resultado = toba::db('becas')->consultar($sql);
+		if(count($resultado)){
+			foreach($resultado as $indice => $conv){
+				$convocatorias[$conv['id_convocatoria']] = $conv['convocatoria'];
+			}
+			return $convocatorias;
+		}else{
+			return array();
+		}
+	}*/
 
 
 }
