@@ -86,7 +86,7 @@ class co_personas
 	}
 
 	/**
-	 * Retorna el apellido y nombres de una persona especÃ­fica segÃºn tipo y nro de documento
+	 * Retorna el apellido y nombres de una persona específica según tipo y nro de documento
 	 * @param  [string] $params [recibe un string con formato [id_tipo_doc]||[nro_documento]  ]
 	 * @return [string]         [retorna un string simple con formato [Apellido],[nombres]  ]
 	 */
@@ -109,22 +109,23 @@ class co_personas
 	}
 
 	/**
-	 * Este mÃ©todo consulta en  la BD local para verificar la existencia de la persona. En caso de no
+	 * Este método consulta en  la BD local para verificar la existencia de la persona. En caso de no
 	 * encontrarla, se conecta al servicio web para obtener los datos y guardarlos en la BD local.
 	 * 
-	 * @param  varchar $nro_documento NÃºmero de documento de la persona que se estÃ¡ buscando
+	 * @param  varchar $id_tipo_doc   Tipo de documento de la persona que se está buscando
+	 * @param  varchar $nro_documento Número de documento de la persona que se está buscando
+	 * @param  varchar $tipo          El parámetro tipo indica que tipo de persona se busca. En caso de ser alumno, si no se lo encuentra en la BD local, se lo importa desde el WS (a la base de personas y alumnos). En cambio, si se está buscando un docente, y no se lo encuentra en local, se realiza el mismo proceso de busqueda en el WS pero luego se lo guarda en la tabla de personas y en la de docentes
 	 * @return boolean                Retorna true en caso de encontrar la persona (en local o en el ws). Falso en caso contrario
 	 */
-	function existe_persona($id_tipo_doc,$nro_documento)
+	function existe_persona($id_tipo_doc,$nro_documento,$tipo)
 	{
 		
 		if($this->existe_en_local($id_tipo_doc,$nro_documento)){
 			return true;
 		}else{
 			$persona = $this->buscar_en_ws($nro_documento); 
-			//ei_arbol($persona); return;
 			if($persona){
-				$this->guardar_en_local($id_tipo_doc,$persona);
+				$this->guardar_en_local($id_tipo_doc,$persona,$tipo);
 				return true;
 			}else{
 				return false;
@@ -132,9 +133,10 @@ class co_personas
 		}
 	}
 
-	protected function existe_en_local($id_tipo_doc,$nro_documento)
+	protected function existe_en_local($id_tipo_doc,$nro_documento,$tipo)
 	{
-		$sql = "SELECT id_tipo_doc, nro_documento FROM personas WHERE nro_documento = ".quote($nro_documento)." AND id_tipo_doc = ".quote($id_tipo_doc);
+		$sql = "SELECT id_tipo_doc, nro_documento FROM personas WHERE nro_documento = ".quote($nro_documento)." AND id_tipo_doc = ".quote($id_tipo_doc);	
+		
 		$resultado = toba::db()->consultar_fila($sql);
 		return ( ! empty($resultado));
 	}
@@ -143,19 +145,23 @@ class co_personas
 	{
 		$cliente = toba::servicio_web_rest('ws_unne')->guzzle();
 		$response = $cliente->get('agentes/'.$nro_documento.'/datoscomedor');
-		//ei_arbol(rest_decode($response->json()));
 		return rest_decode($response->json());
 	}
-	protected function guardar_en_local($id_tipo_doc, $persona)
+	protected function guardar_en_local($id_tipo_doc, $persona,$tipo)
 	{
 		if(array_key_exists('GUARANI', $persona)){
+
 			extract($this->array_a_minusculas($persona['GUARANI'][0]));
-			$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,email,sexo) 
+			
+			if(strtolower(trim($tipo)) === 'alumno'){
+
+				$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,email,sexo) 
 			        VALUES ($id_tipo_doc,'$nro_doc','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$email','$sexo')";
+			}
 			toba::db()->ejecutar($sql);
 		}
 		if(array_key_exists('MAPUCHE', $persona)){
-
+			//acá me quedé. Tengo que ver que datos me ofrece el WS para dar de alta al docente
 		}
 
 	}

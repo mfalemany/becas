@@ -6,19 +6,18 @@ class ci_edicion extends becas_ci
 		//obtengo los datos de la inscripcion
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
 		
-		//si se est√° modificando una inscripcion, es necesario validar algunas cosas...
+		//si se est?modificando una inscripcion, es necesario validar algunas cosas...
 		if($datos){
 			//y los datos de la convocatoria
-			$conv = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$datos['id_convocatoria']));
-			$conv=$conv[0];
+			$conv = array_shift(toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$datos['id_convocatoria'])));
 			
-			//si ya pas√≥ la fecha de fin de la convocatoria, no se puede editar la inscripcion
+			//si ya pas?la fecha de fin de la convocatoria, no se puede editar la inscripcion
 			if($conv['fecha_hasta'] < date('Y-m-d')){
 				//bloqueo el formulario para evitar que se modifiquen  los datos
 				$this->dep('form_inscripcion')->set_solo_lectura();
-				$this->dep('form_inscripcion')->agregar_notificacion('No se pueden modificar los datos de la inscripci&oacute;n debido a que finaliz&oacute; la convocatoria.','warning');
+				$this->dep('form_inscripcion')->agregar_notificacion('No se pueden modificar los datos de la inscripciÛn debido a que finalizÛ la convocatoria.','warning');
 
-				//elimino todas las pantallas que no sean el formulario de inscripci√≥n
+				//elimino todas las pantallas que no sean el formulario de inscripci?
 				$this->pantalla()->eliminar_tab('pant_alumno');
 				$this->pantalla()->eliminar_tab('pant_director');
 
@@ -28,7 +27,7 @@ class ci_edicion extends becas_ci
 			}
 		}
 
-		//si no est√°n cargados el codirector y/o subdirector, se deshabilitan las pesta√±as correspondientes
+		//si no est? cargados el codirector y/o subdirector, se deshabilitan las pesta?s correspondientes
 		if( ! $datos['nro_documento_codir']){
 			$this->pantalla()->eliminar_tab('pant_codirector');
 		}
@@ -36,6 +35,8 @@ class ci_edicion extends becas_ci
 			$this->pantalla()->eliminar_tab('pant_subdirector');
 		}
 	}
+
+
 
 	
 
@@ -45,22 +46,19 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-		///toba::consulta_php('co_personas')->existe_persona(1,'26649995');
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
 		if($datos){
-			$convocatoria = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$datos['id_convocatoria']),FALSE);
-
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
 			$form->set_solo_lectura(array('id_convocatoria','id_tipo_beca'));
-			
-			//si ya existen los registros en la tabla 'requisitos_insc', se cargan
-			$this->get_datos('requisitos_insc')->cargar();
 
+			//asigno los datos al formulario
+			
 			$form->set_datos($datos);
 
 			//se completa el label que contiene el nombre y apellido del director
 			$director = $datos['id_tipo_doc_dir'].'||'.$datos['nro_documento_dir'];
 			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
+
 		}else{
 			$this->pantalla()->tab('pant_director')->desactivar();
 		}
@@ -68,41 +66,73 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
-		//Con la llamada a esta consulta me aseguro que la persona existe en la BD local
-		toba::consulta_php('co_personas')->existe_persona($datos['id_tipo_doc'],$datos['nro_documento']);
-		
-		
-
-
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion_conv_beca')->set($datos);
 		
+		/* ========================= TRATAMIENTO DE LOS DATOS DEL ALUMNO ===================== */
 		
+		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($datos['id_tipo_doc'],$datos['nro_documento'],'alumno');
+		
+		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
+		if( ! $existe_persona){
+			$this->get_datos('alumno')->resetear();
+			$this->get_datos('alumno')->set(array(
+				'nro_documento' => $datos['nro_documento'],
+				'id_tipo_doc'   => $datos['id_tipo_doc']
+			));
+			
+			$this->set_pantalla('pant_alumno');
 
-		//se cargan los datos del alumno (si existen)
-		$this->get_datos('alumno')->cargar(array(
-			'nro_documento' => $datos['nro_documento'],
-			'id_tipo_doc'   => $datos['id_tipo_doc']
-		));
+			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ning˙n alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuaciÛn.');
 
-
-		//se resetea y se vuelven a cargar los datos del director
-		$this->get_datos('director')->resetear();
-		$this->get_datos('director')->cargar(array(
-			'nro_documento' => $datos['nro_documento_dir'],
-			'id_tipo_doc'   => $datos['id_tipo_doc_dir']
-		));
-
-		//se resetea y se vuelven a cargar los datos del director (datos de docente)
-		$this->get_datos('director_docente')->resetear();
-		$this->get_datos('director_docente')->cargar(array(
-			'nro_documento' => $datos['nro_documento_dir'],
-			'id_tipo_doc'   => $datos['id_tipo_doc_dir']
-		));
-		if( ! $this->get_datos('director_docente')->get()){
-			throw new toba_error("El Nro. de Documento del director que declar&oacute; no corresponde a un docente registrado. Por favor, comuniquese con la Secretar&iacute;a General de Ciencia y T&eacute;cnica de la UNNE");
+		}else{
+			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
+			$this->get_datos('alumno')->cargar(array(
+				'nro_documento' => $datos['nro_documento'],
+				'id_tipo_doc'   => $datos['id_tipo_doc']
+			));
 		}
+
+		/* ========================= TRATAMIENTO DE LOS DATOS DEL DIRECTOR ===================== */
+
+		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($datos['id_tipo_doc_dir'],$datos['nro_documento_dir'],'docente');
 		
+		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
+		if( ! $existe_persona){
+			$this->get_datos('director')->resetear();
+			$this->get_datos('director')->set(array(
+				'nro_documento' => $datos['nro_documento_dir'],
+				'id_tipo_doc'   => $datos['id_tipo_doc_dir']
+			));
+			
+			$this->set_pantalla('pant_director');
+
+			throw new toba_error('El Nro. de Documento del director ingresado no se corresponde con ning˙na persona registrada en el sistema. Por favor, complete los datos solicitados a continuaciÛn.');
+
+		}else{
+			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
+			$this->get_datos('director')->cargar(array(
+				'nro_documento' => $datos['nro_documento_dir'],
+				'id_tipo_doc'   => $datos['id_tipo_doc_dir']
+			));
+		}
+
+		//se cargan los datos del director (datos de docente)
+		if( ! $this->get_datos('director_docente')->get()){
+			$this->get_datos('director_docente')->cargar(array(
+				'nro_documento' => $datos['nro_documento_dir'],
+				'id_tipo_doc'   => $datos['id_tipo_doc_dir']
+			));
+		}
+
+
+
+
+
+
+
 		
 		
 		if($datos['nro_documento_codir']){
@@ -136,11 +166,7 @@ class ci_edicion extends becas_ci
 			));
 		}
 
- 		//si se cumple esta condicion, es porque se est√° guardando por primera vez la inscripcion (o no fueron generados los registros correspondientes en la tabla 'requisitos_insc')
-		if( ! $this->get_datos('requisitos_insc')->esta_cargada()){
-			$this->generar_registros_relacionados();
-		}
-		
+			//si se cumple esta condicion, es porque se est?guardando por primera vez la inscripcion (o no fueron generados los registros correspondientes en la tabla 'requisitos_insc')
 
 		$this->get_datos('inscripcion_conv_beca')->set(array('estado'    => 'A','fecha_hora'=> date('Y-m-d'),'es_titular'=>'S'));
 
@@ -148,16 +174,24 @@ class ci_edicion extends becas_ci
 
 	}
 	/**
-	 * Esta funcion genera los registros que tienen que ver con la inscriopcion, pero que pertenecen a otras tablas, 
-	 * como por ejemplo, los registros en la tabla 'requisitos_insc' que registra cuales de los requisitos de esa
-	 * convocatoria fueron entregados por el alumno
+		* Esta funcion genera los registros que tienen que ver con la inscriopcion, pero que pertenecen a otras tablas, 
+		* como por ejemplo, los registros en la tabla 'requisitos_insc' que registra cuales de los requisitos de esa
+		* convocatoria fueron entregados por el alumno
 	**/
 	function generar_registros_relacionados()
 	{
-		if( ! $this->get_datos('requisitos_insc')->esta_cargada()){
+		//obtengo los datos principales de la inscripcion
+		$datos = $this->get_datos('inscripcion_conv_beca')->get();
+		//verifico si ya se crearon los registros para el cumplimiento de requisitos
+		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['id_tipo_doc'],$datos['nro_documento']);
+		
+		//la insercion de los requisitos iniciales se realiza solo una vez
+		if( ! $requisitos_inscripcion){
 			$datos = $this->get_datos('inscripcion_conv_beca')->get();
 			$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($datos['id_convocatoria']);
+
 			foreach($requisitos as $requisito){
+
 				$this->get_datos('requisitos_insc')->nueva_fila($requisito);
 			}
 		}
@@ -169,14 +203,20 @@ class ci_edicion extends becas_ci
 
 	function conf__form_alumno(becas_ei_formulario $form)
 	{
+		$form->set_solo_lectura(array('id_tipo_doc','nro_documento'));
 		if($this->get_datos('alumno')->get()){
+			//ei_arbol($this->get_datos('alumno')->get());
 			$form->set_datos($this->get_datos('alumno')->get());
+			
 		}
 	}
 
 	function evt__form_alumno__modificacion($datos)
 	{
+		$this->get_datos('inscripcion_conv_beca')->set(array('nro_documento'=> $datos['nro_documento'],
+																'id_tipo_doc'  => $datos['id_tipo_doc']));
 		$this->get_datos('alumno')->set($datos);
+		$this->get_datos('alumno')->sincronizar();
 	}
 
 	
@@ -288,80 +328,80 @@ class ci_edicion extends becas_ci
 	//-----------------------------------------------------------------------------------
 
 	function conf__form_codirector_justif(becas_ei_formulario $form)
-	{
-		if($this->get_datos('inscripcion_conv_beca')->get()){
-			$datos = $this->get_datos('inscripcion_conv_beca')->get();
-			$form->set_datos(array('justif_codirector' => $datos['justif_codirector']));
-		}
-	}
+    {
+        if($this->get_datos('inscripcion_conv_beca')->get()){
+            $datos = $this->get_datos('inscripcion_conv_beca')->get();
+            $form->set_datos(array('justif_codirector' => $datos['justif_codirector']));
+        }
+    }
 
-	function evt__form_codirector_justif__modificacion($datos)
-	{
-		$this->get_datos('inscripcion_conv_beca')->set($datos);
-	}
-
-
-	function get_datos($tabla)
-	{
-		return $this->controlador()->get_datos($tabla);
-	}
-
-	function ajax__get_docente($datos, toba_ajax_respuesta $respuesta)
-	{
-		$ayn = toba::consulta_php('co_docentes')->get_ayn($datos['tipo'].'||'.$datos['nro']);
-		if( ! $ayn){
-			$respuesta->set(array('director'=>'Docente no encontrado','error'=>TRUE));
-		}else{
-			$respuesta->set(array('director'=>$ayn,'error'=>FALSE));
-		}
-		
-	}
-	/**
-	 * [get_resumen_insc Obtiene un resumen de los detalles de la inscripcion, que son √∫tiles al momento del proceso de admisibilidad. ]
-	 * @param  integer $id_convocatoria id de la convocatoria donde se registra la inscripcion
-	 * @param  integer $id_tipo_beca    tipo de beca de la inscripcion
-	 * @param  integer $id_tipo_doc     tipo de documento del becario
-	 * @param  string $nro_documento   nro_documento del becario
-	 * @return array                  array con los detalles de la inscripci√≥n
-	 */
-	/*function get_detalles_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento)
-	{
-		$det_doc = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_director($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento);
-		$doc = array('id_tipo_doc'=>$det_doc['id_tipo_doc'],'nro_documento'=>$det_doc['nro_documento']);
-		$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($doc['id_tipo_doc'],$doc['nro_documento']);
-		return array_merge($det_doc,array('cargos'=>$detalles_cargos));
-	}
+    function evt__form_codirector_justif__modificacion($datos)
+    {
+        $this->get_datos('inscripcion_conv_beca')->set($datos);
+    }
 
 
+    function get_datos($tabla)
+    {
+        return $this->controlador()->get_datos($tabla);
+    }
 
-	function formatear_resumen($detalles)
-	{
-		$resumen = "<p>Director: <b class='etiqueta_importante'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].": ".$detalles['nro_documento'].")</p>";
-		$resumen .= "<p>CUIL: ".$detalles['cuil']."</p>";
-		$resumen .= "<p>M&aacute;ximo Grado: ".$detalles['nivel_academico']."</p>";
-		$resumen .= "<p>Cat. Incentivos: ".$detalles['cat_incentivos']."</p>";
-		$resumen .= "<p>Cat. CONICET: ".$detalles['cat_conicet']."</p>";
-		$resumen .= "Cargos:<ul>";
-		foreach($detalles['cargos'] as $indice => $cargo){
-			$resumen .= "<li>Cargo: ".$cargo['cargo']." - Dedicaci&oacute;n: ".$cargo['dedicacion']." (".$cargo['dependencia'].").";
-			if($cargo['fecha_desde']){
-				$desde = new DateTime($cargo['fecha_desde']);
-				$resumen .= " Desde el ".$desde->format('d/m/Y');
-			}
-			if($cargo['fecha_hasta']){
-				$hasta = new DateTime($cargo['fecha_hasta']);
-				$resumen .= " y hasta el ".$hasta->format('d/m/Y');
-			}
-			$resumen .= "</li>";
-		}
-		$resumen .= "</ul>";
-		return $resumen;
-	}*/
+    function ajax__get_docente($datos, toba_ajax_respuesta $respuesta)
+    {
+        $ayn = toba::consulta_php('co_docentes')->get_ayn($datos['tipo'].'||'.$datos['nro']);
+        if( ! $ayn){
+            $respuesta->set(array('director'=>'Docente no encontrado','error'=>TRUE));
+        }else{
+            $respuesta->set(array('director'=>$ayn,'error'=>FALSE));
+        }
+        
+    }
+    /**
+        * [get_resumen_insc Obtiene un resumen de los detalles de la inscripcion, que son ?tiles al momento del proceso de admisibilidad. ]
+        * @param  integer $id_convocatoria id de la convocatoria donde se registra la inscripcion
+        * @param  integer $id_tipo_beca    tipo de beca de la inscripcion
+        * @param  integer $id_tipo_doc     tipo de documento del becario
+        * @param  string $nro_documento   nro_documento del becario
+        * @return array                  array con los detalles de la inscripci?
+        */
+    /*function get_detalles_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento)
+    {
+        $det_doc = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_director($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento);
+        $doc = array('id_tipo_doc'=>$det_doc['id_tipo_doc'],'nro_documento'=>$det_doc['nro_documento']);
+        $detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($doc['id_tipo_doc'],$doc['nro_documento']);
+        return array_merge($det_doc,array('cargos'=>$detalles_cargos));
+    }
 
-	function calcular_puntaje()
-	{
-		return "42.3";
-	}
+
+
+    function formatear_resumen($detalles)
+    {
+        $resumen = "<p>Director: <b class='etiqueta_importante'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].": ".$detalles['nro_documento'].")</p>";
+        $resumen .= "<p>CUIL: ".$detalles['cuil']."</p>";
+        $resumen .= "<p>M?imo Grado: ".$detalles['nivel_academico']."</p>";
+        $resumen .= "<p>Cat. Incentivos: ".$detalles['cat_incentivos']."</p>";
+        $resumen .= "<p>Cat. CONICET: ".$detalles['cat_conicet']."</p>";
+        $resumen .= "Cargos:<ul>";
+        foreach($detalles['cargos'] as $indice => $cargo){
+            $resumen .= "<li>Cargo: ".$cargo['cargo']." - Dedicaci?: ".$cargo['dedicacion']." (".$cargo['dependencia'].").";
+            if($cargo['fecha_desde']){
+                $desde = new DateTime($cargo['fecha_desde']);
+                $resumen .= " Desde el ".$desde->format('d/m/Y');
+            }
+            if($cargo['fecha_hasta']){
+                $hasta = new DateTime($cargo['fecha_hasta']);
+                $resumen .= " y hasta el ".$hasta->format('d/m/Y');
+            }
+            $resumen .= "</li>";
+        }
+        $resumen .= "</ul>";
+        return $resumen;
+    }*/
+
+    function calcular_puntaje()
+    {
+        return "42.3";
+    }
 
 }
 ?>

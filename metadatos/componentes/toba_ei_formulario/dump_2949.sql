@@ -274,7 +274,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_convocatoria', --identificador
 	'ef_combo', --elemento_formulario
 	'id_convocatoria', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
 	'Convocatoria', --etiqueta
@@ -304,7 +304,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --carga_cascada_relaj
 	'0', --cascada_mantiene_estado
 	'1', --carga_permite_no_seteado
-	'-- Seleccione --', --carga_no_seteado
+	'--Seleccione--', --carga_no_seteado
 	'0', --carga_no_seteado_ocultar
 	NULL, --edit_tamano
 	NULL, --edit_maximo
@@ -354,7 +354,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_beca', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_beca', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
 	'Tipo Beca', --etiqueta
@@ -434,7 +434,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_dependencia', --identificador
 	'ef_combo', --elemento_formulario
 	'id_dependencia', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'3', --orden
 	'Dependencia', --etiqueta
@@ -674,7 +674,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_area_conocimiento', --identificador
 	'ef_combo', --elemento_formulario
 	'id_area_conocimiento', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'8', --orden
 	'Area Conocimiento', --etiqueta
@@ -754,7 +754,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'titulo_plan_beca', --identificador
 	'ef_editable_textarea', --elemento_formulario
 	'titulo_plan_beca', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'10', --orden
 	'Titulo Plan Beca', --etiqueta
@@ -834,7 +834,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_carrera', --identificador
 	'ef_combo', --elemento_formulario
 	'id_carrera', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'9', --orden
 	'Carrera', --etiqueta
@@ -914,7 +914,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'materias_plan', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'materias_plan', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'11', --orden
 	'Cant.Mat. del Plan de Estudios', --etiqueta
@@ -994,7 +994,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'materias_aprobadas', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'materias_aprobadas', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'12', --orden
 	'Cant. Materias Aprobadas', --etiqueta
@@ -1074,7 +1074,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'prom_hist_egresados', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'prom_hist_egresados', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'13', --orden
 	'Prom Hist. Egresados', --etiqueta
@@ -1154,7 +1154,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'prom_hist', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'prom_hist', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'14', --orden
 	'Prom Hist. Becario', --etiqueta
@@ -1954,7 +1954,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_proyecto', --identificador
 	'ef_combo_editable', --elemento_formulario
 	'id_proyecto', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'26', --orden
 	'Proyecto', --etiqueta
@@ -2034,7 +2034,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'es_egresado', --identificador
 	'ef_checkbox', --elemento_formulario
 	'es_egresado', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'27', --orden
 	'Es egresado?', --etiqueta
@@ -2114,7 +2114,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'anio_ingreso', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'anio_ingreso', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'28', --orden
 	'Año de Ingreso', --etiqueta
@@ -2354,7 +2354,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'lugar_trabajo_becario', --identificador
 	'ef_combo', --elemento_formulario
 	'lugar_trabajo_becario', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'4', --orden
 	'Lugar de Trabajo', --etiqueta
@@ -2434,7 +2434,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'area_trabajo', --identificador
 	'ef_editable', --elemento_formulario
 	'area_trabajo', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'5', --orden
 	'Área/Dpto./Lab.', --etiqueta

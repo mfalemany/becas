@@ -59,7 +59,7 @@ class form_inscripcion extends becas_ei_formulario
 		
 		// ------------ Asigno el valor obtenido por ajax al label Director ----------------------------
 		function mostrar_director(params)
-		{	
+		{    
 			{$id_js}.ef('director').set_estado(params.director);
 			if( ! params.error){
 				{$this->objeto_js}.controlador.activar_tab('pant_director');
