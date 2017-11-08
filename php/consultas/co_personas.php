@@ -125,15 +125,14 @@ class co_personas
 		}else{
 			$persona = $this->buscar_en_ws($nro_documento); 
 			if($persona){
-				$this->guardar_en_local($id_tipo_doc,$persona,$tipo);
-				return true;
+				return $this->guardar_en_local($id_tipo_doc,$persona,$tipo);
 			}else{
 				return false;
 			}
 		}
 	}
 
-	protected function existe_en_local($id_tipo_doc,$nro_documento,$tipo)
+	protected function existe_en_local($id_tipo_doc,$nro_documento)
 	{
 		$sql = "SELECT id_tipo_doc, nro_documento FROM personas WHERE nro_documento = ".quote($nro_documento)." AND id_tipo_doc = ".quote($id_tipo_doc);	
 		
@@ -147,22 +146,52 @@ class co_personas
 		$response = $cliente->get('agentes/'.$nro_documento.'/datoscomedor');
 		return rest_decode($response->json());
 	}
-	protected function guardar_en_local($id_tipo_doc, $persona,$tipo)
+	protected function guardar_en_local($id_tipo_doc, $persona, $tipo)
 	{
-		if(array_key_exists('GUARANI', $persona)){
-
-			extract($this->array_a_minusculas($persona['GUARANI'][0]));
-			
-			if(strtolower(trim($tipo)) === 'alumno'){
-
-				$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,email,sexo) 
-			        VALUES ($id_tipo_doc,'$nro_doc','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$email','$sexo')";
-			}
-			toba::db()->ejecutar($sql);
-		}
+		/* ******************** OBTENCIÓN DE LOS DATOS **************************/
+		$datos = array(	'id_tipo_doc'   => 1,
+						'nro_documento' => '',
+						'apellido'      => '',
+						'nombres'       => '',
+						'fecha_nac'     => '',
+						'email'         => '',
+						'sexo'          => '',
+						'cuil'          => '');
+		
 		if(array_key_exists('MAPUCHE', $persona)){
-			//acá me quedé. Tengo que ver que datos me ofrece el WS para dar de alta al docente
+			$datos['nro_documento']	= $persona['MAPUCHE'][0]['nro_documento'];
+			$datos['apellido']      = array_shift(explode(',',$persona['MAPUCHE'][0]['ayn']));
+			$datos['nombres']       = array_pop(explode(',',$persona['MAPUCHE'][0]['ayn']));
+			$datos['cuil']          = $persona['MAPUCHE'][0]['cuit'];
 		}
+		
+		
+		$guarani = $this->array_a_minusculas($persona['GUARANI'][0]);
+		if(array_key_exists('GUARANI', $persona)){
+			$datos['nro_documento'] = $guarani['nro_doc'];
+			$datos['apellido'] = ucwords(strtolower($guarani['apellido']));
+			$datos['nombres'] = ucwords(strtolower($guarani['nombres']));
+			$datos['fecha_nac'] = $guarani['fecha_nac'];
+			$datos['email'] = strtolower($guarani['email']);
+			$datos['sexo'] = $guarani['sexo'];
+		}
+		
+		extract($datos);
+		
+		/* **********************************************************************/
+
+		if(strtolower(trim($tipo)) === 'alumno'){
+			
+			$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,email,sexo,cuil) 
+			        VALUES ($id_tipo_doc,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$email','$sexo','$cuil')";
+			$afectados = toba::db()->ejecutar($sql);
+			return ($afectados >= 1);
+		}
+		if(strtolower(trim($tipo)) === 'docente'){
+			//acá hay que hacer la inserción del registro del docente y de los cargos	
+		}	
+		
+		
 
 	}
 	private function array_a_minusculas($array)

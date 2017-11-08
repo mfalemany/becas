@@ -18,8 +18,8 @@ class co_carreras
 			dep.nombre,
 			car.carrera,
 			car.cod_araucano
-		FROM carrera_dependencia as cd 
-		LEFT JOIN carreras as car on cd.id_carrera = car.id_carrera
+		FROM carreras as car
+		LEFT JOIN carrera_dependencia as cd ON cd.id_carrera = car.id_carrera
 		LEFT JOIN dependencias as dep on dep.id_dependencia = cd.id_dependencia
 
 		ORDER BY car.carrera";
