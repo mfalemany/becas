@@ -153,7 +153,7 @@ class co_personas
 						'nro_documento' => '',
 						'apellido'      => '',
 						'nombres'       => '',
-						'fecha_nac'     => '',
+						'fecha_nac'     => '1900-01-01', //fecha_nac por defecto
 						'email'         => '',
 						'sexo'          => '',
 						'cuil'          => '');
@@ -167,13 +167,15 @@ class co_personas
 		
 		
 		$guarani = $this->array_a_minusculas($persona['GUARANI'][0]);
+		
 		if(array_key_exists('GUARANI', $persona)){
 			$datos['nro_documento'] = $guarani['nro_doc'];
 			$datos['apellido'] = ucwords(strtolower($guarani['apellido']));
 			$datos['nombres'] = ucwords(strtolower($guarani['nombres']));
-			$datos['fecha_nac'] = $guarani['fecha_nac'];
-			$datos['email'] = strtolower($guarani['email']);
-			$datos['sexo'] = $guarani['sexo'];
+			$datos['fecha_nac'] = ($guarani['fecha_nac']) ? $guarani['fecha_nac'] : $datos['fecha_nac'];
+			$datos['email'] = ($guarani['email']) ? strtolower($guarani['email']) : '';
+			$datos['sexo'] = ($guarani['sexo']) ? $guarani['sexo'] : '';
+
 		}
 		
 		extract($datos);

@@ -125,6 +125,9 @@ class ci_edicion extends becas_ci
 				'nro_documento' => $datos['nro_documento_dir'],
 				'id_tipo_doc'   => $datos['id_tipo_doc_dir']
 			));
+			if( ! $this->get_datos('director_docente')->esta_cargada()){
+				throw new toba_error('El Nro. de Documento del director ingresado corresponde a un persona registrada en el sistema, pero no es docente. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+			}
 		}
 
 
@@ -245,9 +248,10 @@ class ci_edicion extends becas_ci
 
 	function conf__form_director_docente(becas_ei_formulario $form)
 	{
+		$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
 		if($this->get_datos('director_docente')->get()){
 			$form->set_datos($this->get_datos('director_docente')->get());
-			$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+			
 		}
 		
 	}

@@ -129,14 +129,14 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 	NULL, --archivos_callbacks
 	'100%', --ancho
 	'0', --ordenar
-	'0', --paginar
-	NULL, --tamano_pagina
+	'1', --paginar
+	'15', --tamano_pagina
 	'P', --tipo_paginado
 	'1', --mostrar_total_registros
 	'0', --eof_invisible
 	'No se han cargado provincias', --eof_customizado
 	'0', --siempre_con_titulo
-	'0', --exportar_paginado
+	'1', --exportar_paginado
 	'0', --exportar
 	'0', --exportar_rtf
 	NULL, --pdf_propiedades

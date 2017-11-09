@@ -29,7 +29,7 @@ class co_provincias
 			$where[] = "prov.id_provincia = ".quote("%{$filtro['id_provincia']}%");
 		}
 		if (isset($filtro['id_pais'])) {
-			$where[] = "prov.id_pais = ".quote("%{$filtro['id_pais']}%");
+			$where[] = "prov.id_pais = ".quote("{$filtro['id_pais']}");
 		}
 		$sql = "SELECT
 			prov.id_pais,
@@ -38,7 +38,7 @@ class co_provincias
 			pai.pais
 		FROM provincias as prov
 		LEFT JOIN paises as pai ON prov.id_pais = pai.id_pais
-		ORDER BY prov.provincia, pai.pais";
+		ORDER BY pai.pais,prov.provincia";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
