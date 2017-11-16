@@ -22,7 +22,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --objeto_categoria
 	'Convocatorias - Filtro', --nombre
 	'Filtrar lista de Convocatorias', --titulo
-	'0', --colapsable
+	'1', --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
 	'becas', --fuente_datos

@@ -15,6 +15,7 @@ class co_inscripcion_conv_beca
 			insc.id_dependencia,
 			dep.nombre as dependencia,
 			insc.id_tipo_beca,
+			tip_bec.tipo_beca,
 			insc.nro_documento,
 			becario.apellido||', '||becario.nombres as becario,
 			director.apellido||', '||director.nombres as director,

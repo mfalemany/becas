@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_dependencias', --subclase
-	'opciones/lugares/dependencias/ci_dependencias.php', --subclase_archivo
+	'academica/dependencias/ci_dependencias.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Dependencias - CI', --nombre

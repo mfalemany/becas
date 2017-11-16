@@ -1,21 +1,6 @@
 <?php
 class co_provincias
 {
-	function get_provincias_pais($id_pais)
-	{
-		$sql = "SELECT
-			prov.id_pais,
-			prov.id_provincia,
-			prov.provincia,
-			pai.pais
-		FROM provincias as prov
-		LEFT JOIN paises as pai ON prov.id_pais = pai.id_pais
-		WHERE prov.id_pais = $id_pais
-		ORDER BY prov.provincia, pai.pais";
-
-		return toba::db('becas')->consultar($sql);
-	}
-
 	function get_provincias($filtro=array())
 	{
 
@@ -38,7 +23,7 @@ class co_provincias
 			pai.pais
 		FROM provincias as prov
 		LEFT JOIN paises as pai ON prov.id_pais = pai.id_pais
-		ORDER BY pai.pais,prov.provincia";
+		ORDER BY prov.provincia";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}

@@ -10,7 +10,10 @@ class ci_convocatorias extends becas_ci
 	{
 		if (isset($this->s__datos_filtro)) {
 			$filtro->set_datos($this->s__datos_filtro);
+		}else{
+			$filtro->colapsar();
 		}
+
 	}
 
 	function evt__filtro__filtrar($datos)
@@ -28,9 +31,9 @@ class ci_convocatorias extends becas_ci
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
 		if (isset($this->s__datos_filtro)) {
-			$cuadro->set_datos(toba::consulta_php('co_convocatoria_beca')->get_convocatorias($this->s__datos_filtro));
+			$cuadro->set_datos(toba::consulta_php('co_convocatoria_beca')->get_convocatorias($this->s__datos_filtro),false);
 		} else {
-			$cuadro->set_datos(toba::consulta_php('co_convocatoria_beca')->get_convocatorias());
+			$cuadro->set_datos(toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array(),false));
 		}
 	}
 

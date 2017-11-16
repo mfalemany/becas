@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'22', --punto_montaje
 	'ci_areas', --subclase
-	'opciones/lugares/areas/ci_areas.php', --subclase_archivo
+	'academica/areas/ci_areas.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Areas - CI', --nombre

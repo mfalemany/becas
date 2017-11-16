@@ -27,6 +27,7 @@ class ci_carreras extends becas_ci
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
+		$cuadro->desactivar_modo_clave_segura();
 		if (isset($this->s__datos_filtro)) {
 			$cuadro->set_datos(toba::consulta_php('co_carreras')->get_carreras($this->s__datos_filtro));
 		} else {
@@ -38,6 +39,13 @@ class ci_carreras extends becas_ci
 	{
 		$this->dep('datos')->cargar($datos);
 		$this->set_pantalla('pant_edicion');
+	}
+	function evt__cuadro__eliminar($seleccion)
+	{
+		$this->dep('datos')->resetear();
+		$this->dep('datos')->cargar($seleccion);
+		$this->dep('datos')->eliminar_todo();
+		$this->dep('datos')->resetear();
 	}
 
 	//---- Formulario -------------------------------------------------------------------

@@ -27,5 +27,8 @@
 .centrado{
 	text-align: center;
 }
+#enc-logo img{
+	padding: 0px 0px 0px 18px;
+}
 
 
