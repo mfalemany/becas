@@ -34,8 +34,8 @@ class form_inscripcion extends becas_ei_formulario
 		{$id_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director()');
 		
 		
-
-
+		
+		
 		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL DIRECTOR -------
 		{$id_js}.ef('id_tipo_doc_dir').cuando_cambia_valor('\
 			if({$id_js}.ef(\'id_tipo_doc_dir\').get_estado() == \'nopar\'){ \
@@ -47,9 +47,9 @@ class form_inscripcion extends becas_ei_formulario
 				{$id_js}.ef(\'director\').set_estado(\'\');\
 			}\
 		');
-
-
-
+		
+		
+		
 		//---------- Busco el director usando ajax -----------------------------------------------------
 		function buscar_director(tipo,nro)
 		{
@@ -67,7 +67,7 @@ class form_inscripcion extends becas_ei_formulario
 				{$this->objeto_js}.controlador.desactivar_tab('pant_director');
 			}
 		}
-
+		
 		
 		
 		//------- Si se carga un DNI, se hace tambien obligatorio el campo id_tipo_doc_subdir ----------
@@ -100,8 +100,22 @@ class form_inscripcion extends becas_ei_formulario
 			}
 			return true;
 		}
+		//---- Procesamiento de EFs --------------------------------
+		
+		{$this->objeto_js}.evt__id_area_conocimiento__procesar = function(es_inicial)
+		{
+			area = this.ef('id_area_conocimiento').get_estado();
+			{$this->controlador()->objeto_js}.ajax('get_disciplinas_incluidas',area,this,listar_disciplinas);
+		}
+		
+		function listar_disciplinas(respuesta)
+		{
+			$('#disciplinas_incluidas').html('Disciplinas incluídas: '+respuesta);	
+		}
+
 		";
 	}
+
 
 
 }

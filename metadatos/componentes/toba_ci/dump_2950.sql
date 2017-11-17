@@ -189,7 +189,7 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 	NULL, --ev_procesar_etiq
 	NULL, --ev_cancelar_etiq
 	'100%', --ancho
-	'300px', --alto
+	'450px', --alto
 	NULL, --posicion_botonera
 	NULL, --tipo_navegacion
 	'0', --botonera_barra_item
@@ -300,8 +300,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --eventos
 	NULL, --subclase
 	NULL, --subclase_archivo
-	'<div style="width:850px; margin:auto;">
-	[dep id=ci_edicion]</div>', --template
+	NULL, --template
 	NULL, --template_impresion
 	NULL  --punto_montaje
 );

@@ -5,10 +5,13 @@ class ci_edicion extends becas_ci
 	protected $s__detalles_inscripcion;
 	function conf()
 	{
-		if($this->pantalla()->get_etiqueta() != 'Plan de Trabajo'){
+		/*if($this->pantalla()->get_etiqueta() != 'Plan de Trabajo'){
 			$this->controlador()->pantalla()->eliminar_evento('guardar');
 			$this->controlador()->pantalla()->eliminar_evento('eliminar');
-		};
+		};*/
+
+
+		
 		//obtengo los datos de la inscripcion
 		$datos = $this->get_datos('inscripcion_conv_beca')->get();
 		
@@ -267,7 +270,7 @@ class ci_edicion extends becas_ci
 		}
 		
 		
-		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_pais','id_provincia','id_localidad'));
+		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_localidad'));
 		$form->set_solo_lectura();
 	}
 
@@ -300,7 +303,7 @@ class ci_edicion extends becas_ci
 	{
 		if($this->get_datos('codirector')->get()){
 			$form->set_datos($this->get_datos('codirector')->get());
-			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_pais','id_provincia','id_localidad'));
+			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_localidad'));
 		}
 	}
 
@@ -330,7 +333,7 @@ class ci_edicion extends becas_ci
 	{
 		if($this->get_datos('subdirector')->get()){
 			$form->set_datos($this->get_datos('subdirector')->get());
-			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_pais','id_provincia','id_localidad'));
+			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_localidad'));
 		}
 	}
 
@@ -391,10 +394,6 @@ class ci_edicion extends becas_ci
 		$this->get_datos('plan_trabajo')->set($datos);
 	}
 
-    
-
-
-
     /**
      * Retorna un datos_relación (si no se especifica ninguna tabla en particular), sino, devuelve el datos tabla solicitado
      * @param  string $tabla Nombre de la tabla que se desea obtener (null para obtener el datos_relacion)
@@ -422,6 +421,11 @@ class ci_edicion extends becas_ci
         
     }
 
+    function ajax__get_disciplinas_incluidas($id_area_conocimiento, toba_ajax_respuesta $respuesta)
+    {
+    	$respuesta->set(toba::consulta_php('co_areas_conocimiento')->get_disciplinas_incluidas($id_area_conocimiento));
+    }
+
 
 
     function calcular_puntaje()
@@ -430,6 +434,30 @@ class ci_edicion extends becas_ci
     }
 
 	
+
+	//-----------------------------------------------------------------------------------
+	//---- form_activ_docentes ----------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_activ_docentes(becas_ei_formulario_ml $form_ml)
+	{
+		//agregar la carga de datos ACA
+		
+		$anios['nopar'] = "Vigente";
+		for($i=date("Y");$i>(date("Y")-50);$i--){
+			$anios[$i] = $i;
+		}
+		$form_ml->ef('anio_egreso')->set_opciones($anios);
+		unset($anios['nopar']);
+		$form_ml->ef('anio_ingreso')->set_opciones($anios);
+		
+
+
+	}
+
+	function evt__form_activ_docentes__modificacion($datos)
+	{
+	}
 
 }
 ?>

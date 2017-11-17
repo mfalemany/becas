@@ -140,6 +140,10 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 			</tr>
 			<tr>
 				<td colspan="2">
+					<p id="disciplinas_incluidas">&nbsp;</p></td>
+			</tr>
+			<tr>
+				<td colspan="2">
 					[ef id=titulo_plan_beca]</td>
 			</tr>
 			<tr>
@@ -226,7 +230,10 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 				<td>
 					[ef id=nro_documento_dir]</td>
 			</tr>
-<tr><td colspan="2">[ef id=director]</td></tr>
+			<tr>
+				<td colspan="2">
+					[ef id=director]</td>
+			</tr>
 		</tbody>
 	</table>
 </fieldset>
@@ -514,7 +521,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nro_documento', --identificador
 	'ef_editable', --elemento_formulario
 	'nro_documento', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'7', --orden
 	'Nro Documento', --etiqueta
@@ -594,7 +601,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_doc', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_doc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'6', --orden
 	'Tipo Doc', --etiqueta
@@ -1474,7 +1481,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_doc_dir', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_doc_dir', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'19', --orden
 	'Tipo Documento', --etiqueta
@@ -1554,7 +1561,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nro_documento_dir', --identificador
 	'ef_editable', --elemento_formulario
 	'nro_documento_dir', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'20', --orden
 	'Nro. Documento', --etiqueta

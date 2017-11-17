@@ -14,5 +14,12 @@ class co_areas_conocimiento
 		return toba::db('becas')->consultar($sql);
 	}
 
+	 function get_disciplinas_incluidas($id_area_conocimiento)
+    {
+    	$sql = "SELECT disciplinas_incluidas FROM area_conocimiento WHERE id_area_conocimiento = ".quote($id_area_conocimiento);
+    	$resultado = toba::db()->consultar_fila($sql);
+    	return count($resultado) ? $resultado['disciplinas_incluidas'] : '';
+    }
+
 }
 ?>

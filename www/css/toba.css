@@ -30,5 +30,30 @@
 #enc-logo img{
 	padding: 0px 0px 0px 18px;
 }
+#disciplinas_incluidas{
+	height: 26px;
+	margin: auto 40px auto 160px;
+	padding: 3px;
+	color: #333;
+	font-size:1.1em;
+}
+.ci-tabs-v-lista{
+	width: 20%;
+}
+.ci-tabs-v-solapa{
+	padding: 3px;
 
+}
+.ci-tabs-v-solapa:hover{
+	background-color:#DDD;
+
+}
+.ci-tabs-v-solapa a{
+	display:inline-block;
+	font-size:1.4em;
+	text-decoration: none;
+	width: 100%;
+}
+
+	
 
