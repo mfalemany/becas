@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ei_formulario_ml', --clase
 	'22', --punto_montaje
 	'form_ml_requisitos', --subclase
-	'becas/inscripcion/form_ml_requisitos.php', --subclase_archivo
+	'becas/inscripcion/formularios/form_ml_requisitos.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Inscripción - CI - ml_requisitos', --nombre

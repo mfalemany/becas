@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ei_formulario', --clase
 	'22', --punto_montaje
 	'form_inscripcion', --subclase
-	'becas/inscripcion/form_inscripcion.php', --subclase_archivo
+	'becas/inscripcion/formularios/form_inscripcion.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Inscripción - Form', --nombre

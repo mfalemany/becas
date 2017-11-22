@@ -100,20 +100,6 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2946', --objeto
-	'1381', --col_id
-	'id_dependencia', --columna
-	'C', --tipo
-	'0', --pk
-	NULL, --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'becas', --objeto_proyecto
-	'2946', --objeto
 	'1382', --col_id
 	'nro_documento', --columna
 	'C', --tipo
@@ -187,20 +173,6 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'1387', --col_id
 	'beca_otorgada', --columna
 	'L', --tipo
-	'0', --pk
-	NULL, --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'becas', --objeto_proyecto
-	'2946', --objeto
-	'1388', --col_id
-	'id_area_conocimiento', --columna
-	'C', --tipo
 	'0', --pk
 	NULL, --secuencia
 	NULL, --largo
@@ -596,6 +568,34 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'0', --pk
 	'', --secuencia
 	'15', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'inscripcion_conv_beca'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2946', --objeto
+	'1552', --col_id
+	'id_dependencia', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'inscripcion_conv_beca'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2946', --objeto
+	'1553', --col_id
+	'id_area_conocimiento', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa

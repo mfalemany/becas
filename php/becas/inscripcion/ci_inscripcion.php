@@ -27,7 +27,9 @@ class ci_inscripcion extends becas_ci
 
 	function evt__cuadro__seleccion($datos)
 	{
-		$this->get_datos('inscripcion_conv_beca')->cargar($datos);
+		$this->get_datos('inscripcion_conv_beca')->set($datos);
+		$this->get_datos()->cargar();
+		//ei_arbol($this->get_datos('alumno')->get_filas());
 		$this->set_pantalla('pant_edicion');
 	}
 

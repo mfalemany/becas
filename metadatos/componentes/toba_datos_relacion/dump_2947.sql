@@ -54,7 +54,7 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 	NULL, --ap_clase
 	NULL, --ap_archivo
 	'1', --sinc_susp_constraints
-	'0', --sinc_orden_automatico
+	'1', --sinc_orden_automatico
 	'1'  --sinc_lock_optimista
 );
 
@@ -73,47 +73,119 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
-	'4'  --orden
+	'2'  --orden
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'1841', --dep_id
+	'1860', --dep_id
 	'2947', --objeto_consumidor
-	'2952', --objeto_proveedor
-	'codirector', --identificador
+	'2965', --objeto_proveedor
+	'antec_activ_docentes', --identificador
 	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'8'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becas', --proyecto
-	'1842', --dep_id
-	'2947', --objeto_consumidor
-	'2834', --objeto_proveedor
-	'codirector_docente', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'7'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becas', --proyecto
-	'1827', --dep_id
-	'2947', --objeto_consumidor
-	'2952', --objeto_proveedor
-	'director', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
+	NULL, --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
 	'6'  --orden
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'1828', --dep_id
+	'1861', --dep_id
+	'2947', --objeto_consumidor
+	'2966', --objeto_proveedor
+	'antec_becas_obtenidas', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'7'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1862', --dep_id
+	'2947', --objeto_consumidor
+	'2967', --objeto_proveedor
+	'antec_conoc_idiomas', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'8'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1863', --dep_id
+	'2947', --objeto_consumidor
+	'2968', --objeto_proveedor
+	'antec_cursos_perfec_aprob', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'9'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1864', --dep_id
+	'2947', --objeto_consumidor
+	'2969', --objeto_proveedor
+	'antec_estudios_afines', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'10'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1865', --dep_id
+	'2947', --objeto_consumidor
+	'2970', --objeto_proveedor
+	'antec_otras_actividades', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'11'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1866', --dep_id
+	'2947', --objeto_consumidor
+	'2971', --objeto_proveedor
+	'antec_particip_dict_cursos', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'12'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1867', --dep_id
+	'2947', --objeto_consumidor
+	'2972', --objeto_proveedor
+	'antec_present_reuniones', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'13'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1868', --dep_id
+	'2947', --objeto_consumidor
+	'2973', --objeto_proveedor
+	'antec_trabajos_publicados', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'14'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1872', --dep_id
 	'2947', --objeto_consumidor
 	'2834', --objeto_proveedor
 	'director_docente', --identificador
@@ -121,7 +193,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
-	'5'  --orden
+	'3'  --orden
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
@@ -129,7 +201,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2947', --objeto_consumidor
 	'2946', --objeto_proveedor
 	'inscripcion_conv_beca', --identificador
-	'1', --parametros_a
+	NULL, --parametros_a
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
@@ -145,7 +217,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
-	'2'  --orden
+	'4'  --orden
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
@@ -157,31 +229,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL, --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
-	'3'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becas', --proyecto
-	'1844', --dep_id
-	'2947', --objeto_consumidor
-	'2952', --objeto_proveedor
-	'subdirector', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'10'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becas', --proyecto
-	'1845', --dep_id
-	'2947', --objeto_consumidor
-	'2834', --objeto_proveedor
-	'subdirector_docente', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'9'  --orden
+	'5'  --orden
 );
 --- FIN Grupo de desarrollo 0
 
@@ -193,7 +241,167 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
-	'83', --asoc_id
+	'98', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2965', --hijo_objeto
+	'antec_activ_docentes', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'5'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'99', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2966', --hijo_objeto
+	'antec_becas_obtenidas', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'6'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'100', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2967', --hijo_objeto
+	'antec_conoc_idiomas', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'7'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'101', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2968', --hijo_objeto
+	'antec_cursos_perfec_aprob', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'8'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'102', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2969', --hijo_objeto
+	'antec_estudios_afines', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'9'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'103', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2970', --hijo_objeto
+	'antec_otras_actividades', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'10'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'104', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2971', --hijo_objeto
+	'antec_particip_dict_cursos', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'11'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'105', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2972', --hijo_objeto
+	'antec_present_reuniones', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'12'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'106', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2952', --padre_objeto
+	'alumno', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2973', --hijo_objeto
+	'antec_trabajos_publicados', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'13'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'107', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2946', --padre_objeto
+	'inscripcion_conv_beca', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2962', --hijo_objeto
+	'plan_trabajo', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'3'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'108', --asoc_id
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2946', --padre_objeto
@@ -204,7 +412,39 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	'requisitos_insc', --hijo_id
 	NULL, --hijo_clave
 	NULL, --cascada
+	'4'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'109', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2946', --padre_objeto
+	'inscripcion_conv_beca', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2952', --hijo_objeto
+	'alumno', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
 	'1'  --orden
+);
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'115', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2946', --padre_objeto
+	'inscripcion_conv_beca', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'2834', --hijo_objeto
+	'director_docente', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'2'  --orden
 );
 --- FIN Grupo de desarrollo 0
 
@@ -214,7 +454,205 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
-	'83', --asoc_id
+	'98', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2965', --hijo_objeto
+	'1494'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'98', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2965', --hijo_objeto
+	'1495'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'99', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2966', --hijo_objeto
+	'1500'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'99', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2966', --hijo_objeto
+	'1499'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'100', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2967', --hijo_objeto
+	'1508'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'100', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2967', --hijo_objeto
+	'1507'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'101', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2968', --hijo_objeto
+	'1515'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'101', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2968', --hijo_objeto
+	'1514'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'102', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2969', --hijo_objeto
+	'1523'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'102', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2969', --hijo_objeto
+	'1522'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'103', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2970', --hijo_objeto
+	'1529'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'103', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2970', --hijo_objeto
+	'1528'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'104', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2971', --hijo_objeto
+	'1535'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'104', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2971', --hijo_objeto
+	'1534'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'105', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2972', --hijo_objeto
+	'1541'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'105', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2972', --hijo_objeto
+	'1540'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'106', --asoc_id
+	'2952', --padre_objeto
+	'1405', --padre_clave
+	'2973', --hijo_objeto
+	'1547'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'106', --asoc_id
+	'2952', --padre_objeto
+	'1406', --padre_clave
+	'2973', --hijo_objeto
+	'1546'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'107', --asoc_id
+	'2946', --padre_objeto
+	'1379', --padre_clave
+	'2962', --hijo_objeto
+	'1468'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'107', --asoc_id
+	'2946', --padre_objeto
+	'1380', --padre_clave
+	'2962', --hijo_objeto
+	'1469'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'107', --asoc_id
+	'2946', --padre_objeto
+	'1382', --padre_clave
+	'2962', --hijo_objeto
+	'1467'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'107', --asoc_id
+	'2946', --padre_objeto
+	'1383', --padre_clave
+	'2962', --hijo_objeto
+	'1466'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'108', --asoc_id
 	'2946', --padre_objeto
 	'1379', --padre_clave
 	'2959', --hijo_objeto
@@ -223,7 +661,7 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
-	'83', --asoc_id
+	'108', --asoc_id
 	'2946', --padre_objeto
 	'1380', --padre_clave
 	'2959', --hijo_objeto
@@ -232,7 +670,7 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
-	'83', --asoc_id
+	'108', --asoc_id
 	'2946', --padre_objeto
 	'1382', --padre_clave
 	'2959', --hijo_objeto
@@ -241,9 +679,45 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
-	'83', --asoc_id
+	'108', --asoc_id
 	'2946', --padre_objeto
 	'1383', --padre_clave
 	'2959', --hijo_objeto
 	'1454'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'109', --asoc_id
+	'2946', --padre_objeto
+	'1382', --padre_clave
+	'2952', --hijo_objeto
+	'1405'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'109', --asoc_id
+	'2946', --padre_objeto
+	'1383', --padre_clave
+	'2952', --hijo_objeto
+	'1406'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'115', --asoc_id
+	'2946', --padre_objeto
+	'1448', --padre_clave
+	'2834', --hijo_objeto
+	'1261'  --hijo_clave
+);
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'2947', --objeto
+	'115', --asoc_id
+	'2946', --padre_objeto
+	'1449', --padre_clave
+	'2834', --hijo_objeto
+	'1260'  --hijo_clave
 );

@@ -98,6 +98,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
+	'1870', --dep_id
+	'2951', --objeto_consumidor
+	'2975', --objeto_proveedor
+	'form_becas_obtenidas', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
 	'1819', --dep_id
 	'2951', --objeto_consumidor
 	'2820', --objeto_proveedor
@@ -158,6 +170,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
+	'1869', --dep_id
+	'2951', --objeto_consumidor
+	'2974', --objeto_proveedor
+	'form_estudios_afines', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
 	'1816', --dep_id
 	'2951', --objeto_consumidor
 	'2949', --objeto_proveedor
@@ -198,6 +222,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2951', --objeto_consumidor
 	'2837', --objeto_proveedor
 	'form_subdirector_docente', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1871', --dep_id
+	'2951', --objeto_consumidor
+	'2976', --objeto_proveedor
+	'form_trabajos_publicados', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -577,4 +613,25 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'2951', --objeto_ci
 	'0', --orden
 	'1859'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1412', --pantalla
+	'2951', --objeto_ci
+	'0', --orden
+	'1869'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1413', --pantalla
+	'2951', --objeto_ci
+	'0', --orden
+	'1870'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1414', --pantalla
+	'2951', --objeto_ci
+	'0', --orden
+	'1871'  --dep_id
 );
