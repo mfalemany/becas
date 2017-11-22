@@ -13,7 +13,7 @@ class ci_edicion extends becas_ci
 
 		
 		//obtengo los datos de la inscripcion
-		$datos = $this->get_datos('inscripcion_conv_beca')->get();
+		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		//si se est?modificando una inscripcion, es necesario validar algunas cosas...
 		if($datos){
 			//y los datos de la convocatoria
@@ -35,7 +35,7 @@ class ci_edicion extends becas_ci
 			}
 		}
 
-		if( ! $this->get_datos('inscripcion_conv_beca')->esta_cargada()){
+		if( ! $this->get_datos('inscripcion','inscripcion_conv_beca')->esta_cargada()){
 			$this->controlador()->pantalla()->eliminar_evento('eliminar');
 		
 		}
@@ -59,13 +59,12 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-		$datos = $this->get_datos('inscripcion_conv_beca')->get();
+		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		if($datos){
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
 			$form->set_solo_lectura(array('id_convocatoria','id_tipo_beca'));
 
 			//asigno los datos al formulario
-			ei_arbol($datos);
 			$form->set_datos($datos);
 
 			//se completa el label que contiene el nombre y apellido del director
@@ -79,9 +78,8 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
-		ei_arbol($datos);
 		//se asignan los datos del formulario al datos_dabla
-		$this->get_datos('inscripcion_conv_beca')->set($datos);
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
 
 		//se setean variables de sesion para facilitar el manejo de los demás datos_tabla
 		//$this->setear_entidades($datos);
@@ -514,9 +512,9 @@ class ci_edicion extends becas_ci
      * @param  string $tabla Nombre de la tabla que se desea obtener (null para obtener el datos_relacion)
      * @return datos_tabla o datos_relacion 
      */
-    function get_datos($tabla)
+    function get_datos($relacion,$tabla)
     {
-        return $this->controlador()->get_datos($tabla);
+        return $this->controlador()->get_datos($relacion,$tabla);
     }
 
     /**

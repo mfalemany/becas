@@ -27,15 +27,33 @@ class ci_inscripcion extends becas_ci
 
 	function evt__cuadro__seleccion($datos)
 	{
-		$this->get_datos('inscripcion_conv_beca')->set($datos);
-		$this->get_datos()->cargar();
-		//ei_arbol($this->get_datos('alumno')->get_filas());
+		//se carga la relación de "Alumno"
+		$alumno = array('id_tipo_doc'=>$datos['id_tipo_doc'],'nro_documento'=>$datos['nro_documento']);
+		$this->get_datos('alumno')->cargar($alumno);
+
+		//se cargan los detalles de la inscripción
+		$this->get_datos('inscripcion')->cargar($datos);
+
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$this->get_datos(NULL,'director')->cargar(array('id_tipo_doc'   => $insc['id_tipo_doc_dir'],
+											 'nro_documento' => $insc['nro_documento_dir']));
+
+		if($insc['id_tipo_doc_codir']){
+			$this->get_datos(NULL,'codirector')->cargar(array('id_tipo_doc'   => $insc['id_tipo_doc_codir'],
+											       'nro_documento' => $insc['nro_documento_codir']));
+		}
+
+		if($insc['id_tipo_doc_subdir']){
+			$this->get_datos(NULL,'subdirector')->cargar(array('id_tipo_doc'   => $insc['id_tipo_doc_subdir'],
+											        'nro_documento' => $insc['nro_documento_subdir']));
+		}
+
 		$this->set_pantalla('pant_edicion');
 	}
 
 	function evt__cuadro__admitir($datos)
 	{
-		$this->get_datos('inscripcion_conv_beca')->cargar($datos);
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->cargar($datos);
 		$this->set_pantalla('pant_admisibilidad');
 	}
 	
@@ -60,24 +78,33 @@ class ci_inscripcion extends becas_ci
 
 	function evt__eliminar()
 	{
-		$this->dep('datos')->tabla('requisitos_insc')->eliminar();
-		$this->dep('datos')->tabla('inscripcion_conv_beca')->eliminar();
-		$this->resetear();
+		$this->get_datos('inscripcion','requisitos_insc')->eliminar();
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->eliminar();
+		$this->get_datos('inscripcion')->resetear();
 	}
 
 	function evt__guardar()
 	{
 		$this->dep('ci_edicion')->generar_registros_relacionados();
-		$this->dep('datos')->sincronizar();
+		$this->get_datos('alumno')->sincronizar();
+		$this->get_datos('inscripcion')->sincronizar();
 		$this->resetear();
 	}
 
-	function get_datos($tabla = NULL)
+	function get_datos($relacion = NULL, $tabla = NULL)
 	{
-		if( ! $tabla){
-			return $this->dep('datos');
+		if($tabla){
+			if($relacion){
+				return $this->dep($relacion)->tabla($tabla);	
+			}else{
+				return $this->dep($tabla);
+			}
 		}else{
-			return $this->dep('datos')->tabla($tabla);
+			if($relacion){
+				return $this->dep($relacion);
+			}else{
+				return false;
+			}
 		}
 	}
 
