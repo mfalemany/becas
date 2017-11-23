@@ -89,22 +89,23 @@ class ci_edicion extends becas_ci
 		
 
 		//esta funcion carga los datos del director (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de director
-		/*if( ! $this->get_datos('director_docente')->get()){
+		if( ! $this->get_datos(NULL,'director')->get()){
 			$this->set_director($datos['id_tipo_doc_dir'],$datos['nro_documento_dir']);
-		}*/
+		}
 
 		//cargo el datos_tabla codirector (si es posible)
-		/*if($datos['nro_documento_codir']){
+		if($datos['id_tipo_doc_codir'] && $datos['nro_documento_codir']){
 			$this->set_codirector($datos['id_tipo_doc_codir'],$datos['nro_documento_codir']);
 		}
 
 		//cargo el datos_tabla subdirector (si es posible)
-		if($datos['nro_documento_subdir']){
+		//cargo el datos_tabla codirector (si es posible)
+		if($datos['id_tipo_doc_subdir'] && $datos['nro_documento_subdir']){
 			$this->set_subdirector($datos['id_tipo_doc_subdir'],$datos['nro_documento_subdir']);
-		}*/
+		}
 
 
-		$this->get_datos('inscripcion_conv_beca')->set(array('estado'     => 'A',
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('estado'     => 'A',
 															 'fecha_hora' => date('Y-m-d'),
 															 'es_titular' => 'S',
 															 'puntaje'    => $this->calcular_puntaje(),
@@ -151,7 +152,7 @@ class ci_edicion extends becas_ci
 		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'alumno');
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
-			$this->get_datos('alumno')->set(array(
+			$this->get_datos('alumno','alumno')->set(array(
 				'nro_documento' => $nro_documento,
 				'id_tipo_doc'   => $id_tipo_doc
 			));
@@ -161,7 +162,9 @@ class ci_edicion extends becas_ci
 			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ningún alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
 
 		}else{
-			$this->get_datos()->cargar();
+			$this->get_datos('alumno')->cargar(array('id_tipo_doc'   => $id_tipo_doc,
+													 'nro_documento' => $nro_documento));
+
 		}
 	}
 
@@ -172,29 +175,15 @@ class ci_edicion extends becas_ci
 		
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
-			$this->get_datos('director')->resetear();
-			$this->get_datos('director')->set(array(
-				'nro_documento' => $nro_documento,
-				'id_tipo_doc'   => $id_tipo_doc
-			));
-			
+			$this->get_datos(NULL,'director')->resetear();
 			throw new toba_error('El Nro. de Documento del director ingresado no se corresponde con ningúna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
-
 		}else{
 			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
-			$this->get_datos('director')->cargar(array(
+			$this->get_datos(NULL,'director')->cargar(array(
 				'nro_documento' => $nro_documento,
 				'id_tipo_doc'   => $id_tipo_doc
 			));
-		}
-
-		//se cargan los datos del director (datos de docente)
-		if( ! $this->get_datos('director_docente')->get()){
-			$this->get_datos('director_docente')->cargar(array(
-				'nro_documento' => $nro_documento,
-				'id_tipo_doc'   => $id_tipo_doc
-			));
-			if( ! $this->get_datos('director_docente')->esta_cargada()){
+			if( ! $this->get_datos(NULL,'director')->esta_cargada()){
 				throw new toba_error('El Nro. de Documento del director ingresado corresponde a un persona registrada en el sistema, pero no es docente. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
 			}
 		}
@@ -202,34 +191,44 @@ class ci_edicion extends becas_ci
 
 	protected function set_codirector($id_tipo_doc,$nro_documento)
 	{
-		//se resetea y se vuelven a cargar los datos del codirector
-		$this->get_datos('codirector')->resetear();
-		$this->get_datos('codirector')->cargar(array(
-			'nro_documento' => $nro_documento,
-			'id_tipo_doc'   => $id_tipo_doc
-		));
-		//se resetea y se vuelven a cargar los datos del codirector (datos de docente)
-		$this->get_datos('codirector_docente')->resetear();
-		$this->get_datos('codirector_docente')->cargar(array(
-			'nro_documento' => $nro_documento,
-			'id_tipo_doc'   => $id_tipo_doc
-		));
+		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'docente');
+		
+		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
+		if( ! $existe_persona){
+			$this->get_datos(NULL,'codirector')->resetear();
+			throw new toba_error('El Nro. de Documento del co-director ingresado no se corresponde con ningúna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+		}else{
+			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
+			$this->get_datos(NULL,'codirector')->cargar(array(
+				'nro_documento' => $nro_documento,
+				'id_tipo_doc'   => $id_tipo_doc
+			));
+			if( ! $this->get_datos(NULL,'codirector')->esta_cargada()){
+				throw new toba_error('El Nro. de Documento del co-director ingresado corresponde a un persona registrada en el sistema, pero no es docente. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+			}
+		}
 	}
 
 	protected function set_subdirector($id_tipo_doc,$nro_documento)
 	{
-		//se resetea y se vuelven a cargar los datos del subdirector
-		$this->get_datos('subdirector')->resetear();
-		$this->get_datos('subdirector')->cargar(array(
-			'nro_documento' => $nro_documento,
-			'id_tipo_doc'   => $id_tipo_doc
-		));
-		//se resetea y se vuelven a cargar los datos del subdirector (datos de docente)
-		$this->get_datos('subdirector_docente')->resetear();
-		$this->get_datos('subdirector_docente')->cargar(array(
-			'nro_documento' => $nro_documento,
-			'id_tipo_doc'   => $id_tipo_doc
-		));
+		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'docente');
+		
+		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
+		if( ! $existe_persona){
+			$this->get_datos(NULL,'subdirector')->resetear();
+			throw new toba_error('El Nro. de Documento del sub-director ingresado no se corresponde con ningúna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+		}else{
+			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
+			$this->get_datos(NULL,'subdirector')->cargar(array(
+				'nro_documento' => $nro_documento,
+				'id_tipo_doc'   => $id_tipo_doc
+			));
+			if( ! $this->get_datos(NULL,'subdirector')->esta_cargada()){
+				throw new toba_error('El Nro. de Documento del sub-director ingresado corresponde a un persona registrada en el sistema, pero no es docente. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+			}
+		}
 	}
 
 
@@ -242,13 +241,13 @@ class ci_edicion extends becas_ci
 	function generar_registros_relacionados()
 	{
 		//obtengo los datos principales de la inscripcion
-		$datos = $this->get_datos('inscripcion_conv_beca')->get();
+		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		//verifico si ya se crearon los registros para el cumplimiento de requisitos
 		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['id_tipo_doc'],$datos['nro_documento']);
 		
 		//la insercion de los requisitos iniciales se realiza solo una vez
 		if( ! $requisitos_inscripcion){
-			$datos = $this->get_datos('inscripcion_conv_beca')->get();
+			$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 			$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($datos['id_convocatoria']);
 
 			foreach($requisitos as $requisito){
@@ -264,16 +263,16 @@ class ci_edicion extends becas_ci
 
 	function conf__form_alumno(becas_ei_formulario $form)
 	{
-
-		if($this->get_datos('alumno')->get()){
+		if($this->get_datos('alumno','alumno')->get()){
 			$form->set_solo_lectura(array('id_tipo_doc','nro_documento','apellido','nombres'));
-			$form->set_datos($this->get_datos('alumno')->get());
+			$form->set_datos($this->get_datos('alumno','alumno')->get());
 		}
 	}
 
 	function evt__form_alumno__modificacion($datos)
 	{
-		$this->get_datos('alumno')->set($datos);
+		$this->get_datos('alumno','alumno')->set($datos);
+		$this->get_datos('alumno')->sincronizar($datos);
 	}
 
 	
@@ -284,7 +283,7 @@ class ci_edicion extends becas_ci
 
 	function conf__form_director(becas_ei_formulario $form)
 	{
-		$dir = $this->get_datos('director_docente')->get();
+		$dir = $this->get_datos(NULL,'director')->get();
 		if($dir){
 			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
 				'id_tipo_doc'   => $dir['id_tipo_doc'],
@@ -300,16 +299,16 @@ class ci_edicion extends becas_ci
 	function conf__form_director_docente(becas_ei_formulario $form)
 	{
 		$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
-		if($this->get_datos('director_docente')->get()){
-			$form->set_datos($this->get_datos('director_docente')->get());
+		if($this->get_datos(NULL,'director')->get()){
+			$form->set_datos($this->get_datos(NULL,'director')->get());
 			
 		}
-		
 	}
 
 	function evt__form_director_docente__modificacion($datos)
 	{
-		$this->get_datos('director_docente')->set($datos);
+		$this->get_datos(NULL,'director')->set($datos);
+		$this->get_datos(NULL,'director')->sincronizar();
 	}
 
 
@@ -317,32 +316,34 @@ class ci_edicion extends becas_ci
 	//---- form_codirector --------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 	
-	
-	
 	function conf__form_codirector(becas_ei_formulario $form)
 	{
-		//carga del datos_tabla
-		if(isset($this->s__codirector)){
-			$this->get_datos('codirector')->cargar($this->s__codirector);	
+		$dir = $this->get_datos(NULL,'codirector')->get();
+		if($dir){
+			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
+				'id_tipo_doc'   => $dir['id_tipo_doc'],
+				'nro_documento' => $dir['nro_documento']
+			)));
+			$form->set_datos($director);
 		}
-		if($this->get_datos('codirector')->get()){
-			$form->set_datos($this->get_datos('codirector')->get());
-			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_localidad','sexo'));
-			$form->set_solo_lectura(array('id_tipo_doc','nro_documento','apellido','nombres','id_nivel_academico'));
-		}
+		
+		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_localidad'));
+		$form->set_solo_lectura();
 	}
 
 	function conf__form_codirector_docente(becas_ei_formulario $form)
 	{
-		if($this->get_datos('codirector_docente')->get()){
-			$form->set_datos($this->get_datos('codirector_docente')->get());
-			$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+		$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+		if($this->get_datos(NULL,'codirector')->get()){
+			$form->set_datos($this->get_datos(NULL,'codirector')->get());
+			
 		}
 	}
 
 	function evt__form_codirector_docente__modificacion($datos)
 	{
-		$this->get_datos('codirector_docente')->set($datos);
+		$this->get_datos(NULL,'codirector')->set($datos);
+		$this->get_datos(NULL,'codirector')->sincronizar();
 
 	}
 
@@ -352,8 +353,8 @@ class ci_edicion extends becas_ci
 
 	function conf__form_codirector_justif(becas_ei_formulario $form)
     {
-        if($this->get_datos('inscripcion_conv_beca')->get()){
-            $datos = $this->get_datos('inscripcion_conv_beca')->get();
+        if($this->get_datos('inscripcion','inscripcion_conv_beca')->get()){
+            $datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
             $form->set_datos(array('justif_codirector' => $datos['justif_codirector']));
             
         }
@@ -361,7 +362,7 @@ class ci_edicion extends becas_ci
 
     function evt__form_codirector_justif__modificacion($datos)
     {
-        $this->get_datos('inscripcion_conv_beca')->set($datos);
+        $this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
     }
 
 	//-----------------------------------------------------------------------------------
@@ -372,28 +373,31 @@ class ci_edicion extends becas_ci
 
 	function conf__form_subdirector(becas_ei_formulario $form)
 	{
-		//carga del datos_tabla
-		if(isset($this->s__subdirector)){
-			$this->get_datos('subdirector')->cargar($this->s__subdirector);	
+		$dir = $this->get_datos(NULL,'subdirector')->get();
+		if($dir){
+			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
+				'id_tipo_doc'   => $dir['id_tipo_doc'],
+				'nro_documento' => $dir['nro_documento']
+			)));
+			$form->set_datos($director);
 		}
-		if($this->get_datos('subdirector')->get()){
-			$form->set_datos($this->get_datos('subdirector')->get());
-			$form->desactivar_efs(array('cuil','fecha_nac','celular','email','telefono','id_localidad','sexo'));
-			$form->set_solo_lectura(array('id_tipo_doc','nro_documento','apellido','nombres','id_nivel_academico'));
-		}
+		
+		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_localidad'));
+		$form->set_solo_lectura();
 	}
 
 	function conf__form_subdirector_docente(becas_ei_formulario $form)
 	{
-		if($this->get_datos('subdirector_docente')->get()){
-			$form->set_datos($this->get_datos('subdirector_docente')->get());
-			$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+		$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+		if($this->get_datos(NULL,'subdirector')->get()){
+			$form->set_datos($this->get_datos(NULL,'subdirector')->get());
 		}
 	}
 
 	function evt__form_subdirector_docente__modificacion($datos)
 	{
-		$this->get_datos('subdirector_docente')->set($datos);
+		$this->get_datos(NULL,'subdirector')->set($datos);
+		$this->get_datos(NULL,'subdirector')->sincronizar();
 	}
 
 
@@ -403,15 +407,14 @@ class ci_edicion extends becas_ci
 
 	function conf__form_plan_trabajo(becas_ei_formulario $form)
 	{
-		if($this->get_datos('plan_trabajo')->get()){
-			$form->set_datos($this->get_datos('plan_trabajo')->get());
+		if($this->get_datos('inscripcion','plan_trabajo')->get()){
+			$form->set_datos($this->get_datos('inscripcion','plan_trabajo')->get());
 		}
 	}
 
 	function evt__form_plan_trabajo__modificacion($datos)
 	{
-		var_dump($datos);
-		$this->get_datos('plan_trabajo')->set($datos);
+		$this->get_datos('inscripcion','plan_trabajo')->set($datos);
 	}
 
 
@@ -421,12 +424,8 @@ class ci_edicion extends becas_ci
 
 	function conf__form_activ_docentes(becas_ei_formulario_ml $form_ml)
 	{
-		if(isset($this->s__alumno)){
-			$this->get_datos('antec_activ_docentes')->cargar($this->s__alumno);
-		}
-		
-		if($this->get_datos('antec_activ_docentes')->get_filas()){
-			$form_ml->set_datos($this->get_datos('antec_activ_docentes')->get_filas());
+		if($this->get_datos('alumno','antec_activ_docentes')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_activ_docentes')->get_filas());
 		}
 		
 		//se arma un array para cargar el combo "anio_egreso"
@@ -443,7 +442,7 @@ class ci_edicion extends becas_ci
 
 	function evt__form_activ_docentes__modificacion($datos)
 	{
-		$this->get_datos('antec_activ_docentes')->procesar_filas($datos);
+		$this->get_datos('alumno','antec_activ_docentes')->procesar_filas($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -452,12 +451,8 @@ class ci_edicion extends becas_ci
 
 	function conf__form_estudios_afines(becas_ei_formulario_ml $form_ml)
 	{
-		if(isset($this->s__alumno)){
-			$this->get_datos('antec_estudios_afines')->cargar($this->s__alumno);
-		}
-		
-		if($this->get_datos('antec_estudios_afines')->get_filas()){
-			$form_ml->set_datos($this->get_datos('antec_estudios_afines')->get_filas());
+		if($this->get_datos('alumno','antec_estudios_afines')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_estudios_afines')->get_filas());
 		}
 		
 		//se arma un array para cargar los combos de añois
@@ -470,7 +465,7 @@ class ci_edicion extends becas_ci
 
 	function evt__form_estudios_afines__modificacion($datos)
 	{
-		$this->get_datos('antec_estudios_afines')->procesar_filas($datos);
+		$this->get_datos('alumno','antec_estudios_afines')->procesar_filas($datos);
 	}
 
 
@@ -480,14 +475,14 @@ class ci_edicion extends becas_ci
 
 	function conf__form_trabajos_publicados(becas_ei_formulario_ml $form_ml)
 	{
-		if($this->get_datos('antec_trabajos_publicados')->get_filas()){
-			$form_ml->set_datos($this->get_datos('antec_trabajos_publicados')->get_filas());
+		if($this->get_datos('alumno','antec_trabajos_publicados')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_trabajos_publicados')->get_filas());
 		}
 	}
 
 	function evt__form_trabajos_publicados__modificacion($datos)
 	{
-		$this->get_datos('antec_trabajos_publicados')->procesar_filas($datos);
+		$this->get_datos('alumno','antec_trabajos_publicados')->procesar_filas($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -496,14 +491,78 @@ class ci_edicion extends becas_ci
 
 	function conf__form_becas_obtenidas(form_ml_becas_obtenidas $form_ml)
 	{
-		if($this->get_datos('antec_becas_obtenidas')->get_filas()){
-			$form_ml->set_datos($this->get_datos('antec_becas_obtenidas')->get_filas());
+		if($this->get_datos('alumno','antec_becas_obtenidas')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_becas_obtenidas')->get_filas());
 		}
 	}
 
 	function evt__form_becas_obtenidas__modificacion($datos)
 	{
-		$this->get_datos('antec_becas_obtenidas')->procesar_filas($datos);
+		$this->get_datos('alumno','antec_becas_obtenidas')->procesar_filas($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form_present_reuniones -------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_present_reuniones(becas_ei_formulario_ml $form_ml)
+	{
+		if($this->get_datos('alumno','antec_present_reuniones')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_present_reuniones')->get_filas());
+		}
+	}
+
+	function evt__form_present_reuniones__modificacion($datos)
+	{
+		$this->get_datos('alumno','antec_present_reuniones')->procesar_filas($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form_conoc_idiomas -----------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_conoc_idiomas(becas_ei_formulario_ml $form_ml)
+	{
+		if($this->get_datos('alumno','antec_conoc_idiomas')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_conoc_idiomas')->get_filas());
+		}
+	}
+
+	function evt__form_conoc_idiomas__modificacion($datos)
+	{
+		$this->get_datos('alumno','antec_conoc_idiomas')->procesar_filas($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form_otras_actividades -------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_otras_actividades(becas_ei_formulario_ml $form_ml)
+	{
+		if($this->get_datos('alumno','antec_otras_actividades')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_otras_actividades')->get_filas());
+		}
+	}
+
+	function evt__form_otras_actividades__modificacion($datos)
+	{
+		$this->get_datos('alumno','antec_otras_actividades')->procesar_filas($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form_part_dict_cursos --------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_part_dict_cursos(becas_ei_formulario_ml $form_ml)
+	{
+		if($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas());
+		}
+	}
+
+	function evt__form_part_dict_cursos__modificacion($datos)
+	{
+		$this->get_datos('alumno','antec_particip_dict_cursos')->procesar_filas($datos);
 	}
 
 
@@ -545,9 +604,6 @@ class ci_edicion extends becas_ci
         return "42.3";
     }
 
-	
-
-	
 
 	
 

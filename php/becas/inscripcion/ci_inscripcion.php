@@ -60,7 +60,13 @@ class ci_inscripcion extends becas_ci
 
 	function resetear()
 	{
-		$this->dep('datos')->resetear();
+		$this->get_datos('alumno')->resetear();
+		$this->get_datos('inscripcion')->resetear();
+		$this->get_datos('director')->resetear();
+		$this->get_datos('codirector')->resetear();
+		$this->get_datos('subdirector')->resetear();
+
+
 		$this->set_pantalla('pant_seleccion');
 	}
 
@@ -80,7 +86,7 @@ class ci_inscripcion extends becas_ci
 	{
 		$this->get_datos('inscripcion','requisitos_insc')->eliminar();
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->eliminar();
-		$this->get_datos('inscripcion')->resetear();
+		$this->resetear();
 	}
 
 	function evt__guardar()
