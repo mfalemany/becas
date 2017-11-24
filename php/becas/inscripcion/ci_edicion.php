@@ -14,6 +14,7 @@ class ci_edicion extends becas_ci
 		
 		//obtengo los datos de la inscripcion
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+
 		//si se est?modificando una inscripcion, es necesario validar algunas cosas...
 		if($datos){
 			//y los datos de la convocatoria
@@ -37,14 +38,16 @@ class ci_edicion extends becas_ci
 
 		if( ! $this->get_datos('inscripcion','inscripcion_conv_beca')->esta_cargada()){
 			$this->controlador()->pantalla()->eliminar_evento('eliminar');
-		
 		}
-
 		//si no est? cargados el codirector y/o subdirector, se deshabilitan las pesta?s correspondientes
-		if( ! $datos['nro_documento_codir']){
+		if( ! $this->get_datos(NULL,'director')->get()){
+			$this->pantalla()->tab('pant_director')->desactivar();
+		}
+		//si no est? cargados el codirector y/o subdirector, se deshabilitan las pesta?s correspondientes
+		if( ! $this->get_datos(NULL,'codirector')->get()){
 			$this->pantalla()->eliminar_tab('pant_codirector');
 		}
-		if( ! $datos['nro_documento_subdir']){
+		if( ! $this->get_datos(NULL,'subdirector')->get()){
 			$this->pantalla()->eliminar_tab('pant_subdirector');
 		}
 	}
@@ -85,7 +88,7 @@ class ci_edicion extends becas_ci
 		//$this->setear_entidades($datos);
 
 		//esta funcion carga los datos del alumno (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de alumno
-		$this->set_alumno($datos['id_tipo_doc'],$datos['nro_documento']);	
+		$this->set_alumno($datos['id_tipo_doc'],$datos['nro_documento']);    
 		
 
 		//esta funcion carga los datos del director (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de director
@@ -105,46 +108,14 @@ class ci_edicion extends becas_ci
 		}
 
 
-		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('estado'     => 'A',
-															 'fecha_hora' => date('Y-m-d'),
-															 'es_titular' => 'S',
-															 'puntaje'    => $this->calcular_puntaje(),
-															 'nro_carpeta' => substr(time(),0,7)
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => 'A',
+																			'fecha_hora'  => date('Y-m-d'),
+																			'es_titular'  => 'S',
+																			'puntaje'     => $this->calcular_puntaje(),
+																			'nro_carpeta' => substr(time(),0,7)
 															));
 
 	}
-
-	/*protected function setear_entidades($datos)
-	{
-		//claves del datos_tabla "inscripcion_conv_beca"
-		$this->s__inscripcion = array(
-			'id_convocatoria' => $datos['id_convocatoria'],
-			'id_tipo_beca' => $datos['id_tipo_beca'],
-			'id_tipo_doc' => $datos['id_tipo_doc'],
-			'nro_documento' => $datos['nro_documento']
-		);
-		//claves del datos_tabla "alumno"
-		$this->s__alumno = array(
-			'id_tipo_doc' => $datos['id_tipo_doc'],
-			'nro_documento' => $datos['nro_documento']
-		);
-		//claves del datos_tabla "director"
-		$this->s__director = array(
-			'id_tipo_doc' => $datos['id_tipo_doc_dir'],
-			'nro_documento' => $datos['nro_documento_dir']
-		);
-		//claves del datos_tabla "codirector"
-		$this->s__codirector = array(
-			'id_tipo_doc' => $datos['id_tipo_doc_codir'],
-			'nro_documento' => $datos['nro_documento_codir']
-		);
-		//claves del datos_tabla "subdirector"
-		$this->s__subdirector = array(
-			'id_tipo_doc' => $datos['id_tipo_doc_subdir'],
-			'nro_documento' => $datos['nro_documento_subdir']
-		);
-	}*/
-
 
 	protected function set_alumno($id_tipo_doc,$nro_documento)
 	{
@@ -152,6 +123,7 @@ class ci_edicion extends becas_ci
 		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'alumno');
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
+			$this->get_datos('alumno')->resetear();
 			$this->get_datos('alumno','alumno')->set(array(
 				'nro_documento' => $nro_documento,
 				'id_tipo_doc'   => $id_tipo_doc
@@ -163,13 +135,14 @@ class ci_edicion extends becas_ci
 
 		}else{
 			$this->get_datos('alumno')->cargar(array('id_tipo_doc'   => $id_tipo_doc,
-													 'nro_documento' => $nro_documento));
+														'nro_documento' => $nro_documento));
 
 		}
 	}
 
 	protected function set_director($id_tipo_doc,$nro_documento)
 	{
+
 		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
 		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'docente');
 		
@@ -252,7 +225,7 @@ class ci_edicion extends becas_ci
 
 			foreach($requisitos as $requisito){
 
-				$this->get_datos('requisitos_insc')->nueva_fila($requisito);
+				$this->get_datos('inscripcion','requisitos_insc')->nueva_fila($requisito);
 			}
 		}
 	}
@@ -262,10 +235,19 @@ class ci_edicion extends becas_ci
 	//-----------------------------------------------------------------------------------
 
 	function conf__form_alumno(becas_ei_formulario $form)
-	{
-		if($this->get_datos('alumno','alumno')->get()){
-			$form->set_solo_lectura(array('id_tipo_doc','nro_documento','apellido','nombres'));
+	{	
+		$alumno = $this->get_datos('alumno','alumno')->get();
+		if($alumno){
 			$form->set_datos($this->get_datos('alumno','alumno')->get());
+			//se bloquean los efs principales
+			$form->set_solo_lectura(array('id_tipo_doc','nro_documento'));
+			if(isset($alumno['apellido'])){
+				$form->set_solo_lectura(array('apellido'));
+			}
+			if(isset($alumno['nombres'])){
+				$form->set_solo_lectura(array('nombres'));
+			}
+
 		}
 	}
 
@@ -352,18 +334,18 @@ class ci_edicion extends becas_ci
 	//-----------------------------------------------------------------------------------
 
 	function conf__form_codirector_justif(becas_ei_formulario $form)
-    {
-        if($this->get_datos('inscripcion','inscripcion_conv_beca')->get()){
-            $datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-            $form->set_datos(array('justif_codirector' => $datos['justif_codirector']));
-            
-        }
-    }
+	{
+		if($this->get_datos('inscripcion','inscripcion_conv_beca')->get()){
+			$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+			$form->set_datos(array('justif_codirector' => $datos['justif_codirector']));
+			
+		}
+	}
 
-    function evt__form_codirector_justif__modificacion($datos)
-    {
-        $this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
-    }
+	function evt__form_codirector_justif__modificacion($datos)
+	{
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
+	}
 
 	//-----------------------------------------------------------------------------------
 	//---- form_subdirector -------------------------------------------------------------
@@ -401,7 +383,7 @@ class ci_edicion extends becas_ci
 	}
 
 
-    //-----------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
 	//---- form_plan_trabajo ------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 
@@ -565,47 +547,72 @@ class ci_edicion extends becas_ci
 		$this->get_datos('alumno','antec_particip_dict_cursos')->procesar_filas($datos);
 	}
 
+	//-----------------------------------------------------------------------------------
+	//---- form_cursos_perfec_aprob -----------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_cursos_perfec_aprob(becas_ei_formulario_ml $form_ml)
+	{
+		if($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas()){
+			$form_ml->set_datos($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas());
+		}
+	}
+
+	function evt__form_cursos_perfec_aprob__modificacion($datos)
+	{
+		$this->get_datos('alumno','antec_particip_dict_cursos')->procesar_filas($datos);
+	}
+
 
 	/**
-     * Retorna un datos_relación (si no se especifica ninguna tabla en particular), sino, devuelve el datos tabla solicitado
-     * @param  string $tabla Nombre de la tabla que se desea obtener (null para obtener el datos_relacion)
-     * @return datos_tabla o datos_relacion 
-     */
-    function get_datos($relacion,$tabla)
-    {
-        return $this->controlador()->get_datos($relacion,$tabla);
-    }
+		* Retorna un datos_relación (si no se especifica ninguna tabla en particular), sino, devuelve el datos tabla solicitado
+		* @param  string $tabla Nombre de la tabla que se desea obtener (null para obtener el datos_relacion)
+		* @return datos_tabla o datos_relacion 
+		*/
+	function get_datos($relacion,$tabla)
+	{
+		return $this->controlador()->get_datos($relacion,$tabla);
+	}
 
-    /**
-     * Retorna el nombre y apellido de un docente
-     * @param  array              $datos     Array asociativo que contiene el tipo_doc y el nro_doc
-     * @param  toba_ajax_respuesta $respuesta Respuesta que se envía al cliente
-     */
-    function ajax__get_docente($datos, toba_ajax_respuesta $respuesta)
-    {
-        $ayn = toba::consulta_php('co_docentes')->get_ayn($datos['tipo'].'||'.$datos['nro']);
-        if( ! $ayn){
-            $respuesta->set(array('director'=>'Docente no encontrado','error'=>TRUE));
-        }else{
-            $respuesta->set(array('director'=>$ayn,'error'=>FALSE));
-        }
-        
-    }
+	/**
+		* Retorna el nombre y apellido de un docente
+		* @param  array              $datos     Array asociativo que contiene el tipo_doc y el nro_doc
+		* @param  toba_ajax_respuesta $respuesta Respuesta que se envía al cliente
+		*/
+	function ajax__get_docente($datos, toba_ajax_respuesta $respuesta)
+	{
+		$ayn = toba::consulta_php('co_docentes')->get_ayn($datos['tipo'].'||'.$datos['nro']);
+		if( ! $ayn){
+			$respuesta->set(array('director'=>'Docente no encontrado','error'=>TRUE));
+		}else{
+			$respuesta->set(array('director'=>$ayn,'error'=>FALSE));
+		}
+		
+	}
 
-    function ajax__get_disciplinas_incluidas($id_area_conocimiento, toba_ajax_respuesta $respuesta)
-    {
-    	$respuesta->set(toba::consulta_php('co_areas_conocimiento')->get_disciplinas_incluidas($id_area_conocimiento));
-    }
-
-
-
-    function calcular_puntaje()
-    {
-        return "42.3";
-    }
+	function ajax__get_disciplinas_incluidas($id_area_conocimiento, toba_ajax_respuesta $respuesta)
+	{
+		$respuesta->set(toba::consulta_php('co_areas_conocimiento')->get_disciplinas_incluidas($id_area_conocimiento));
+	}
 
 
-	
+
+	function calcular_puntaje()
+	{
+		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		if( ! $datos['id_tipo_beca']){
+			return false;
+		}
+		$factor = toba::consulta_php('co_tipos_beca')->get_factor($datos['id_tipo_beca']);
+		if(!$factor){
+			return false;
+		}
+		$puntaje = ($factor * $datos['prom_hist']) - 
+					  ($datos['prom_hist_egresados'] / $datos['prom_hist']) +  
+				      ($datos['prom_hist_egresados'] * $datos['prom_hist'] / 100);
+		return round ($puntaje,3);
+
+	}
 
 }
 ?>

@@ -10,6 +10,7 @@ class co_tipos_beca
 			tip.tipo_beca,
 			tip.cupo_maximo,
 			tip.id_color,
+			tip.factor,
 			col.color
 		FROM tipos_beca as tip	
 		LEFT JOIN tipos_convocatoria as tip_con ON tip.id_tipo_convocatoria = tip_con.id_tipo_convocatoria
@@ -27,6 +28,13 @@ class co_tipos_beca
 				WHERE cb.id_convocatoria = ".quote($id_convocatoria)."
 				AND tb.estado = 'A'";
 		return toba::db()->consultar($sql);
+	}
+
+	function get_factor($id_tipo_beca)
+	{
+		$sql = "SELECT factor FROM tipos_beca WHERE id_tipo_beca = ".quote($id_tipo_beca);
+		$resultado = toba::db()->consultar_fila($sql);
+		return $resultado['factor'];
 	}
 
 

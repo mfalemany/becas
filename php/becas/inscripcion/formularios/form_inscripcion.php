@@ -28,6 +28,15 @@ class form_inscripcion extends becas_ei_formulario
 				{$id_js}.ef(\'id_tipo_doc_codir\').set_obligatorio(false);\
 			}\
 		');
+
+		//--------Si se carga un DNI, se hace tambien obligatorio el campo id_tipo_doc_subdir ------------
+		{$id_js}.ef('nro_documento_subdir').cuando_cambia_valor('\
+			if($(this).prop(\'value\').length){\
+				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(true);\
+			}else{\
+				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(false);\
+			}\	
+		');
 		
 		
 		//--------Si se carga un DNI, se carga mediante ajax el nombre y apellido del director----------
@@ -47,6 +56,32 @@ class form_inscripcion extends becas_ei_formulario
 				{$id_js}.ef(\'director\').set_estado(\'\');\
 			}\
 		');
+
+		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL CODIRECTOR -------
+		{$id_js}.ef('id_tipo_doc_codir').cuando_cambia_valor('\
+			if({$id_js}.ef(\'id_tipo_doc_codir\').get_estado() == \'nopar\'){ \
+				{$id_js}.ef(\'nro_documento_codir\').set_estado(\'\');\
+				{$this->objeto_js}.controlador.desactivar_tab(\'pant_codirector\');\
+				{$id_js}.ef(\'nro_documento_codir\').set_obligatorio(false);\
+				return false;\
+			}else{\
+				{$id_js}.ef(\'nro_documento_codir\').set_obligatorio(true);\
+			}\
+		');
+
+		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL SUBDIRECTOR -------
+		{$id_js}.ef('id_tipo_doc_subdir').cuando_cambia_valor('\
+			if({$id_js}.ef(\'id_tipo_doc_subdir\').get_estado() == \'nopar\'){ \
+				{$id_js}.ef(\'nro_documento_subdir\').set_estado(\'\');\
+				{$this->objeto_js}.controlador.desactivar_tab(\'pant_subdirector\');\
+				{$id_js}.ef(\'nro_documento_subdir\').set_obligatorio(false);\
+				return false;\
+			}else{\
+				{$id_js}.ef(\'nro_documento_subdir\').set_obligatorio(true);\
+			}\
+		');
+
+		
 		
 		
 		

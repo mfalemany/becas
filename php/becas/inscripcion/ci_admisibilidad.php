@@ -7,7 +7,7 @@ class ci_admisibilidad extends becas_ci
 
 	function conf__form_admisibilidad(becas_ei_formulario $form)
 	{
-		$insc = $this->get_datos('inscripcion_conv_beca')->get();
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		if($insc){
 			//$detalles = $this->get_detalles_insc($insc['id_convocatoria'],$insc['id_tipo_beca'],$insc['id_tipo_doc'],$insc['nro_documento']);
 			$form->set_datos($insc);
@@ -21,7 +21,7 @@ class ci_admisibilidad extends becas_ci
 
 	function evt__form_admisibilidad__modificacion($datos)
 	{
-		$this->get_datos('inscripcion_conv_beca')->set($datos);
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -31,10 +31,10 @@ class ci_admisibilidad extends becas_ci
 	function conf__ml_requisitos(becas_ei_formulario_ml $form_ml)
 	{
 		//obtengo los detalles de la inscripcion
-		$insc = $this->get_datos('inscripcion_conv_beca')->get();
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 
 		//cargo la tabla de requisitos
-		$this->get_datos('requisitos_insc')->cargar();
+		$this->get_datos('inscripcion','requisitos_insc')->cargar();
 		
 		//obtengo el estado de presentacion de requisitos del aspirante
 		$req = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($insc['id_convocatoria'],$insc['id_tipo_beca'],$insc['id_tipo_doc'],$insc['nro_documento']);
@@ -43,7 +43,7 @@ class ci_admisibilidad extends becas_ci
 
 	function evt__ml_requisitos__modificacion($datos)
 	{
-		$this->get_datos('requisitos_insc')->procesar_filas($datos);
+		$this->get_datos('inscripcion','requisitos_insc')->procesar_filas($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -52,19 +52,71 @@ class ci_admisibilidad extends becas_ci
 
 	function conf__pant_inicial(toba_ei_pantalla $pantalla)
 	{
-		$insc = $this->get_datos('inscripcion_conv_beca')->get();
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 
-		//se obtienen los detalles de la inscripcion
-		$det_doc = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_director($insc['id_convocatoria'],$insc['id_tipo_beca'],$insc['id_tipo_doc'],$insc['nro_documento']);
+		/* ================================== DIRECTOR ================================ */
+		$det = toba::consulta_php('co_docentes')->get_resumen_docente($insc['id_tipo_doc_dir'],$insc['nro_documento_dir']);
 
+		$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($insc['id_tipo_doc_dir'],$insc['nro_documento_dir']);
+		$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
+		$resumen_dir = $this->mostrar_detalles_director($detalles);
+		/* ============================================================================ */
 
-		//se obtienen los detalles de los cargos del docente
-		$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($det_doc['id_tipo_doc_dir'],$det_doc['nro_documento_dir']);
-		//se unifican ambos arrays
-		$detalles = array_merge($det_doc,array('cargos'=>$detalles_cargos));
-		//ei_arbol($detalles);
+		unset($det);
+		unset($detalles_cargos);
+
+		/* ================================= CODIRECTOR =============================== */
+		if($insc['id_tipo_doc_codir'] && $insc['nro_documento_codir']){
+			$det = toba::consulta_php('co_docentes')->get_resumen_docente($insc['id_tipo_doc_codir'],$insc['nro_documento_codir']);
+			$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($insc['id_tipo_doc_codir'],$insc['nro_documento_codir']);
+			$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
+			$resumen_codir = $this->mostrar_detalles_director($detalles);	
+		}
+		/* ============================================================================ */
+
+		unset($det);
+		unset($detalles_cargos);
+
+		/* ================================= SUBDIRECTOR =============================== */
+		if($insc['id_tipo_doc_subdir'] && $insc['nro_documento_subdir']){
+			$det = toba::consulta_php('co_docentes')->get_resumen_docente($insc['id_tipo_doc_subdir'],$insc['nro_documento_subdir']);
+			$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($insc['id_tipo_doc_subdir'],$insc['nro_documento_subdir']);
+			$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
+			$resumen_subdir = $this->mostrar_detalles_director($detalles);	
+		}
+		/* ============================================================================ */
+
+		$template = "<table>
+						<tr>
+							<td>[dep id=form_admisibilidad][dep id=ml_requisitos]</td>
+							<td>
+								<fieldset>
+									<legend>Resumen del Director de la beca</legend>
+									$resumen_dir
+								</fieldset>";
+		if(isset($resumen_codir)){
+			$template .= "	<br><fieldset>
+									<legend>Resumen del Co-Director de la beca</legend>
+									$resumen_codir
+								</fieldset>";
+		}
+		if(isset($resumen_subdir)){
+			$template .= "	<br><fieldset>
+									<legend>Resumen del Sub-Director de la beca</legend>
+									$resumen_subdir
+								</fieldset>";
+		}
+
+		$template .=		"</td>
+						</tr>
+					</table>";
+		$pantalla->set_template($template);
+	}
+
+	function mostrar_detalles_director($detalles)
+	{
 		////se arma el template (tiene un encabezado que resume los datos del director)
-		$resumen = "<p>Director: <b class='etiqueta_importante'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].". ".$detalles['nro_documento_dir'].")</p>";
+		$resumen = "<p>Director: <b class='etiqueta_importante'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].". ".$detalles['nro_documento'].")</p>";
 		//$resumen .= "<p>CUIL: ".$detalles['cuil']."</p>";
 		$resumen .= "<p>M&aacute;ximo Grado: ".$detalles['nivel_academico']."</p>";
 		$resumen .= "<p>Cat. Incentivos: ".$detalles['cat_incentivos']."</p>";
@@ -90,28 +142,16 @@ class ci_admisibilidad extends becas_ci
 			$resumen .= "</li>";
 		}
 		$resumen .= "</ul>";
-		$pantalla->set_template("<table>
-									<tr>
-										<td>[dep id=form_admisibilidad]</td>
-										<td>
-											<fieldset>
-												<legend>Resumen del director de la beca</legend>
-												$resumen
-											</fieldset>
-										</td>
-									</tr>
-									<tr>
-										<td>[dep id=ml_requisitos]</td>
-									</tr>
-								</table>");
+		return $resumen;
+		
 	}
 
 	
 
 
-	function get_datos($tabla = NULL)
+	function get_datos($relacion = NULL, $tabla = NULL)
 	{
-		return $this->controlador()->get_datos($tabla);
+		return $this->controlador()->get_datos($relacion, $tabla);
 	}
 
 	

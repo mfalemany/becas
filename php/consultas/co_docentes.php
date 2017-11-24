@@ -79,6 +79,29 @@ class co_docentes
 		}
 	}
 
+	function get_resumen_docente($id_tipo_doc, $nro_documento)
+	{
+			$sql = "SELECT doc.id_tipo_doc,
+						   td.tipo_doc,
+						   doc.nro_documento,
+						   per.apellido,
+						   per.nombres,
+						   per.cuil,
+						   niv.nivel_academico,
+						   cat_inc.categoria as cat_incentivos,
+						   cat_con.categoria as cat_conicet
+			FROM docentes AS doc
+			LEFT JOIN categorias_incentivos AS cat_inc ON cat_inc.id_cat_incentivos = doc.id_cat_incentivos
+			LEFT JOIN categorias_conicet AS cat_con ON cat_con.id_cat_conicet = doc.id_cat_conicet
+			LEFT JOIN personas AS per ON per.nro_documento = doc.nro_documento AND per.id_tipo_doc = doc.id_tipo_doc
+			LEFT JOIN niveles_academicos AS niv ON niv.id_nivel_academico = per.id_nivel_academico
+			LEFT JOIN tipo_documento AS td ON td.id_tipo_doc = per.id_tipo_doc
+			WHERE per.id_tipo_doc = ".quote($id_tipo_doc)."
+			AND per.nro_documento = ".quote($nro_documento);
+			return toba::db('becas')->consultar_fila($sql);
+
+	}
+
 
 
 }

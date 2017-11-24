@@ -114,5 +114,7 @@ class ci_inscripcion extends becas_ci
 		}
 	}
 
+	
+
 }
 ?>
