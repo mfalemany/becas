@@ -102,7 +102,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase
 	NULL, --auto_reset
 	'100%', --ancho
-	'150px', --ancho_etiqueta
+	'160px', --ancho_etiqueta
 	'0', --expandir_descripcion
 	NULL, --campo_bl
 	NULL, --scroll
@@ -122,7 +122,37 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	NULL, --template
+	'<div style=''font-size: 1.1em;''>
+<table>
+	<tbody>
+		<tr>
+			<td>
+				[ef id=id_tipo_convocatoria]</td>
+		</tr>
+		<tr>
+			<td>
+				<span style="color:#2f004c;"><span style="padding: 10px;">Se sugiere incluir el a&ntilde;o actual en el nombre de la convocatoria. Por ejemplo: Convocatoria Becas CyT 2017</span></span></td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=convocatoria]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=fecha_desde]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=fecha_hasta]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=limite_movimientos]</td>
+		</tr>
+	</tbody>
+</table>
+<p>&nbsp;</p>
+</div>', --template
 	NULL  --template_impresion
 );
 

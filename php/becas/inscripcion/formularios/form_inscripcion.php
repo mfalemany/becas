@@ -28,22 +28,15 @@ class form_inscripcion extends becas_ei_formulario
 				{$id_js}.ef(\'id_tipo_doc_codir\').set_obligatorio(false);\
 			}\
 		');
-
+		
 		//--------Si se carga un DNI, se hace tambien obligatorio el campo id_tipo_doc_subdir ------------
 		{$id_js}.ef('nro_documento_subdir').cuando_cambia_valor('\
 			if($(this).prop(\'value\').length){\
 				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(true);\
 			}else{\
 				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(false);\
-			}\	
+			}\
 		');
-		
-		
-		//--------Si se carga un DNI, se carga mediante ajax el nombre y apellido del director----------
-		{$id_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director()');
-		
-		
-		
 		
 		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL DIRECTOR -------
 		{$id_js}.ef('id_tipo_doc_dir').cuando_cambia_valor('\
@@ -56,7 +49,7 @@ class form_inscripcion extends becas_ei_formulario
 				{$id_js}.ef(\'director\').set_estado(\'\');\
 			}\
 		');
-
+		
 		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL CODIRECTOR -------
 		{$id_js}.ef('id_tipo_doc_codir').cuando_cambia_valor('\
 			if({$id_js}.ef(\'id_tipo_doc_codir\').get_estado() == \'nopar\'){ \
@@ -68,7 +61,7 @@ class form_inscripcion extends becas_ei_formulario
 				{$id_js}.ef(\'nro_documento_codir\').set_obligatorio(true);\
 			}\
 		');
-
+		
 		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL SUBDIRECTOR -------
 		{$id_js}.ef('id_tipo_doc_subdir').cuando_cambia_valor('\
 			if({$id_js}.ef(\'id_tipo_doc_subdir\').get_estado() == \'nopar\'){ \
@@ -80,10 +73,11 @@ class form_inscripcion extends becas_ei_formulario
 				{$id_js}.ef(\'nro_documento_subdir\').set_obligatorio(true);\
 			}\
 		');
-
 		
 		
 		
+		//--------Si se carga un DNI, se carga mediante ajax el nombre y apellido del director----------
+		{$id_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director()');
 		
 		//---------- Busco el director usando ajax -----------------------------------------------------
 		function buscar_director(tipo,nro)
@@ -147,9 +141,30 @@ class form_inscripcion extends becas_ei_formulario
 		{
 			$('#disciplinas_incluidas').html('Disciplinas incluídas: '+respuesta);	
 		}
+		
+		//---- Procesamiento de EFs --------------------------------
+		
+		{$this->objeto_js}.evt__nro_documento__procesar = function(es_inicial)
+		{
+			if( ! es_inicial){
+				if(this.ef('nro_documento').get_estado().length && this.ef('id_tipo_doc').get_estado() != 'nopar'){
+					var params = {id_tipo_doc   : this.ef('id_tipo_doc').get_estado(),
+								  nro_documento : this.ef('nro_documento').get_estado(),
+								  id_tipo_beca  : this.ef('id_tipo_beca').get_estado()};
+					{$this->controlador()->objeto_js}.ajax('validar_edad',params,this,alertar_edad);
+				}
+			}
+		}
 
+		function alertar_edad(mensaje){
+			if(mensaje){
+				notificacion.agregar(mensaje,'error');
+				notificacion.ventana_modal();
+			}
+		}
 		";
 	}
+
 
 
 

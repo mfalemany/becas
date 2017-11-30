@@ -20,12 +20,20 @@
 	font-size: 1.1em;
 	color: #22F;
 }
+.etiqueta_error{
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #F22;
+}
 .cargo_vigente{
 	color:#008400;
 }
 
 .centrado{
 	text-align: center;
+}
+.sombreado{
+	text-shadow: 1px 1px 1px #7D7D7D;
 }
 #enc-logo img{
 	padding: 0px 0px 0px 18px;
@@ -54,6 +62,13 @@
 	text-decoration: none;
 	width: 100%;
 }
+.ei-ml-grilla thead{
+	font-size: 1.1em;
+}
+.ei-ml-columna{
+	text-align:center;
+}
+
 
 	
 

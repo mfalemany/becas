@@ -1180,7 +1180,7 @@ CREATE TABLE inscripcion_conv_beca (
     carrera_posgrado character varying(200),
     nombre_inst_posgrado character varying(200),
     titulo_carrera_posgrado character varying(200),
-    nro_carpeta character varying(8),
+    nro_carpeta character varying(20),
     observaciones character varying(200),
     estado character(1) NOT NULL,
     cant_fojas numeric(3,0),
@@ -1422,7 +1422,10 @@ CREATE TABLE tipos_beca (
     meses_present_avance numeric(3,0),
     cupo_maximo numeric(5,0),
     id_color smallint,
-    estado character(1) DEFAULT 'A'::bpchar
+    estado character(1) DEFAULT 'A'::bpchar,
+    factor numeric(3,2),
+    edad_limite numeric(2,0),
+    prefijo_carpeta character varying(10)
 );
 
 
@@ -1705,6 +1708,8 @@ ALTER TABLE ONLY universidades ALTER COLUMN id_universidad SET DEFAULT nextval('
 
 COPY antec_activ_docentes (id_antecedente, institucion, cargo, anio_ingreso, anio_egreso, nro_documento, id_tipo_doc) FROM stdin;
 2	Facultad de Sarasa	Sarasero Profesional	2015	\N	31255073	1
+3	Otra Intitucion	Barrendero	2013	2014	31255073	1
+4	UNNE, FACENA, CATEDRA ESTADISTICA	JTP SIMPLE	2017	\N	27567172	1
 \.
 
 
@@ -1712,7 +1717,7 @@ COPY antec_activ_docentes (id_antecedente, institucion, cargo, anio_ingreso, ani
 -- Name: antec_activ_docentes_id_antecedente_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_activ_docentes_id_antecedente_seq', 2, true);
+SELECT pg_catalog.setval('antec_activ_docentes_id_antecedente_seq', 4, true);
 
 
 --
@@ -1721,6 +1726,7 @@ SELECT pg_catalog.setval('antec_activ_docentes_id_antecedente_seq', 2, true);
 
 COPY antec_becas_obtenidas (id_beca_obtenida, institucion, tipo_beca, id_tipo_doc, nro_documento, fecha_desde, fecha_hasta) FROM stdin;
 4	Beca por groso	Grado	1	31255073	2017-01-01	2018-01-01
+5	Otra beca por mas groso	Iniciación	1	31255073	2014-01-01	2015-01-01
 \.
 
 
@@ -1728,7 +1734,7 @@ COPY antec_becas_obtenidas (id_beca_obtenida, institucion, tipo_beca, id_tipo_do
 -- Name: antec_becas_obtenidas_id_beca_obtenida_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_becas_obtenidas_id_beca_obtenida_seq', 4, true);
+SELECT pg_catalog.setval('antec_becas_obtenidas_id_beca_obtenida_seq', 5, true);
 
 
 --
@@ -1736,6 +1742,9 @@ SELECT pg_catalog.setval('antec_becas_obtenidas_id_beca_obtenida_seq', 4, true);
 --
 
 COPY antec_conoc_idiomas (id_conocimiento_idioma, idioma, lectura, escritura, conversacion, traduccion, id_tipo_doc, nro_documento) FROM stdin;
+1	Inglés	1	2	3	2	1	31255073
+2	Aleman	3	3	3	3	1	31255073
+3	Aleman	1	1	3	2	1	43929392
 \.
 
 
@@ -1743,7 +1752,7 @@ COPY antec_conoc_idiomas (id_conocimiento_idioma, idioma, lectura, escritura, co
 -- Name: antec_conoc_idiomas_id_conocimiento_idioma_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_conoc_idiomas_id_conocimiento_idioma_seq', 1, false);
+SELECT pg_catalog.setval('antec_conoc_idiomas_id_conocimiento_idioma_seq', 3, true);
 
 
 --
@@ -1767,6 +1776,7 @@ SELECT pg_catalog.setval('antec_cursos_perfec_aprob_id_curso_perfec_aprob_seq', 
 
 COPY antec_estudios_afines (id_estudio_afin, institucion, titulo, id_tipo_doc, nro_documento, anio_desde, anio_hasta) FROM stdin;
 1	Universidad de la Esquina	Universitario en casi todo	1	31255073	2008	2010
+2	Universidad Blas Pascal	Universitario Completo	1	31255073	2017	2017
 \.
 
 
@@ -1774,7 +1784,7 @@ COPY antec_estudios_afines (id_estudio_afin, institucion, titulo, id_tipo_doc, n
 -- Name: antec_estudios_afines_id_estudio_afin_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_estudios_afines_id_estudio_afin_seq', 1, true);
+SELECT pg_catalog.setval('antec_estudios_afines_id_estudio_afin_seq', 2, true);
 
 
 --
@@ -1782,6 +1792,7 @@ SELECT pg_catalog.setval('antec_estudios_afines_id_estudio_afin_seq', 1, true);
 --
 
 COPY antec_otras_actividades (id_otra_actividad, institucion, actividad, titulo_tema, id_tipo_doc, nro_documento) FROM stdin;
+1	Universidad Nacional del Nordeste	Una actividad de prueba	Probar la opción de Otras Actividades	1	31255073
 \.
 
 
@@ -1789,14 +1800,14 @@ COPY antec_otras_actividades (id_otra_actividad, institucion, actividad, titulo_
 -- Name: antec_otras_actividades_id_otra_actividad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_otras_actividades_id_otra_actividad_seq', 1, false);
+SELECT pg_catalog.setval('antec_otras_actividades_id_otra_actividad_seq', 1, true);
 
 
 --
 -- Name: antec_particip_cursos_id_particip_cursos_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_particip_cursos_id_particip_cursos_seq', 1, false);
+SELECT pg_catalog.setval('antec_particip_cursos_id_particip_cursos_seq', 1, true);
 
 
 --
@@ -1804,6 +1815,7 @@ SELECT pg_catalog.setval('antec_particip_cursos_id_particip_cursos_seq', 1, fals
 --
 
 COPY antec_particip_dict_cursos (id_particip_cursos, institucion, carga_horaria, fecha, id_tipo_doc, nro_documento) FROM stdin;
+1	Universidad Nacional de Don Torcuato	140	2017-11-23	1	31255073
 \.
 
 
@@ -1812,6 +1824,7 @@ COPY antec_particip_dict_cursos (id_particip_cursos, institucion, carga_horaria,
 --
 
 COPY antec_present_reuniones (id_present_reunion, autores, titulo_trabajo, fecha, id_tipo_doc, nro_documento) FROM stdin;
+1	Jose Lopez, Pedro Romero, Manuel Ramirez	Reunion de Prueba	2015-01-01	1	31255073
 \.
 
 
@@ -1819,7 +1832,7 @@ COPY antec_present_reuniones (id_present_reunion, autores, titulo_trabajo, fecha
 -- Name: antec_present_reuniones_id_present_reunion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_present_reuniones_id_present_reunion_seq', 1, false);
+SELECT pg_catalog.setval('antec_present_reuniones_id_present_reunion_seq', 1, true);
 
 
 --
@@ -1903,7 +1916,7 @@ SELECT pg_catalog.setval('be_avance_beca_id_avance_seq', 1, false);
 -- Name: be_cargos_docente_id_cargo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_cargos_docente_id_cargo_seq', 7, true);
+SELECT pg_catalog.setval('be_cargos_docente_id_cargo_seq', 9, true);
 
 
 --
@@ -1938,7 +1951,7 @@ SELECT pg_catalog.setval('be_dedicacion_id_dedicacion_seq', 3, true);
 -- Name: be_dependencias_id_dependencia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_dependencias_id_dependencia_seq', 128, true);
+SELECT pg_catalog.setval('be_dependencias_id_dependencia_seq', 129, true);
 
 
 --
@@ -2004,6 +2017,8 @@ COPY becas_otorgadas (nro_resol, anio, nro_documento, id_tipo_doc, id_convocator
 
 COPY cargos_docente (id_dependencia, id_dedicacion, id_cargo_unne, id_cargo, fecha_desde, fecha_hasta, estado, id_tipo_doc, nro_documento) FROM stdin;
 65	1	3	7	2017-01-01	2017-12-31	A	1	32405039
+65	3	4	8	2016-01-01	2017-12-30	A	1	1
+128	3	1	9	2012-01-09	2018-01-01	A	1	1
 \.
 
 
@@ -2198,6 +2213,7 @@ COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad, id
 127	Facultad De Ciencias Veterinarias	VET	1	4669	\N	\N
 86	Facultad De Ciencias Exactas Y Naturales Y Agrimensura	EXA	1	4669	\N	\N
 99	Instituto De Ciencias Criminalísticas Y Criminología	CRI	1	4669	\N	\N
+129	Otro	Otro	1	4669	\N	\N
 \.
 
 
@@ -2206,7 +2222,8 @@ COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad, id
 --
 
 COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_conicet, id_dependencia_conicet) FROM stdin;
-32405039	1	10000	2	2	66
+1	1	1	3	5	86
+32405039	1	10000	3	5	86
 \.
 
 
@@ -2215,7 +2232,9 @@ COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_con
 --
 
 COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones, estado, cant_fojas, es_titular, id_tipo_beca, id_proyecto, es_egresado, anio_ingreso, anio_egreso, fecha_insc_posgrado, lugar_trabajo_becario, area_trabajo, id_tipo_doc_dir, nro_documento_dir, id_tipo_doc_codir, nro_documento_codir, id_tipo_doc_subdir, nro_documento_subdir) FROM stdin;
-\N	31255073	1	6	2017-11-22 00:00:00	\N	42.300	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	1511361	\N	A	\N	S	7	\N	0	\N	\N	\N	\N	\N	1	32405039	\N	\N	\N	\N
+86	27567172	1	6	2017-11-30 00:00:00	\N	31.328	\N	5	ANFIBIOS DEL IBERA	\N	\N	28	28	8.15	9.00	Doctorado en Biología	UNNE	DOCTORA EN BIOLOGIA	PER-001	\N	A	\N	S	10	529	1	2005	2010	2014-11-21	86	EL UNO	1	32405039	\N	\N	\N	\N
+65	5343322	1	6	2017-11-30 00:00:00	\N	35.648	\N	8	Aplicación de fertilizantes a los cultivos de maiz	Tiene conocimientos en el area que se aborda	1	41	23	7.61	7.23	\N	\N	\N	PRE-002	\N	A	\N	S	7	\N	0	2010	\N	\N	65	Departamento de Producción Vegetal	1	32405039	1	1	1	32405039
+65	31255073	1	6	2017-11-28 00:00:00	\N	46.070	\N	8	Titulo del plan de becas	Tiene conocimientos sobre el tema que se aborda	1	38	23	8.23	9.24	\N	\N	\N	PRE-001	\N	A	\N	S	7	\N	0	2003	\N	\N	65	Area cualquiera	1	32405039	1	1	1	\N
 \.
 
 
@@ -16547,7 +16566,17 @@ COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, c
 32405039	1	Alemany	Marcelo Federico	20324050397	1986-06-17	3794-844649	mfalemany@gmail.com	\N	4669	2	M
 12345676	1	Prueba	Persona de	\N	\N	\N	\N	\N	5672	3	M
 33012239	1	Barrera	Joel Matias Gaston		1987-05-27	\N	joel_barrera@hotmail.com	\N	8904	2	M
-31255073	1	Morales	Susana Beatriz		1984-11-23	\N	chuny_24@hotmail.com	\N	5205	2	F
+40446905	1	Gomez	Raul Antonio	\N	1980-01-01	No tiene	sinmail@gmail.com	No tiene	4895	3	M
+53433223	1	Gomez	Pedro Ramón	\N	1980-01-01	No tiene	sinmail@gmail.com	No tiene	4643	4	M
+534332	1	\N	\N	\N	\N	\N	\N	\N	\N	\N	M
+1	1	Acosta	Julio Cesar	\N	1960-01-01	3794-844649	julioaforever@gmail.com	\N	5970	1	M
+35770597	1	Arnica	Nicolás Joaquín	\N	1980-01-01	\N	\N	\N	5129	1	M
+5343322	1	Perez	Carlos Ramiro	\N	1986-06-17	\N	\N	\N	5080	1	M
+31255073	1	Morales	Susana Beatriz	27312550739	1984-11-23	No tiene	chuny_24@hotmail.com	No tiene	4669	2	F
+41232123	1	Martinez	Roberto Adrian	\N	1978-11-01	\N	\N	\N	5589	2	M
+43929392	1	Davalos	Carlos Roberto	\N	1978-11-01	\N	\N	\N	4683	3	M
+28302392	1	Ojeda	Jorge Alberto	20283023924	1980-11-14	\N	ojedita@msn.com	\N	\N	\N	M
+27567172	1	Ingaramo	MarÃ­a Del Rosario		1979-10-06	\N	mringaramo@gmail.com	\N	\N	\N	F
 \.
 
 
@@ -16556,7 +16585,9 @@ COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, c
 --
 
 COPY planes_trabajo (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca, plan_trabajo) FROM stdin;
-1	31255073	6	7	ADSAdDSS
+1	31255073	6	7	Mi plan de trabajo para hacer
+1	5343322	6	7	Mi plan de trabajo de prueba
+1	27567172	6	10	\N
 \.
 
 
@@ -17000,6 +17031,7 @@ SELECT pg_catalog.setval('requisitos_convocatoria_id_requisito_seq', 17, true);
 
 COPY requisitos_insc (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca, id_requisito, cumplido, fecha) FROM stdin;
 1	31255073	6	7	17	N	\N
+1	5343322	6	7	17	N	\N
 \.
 
 
@@ -17033,10 +17065,11 @@ COPY tipo_documento (id_tipo_doc, tipo_doc) FROM stdin;
 -- Data for Name: tipos_beca; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY tipos_beca (id_tipo_beca, id_tipo_convocatoria, tipo_beca, duracion_meses, meses_present_avance, cupo_maximo, id_color, estado) FROM stdin;
-7	5	PREGRADO	12	6	113	2	A
-8	6	Grado	24	12	10	2	A
-9	5	Iniciación	36	12	100	2	A
+COPY tipos_beca (id_tipo_beca, id_tipo_convocatoria, tipo_beca, duracion_meses, meses_present_avance, cupo_maximo, id_color, estado, factor, edad_limite, prefijo_carpeta) FROM stdin;
+8	6	Grado	24	12	10	2	A	\N	\N	\N
+9	5	Iniciación	36	12	100	2	A	3.50	33	INI
+7	5	Pre-Grado	12	6	113	2	A	5.00	30	PRE
+10	5	Perfeccionamiento	24	12	10	3	A	3.50	35	PER
 \.
 
 
@@ -17044,7 +17077,7 @@ COPY tipos_beca (id_tipo_beca, id_tipo_convocatoria, tipo_beca, duracion_meses, 
 -- Name: tipos_beca_id_tipo_beca_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('tipos_beca_id_tipo_beca_seq', 9, true);
+SELECT pg_catalog.setval('tipos_beca_id_tipo_beca_seq', 10, true);
 
 
 --
@@ -17483,6 +17516,14 @@ ALTER TABLE ONLY dependencias
 
 
 --
+-- Name: uq_inscripcion_conv_beca_nro-carpeta; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY inscripcion_conv_beca
+    ADD CONSTRAINT "uq_inscripcion_conv_beca_nro-carpeta" UNIQUE (nro_carpeta, id_convocatoria);
+
+
+--
 -- Name: uq_nivel_academico; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -17496,6 +17537,14 @@ ALTER TABLE ONLY niveles_academicos
 
 ALTER TABLE ONLY proyectos
     ADD CONSTRAINT uq_proyectos_proyecto UNIQUE (proyecto);
+
+
+--
+-- Name: uq_tipos_beca_prefijo-carpeta; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tipos_beca
+    ADD CONSTRAINT "uq_tipos_beca_prefijo-carpeta" UNIQUE (prefijo_carpeta);
 
 
 --
@@ -17768,14 +17817,6 @@ ALTER TABLE ONLY inscripcion_conv_beca
 
 ALTER TABLE ONLY inscripcion_conv_beca
     ADD CONSTRAINT fk_insc_conv_beca_dir FOREIGN KEY (id_tipo_doc_dir, nro_documento_dir) REFERENCES docentes(id_tipo_doc, nro_documento) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: fk_insc_conv_beca_idproyecto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY inscripcion_conv_beca
-    ADD CONSTRAINT fk_insc_conv_beca_idproyecto FOREIGN KEY (id_proyecto) REFERENCES proyectos(id_proyecto) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

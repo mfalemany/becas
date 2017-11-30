@@ -281,7 +281,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_convocatoria', --identificador
 	'ef_combo', --elemento_formulario
 	'id_convocatoria', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
 	'Convocatoria', --etiqueta
@@ -361,7 +361,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_beca', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_beca', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
 	'Tipo Beca', --etiqueta
@@ -521,7 +521,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nro_documento', --identificador
 	'ef_editable', --elemento_formulario
 	'nro_documento', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'7', --orden
 	'Nro Documento', --etiqueta
@@ -601,7 +601,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_doc', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_doc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'6', --orden
 	'Tipo Doc', --etiqueta
@@ -1324,7 +1324,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'17', --orden
-	'Nombre Inst Posgrado', --etiqueta
+	'Universidad (Posgrado)', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	'0', --colapsado
@@ -1481,7 +1481,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_tipo_doc_dir', --identificador
 	'ef_combo', --elemento_formulario
 	'id_tipo_doc_dir', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'19', --orden
 	'Tipo Documento', --etiqueta
@@ -1561,7 +1561,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nro_documento_dir', --identificador
 	'ef_editable', --elemento_formulario
 	'nro_documento_dir', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'20', --orden
 	'Nro. Documento', --etiqueta
@@ -1964,9 +1964,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'26', --orden
-	'Proyecto', --etiqueta
+	'Título del Proyecto', --etiqueta
 	NULL, --etiqueta_estilo
-	NULL, --descripcion
+	'Ingrese cualquier palabra que se encuentre incluida en el título del proyecto', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo
@@ -1981,12 +1981,12 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
-	'42', --carga_consulta_php
+	'45', --carga_consulta_php
 	NULL, --carga_sql
 	'becas', --carga_fuente
 	NULL, --carga_lista
-	'id_proyecto', --carga_col_clave
-	'proyecto', --carga_col_desc
+	'id', --carga_col_clave
+	'descripcion', --carga_col_desc
 	NULL, --carga_maestros
 	'0', --carga_cascada_relaj
 	'0', --cascada_mantiene_estado
@@ -2009,9 +2009,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --popup_proyecto
 	NULL, --popup_editable
 	NULL, --popup_ventana
-	'get_proyecto_busqueda', --popup_carga_desc_metodo
-	'co_proyectos', --popup_carga_desc_clase
-	'consultas/co_proyectos.php', --popup_carga_desc_include
+	'get_descripcion', --popup_carga_desc_metodo
+	'co_sap_proyectos', --popup_carga_desc_clase
+	'consultas/co_sap_proyectos.php', --popup_carga_desc_include
 	NULL, --popup_puede_borrar_estado
 	NULL, --fieldset_fin
 	NULL, --check_valor_si

@@ -91,9 +91,11 @@ class ci_inscripcion extends becas_ci
 
 	function evt__guardar()
 	{
-		$this->dep('ci_edicion')->generar_registros_relacionados();
+		$this->dep('ci_edicion')->generar_nro_carpeta();
 		$this->get_datos('alumno')->sincronizar();
 		$this->get_datos('inscripcion')->sincronizar();
+		$this->dep('ci_edicion')->generar_registros_relacionados();
+
 		$this->resetear();
 	}
 

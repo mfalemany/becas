@@ -62,6 +62,8 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
+		//$sql = "SELECT id, descripcion FROM sap_proyectos WHERE descripcion ILIKE ".quote("%".$patron."%")." LIMIT 10";
+		//ei_arbol(toba::db('sap')->consultar($sql));
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		if($datos){
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
@@ -83,6 +85,12 @@ class ci_edicion extends becas_ci
 	{
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => 'A',
+																			'fecha_hora'  => date('Y-m-d'),
+																			'es_titular'  => 'S',
+																			'puntaje'     => $this->calcular_puntaje()
+																			
+															));
 
 		//se setean variables de sesion para facilitar el manejo de los demás datos_tabla
 		//$this->setear_entidades($datos);
@@ -108,12 +116,7 @@ class ci_edicion extends becas_ci
 		}
 
 
-		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => 'A',
-																			'fecha_hora'  => date('Y-m-d'),
-																			'es_titular'  => 'S',
-																			'puntaje'     => $this->calcular_puntaje(),
-																			'nro_carpeta' => substr(time(),0,7)
-															));
+		
 
 	}
 
@@ -128,6 +131,7 @@ class ci_edicion extends becas_ci
 				'nro_documento' => $nro_documento,
 				'id_tipo_doc'   => $id_tipo_doc
 			));
+
 			
 			$this->set_pantalla('pant_alumno');
 
@@ -216,6 +220,7 @@ class ci_edicion extends becas_ci
 		//obtengo los datos principales de la inscripcion
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		//verifico si ya se crearon los registros para el cumplimiento de requisitos
+		
 		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['id_tipo_doc'],$datos['nro_documento']);
 		
 		//la insercion de los requisitos iniciales se realiza solo una vez
@@ -397,6 +402,24 @@ class ci_edicion extends becas_ci
 	function evt__form_plan_trabajo__modificacion($datos)
 	{
 		$this->get_datos('inscripcion','plan_trabajo')->set($datos);
+	}
+
+	function conf__pant_plan_trabajo(toba_ei_pantalla $pantalla)
+	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		
+		if($insc){
+			$template = "<table>
+							<tr>
+								<td><h1 class='centrado sombreado'>".quote($insc['titulo_plan_beca'])."</h1></td>
+							</tr>
+							<tr>
+								<td>[dep id=form_plan_trabajo]</td>
+							</tr>
+						</table>";
+			$pantalla->set_template($template);	
+		}
+		
 	}
 
 
@@ -595,6 +618,14 @@ class ci_edicion extends becas_ci
 		$respuesta->set(toba::consulta_php('co_areas_conocimiento')->get_disciplinas_incluidas($id_area_conocimiento));
 	}
 
+	function ajax__validar_edad($params, toba_ajax_respuesta $respuesta)
+	{
+		$edad_limite  = toba::consulta_php('co_tipos_beca')->get_campo('edad_limite',$params['id_tipo_beca']);
+		$edad_persona = toba::consulta_php('co_personas')->get_edad($params,$fecha); 
+		$mensaje = ($edad_persona->y > $edad_limite) ? 'La persona indicada supera el límite de edad para el tipo de beca seleccionado. Esto hará que la inscripción actual resulte inadmisible' : NULL;
+		$respuesta->set($mensaje);
+	}
+
 
 
 	function calcular_puntaje()
@@ -603,7 +634,7 @@ class ci_edicion extends becas_ci
 		if( ! $datos['id_tipo_beca']){
 			return false;
 		}
-		$factor = toba::consulta_php('co_tipos_beca')->get_factor($datos['id_tipo_beca']);
+		$factor = toba::consulta_php('co_tipos_beca')->get_campo('factor',$datos['id_tipo_beca']);
 		if(!$factor){
 			return false;
 		}
@@ -614,5 +645,31 @@ class ci_edicion extends becas_ci
 
 	}
 
+	function generar_nro_carpeta(){
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		//si ya tiene numero de carpeta asignado no se hace nada
+		if($insc['nro_carpeta']){
+			return;
+		}
+		//se obtiene el prefijo de carpeta para el tipo de beca actual
+		$prefijo = toba::consulta_php('co_tipos_beca')->get_campo('prefijo_carpeta',$insc['id_tipo_beca']);
+		
+		$nro = NULL;
+		
+		//si el tipo de beca actual tiene asignado un prefijo de carpeta, se busca el último número (o se genera el primero)
+		if($prefijo) {
+			$nro_carpeta = toba::consulta_php('co_inscripcion_conv_beca')->get_ultimo_nro_carpeta($insc['id_convocatoria'],$insc['id_tipo_beca']);
+			if($nro_carpeta){
+				if(strpos($nro_carpeta,$prefijo) !== FALSE){
+					$partes = explode('-',$nro_carpeta);
+					$nro = $prefijo."-".sprintf("%'.03d\n",($partes[1] + 1));
+				}
+			}else{
+				$nro = $prefijo."-001";
+				
+			}
+		}
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('nro_carpeta' => $nro)) ;
+	}
 }
 ?>

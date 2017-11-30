@@ -13,7 +13,6 @@ class form_ml_requisitos extends becas_ei_formulario_ml
 		
 		{$this->objeto_js}.evt__cumplido__procesar = function(es_inicial, fila)
 		{
-			console.log(es_inicial,fila);
 			if( ! es_inicial){
 				if(this.ef('cumplido').get_estado() == 1){
 					hoy = new Date();

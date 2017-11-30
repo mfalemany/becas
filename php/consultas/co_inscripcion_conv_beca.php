@@ -61,6 +61,18 @@ class co_inscripcion_conv_beca
 		return toba::db('becas')->consultar($sql);
 	}
 
+	function get_ultimo_nro_carpeta($id_convocatoria,$id_tipo_beca)
+	{
+		$sql = "SELECT nro_carpeta 
+				FROM inscripcion_conv_beca
+				WHERE id_convocatoria = ".quote($id_convocatoria)."
+				AND id_tipo_beca = ".quote($id_tipo_beca)."
+				ORDER BY fecha_hora DESC
+				LIMIT 1";
+		$resultado = toba::db()->consultar_fila($sql);
+		return ($resultado['nro_carpeta']) ? $resultado['nro_carpeta'] : FALSE;
+	}
+
 	
 
 	

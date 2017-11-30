@@ -30,12 +30,19 @@ class co_tipos_beca
 		return toba::db()->consultar($sql);
 	}
 
-	function get_factor($id_tipo_beca)
+	function get_campo($campo, $id_tipo_beca)
 	{
-		$sql = "SELECT factor FROM tipos_beca WHERE id_tipo_beca = ".quote($id_tipo_beca);
+		$sql = "SELECT $campo FROM tipos_beca WHERE id_tipo_beca = ".quote($id_tipo_beca)." LIMIT 1";
 		$resultado = toba::db()->consultar_fila($sql);
-		return $resultado['factor'];
+		if( array_key_exists($campo,$resultado)){
+			if($resultado[$campo]){
+				return $resultado[$campo];
+			}
+		}
+		return FALSE;
 	}
+
+	
 
 
 }

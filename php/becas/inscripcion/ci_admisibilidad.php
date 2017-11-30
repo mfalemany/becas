@@ -86,9 +86,16 @@ class ci_admisibilidad extends becas_ci
 		}
 		/* ============================================================================ */
 
+		$edad_asp = toba::consulta_php('co_personas')->get_edad(array('id_tipo_doc'   => $insc['id_tipo_doc'],
+																	  'nro_documento' => $insc['nro_documento']),
+																date('Y-12-31'));
 		$template = "<table>
 						<tr>
-							<td>[dep id=form_admisibilidad][dep id=ml_requisitos]</td>
+							<td>
+								<p class='etiqueta_importante centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp->y." años.</p>
+								[dep id=form_admisibilidad]
+								[dep id=ml_requisitos]
+							</td>
 							<td>
 								<fieldset>
 									<legend>Resumen del Director de la beca</legend>

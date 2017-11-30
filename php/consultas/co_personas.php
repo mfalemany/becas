@@ -199,7 +199,26 @@ class co_personas
 			}
 		}
 		return $resultado;
-		
+	}
+
+	/**
+	 * Retorna la edad de una persona. Si se pasa una fecha (como segundo argumento), este método retorna la edad de la persona'a esa fecha 
+	 * @param  array $persona array que contien el id_tipo_doc y el nro_documento de la persona
+	 * @param  date $fecha   Fecha a la que se quiere saber la edad de la persona. Si no se establece, se asume la fecha actual
+	 * @return integer       Edad de la persona a la fecha establecida
+	 */
+	function get_edad($persona,$fecha)
+	{
+		$fecha = ($fecha) ? $fecha : date("Y-m-d");
+		$sql = "SELECT fecha_nac
+				FROM personas 
+				WHERE id_tipo_doc = ".quote($persona['id_tipo_doc'])."
+				AND nro_documento = ".quote($persona['nro_documento'])."
+				LIMIT 1";
+		$resultado = toba::db()->consultar_fila($sql);
+		$nac = new Datetime($resultado['fecha_nac']);
+		$fec = new Datetime($fecha);
+		return $nac->diff($fec);
 	}
 
 }
