@@ -71,7 +71,8 @@ CREATE TABLE antec_activ_docentes (
     anio_ingreso numeric(4,0) NOT NULL,
     anio_egreso numeric(4,0),
     nro_documento character varying(15) NOT NULL,
-    id_tipo_doc smallint NOT NULL
+    id_tipo_doc smallint NOT NULL,
+    doc_probatoria character varying(200)
 );
 
 

@@ -65,6 +65,10 @@
 .ei-ml-grilla thead{
 	font-size: 1.1em;
 }
+.ei-ml-grilla input[type=file]{
+	background-color: #595d9b;
+	font-weight: bold;
+}
 .ei-ml-columna{
 	text-align:center;
 }

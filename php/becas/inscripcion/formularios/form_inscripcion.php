@@ -156,10 +156,13 @@ class form_inscripcion extends becas_ei_formulario
 			}
 		}
 
-		function alertar_edad(mensaje){
-			if(mensaje){
-				notificacion.agregar(mensaje,'error');
-				notificacion.ventana_modal();
+		function alertar_edad(edad_valida){
+			if(edad_valida !== null){
+				if( ! edad_valida){
+					notificacion.agregar('La persona indicada como postulante supera la edad límite para el tipo de beca al que intenta inscribirse. Esto hará que la inscripción resulte inadmisible.','error');
+					notificacion.ventana_modal();
+					notificacion.limpiar();
+				}
 			}
 		}
 		";

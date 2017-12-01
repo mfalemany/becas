@@ -216,9 +216,14 @@ class co_personas
 				AND nro_documento = ".quote($persona['nro_documento'])."
 				LIMIT 1";
 		$resultado = toba::db()->consultar_fila($sql);
-		$nac = new Datetime($resultado['fecha_nac']);
-		$fec = new Datetime($fecha);
-		return $nac->diff($fec);
+		if(count($resultado)){
+			$nac = new Datetime($resultado['fecha_nac']);
+			$fec = new Datetime($fecha);
+			return $nac->diff($fec)->y;	
+		}else{
+			return FALSE;
+		}
+		
 	}
 
 }

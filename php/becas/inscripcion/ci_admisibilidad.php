@@ -92,7 +92,7 @@ class ci_admisibilidad extends becas_ci
 		$template = "<table>
 						<tr>
 							<td>
-								<p class='etiqueta_importante centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp->y." años.</p>
+								<p class='etiqueta_importante centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
 								[dep id=form_admisibilidad]
 								[dep id=ml_requisitos]
 							</td>

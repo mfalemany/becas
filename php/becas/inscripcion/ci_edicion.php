@@ -447,6 +447,17 @@ class ci_edicion extends becas_ci
 
 	function evt__form_activ_docentes__modificacion($datos)
 	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$id = $insc['id_tipo_doc']."-".$insc['nro_documento'];
+		ei_arbol($datos);
+		foreach($datos as $item){
+			if($item['doc_probatoria']){
+				$nombre = $item['institucion']."-".$item['cargo'];
+				if( ! $this->subir_archivo($item['doc_probatoria'],'doc_probatoria/'.$id."/activ_docente/",$nombre)){
+					toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".$nombre);
+				}
+			}
+		}
 		$this->get_datos('alumno','antec_activ_docentes')->procesar_filas($datos);
 	}
 
@@ -620,10 +631,26 @@ class ci_edicion extends becas_ci
 
 	function ajax__validar_edad($params, toba_ajax_respuesta $respuesta)
 	{
-		$edad_limite  = toba::consulta_php('co_tipos_beca')->get_campo('edad_limite',$params['id_tipo_beca']);
-		$edad_persona = toba::consulta_php('co_personas')->get_edad($params,$fecha); 
-		$mensaje = ($edad_persona->y > $edad_limite) ? 'La persona indicada supera el límite de edad para el tipo de beca seleccionado. Esto hará que la inscripción actual resulte inadmisible' : NULL;
+		//$mensaje = ($this->edad_permitida_para_beca($params['id_tipo_doc'],$params['nro_documento'],$params['id_tipo_beca']))? TRUE : FALSE;
+		$mensaje = $this->edad_permitida_para_beca($params['id_tipo_doc'],$params['nro_documento'],$params['id_tipo_beca']);
 		$respuesta->set($mensaje);
+	}
+
+	function edad_permitida_para_beca($id_tipo_doc, $nro_documento, $id_tipo_beca)
+	{
+		$edad_limite  = toba::consulta_php('co_tipos_beca')->get_campo('edad_limite',$id_tipo_beca);
+		//se asegura que exista la persona en la BD local, sino, lo busca en WS
+		toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'alumno');
+		$edad_persona =  $this->get_edad($id_tipo_doc,$nro_documento,date('Y-12-31'));
+		if($edad_persona){
+			return $edad_persona <= $edad_limite;
+		}
+	}
+
+	function get_edad($id_tipo_doc, $nro_documento, $fecha)
+	{
+		$persona = array('id_tipo_doc'=>$id_tipo_doc,'nro_documento'=>$nro_documento);
+		return toba::consulta_php('co_personas')->get_edad($persona,$fecha);
 	}
 
 
@@ -670,6 +697,26 @@ class ci_edicion extends becas_ci
 			}
 		}
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('nro_carpeta' => $nro)) ;
+	}
+
+	protected function subir_archivo($detalles = array(),$carpeta,$nombre_archivo)
+	{
+
+		if(!count($detalles)){
+			return;
+		}
+		$www = toba::proyecto()->get_www();
+		$www = $www['path'];
+		
+		
+		if( ! is_dir($www.$carpeta)){
+			if( ! mkdir($www.$carpeta,0777,TRUE)){
+				throw new toba_error('No se puede crear el directorio '.$carpeta.' en el directorio navegable del servidor. Por favor, pongase en contacto con el administrador del sistema');
+				return false;
+			}
+		}
+		$archivo = toba::proyecto()->get_www_temp($detalles['name']);
+		return move_uploaded_file($detalles['tmp_name'], $www.$carpeta."/".$nombre_archivo);
 	}
 }
 ?>
