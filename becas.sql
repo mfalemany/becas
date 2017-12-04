@@ -71,7 +71,8 @@ CREATE TABLE antec_activ_docentes (
     anio_ingreso numeric(4,0) NOT NULL,
     anio_egreso numeric(4,0),
     nro_documento character varying(15) NOT NULL,
-    id_tipo_doc smallint NOT NULL
+    id_tipo_doc smallint NOT NULL,
+    doc_probatoria character varying(200)
 );
 
 
@@ -1706,10 +1707,12 @@ ALTER TABLE ONLY universidades ALTER COLUMN id_universidad SET DEFAULT nextval('
 -- Data for Name: antec_activ_docentes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_activ_docentes (id_antecedente, institucion, cargo, anio_ingreso, anio_egreso, nro_documento, id_tipo_doc) FROM stdin;
-2	Facultad de Sarasa	Sarasero Profesional	2015	\N	31255073	1
-3	Otra Intitucion	Barrendero	2013	2014	31255073	1
-4	UNNE, FACENA, CATEDRA ESTADISTICA	JTP SIMPLE	2017	\N	27567172	1
+COPY antec_activ_docentes (id_antecedente, institucion, cargo, anio_ingreso, anio_egreso, nro_documento, id_tipo_doc, doc_probatoria) FROM stdin;
+3	Otra Intitucion	Barrendero	2013	2014	31255073	1	\N
+4	UNNE, FACENA, CATEDRA ESTADISTICA	JTP SIMPLE	2017	\N	27567172	1	\N
+2	Facultad de Sarasa	Sarasero Profesional	2015	\N	31255073	1	
+14	Universidad Nacional de la Matanza	JTP Interino	2010	2017	5343322	1	2010-2017-Universidad Nacional de la Matanza-JTP Interino.pdf
+15	Universidad de Lujan	Profesor Titular Interino	2003	2012	5343322	1	2003-2012-Universidad de Lujan-Profesor Titular Interino.pdf
 \.
 
 
@@ -1717,7 +1720,7 @@ COPY antec_activ_docentes (id_antecedente, institucion, cargo, anio_ingreso, ani
 -- Name: antec_activ_docentes_id_antecedente_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_activ_docentes_id_antecedente_seq', 4, true);
+SELECT pg_catalog.setval('antec_activ_docentes_id_antecedente_seq', 15, true);
 
 
 --
@@ -1951,7 +1954,7 @@ SELECT pg_catalog.setval('be_dedicacion_id_dedicacion_seq', 3, true);
 -- Name: be_dependencias_id_dependencia_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_dependencias_id_dependencia_seq', 129, true);
+SELECT pg_catalog.setval('be_dependencias_id_dependencia_seq', 130, true);
 
 
 --
@@ -2000,7 +2003,7 @@ SELECT pg_catalog.setval('be_tipos_resolucion_id_tipo_resol_seq', 1, false);
 -- Name: be_universidades_id_universidad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('be_universidades_id_universidad_seq', 1, true);
+SELECT pg_catalog.setval('be_universidades_id_universidad_seq', 2, true);
 
 
 --
@@ -2214,6 +2217,7 @@ COPY dependencias (id_dependencia, nombre, descripcion_corta, id_universidad, id
 86	Facultad De Ciencias Exactas Y Naturales Y Agrimensura	EXA	1	4669	\N	\N
 99	Instituto De Ciencias Criminalísticas Y Criminología	CRI	1	4669	\N	\N
 129	Otro	Otro	1	4669	\N	\N
+130	Otra	Otra	2	\N	\N	\N
 \.
 
 
@@ -2233,8 +2237,8 @@ COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_con
 
 COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones, estado, cant_fojas, es_titular, id_tipo_beca, id_proyecto, es_egresado, anio_ingreso, anio_egreso, fecha_insc_posgrado, lugar_trabajo_becario, area_trabajo, id_tipo_doc_dir, nro_documento_dir, id_tipo_doc_codir, nro_documento_codir, id_tipo_doc_subdir, nro_documento_subdir) FROM stdin;
 86	27567172	1	6	2017-11-30 00:00:00	\N	31.328	\N	5	ANFIBIOS DEL IBERA	\N	\N	28	28	8.15	9.00	Doctorado en Biología	UNNE	DOCTORA EN BIOLOGIA	PER-001	\N	A	\N	S	10	529	1	2005	2010	2014-11-21	86	EL UNO	1	32405039	\N	\N	\N	\N
-65	5343322	1	6	2017-11-30 00:00:00	\N	35.648	\N	8	Aplicación de fertilizantes a los cultivos de maiz	Tiene conocimientos en el area que se aborda	1	41	23	7.61	7.23	\N	\N	\N	PRE-002	\N	A	\N	S	7	\N	0	2010	\N	\N	65	Departamento de Producción Vegetal	1	32405039	1	1	1	32405039
-65	31255073	1	6	2017-11-28 00:00:00	\N	46.070	\N	8	Titulo del plan de becas	Tiene conocimientos sobre el tema que se aborda	1	38	23	8.23	9.24	\N	\N	\N	PRE-001	\N	A	\N	S	7	\N	0	2003	\N	\N	65	Area cualquiera	1	32405039	1	1	1	\N
+65	31255073	1	6	2017-12-01 00:00:00	\N	46.070	\N	8	Titulo del plan de becas	Tiene conocimientos sobre el tema que se aborda	1	38	23	8.23	9.24	\N	\N	\N	PRE-001	\N	A	\N	S	7	\N	0	2003	\N	\N	65	Area cualquiera	1	32405039	1	1	1	\N
+65	5343322	1	6	2017-12-04 00:00:00	N	29.822	f	8	Aplicación de fertilizantes a los cultivos de maiz	Tiene conocimientos en el area que se aborda	1	41	23	7.61	6.12	\N	\N	\N	PRE-002	\N	A	\N	S	7	\N	0	2010	\N	\N	65	Departamento de Producción Vegetal	1	32405039	1	1	1	32405039
 \.
 
 
@@ -16563,7 +16567,6 @@ COPY paises (id_pais, pais) FROM stdin;
 --
 
 COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, celular, email, telefono, id_localidad, id_nivel_academico, sexo) FROM stdin;
-32405039	1	Alemany	Marcelo Federico	20324050397	1986-06-17	3794-844649	mfalemany@gmail.com	\N	4669	2	M
 12345676	1	Prueba	Persona de	\N	\N	\N	\N	\N	5672	3	M
 33012239	1	Barrera	Joel Matias Gaston		1987-05-27	\N	joel_barrera@hotmail.com	\N	8904	2	M
 40446905	1	Gomez	Raul Antonio	\N	1980-01-01	No tiene	sinmail@gmail.com	No tiene	4895	3	M
@@ -16576,7 +16579,8 @@ COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, c
 41232123	1	Martinez	Roberto Adrian	\N	1978-11-01	\N	\N	\N	5589	2	M
 43929392	1	Davalos	Carlos Roberto	\N	1978-11-01	\N	\N	\N	4683	3	M
 28302392	1	Ojeda	Jorge Alberto	20283023924	1980-11-14	\N	ojedita@msn.com	\N	\N	\N	M
-27567172	1	Ingaramo	MarÃ­a Del Rosario		1979-10-06	\N	mringaramo@gmail.com	\N	\N	\N	F
+32405039	1	Alemany	Marcelo Federico	20324050397	1987-06-17	3794-844649	mfalemany@gmail.com	\N	4669	2	M
+27567172	1	Ingaramo	Marí­a Del Rosario		1979-10-06	\N	mringaramo@gmail.com	\N	\N	\N	F
 \.
 
 
@@ -17031,7 +17035,7 @@ SELECT pg_catalog.setval('requisitos_convocatoria_id_requisito_seq', 17, true);
 
 COPY requisitos_insc (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca, id_requisito, cumplido, fecha) FROM stdin;
 1	31255073	6	7	17	N	\N
-1	5343322	6	7	17	N	\N
+1	5343322	6	7	17	0	\N
 \.
 
 
@@ -17112,6 +17116,7 @@ COPY tipos_resolucion (id_tipo_resol, tipo_resol, tipo_resol_corto) FROM stdin;
 
 COPY universidades (id_universidad, universidad, id_pais, sigla) FROM stdin;
 1	Universidad Nacional del Nordeste	54	UNNE
+2	Otra	54	Otra
 \.
 
 

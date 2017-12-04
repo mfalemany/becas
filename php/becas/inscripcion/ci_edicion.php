@@ -1,6 +1,7 @@
 <?php
 class ci_edicion extends becas_ci
 {
+	protected $s__estado_inicial;
 
 	//protected $s__detalles_inscripcion;
 	function conf()
@@ -430,7 +431,9 @@ class ci_edicion extends becas_ci
 	function conf__form_activ_docentes(becas_ei_formulario_ml $form_ml)
 	{
 		if($this->get_datos('alumno','antec_activ_docentes')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_activ_docentes')->get_filas());
+			$datos = $this->get_datos('alumno','antec_activ_docentes')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 		
 		//se arma un array para cargar el combo "anio_egreso"
@@ -445,19 +448,21 @@ class ci_edicion extends becas_ci
 		$form_ml->ef('anio_ingreso')->set_opciones($anios);
 	}
 
+
 	function evt__form_activ_docentes__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$id = $insc['id_tipo_doc']."-".$insc['nro_documento'];
-		ei_arbol($datos);
-		foreach($datos as $item){
-			if($item['doc_probatoria']){
-				$nombre = $item['institucion']."-".$item['cargo'];
-				if( ! $this->subir_archivo($item['doc_probatoria'],'doc_probatoria/'.$id."/activ_docente/",$nombre)){
-					toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".$nombre);
-				}
-			}
-		}
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/activ_docente/";
+		
+		$campos = array(
+						array('nombre' => 'anio_ingreso'),
+						array('nombre' => 'anio_egreso', 'defecto' => 'Actualidad'),
+						array('nombre' => 'institucion'),
+						array('nombre' => 'cargo')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos);
+		
 		$this->get_datos('alumno','antec_activ_docentes')->procesar_filas($datos);
 	}
 
@@ -717,6 +722,69 @@ class ci_edicion extends becas_ci
 		}
 		$archivo = toba::proyecto()->get_www_temp($detalles['name']);
 		return move_uploaded_file($detalles['tmp_name'], $www.$carpeta."/".$nombre_archivo);
+	}
+
+	protected function eliminar_archivo($archivo)
+	{
+		unlink($archivo);
+	}
+
+	/**
+	 * Esta funcion procesa los archivos involucrados en un formulario ML. Por cada linea pasada al ML, esta funcion procesa si se trata de un Alta, Baja o Modificación, y en consecuencia, Sube, Modifica o Elimina archivos vinculados a cada linea. Recibe como parámetros el estado inicial del ML, el estado luego de la moficiacion, la ruta donde se almacenarán los archivos y los nombres de los campos del ML que se utilizarán para darle el nombre a cada archivo
+	 * @param  array $estado_inicial_ml     Estado del ML al cargar el formulario
+	 * @param  array $estado_actual_ml      Estado del ML luego de que el usuario realiza cambios
+	 * @param  string $ruta                  Ruta donde se almacenarán/eliminaran los archivos involucrados
+	 * @param  array $campos_nombre_archivo Campos del ML que se utilizan para formatear el nombre del archivo subido
+	 * @return void                        
+	 */
+	protected function procesar_archivos($estado_inicial_ml,&$estado_actual_ml,$ruta,$campos_nombre_archivo)
+	{
+		//para cada linea de actividad docente
+		foreach($estado_actual_ml as $fila => $item){
+			//si se subió un archivo
+			
+			// =========== ALTA Y MODIFICACIÓN ===============
+			// En el caso de la modificación, el archivo anterior se pisa (se usa el mismo nombre) 
+			
+			if($item['doc_probatoria']){
+				if($item['apex_ei_analisis_fila'] == 'A' || $item['apex_ei_analisis_fila'] == 'M'){
+					$nombre = '';
+					foreach($campos_nombre_archivo as $campo){
+						//agrega un guión medio entre cada palabra del nombre
+						if(strlen($nombre)>0){
+							$nombre .= "-";
+						}
+						$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
+					}
+					$nombre .= '.pdf'; 
+
+					//en el caso de una modificación, se elimina el archivo previo
+					if(isset($estado_inicial_ml)){
+						if($estado_inicial_ml['doc_probatoria']){
+							$this->eliminar_archivo($ruta,$estado_inicial_ml['doc_probatoria']);	
+						}
+					}
+					
+					//se sube el nuevo archivo
+					if( ! $this->subir_archivo($item['doc_probatoria'],$ruta,$nombre)){
+						toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".$nombre);
+					}
+					$estado_actual_ml[$fila]['doc_probatoria'] = $nombre;
+				}
+			}else{
+				//esta linea sirve para que el formulario (cuando no se define un nuevo archivo) no pise el estado anterior
+				unset($estado_actual_ml[$fila]['doc_probatoria']);
+			}
+			//si se está dando de baja un registro, se busca su nombre de archivo y se lo elimina tambien
+			if($item['apex_ei_analisis_fila'] == 'B'){
+				foreach($estado_inicial_ml as $linea){
+					if($linea['x_dbr_clave'] == $fila){
+						$archivo = $ruta.$linea['doc_probatoria'];
+						$this->eliminar_archivo($archivo);
+					}
+				}
+			}
+		}
 	}
 }
 ?>
