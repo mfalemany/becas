@@ -15,10 +15,15 @@
 	font-size: 1.3em;
 	text-shadow: 0px 0px 2px #222;
 }
-.etiqueta_importante{
+.etiqueta_info{
 	font-weight: bold;
 	font-size: 1.1em;
 	color: #22F;
+}
+.etiqueta_success{
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #35a535;
 }
 .etiqueta_error{
 	font-weight: bold;
@@ -65,9 +70,11 @@
 .ei-ml-grilla thead{
 	font-size: 1.1em;
 }
-.ei-ml-grilla input[type=file]{
-	background-color: #595d9b;
-	font-weight: bold;
+.ef-upload-desc{
+	/*white-space: nowrap;*/
+    overflow: hidden;
+    display:block;
+    width : 130px;
 }
 .ei-ml-columna{
 	text-align:center;

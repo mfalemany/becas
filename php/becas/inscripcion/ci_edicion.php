@@ -402,6 +402,19 @@ class ci_edicion extends becas_ci
 
 	function evt__form_plan_trabajo__modificacion($datos)
 	{
+		if($datos['doc_probatoria']){
+			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+			$convocatoria = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$insc['id_convocatoria']);
+			$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
+			$nombre_archivo = $insc['id_tipo_doc']."-".$insc['nro_documento'].".pdf";
+			$ruta = 'planes_trabajo/'.utf8_encode($convocatoria).'/'.utf8_encode($tipo_beca).'/';
+			$this->eliminar_archivo($ruta.$nombre_archivo);
+			$this->subir_archivo($datos['doc_probatoria'],$ruta,$nombre_archivo);
+		}else{
+			unset($datos['doc_probatoria']);
+		}
+		
+		
 		$this->get_datos('inscripcion','plan_trabajo')->set($datos);
 	}
 
@@ -461,7 +474,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'cargo')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos);
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		
 		$this->get_datos('alumno','antec_activ_docentes')->procesar_filas($datos);
 	}
@@ -473,7 +486,9 @@ class ci_edicion extends becas_ci
 	function conf__form_estudios_afines(becas_ei_formulario_ml $form_ml)
 	{
 		if($this->get_datos('alumno','antec_estudios_afines')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_estudios_afines')->get_filas());
+			$datos = $this->get_datos('alumno','antec_estudios_afines')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 		
 		//se arma un array para cargar los combos de añois
@@ -486,25 +501,19 @@ class ci_edicion extends becas_ci
 
 	function evt__form_estudios_afines__modificacion($datos)
 	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/estudios_afines/";
+		$campos = array(
+						array('nombre' => 'anio_desde'),
+						array('nombre' => 'anio_hasta', 'defecto' => 'Actualidad'),
+						array('nombre' => 'institucion'),
+						array('nombre' => 'titulo')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_estudios_afines')->procesar_filas($datos);
 	}
 
-
-	//-----------------------------------------------------------------------------------
-	//---- form_trabajos_publicados -----------------------------------------------------
-	//-----------------------------------------------------------------------------------
-
-	function conf__form_trabajos_publicados(becas_ei_formulario_ml $form_ml)
-	{
-		if($this->get_datos('alumno','antec_trabajos_publicados')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_trabajos_publicados')->get_filas());
-		}
-	}
-
-	function evt__form_trabajos_publicados__modificacion($datos)
-	{
-		$this->get_datos('alumno','antec_trabajos_publicados')->procesar_filas($datos);
-	}
 
 	//-----------------------------------------------------------------------------------
 	//---- form_becas_obtenidas ---------------------------------------------------------
@@ -513,13 +522,51 @@ class ci_edicion extends becas_ci
 	function conf__form_becas_obtenidas(form_ml_becas_obtenidas $form_ml)
 	{
 		if($this->get_datos('alumno','antec_becas_obtenidas')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_becas_obtenidas')->get_filas());
+			$datos = $this->get_datos('alumno','antec_becas_obtenidas')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 	}
 
 	function evt__form_becas_obtenidas__modificacion($datos)
 	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/becas_obtenidas/";
+		$campos = array(
+						array('nombre' => 'fecha_desde'),
+						array('nombre' => 'fecha_hasta'),
+						array('nombre' => 'institucion'),
+						array('nombre' => 'tipo_beca')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_becas_obtenidas')->procesar_filas($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form_trabajos_publicados -----------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_trabajos_publicados(becas_ei_formulario_ml $form_ml)
+	{
+		if($this->get_datos('alumno','antec_trabajos_publicados')->get_filas()){
+			$datos = $this->get_datos('alumno','antec_trabajos_publicados')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
+		}
+	}
+
+	function evt__form_trabajos_publicados__modificacion($datos)
+	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/trabajos_publicados/";
+		$campos = array(
+						array('nombre' => 'fecha'),
+						array('nombre' => 'autores')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		$this->get_datos('alumno','antec_trabajos_publicados')->procesar_filas($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -529,12 +576,22 @@ class ci_edicion extends becas_ci
 	function conf__form_present_reuniones(becas_ei_formulario_ml $form_ml)
 	{
 		if($this->get_datos('alumno','antec_present_reuniones')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_present_reuniones')->get_filas());
+			$datos = $this->get_datos('alumno','antec_present_reuniones')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 	}
 
 	function evt__form_present_reuniones__modificacion($datos)
 	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/presentacion_reuniones/";
+		$campos = array(
+						array('nombre' => 'fecha'),
+						array('nombre' => 'autores')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_present_reuniones')->procesar_filas($datos);
 	}
 
@@ -545,12 +602,21 @@ class ci_edicion extends becas_ci
 	function conf__form_conoc_idiomas(becas_ei_formulario_ml $form_ml)
 	{
 		if($this->get_datos('alumno','antec_conoc_idiomas')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_conoc_idiomas')->get_filas());
+			$datos = $this->get_datos('alumno','antec_conoc_idiomas')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 	}
 
 	function evt__form_conoc_idiomas__modificacion($datos)
 	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/conocimiento_idiomas/";
+		$campos = array(
+						array('nombre' => 'idioma')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_conoc_idiomas')->procesar_filas($datos);
 	}
 
@@ -561,12 +627,22 @@ class ci_edicion extends becas_ci
 	function conf__form_otras_actividades(becas_ei_formulario_ml $form_ml)
 	{
 		if($this->get_datos('alumno','antec_otras_actividades')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_otras_actividades')->get_filas());
+			$datos = $this->get_datos('alumno','antec_otras_actividades')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 	}
 
 	function evt__form_otras_actividades__modificacion($datos)
 	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/otras_actividades/";
+		$campos = array(
+						array('nombre' => 'institucion'),
+						array('nombre' => 'actividad')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_otras_actividades')->procesar_filas($datos);
 	}
 
@@ -577,12 +653,22 @@ class ci_edicion extends becas_ci
 	function conf__form_part_dict_cursos(becas_ei_formulario_ml $form_ml)
 	{
 		if($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas());
+			$datos = $this->get_datos('alumno','antec_particip_dict_cursos')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 	}
 
 	function evt__form_part_dict_cursos__modificacion($datos)
 	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/part_dict_cursos/";
+		$campos = array(
+						array('nombre' => 'fecha'),
+						array('nombre' => 'institucion')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_particip_dict_cursos')->procesar_filas($datos);
 	}
 
@@ -592,14 +678,24 @@ class ci_edicion extends becas_ci
 
 	function conf__form_cursos_perfec_aprob(becas_ei_formulario_ml $form_ml)
 	{
-		if($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas()){
-			$form_ml->set_datos($this->get_datos('alumno','antec_particip_dict_cursos')->get_filas());
+		if($this->get_datos('alumno','antec_cursos_perfec_aprob')->get_filas()){
+			$datos = $this->get_datos('alumno','antec_cursos_perfec_aprob')->get_filas();
+			$form_ml->set_datos($datos);
+			$this->s__estado_inicial = $datos;
 		}
 	}
 
 	function evt__form_cursos_perfec_aprob__modificacion($datos)
 	{
-		$this->get_datos('alumno','antec_particip_dict_cursos')->procesar_filas($datos);
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/cursos_perfec_aprob/";
+		$campos = array(
+						array('nombre' => 'fecha'),
+						array('nombre' => 'institucion')
+						);
+		
+		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		$this->get_datos('alumno','antec_cursos_perfec_aprob')->procesar_filas($datos);
 	}
 
 
@@ -733,53 +829,61 @@ class ci_edicion extends becas_ci
 	 * Esta funcion procesa los archivos involucrados en un formulario ML. Por cada linea pasada al ML, esta funcion procesa si se trata de un Alta, Baja o Modificación, y en consecuencia, Sube, Modifica o Elimina archivos vinculados a cada linea. Recibe como parámetros el estado inicial del ML, el estado luego de la moficiacion, la ruta donde se almacenarán los archivos y los nombres de los campos del ML que se utilizarán para darle el nombre a cada archivo
 	 * @param  array $estado_inicial_ml     Estado del ML al cargar el formulario
 	 * @param  array $estado_actual_ml      Estado del ML luego de que el usuario realiza cambios
-	 * @param  string $ruta                  Ruta donde se almacenarán/eliminaran los archivos involucrados
+	 * @param  string $ruta                 Ruta donde se almacenarán/eliminaran los archivos involucrados
 	 * @param  array $campos_nombre_archivo Campos del ML que se utilizan para formatear el nombre del archivo subido
+	 * @param  string $nombre_input         Nombre del ef_upload que contiene el/los archivos subidos
 	 * @return void                        
 	 */
-	protected function procesar_archivos($estado_inicial_ml,&$estado_actual_ml,$ruta,$campos_nombre_archivo)
+	protected function procesar_archivos($estado_inicial_ml,&$estado_actual_ml,$ruta,$campos_nombre_archivo,$nombre_input)
 	{
 		//para cada linea de actividad docente
 		foreach($estado_actual_ml as $fila => $item){
-			//si se subió un archivo
 			
-			// =========== ALTA Y MODIFICACIÓN ===============
-			// En el caso de la modificación, el archivo anterior se pisa (se usa el mismo nombre) 
-			
-			if($item['doc_probatoria']){
-				if($item['apex_ei_analisis_fila'] == 'A' || $item['apex_ei_analisis_fila'] == 'M'){
-					$nombre = '';
-					foreach($campos_nombre_archivo as $campo){
-						//agrega un guión medio entre cada palabra del nombre
-						if(strlen($nombre)>0){
-							$nombre .= "-";
-						}
-						$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
-					}
-					$nombre .= '.pdf'; 
+			//se genera el nombre del archivo
+			$nombre = '';
+			foreach($campos_nombre_archivo as $campo){
+				//agrega un guión medio entre cada palabra del nombre
+				if(strlen($nombre)>0){
+					$nombre .= "-";
+				}
+				$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
+			}
+			$nombre .= '.pdf'; 
 
+			// =========== ALTA Y MODIFICACIÓN ===============
+			
+			if($item['apex_ei_analisis_fila'] == 'A' || $item['apex_ei_analisis_fila'] == 'M'){
+				if($item[$nombre_input]){
 					//en el caso de una modificación, se elimina el archivo previo
 					if(isset($estado_inicial_ml)){
-						if($estado_inicial_ml['doc_probatoria']){
-							$this->eliminar_archivo($ruta,$estado_inicial_ml['doc_probatoria']);	
+						if($estado_inicial_ml[$nombre_input]){
+							$this->eliminar_archivo($ruta,$estado_inicial_ml[$nombre_input]);	
 						}
 					}
 					
 					//se sube el nuevo archivo
-					if( ! $this->subir_archivo($item['doc_probatoria'],$ruta,$nombre)){
-						toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".$nombre);
+					if( ! $this->subir_archivo($item[$nombre_input],$ruta,utf8_encode($nombre))){
+						//se utiliza substr y strlen para quitar el ".pdf" al final del nombre de la actividad
+						toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".substr($nombre,0,(strlen($nombre)-4) ) );
 					}
-					$estado_actual_ml[$fila]['doc_probatoria'] = $nombre;
+					$estado_actual_ml[$fila][$nombre_input] = $nombre;
+				}else{
+					if(file_exists($ruta.utf8_encode($estado_inicial_ml[$fila][$nombre_input])) && is_file($ruta.utf8_encode($estado_inicial_ml[$fila][$nombre_input]) )){
+						rename($ruta.utf8_encode($estado_inicial_ml[$fila][$nombre_input]),$ruta.utf8_encode($nombre) );
+						$estado_actual_ml[$fila][$nombre_input] = $nombre;
+					}else{
+						//esta linea sirve para que el formulario (cuando no se define un nuevo archivo) no pise el estado anterior
+						unset($estado_actual_ml[$fila][$nombre_input]);		
+					}
+					
 				}
-			}else{
-				//esta linea sirve para que el formulario (cuando no se define un nuevo archivo) no pise el estado anterior
-				unset($estado_actual_ml[$fila]['doc_probatoria']);
 			}
+				
 			//si se está dando de baja un registro, se busca su nombre de archivo y se lo elimina tambien
 			if($item['apex_ei_analisis_fila'] == 'B'){
 				foreach($estado_inicial_ml as $linea){
 					if($linea['x_dbr_clave'] == $fila){
-						$archivo = $ruta.$linea['doc_probatoria'];
+						$archivo = $ruta.utf8_encode($linea[$nombre_input]);
 						$this->eliminar_archivo($archivo);
 					}
 				}

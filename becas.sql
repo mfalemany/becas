@@ -72,7 +72,7 @@ CREATE TABLE antec_activ_docentes (
     anio_egreso numeric(4,0),
     nro_documento character varying(15) NOT NULL,
     id_tipo_doc smallint NOT NULL,
-    doc_probatoria character varying(200)
+    doc_probatoria character varying(300)
 );
 
 
@@ -110,7 +110,8 @@ CREATE TABLE antec_becas_obtenidas (
     id_tipo_doc smallint NOT NULL,
     nro_documento character varying(15) NOT NULL,
     fecha_desde date NOT NULL,
-    fecha_hasta date NOT NULL
+    fecha_hasta date NOT NULL,
+    doc_probatoria character varying(300)
 );
 
 
@@ -149,7 +150,8 @@ CREATE TABLE antec_conoc_idiomas (
     conversacion numeric(1,0) NOT NULL,
     traduccion numeric(1,0) NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -187,7 +189,8 @@ CREATE TABLE antec_cursos_perfec_aprob (
     carga_horaria numeric(4,0),
     fecha date,
     id_tipo_doc smallint NOT NULL,
-    nro_documento character varying(15) NOT NULL
+    nro_documento character varying(15) NOT NULL,
+    doc_probatoria character varying(300)
 );
 
 
@@ -225,7 +228,8 @@ CREATE TABLE antec_estudios_afines (
     id_tipo_doc smallint,
     nro_documento character varying(15),
     anio_desde numeric(4,0) NOT NULL,
-    anio_hasta numeric(4,0)
+    anio_hasta numeric(4,0),
+    doc_probatoria character varying(300)
 );
 
 
@@ -262,7 +266,8 @@ CREATE TABLE antec_otras_actividades (
     actividad character varying(200) NOT NULL,
     titulo_tema character varying(300) NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -299,7 +304,8 @@ CREATE TABLE antec_particip_dict_cursos (
     carga_horaria numeric(4,0) NOT NULL,
     fecha date NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -336,7 +342,8 @@ CREATE TABLE antec_present_reuniones (
     titulo_trabajo character varying(200) NOT NULL,
     fecha date NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -373,7 +380,8 @@ CREATE TABLE antec_trabajos_publicados (
     datos_publicacion character varying(750) NOT NULL,
     fecha date NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -1325,7 +1333,8 @@ CREATE TABLE planes_trabajo (
     nro_documento character varying(15) NOT NULL,
     id_convocatoria smallint NOT NULL,
     id_tipo_beca smallint NOT NULL,
-    plan_trabajo text
+    plan_trabajo text,
+    doc_probatoria character varying(300)
 );
 
 
@@ -1708,11 +1717,8 @@ ALTER TABLE ONLY universidades ALTER COLUMN id_universidad SET DEFAULT nextval('
 --
 
 COPY antec_activ_docentes (id_antecedente, institucion, cargo, anio_ingreso, anio_egreso, nro_documento, id_tipo_doc, doc_probatoria) FROM stdin;
-3	Otra Intitucion	Barrendero	2013	2014	31255073	1	\N
-4	UNNE, FACENA, CATEDRA ESTADISTICA	JTP SIMPLE	2017	\N	27567172	1	\N
-2	Facultad de Sarasa	Sarasero Profesional	2015	\N	31255073	1	
-14	Universidad Nacional de la Matanza	JTP Interino	2010	2017	5343322	1	2010-2017-Universidad Nacional de la Matanza-JTP Interino.pdf
-15	Universidad de Lujan	Profesor Titular Interino	2003	2012	5343322	1	2003-2012-Universidad de Lujan-Profesor Titular Interino.pdf
+22	Universidad Nacional de Santo Tomé	Títular Ñ ñ	2017	\N	5343322	1	2017-Actualidad-Universidad Nacional de Santo TomÃ©-TÃ­tular Ã Ã±.pdf
+23	Facultad de Sarasa	Titular Simple	2011	2017	27567172	1	2011-2017-Facultad de Sarasa-Titular Simple.pdf
 \.
 
 
@@ -1720,16 +1726,18 @@ COPY antec_activ_docentes (id_antecedente, institucion, cargo, anio_ingreso, ani
 -- Name: antec_activ_docentes_id_antecedente_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_activ_docentes_id_antecedente_seq', 15, true);
+SELECT pg_catalog.setval('antec_activ_docentes_id_antecedente_seq', 23, true);
 
 
 --
 -- Data for Name: antec_becas_obtenidas; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_becas_obtenidas (id_beca_obtenida, institucion, tipo_beca, id_tipo_doc, nro_documento, fecha_desde, fecha_hasta) FROM stdin;
-4	Beca por groso	Grado	1	31255073	2017-01-01	2018-01-01
-5	Otra beca por mas groso	Iniciación	1	31255073	2014-01-01	2015-01-01
+COPY antec_becas_obtenidas (id_beca_obtenida, institucion, tipo_beca, id_tipo_doc, nro_documento, fecha_desde, fecha_hasta, doc_probatoria) FROM stdin;
+4	Beca por groso	Grado	1	31255073	2017-01-01	2018-01-01	\N
+5	Otra beca por mas groso	Iniciación	1	31255073	2014-01-01	2015-01-01	\N
+6	Universidad de Lavras - Brasil	Grado	1	5343322	2017-01-01	2017-06-30	2017-01-01-2017-06-30-Universidad de Lavras - Brasil-Grado.pdf
+7	Universidad de Lavras - Brasil	Grado	1	27567172	2009-01-01	2016-12-31	2009-01-01-2016-12-31-Universidad de Lavras - Brasil-Grado.pdf
 \.
 
 
@@ -1737,17 +1745,20 @@ COPY antec_becas_obtenidas (id_beca_obtenida, institucion, tipo_beca, id_tipo_do
 -- Name: antec_becas_obtenidas_id_beca_obtenida_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_becas_obtenidas_id_beca_obtenida_seq', 5, true);
+SELECT pg_catalog.setval('antec_becas_obtenidas_id_beca_obtenida_seq', 7, true);
 
 
 --
 -- Data for Name: antec_conoc_idiomas; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_conoc_idiomas (id_conocimiento_idioma, idioma, lectura, escritura, conversacion, traduccion, id_tipo_doc, nro_documento) FROM stdin;
-1	Inglés	1	2	3	2	1	31255073
-2	Aleman	3	3	3	3	1	31255073
-3	Aleman	1	1	3	2	1	43929392
+COPY antec_conoc_idiomas (id_conocimiento_idioma, idioma, lectura, escritura, conversacion, traduccion, id_tipo_doc, nro_documento, doc_probatoria) FROM stdin;
+1	Inglés	1	2	3	2	1	31255073	\N
+2	Aleman	3	3	3	3	1	31255073	\N
+3	Aleman	1	1	3	2	1	43929392	\N
+6	Inglés	1	1	1	2	1	27567172	Inglés.pdf
+7	Aleman	1	1	1	2	1	27567172	Aleman.pdf
+8	Portugues	1	3	1	3	1	27567172	Portugues.pdf
 \.
 
 
@@ -1755,14 +1766,15 @@ COPY antec_conoc_idiomas (id_conocimiento_idioma, idioma, lectura, escritura, co
 -- Name: antec_conoc_idiomas_id_conocimiento_idioma_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_conoc_idiomas_id_conocimiento_idioma_seq', 3, true);
+SELECT pg_catalog.setval('antec_conoc_idiomas_id_conocimiento_idioma_seq', 8, true);
 
 
 --
 -- Data for Name: antec_cursos_perfec_aprob; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_cursos_perfec_aprob (id_curso_perfec_aprob, institucion, tema, carga_horaria, fecha, id_tipo_doc, nro_documento) FROM stdin;
+COPY antec_cursos_perfec_aprob (id_curso_perfec_aprob, institucion, tema, carga_horaria, fecha, id_tipo_doc, nro_documento, doc_probatoria) FROM stdin;
+1	Universidad Católica de Río Grande	Un tema muy interesante	24	1998-08-12	1	27567172	1998-08-12-Universidad Católica de Rio Grande.pdf
 \.
 
 
@@ -1770,16 +1782,19 @@ COPY antec_cursos_perfec_aprob (id_curso_perfec_aprob, institucion, tema, carga_
 -- Name: antec_cursos_perfec_aprob_id_curso_perfec_aprob_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_cursos_perfec_aprob_id_curso_perfec_aprob_seq', 1, false);
+SELECT pg_catalog.setval('antec_cursos_perfec_aprob_id_curso_perfec_aprob_seq', 1, true);
 
 
 --
 -- Data for Name: antec_estudios_afines; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_estudios_afines (id_estudio_afin, institucion, titulo, id_tipo_doc, nro_documento, anio_desde, anio_hasta) FROM stdin;
-1	Universidad de la Esquina	Universitario en casi todo	1	31255073	2008	2010
-2	Universidad Blas Pascal	Universitario Completo	1	31255073	2017	2017
+COPY antec_estudios_afines (id_estudio_afin, institucion, titulo, id_tipo_doc, nro_documento, anio_desde, anio_hasta, doc_probatoria) FROM stdin;
+1	Universidad de la Esquina	Universitario en casi todo	1	31255073	2008	2010	\N
+2	Universidad Blas Pascal	Universitario Completo	1	31255073	2017	2017	\N
+3	Facultad de Ciencias Agrarias - UNNE	Licenciado en Sistemas de Información	1	5343322	2004	2008	2004-2008-Facultad de Ciencias Agrarias - UNNE-Licenciado en Sistemas de InformaciÃ³n.pdf
+4	Universidad de Santiago del Estero	Curso de Actualización de Cultivos de Arroz en el nordeste de argentina (Chaco salteño)	1	5343322	2009	2010	2009-2010-Universidad de Santiago del Estero-Curso de ActualizaciÃ³n de Cultivos de Arroz en el nordeste de argentina (Chaco salteÃ±o).pdf
+5	Licenciatura en Biología	Licenciado en Biología	1	27567172	2004	2009	2004-2009-Licenciatura en Biología-Licenciado en Biología.pdf
 \.
 
 
@@ -1787,15 +1802,17 @@ COPY antec_estudios_afines (id_estudio_afin, institucion, titulo, id_tipo_doc, n
 -- Name: antec_estudios_afines_id_estudio_afin_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_estudios_afines_id_estudio_afin_seq', 2, true);
+SELECT pg_catalog.setval('antec_estudios_afines_id_estudio_afin_seq', 5, true);
 
 
 --
 -- Data for Name: antec_otras_actividades; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_otras_actividades (id_otra_actividad, institucion, actividad, titulo_tema, id_tipo_doc, nro_documento) FROM stdin;
-1	Universidad Nacional del Nordeste	Una actividad de prueba	Probar la opción de Otras Actividades	1	31255073
+COPY antec_otras_actividades (id_otra_actividad, institucion, actividad, titulo_tema, id_tipo_doc, nro_documento, doc_probatoria) FROM stdin;
+1	Universidad Nacional del Nordeste	Una actividad de prueba	Probar la opción de Otras Actividades	1	31255073	\N
+2	Universidad Nacional del Nordeste	Pasantía rentada en el INTA	Desarrollo de pasturas para ganado bovino	1	5343322	Universidad Nacional del Nordeste-Pasantía rentada en el INTA.pdf
+3	Universidad de La Plata	Proyecto de Investigación importante	Investigando a la Ciencias	1	27567172	Universidad de La Plata-Proyecto de Investigación importante.pdf
 \.
 
 
@@ -1803,22 +1820,23 @@ COPY antec_otras_actividades (id_otra_actividad, institucion, actividad, titulo_
 -- Name: antec_otras_actividades_id_otra_actividad_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_otras_actividades_id_otra_actividad_seq', 1, true);
+SELECT pg_catalog.setval('antec_otras_actividades_id_otra_actividad_seq', 3, true);
 
 
 --
 -- Name: antec_particip_cursos_id_particip_cursos_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_particip_cursos_id_particip_cursos_seq', 1, true);
+SELECT pg_catalog.setval('antec_particip_cursos_id_particip_cursos_seq', 3, true);
 
 
 --
 -- Data for Name: antec_particip_dict_cursos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_particip_dict_cursos (id_particip_cursos, institucion, carga_horaria, fecha, id_tipo_doc, nro_documento) FROM stdin;
-1	Universidad Nacional de Don Torcuato	140	2017-11-23	1	31255073
+COPY antec_particip_dict_cursos (id_particip_cursos, institucion, carga_horaria, fecha, id_tipo_doc, nro_documento, doc_probatoria) FROM stdin;
+1	Universidad Nacional de Don Torcuato	140	2017-11-23	1	31255073	\N
+3	Universidad Católica de Salta	34	2014-09-02	1	27567172	2014-09-02-Universidad Católica de Salta.pdf
 \.
 
 
@@ -1826,8 +1844,10 @@ COPY antec_particip_dict_cursos (id_particip_cursos, institucion, carga_horaria,
 -- Data for Name: antec_present_reuniones; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_present_reuniones (id_present_reunion, autores, titulo_trabajo, fecha, id_tipo_doc, nro_documento) FROM stdin;
-1	Jose Lopez, Pedro Romero, Manuel Ramirez	Reunion de Prueba	2015-01-01	1	31255073
+COPY antec_present_reuniones (id_present_reunion, autores, titulo_trabajo, fecha, id_tipo_doc, nro_documento, doc_probatoria) FROM stdin;
+1	Jose Lopez, Pedro Romero, Manuel Ramirez	Reunion de Prueba	2015-01-01	1	31255073	\N
+2	Federico Alemany, Martinez Hector, Pedro Lopez, Ricardo García	Una reunión científica cualquiera	2017-01-01	1	5343322	2017-01-01-Federico Alemany, Martinez Hector, Pedro Lopez, Ricardo GarcÃ­a.pdf
+3	Federico Alemany, Carlos Morales	Titulo de un trabajo de prueba	2015-04-23	1	27567172	2015-04-23-Federico Alemany, Carlos Morales.pdf
 \.
 
 
@@ -1835,15 +1855,17 @@ COPY antec_present_reuniones (id_present_reunion, autores, titulo_trabajo, fecha
 -- Name: antec_present_reuniones_id_present_reunion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_present_reuniones_id_present_reunion_seq', 1, true);
+SELECT pg_catalog.setval('antec_present_reuniones_id_present_reunion_seq', 3, true);
 
 
 --
 -- Data for Name: antec_trabajos_publicados; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY antec_trabajos_publicados (id_trabajo_publicado, autores, datos_publicacion, fecha, id_tipo_doc, nro_documento) FROM stdin;
-1	Federico Alemany, Carlos Martinez	Publicación con mucha información importante	2012-01-01	1	31255073
+COPY antec_trabajos_publicados (id_trabajo_publicado, autores, datos_publicacion, fecha, id_tipo_doc, nro_documento, doc_probatoria) FROM stdin;
+1	Federico Alemany, Carlos Martinez	Publicación con mucha información importante	2012-01-01	1	31255073	\N
+2	Federico Alemany, Susana Morales, Pedro García, Roberto Martinez, Pedro Ramirez	Una publicación presentada hace muuuuucho	2012-01-01	1	5343322	2012-01-01-Federico Alemany, Susana Morales, Pedro GarcÃ­a, Roberto Martinez, Pedro Ramirez.pdf
+3	Federico Alemany	Publicación de Prueba	2012-01-01	1	27567172	2012-01-01-Federico Alemany.pdf
 \.
 
 
@@ -1851,7 +1873,7 @@ COPY antec_trabajos_publicados (id_trabajo_publicado, autores, datos_publicacion
 -- Name: antec_trabajos_publicados_id_trabajo_publicado_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('antec_trabajos_publicados_id_trabajo_publicado_seq', 1, true);
+SELECT pg_catalog.setval('antec_trabajos_publicados_id_trabajo_publicado_seq', 3, true);
 
 
 --
@@ -2236,9 +2258,7 @@ COPY docentes (nro_documento, id_tipo_doc, legajo, id_cat_incentivos, id_cat_con
 --
 
 COPY inscripcion_conv_beca (id_dependencia, nro_documento, id_tipo_doc, id_convocatoria, fecha_hora, admisible, puntaje, beca_otorgada, id_area_conocimiento, titulo_plan_beca, justif_codirector, id_carrera, materias_plan, materias_aprobadas, prom_hist_egresados, prom_hist, carrera_posgrado, nombre_inst_posgrado, titulo_carrera_posgrado, nro_carpeta, observaciones, estado, cant_fojas, es_titular, id_tipo_beca, id_proyecto, es_egresado, anio_ingreso, anio_egreso, fecha_insc_posgrado, lugar_trabajo_becario, area_trabajo, id_tipo_doc_dir, nro_documento_dir, id_tipo_doc_codir, nro_documento_codir, id_tipo_doc_subdir, nro_documento_subdir) FROM stdin;
-86	27567172	1	6	2017-11-30 00:00:00	\N	31.328	\N	5	ANFIBIOS DEL IBERA	\N	\N	28	28	8.15	9.00	Doctorado en Biología	UNNE	DOCTORA EN BIOLOGIA	PER-001	\N	A	\N	S	10	529	1	2005	2010	2014-11-21	86	EL UNO	1	32405039	\N	\N	\N	\N
-65	31255073	1	6	2017-12-01 00:00:00	\N	46.070	\N	8	Titulo del plan de becas	Tiene conocimientos sobre el tema que se aborda	1	38	23	8.23	9.24	\N	\N	\N	PRE-001	\N	A	\N	S	7	\N	0	2003	\N	\N	65	Area cualquiera	1	32405039	1	1	1	\N
-65	5343322	1	6	2017-12-04 00:00:00	N	29.822	f	8	Aplicación de fertilizantes a los cultivos de maiz	Tiene conocimientos en el area que se aborda	1	41	23	7.61	6.12	\N	\N	\N	PRE-002	\N	A	\N	S	7	\N	0	2010	\N	\N	65	Departamento de Producción Vegetal	1	32405039	1	1	1	32405039
+69	27567172	1	6	2017-12-05 00:00:00	\N	28.117	\N	7	Tratamiento seguro de muestras patológicas	\N	5	34	34	7.23	8.12	Maestría en Producción Biológica	Universidad de La Plata	Magister en Biología	INI-001	\N	A	\N	S	9	407	1	2004	2009	2017-12-06	124	Laboratorio de Análisis Clínicos	1	32405039	1	32405039	1	32405039
 \.
 
 
@@ -16580,7 +16600,7 @@ COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, c
 43929392	1	Davalos	Carlos Roberto	\N	1978-11-01	\N	\N	\N	4683	3	M
 28302392	1	Ojeda	Jorge Alberto	20283023924	1980-11-14	\N	ojedita@msn.com	\N	\N	\N	M
 32405039	1	Alemany	Marcelo Federico	20324050397	1987-06-17	3794-844649	mfalemany@gmail.com	\N	4669	2	M
-27567172	1	Ingaramo	Marí­a Del Rosario		1979-10-06	\N	mringaramo@gmail.com	\N	\N	\N	F
+27567172	1	Ingaramo	Marí­a Del Rosario		1969-10-06	\N	mringaramo@gmail.com	\N	\N	\N	F
 \.
 
 
@@ -16588,10 +16608,8 @@ COPY personas (nro_documento, id_tipo_doc, apellido, nombres, cuil, fecha_nac, c
 -- Data for Name: planes_trabajo; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY planes_trabajo (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca, plan_trabajo) FROM stdin;
-1	31255073	6	7	Mi plan de trabajo para hacer
-1	5343322	6	7	Mi plan de trabajo de prueba
-1	27567172	6	10	\N
+COPY planes_trabajo (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca, plan_trabajo, doc_probatoria) FROM stdin;
+1	27567172	6	9	Analizar el seguimiento de muestras patológicas en el proceso de toma de datos	
 \.
 
 
@@ -17034,8 +17052,6 @@ SELECT pg_catalog.setval('requisitos_convocatoria_id_requisito_seq', 17, true);
 --
 
 COPY requisitos_insc (id_tipo_doc, nro_documento, id_convocatoria, id_tipo_beca, id_requisito, cumplido, fecha) FROM stdin;
-1	31255073	6	7	17	N	\N
-1	5343322	6	7	17	0	\N
 \.
 
 

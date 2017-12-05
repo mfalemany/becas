@@ -89,10 +89,14 @@ class ci_admisibilidad extends becas_ci
 		$edad_asp = toba::consulta_php('co_personas')->get_edad(array('id_tipo_doc'   => $insc['id_tipo_doc'],
 																	  'nro_documento' => $insc['nro_documento']),
 																date('Y-12-31'));
+		$edad_limite = toba::consulta_php('co_tipos_beca')->get_campo('edad_limite',$insc['id_tipo_beca']);
+		if($edad_limite){
+			$clase_css = ($edad_asp > $edad_limite) ? 'etiqueta_error' : 'etiqueta_success';
+		}
 		$template = "<table>
 						<tr>
-							<td>
-								<p class='etiqueta_importante centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
+							<td style='vertical-align: top;'>
+								<p class='".$clase_css." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
 								[dep id=form_admisibilidad]
 								[dep id=ml_requisitos]
 							</td>
@@ -123,7 +127,7 @@ class ci_admisibilidad extends becas_ci
 	function mostrar_detalles_director($detalles)
 	{
 		////se arma el template (tiene un encabezado que resume los datos del director)
-		$resumen = "<p>Director: <b class='etiqueta_importante'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].". ".$detalles['nro_documento'].")</p>";
+		$resumen = "<p>Director: <b class='etiqueta_info'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].". ".$detalles['nro_documento'].")</p>";
 		//$resumen .= "<p>CUIL: ".$detalles['cuil']."</p>";
 		$resumen .= "<p>M&aacute;ximo Grado: ".$detalles['nivel_academico']."</p>";
 		$resumen .= "<p>Cat. Incentivos: ".$detalles['cat_incentivos']."</p>";

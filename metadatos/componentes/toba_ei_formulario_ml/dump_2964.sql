@@ -458,15 +458,15 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'doc_probatoria', --identificador
 	'ef_upload', --elemento_formulario
 	'doc_probatoria', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'5', --orden
 	'Docum. Probatoria', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
-	'0', --colapsado
+	'1', --colapsado
 	'0', --desactivado
-	NULL, --estilo
+	'doc_probatoria_upload', --estilo
 	'0', --total
 	NULL, --inicializacion
 	'0', --permitir_html

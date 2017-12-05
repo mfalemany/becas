@@ -62,20 +62,18 @@ class co_convocatoria_beca
 
 	}
 
-	/*function get_convocatorias_seleccion($solo_vigentes=TRUE)
+	function get_campo($campo, $id_convocatoria)
 	{
-		$sql = "SELECT id_convocatoria,convocatoria FROM convocatoria_beca AS conv WHERE 1=1" ;
-		$sql .= $solo_vigentes ? " AND current_date BETWEEN conv.fecha_desde AND conv.fecha_hasta" : "";
-		$resultado = toba::db('becas')->consultar($sql);
-		if(count($resultado)){
-			foreach($resultado as $indice => $conv){
-				$convocatorias[$conv['id_convocatoria']] = $conv['convocatoria'];
+		$sql = "SELECT $campo FROM convocatoria_beca WHERE id_convocatoria = ".quote($id_convocatoria)." LIMIT 1";
+		$resultado = toba::db()->consultar_fila($sql);
+		if( array_key_exists($campo,$resultado)){
+			if($resultado[$campo]){
+				return $resultado[$campo];
 			}
-			return $convocatorias;
-		}else{
-			return array();
 		}
-	}*/
+		return FALSE;
+	}
+	
 
 
 }

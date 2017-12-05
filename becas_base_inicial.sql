@@ -72,7 +72,7 @@ CREATE TABLE antec_activ_docentes (
     anio_egreso numeric(4,0),
     nro_documento character varying(15) NOT NULL,
     id_tipo_doc smallint NOT NULL,
-    doc_probatoria character varying(200)
+    doc_probatoria character varying(300)
 );
 
 
@@ -110,7 +110,8 @@ CREATE TABLE antec_becas_obtenidas (
     id_tipo_doc smallint NOT NULL,
     nro_documento character varying(15) NOT NULL,
     fecha_desde date NOT NULL,
-    fecha_hasta date NOT NULL
+    fecha_hasta date NOT NULL,
+    doc_probatoria character varying(300)
 );
 
 
@@ -149,7 +150,8 @@ CREATE TABLE antec_conoc_idiomas (
     conversacion numeric(1,0) NOT NULL,
     traduccion numeric(1,0) NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -187,7 +189,8 @@ CREATE TABLE antec_cursos_perfec_aprob (
     carga_horaria numeric(4,0),
     fecha date,
     id_tipo_doc smallint NOT NULL,
-    nro_documento character varying(15) NOT NULL
+    nro_documento character varying(15) NOT NULL,
+    doc_probatoria character varying(300)
 );
 
 
@@ -225,7 +228,8 @@ CREATE TABLE antec_estudios_afines (
     id_tipo_doc smallint,
     nro_documento character varying(15),
     anio_desde numeric(4,0) NOT NULL,
-    anio_hasta numeric(4,0)
+    anio_hasta numeric(4,0),
+    doc_probatoria character varying(300)
 );
 
 
@@ -262,7 +266,8 @@ CREATE TABLE antec_otras_actividades (
     actividad character varying(200) NOT NULL,
     titulo_tema character varying(300) NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -299,7 +304,8 @@ CREATE TABLE antec_particip_dict_cursos (
     carga_horaria numeric(4,0) NOT NULL,
     fecha date NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -336,7 +342,8 @@ CREATE TABLE antec_present_reuniones (
     titulo_trabajo character varying(200) NOT NULL,
     fecha date NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -373,7 +380,8 @@ CREATE TABLE antec_trabajos_publicados (
     datos_publicacion character varying(750) NOT NULL,
     fecha date NOT NULL,
     id_tipo_doc smallint,
-    nro_documento character varying(15)
+    nro_documento character varying(15),
+    doc_probatoria character varying(300)
 );
 
 
@@ -1325,7 +1333,8 @@ CREATE TABLE planes_trabajo (
     nro_documento character varying(15) NOT NULL,
     id_convocatoria smallint NOT NULL,
     id_tipo_beca smallint NOT NULL,
-    plan_trabajo text
+    plan_trabajo text,
+    doc_probatoria character varying(300)
 );
 
 
