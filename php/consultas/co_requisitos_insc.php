@@ -2,7 +2,7 @@
 
 class co_requisitos_insc
 {
-	function get_requisitos_insc($id_convocatoria,$id_tipo_beca,$id_tipo_doc,$nro_documento)
+	function get_requisitos_insc($id_convocatoria,$id_tipo_beca,$nro_documento)
 	{
 		$sql = "SELECT 	req_con.id_requisito, 
 				        req_con.requisito, 
@@ -11,8 +11,7 @@ class co_requisitos_insc
 				        req_ins.fecha
 				FROM requisitos_insc AS req_ins
 				LEFT JOIN requisitos_convocatoria AS req_con on req_ins.id_requisito = req_con.id_requisito
-				WHERE req_ins.id_tipo_doc = ".quote($id_tipo_doc)."
-				AND req_ins.nro_documento = ".quote($nro_documento)."
+				WHERE req_ins.nro_documento = ".quote($nro_documento)."
 				AND req_ins.id_tipo_beca = ".quote($id_tipo_beca)."
 				AND req_con.id_convocatoria = ".quote($id_convocatoria)."
 				order by req_con.id_requisito";

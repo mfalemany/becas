@@ -6,7 +6,7 @@ class co_inscripcion_conv_beca
 	{
 		$where = array();
 		if(isset($filtro['id_tipo_doc'])){
-			$where[] = 'insc.id_tipo_doc = '.quote($filtro['id_tipo_doc']);	
+			$where[] = 'becario.id_tipo_doc = '.quote($filtro['id_tipo_doc']);	
 		}
 		if(isset($filtro['nro_documento'])){
 			$where[] = 'insc.nro_documento = '.quote($filtro['nro_documento']);	
@@ -19,7 +19,7 @@ class co_inscripcion_conv_beca
 			insc.nro_documento,
 			becario.apellido||', '||becario.nombres as becario,
 			director.apellido||', '||director.nombres as director,
-			insc.id_tipo_doc,
+			becario.id_tipo_doc,
 			insc.id_convocatoria,
 			conv.convocatoria,
 			insc.fecha_hora,
@@ -45,10 +45,9 @@ class co_inscripcion_conv_beca
 			
 		FROM inscripcion_conv_beca as insc	
 		LEFT JOIN convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
-		LEFT JOIN personas as becario on becario.id_tipo_doc = insc.id_tipo_doc AND becario.nro_documento = insc.nro_documento
+		LEFT JOIN personas as becario on becario.nro_documento = insc.nro_documento
 		LEFT JOIN personas as director 
-			ON director.id_tipo_doc = insc.id_tipo_doc_dir
-			AND director.nro_documento = insc.nro_documento_dir
+			ON director.nro_documento = insc.nro_documento_dir
 		LEFT JOIN tipos_beca as tip_bec on tip_bec.id_tipo_beca = insc.id_tipo_beca
 		LEFT JOIN dependencias as dep ON (insc.id_dependencia = dep.id_dependencia)
 		LEFT JOIN area_conocimiento as area ON (insc.id_area_conocimiento = area.id_area_conocimiento)
@@ -57,7 +56,7 @@ class co_inscripcion_conv_beca
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);
 		}
-
+		//echo nl2br($sql);
 		return toba::db('becas')->consultar($sql);
 	}
 

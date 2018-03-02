@@ -86,20 +86,6 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2952', --objeto
-	'1406', --col_id
-	'id_tipo_doc', --columna
-	'E', --tipo
-	'1', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'1', --no_nulo_db
-	'0', --externa
-	'personas'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'becas', --objeto_proyecto
-	'2952', --objeto
 	'1407', --col_id
 	'apellido', --columna
 	'C', --tipo
@@ -234,6 +220,48 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2952', --objeto
+	'1638', --col_id
+	'archivo_titulo_grado', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'300', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2952', --objeto
+	'1639', --col_id
+	'archivo_cuil', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'300', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2952', --objeto
+	'1737', --col_id
+	'id_tipo_doc', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
 	'0', --externa
 	'personas'  --tabla
 );

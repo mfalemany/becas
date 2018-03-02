@@ -42,8 +42,7 @@ class co_cumplim_obligaciones
 		FROM
 			cumplimiento_obligacion as cum	
 			LEFT OUTER JOIN tipo_cumpl_obligacion as tip ON (cum.id_tipo_cumpl_oblig = tip.id_tipo_cumpl_oblig)
-			LEFT JOIN personas as per on per.nro_documento = cum.nro_documento and per.id_tipo_doc = cum.id_tipo_doc
-			";
+			LEFT JOIN personas as per on per.nro_documento = cum.nro_documento";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}

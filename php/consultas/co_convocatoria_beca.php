@@ -45,6 +45,15 @@ class co_convocatoria_beca
 		return toba::db('becas')->consultar($sql);
 	}
 
+	/**
+	 * Retorna un listado de convocatorias para la cual no existan inscripciones realizadas.
+	 * @return array Array de convocatorias (vigentes o no) que no hayan registrado inscripciones
+	 */
+	function get_convocatorias_sin_inscripciones()
+	{
+		
+	}
+
 	function existen_inscripciones($id_convocatoria,$id_tipo_beca)
 	{
 		$sql = "SELECT count(*) AS cantidad 

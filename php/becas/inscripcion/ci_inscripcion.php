@@ -28,24 +28,21 @@ class ci_inscripcion extends becas_ci
 	function evt__cuadro__seleccion($datos)
 	{
 		//se carga la relación de "Alumno"
-		$alumno = array('id_tipo_doc'=>$datos['id_tipo_doc'],'nro_documento'=>$datos['nro_documento']);
+		$alumno = array('nro_documento'=>$datos['nro_documento']);
 		$this->get_datos('alumno')->cargar($alumno);
 
 		//se cargan los detalles de la inscripción
 		$this->get_datos('inscripcion')->cargar($datos);
 
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$this->get_datos(NULL,'director')->cargar(array('id_tipo_doc'   => $insc['id_tipo_doc_dir'],
-											 'nro_documento' => $insc['nro_documento_dir']));
+		$this->get_datos(NULL,'director')->cargar(array('nro_documento' => $insc['nro_documento_dir']));
 
-		if($insc['id_tipo_doc_codir']){
-			$this->get_datos(NULL,'codirector')->cargar(array('id_tipo_doc'   => $insc['id_tipo_doc_codir'],
-											       'nro_documento' => $insc['nro_documento_codir']));
+		if($insc['nro_documento_codir']){
+			$this->get_datos(NULL,'codirector')->cargar(array('nro_documento' => $insc['nro_documento_codir']));
 		}
 
-		if($insc['id_tipo_doc_subdir']){
-			$this->get_datos(NULL,'subdirector')->cargar(array('id_tipo_doc'   => $insc['id_tipo_doc_subdir'],
-											        'nro_documento' => $insc['nro_documento_subdir']));
+		if($insc['nro_documento_subdir']){
+			$this->get_datos(NULL,'subdirector')->cargar(array('nro_documento' => $insc['nro_documento_subdir']));
 		}
 
 		$this->set_pantalla('pant_edicion');

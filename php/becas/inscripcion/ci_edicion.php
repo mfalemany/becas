@@ -11,17 +11,15 @@ class ci_edicion extends becas_ci
 			$this->controlador()->pantalla()->eliminar_evento('eliminar');
 		};*/
 
-
-		
 		//obtengo los datos de la inscripcion
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 
-		//si se est?modificando una inscripcion, es necesario validar algunas cosas...
+		//si se está modificando una inscripción, es necesario validar algunas cosas...
 		if($datos){
 			//y los datos de la convocatoria
 			$conv = array_shift(toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$datos['id_convocatoria'])));
 			
-			//si ya pas?la fecha de fin de la convocatoria, no se puede editar la inscripcion
+			//si ya pasó la fecha de fin de la convocatoria, no se puede editar la inscripcion
 			if($conv['fecha_hasta'] < date('Y-m-d')){
 				//bloqueo el formulario para evitar que se modifiquen  los datos
 				$this->dep('form_inscripcion')->set_solo_lectura();
@@ -34,6 +32,13 @@ class ci_edicion extends becas_ci
 				//elimino los eventos que me permiten alterar los datos de la inscripcion
 				$this->controlador()->pantalla()->eliminar_evento('guardar');
 				$this->controlador()->pantalla()->eliminar_evento('eliminar');
+			}
+		}else{
+			//si se está cargando una nueva inscripción, se valida si es un usuario normal o un admin
+			if( ! in_array('admin',toba::usuario()->get_perfiles_funcionales())){
+				//si es un usuario normal, solo puede cargar una solicitud para sí mismo
+				$this->dep('form_inscripcion')->ef('nro_documento')->set_estado(toba::usuario()->get_id());
+				$this->dep('form_inscripcion')->set_solo_lectura(array('nro_documento'));
 			}
 		}
 
@@ -64,7 +69,6 @@ class ci_edicion extends becas_ci
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
 		//$sql = "SELECT id, descripcion FROM sap_proyectos WHERE descripcion ILIKE ".quote("%".$patron."%")." LIMIT 10";
-		//ei_arbol(toba::db('sap')->consultar($sql));
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		if($datos){
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
@@ -84,6 +88,17 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
+		/* ================== UPLOAD DEL CERTIFICADO ANALÍTICO =================== */
+		$conv = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$datos['id_convocatoria']);
+		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$datos['id_tipo_beca']);
+		$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
+		$efs_archivos = array(array('ef'          => 'archivo_analitico',
+							  		'descripcion' => 'Certificado Analítico',
+							  		'nombre'      => 'Cert. Analitico.pdf')
+							);
+
+		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
+		/* ========================================================================= */
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => 'A',
@@ -93,44 +108,41 @@ class ci_edicion extends becas_ci
 																			
 															));
 
-		//se setean variables de sesion para facilitar el manejo de los demás datos_tabla
-		//$this->setear_entidades($datos);
-
 		//esta funcion carga los datos del alumno (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de alumno
-		$this->set_alumno($datos['id_tipo_doc'],$datos['nro_documento']);    
+		$this->set_alumno($datos['nro_documento']);    
 		
-
 		//esta funcion carga los datos del director (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de director
 		if( ! $this->get_datos(NULL,'director')->get()){
-			$this->set_director($datos['id_tipo_doc_dir'],$datos['nro_documento_dir']);
+			$this->set_director($datos['nro_documento_dir']);
 		}
 
 		//cargo el datos_tabla codirector (si es posible)
-		if($datos['id_tipo_doc_codir'] && $datos['nro_documento_codir']){
-			$this->set_codirector($datos['id_tipo_doc_codir'],$datos['nro_documento_codir']);
+		if($datos['nro_documento_codir']){
+			$this->set_codirector($datos['nro_documento_codir']);
 		}
 
 		//cargo el datos_tabla subdirector (si es posible)
 		//cargo el datos_tabla codirector (si es posible)
-		if($datos['id_tipo_doc_subdir'] && $datos['nro_documento_subdir']){
-			$this->set_subdirector($datos['id_tipo_doc_subdir'],$datos['nro_documento_subdir']);
+		if($datos['nro_documento_subdir']){
+			$this->set_subdirector($datos['nro_documento_subdir']);
 		}
+
+
 
 
 		
 
 	}
 
-	protected function set_alumno($id_tipo_doc,$nro_documento)
+	protected function set_alumno($nro_documento)
 	{
 		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
-		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'alumno');
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($nro_documento,'alumno');
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
 			$this->get_datos('alumno')->resetear();
 			$this->get_datos('alumno','alumno')->set(array(
-				'nro_documento' => $nro_documento,
-				'id_tipo_doc'   => $id_tipo_doc
+				'nro_documento' => $nro_documento
 			));
 
 			
@@ -139,17 +151,16 @@ class ci_edicion extends becas_ci
 			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ningún alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
 
 		}else{
-			$this->get_datos('alumno')->cargar(array('id_tipo_doc'   => $id_tipo_doc,
-														'nro_documento' => $nro_documento));
+			$this->get_datos('alumno')->cargar(array('nro_documento' => $nro_documento));
 
 		}
 	}
 
-	protected function set_director($id_tipo_doc,$nro_documento)
+	protected function set_director($nro_documento)
 	{
 
 		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
-		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'docente');
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($nro_documento,'docente');
 		
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
@@ -158,8 +169,7 @@ class ci_edicion extends becas_ci
 		}else{
 			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
 			$this->get_datos(NULL,'director')->cargar(array(
-				'nro_documento' => $nro_documento,
-				'id_tipo_doc'   => $id_tipo_doc
+				'nro_documento' => $nro_documento
 			));
 			if( ! $this->get_datos(NULL,'director')->esta_cargada()){
 				throw new toba_error('El Nro. de Documento del director ingresado corresponde a un persona registrada en el sistema, pero no es docente. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
@@ -170,7 +180,7 @@ class ci_edicion extends becas_ci
 	protected function set_codirector($id_tipo_doc,$nro_documento)
 	{
 		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
-		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'docente');
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($nro_documento,'docente');
 		
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
@@ -179,8 +189,7 @@ class ci_edicion extends becas_ci
 		}else{
 			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
 			$this->get_datos(NULL,'codirector')->cargar(array(
-				'nro_documento' => $nro_documento,
-				'id_tipo_doc'   => $id_tipo_doc
+				'nro_documento' => $nro_documento
 			));
 			if( ! $this->get_datos(NULL,'codirector')->esta_cargada()){
 				throw new toba_error('El Nro. de Documento del co-director ingresado corresponde a un persona registrada en el sistema, pero no es docente. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
@@ -191,7 +200,7 @@ class ci_edicion extends becas_ci
 	protected function set_subdirector($id_tipo_doc,$nro_documento)
 	{
 		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
-		$existe_persona = toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'docente');
+		$existe_persona = toba::consulta_php('co_personas')->existe_persona($nro_documento,'docente');
 		
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
@@ -200,8 +209,7 @@ class ci_edicion extends becas_ci
 		}else{
 			//si existe, se cargan los datos del alumno en el datos tabla para la sincronizacion
 			$this->get_datos(NULL,'subdirector')->cargar(array(
-				'nro_documento' => $nro_documento,
-				'id_tipo_doc'   => $id_tipo_doc
+				'nro_documento' => $nro_documento
 			));
 			if( ! $this->get_datos(NULL,'subdirector')->esta_cargada()){
 				throw new toba_error('El Nro. de Documento del sub-director ingresado corresponde a un persona registrada en el sistema, pero no es docente. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
@@ -222,7 +230,7 @@ class ci_edicion extends becas_ci
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		//verifico si ya se crearon los registros para el cumplimiento de requisitos
 		
-		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['id_tipo_doc'],$datos['nro_documento']);
+		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['nro_documento']);
 		
 		//la insercion de los requisitos iniciales se realiza solo una vez
 		if( ! $requisitos_inscripcion){
@@ -242,6 +250,10 @@ class ci_edicion extends becas_ci
 
 	function conf__form_alumno(becas_ei_formulario $form)
 	{	
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		if( ! $insc['es_egresado']){
+			$form->desactivar_efs(array('archivo_titulo_grado'));
+		}
 		$alumno = $this->get_datos('alumno','alumno')->get();
 		if($alumno){
 			$form->set_datos($this->get_datos('alumno','alumno')->get());
@@ -259,6 +271,17 @@ class ci_edicion extends becas_ci
 
 	function evt__form_alumno__modificacion($datos)
 	{
+
+		$efs_archivos = array(array('ef'          => 'archivo_titulo_grado',
+							 	    'descripcion' => 'Titulo de Grado',
+							 	    'nombre'      => 'Titulo Grado.pdf') ,
+							  array('ef'          => 'archivo_cuil',
+							  	    'descripcion' => 'Constancia de CUIL',
+							  	    'nombre'      => 'CUIL.pdf')
+							);
+							 
+		$ruta = 'doc_probatoria/'.$datos['nro_documento'].'/';
+		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		$this->get_datos('alumno','alumno')->set($datos);
 		$this->get_datos('alumno')->sincronizar($datos);
 	}
@@ -274,7 +297,6 @@ class ci_edicion extends becas_ci
 		$dir = $this->get_datos(NULL,'director')->get();
 		if($dir){
 			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-				'id_tipo_doc'   => $dir['id_tipo_doc'],
 				'nro_documento' => $dir['nro_documento']
 			)));
 			$form->set_datos($director);
@@ -309,7 +331,6 @@ class ci_edicion extends becas_ci
 		$dir = $this->get_datos(NULL,'codirector')->get();
 		if($dir){
 			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-				'id_tipo_doc'   => $dir['id_tipo_doc'],
 				'nro_documento' => $dir['nro_documento']
 			)));
 			$form->set_datos($director);
@@ -364,7 +385,6 @@ class ci_edicion extends becas_ci
 		$dir = $this->get_datos(NULL,'subdirector')->get();
 		if($dir){
 			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-				'id_tipo_doc'   => $dir['id_tipo_doc'],
 				'nro_documento' => $dir['nro_documento']
 			)));
 			$form->set_datos($director);
@@ -403,18 +423,21 @@ class ci_edicion extends becas_ci
 	function evt__form_plan_trabajo__modificacion($datos)
 	{
 		if($datos['doc_probatoria']){
+			//detalles de la inscripcion
 			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+			//nombre de la convocatoria
 			$convocatoria = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$insc['id_convocatoria']);
+			//nombre del tipo de beca
 			$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
-			$nombre_archivo = $insc['id_tipo_doc']."-".$insc['nro_documento'].".pdf";
-			$ruta = 'planes_trabajo/'.utf8_encode($convocatoria).'/'.utf8_encode($tipo_beca).'/';
-			$this->eliminar_archivo($ruta.$nombre_archivo);
-			$this->subir_archivo($datos['doc_probatoria'],$ruta,$nombre_archivo);
-		}else{
-			unset($datos['doc_probatoria']);
+			//conformación de la ruta donde se almacenará el plan de trabajo
+			$ruta = 'doc_por_convocatoria/'.$convocatoria.'/'.$tipo_beca.'/'.$insc['nro_documento'].'/';
+			//campos que contienen archivos
+			$efs_archivos = array(array('ef'          => 'doc_probatoria',
+										'descripcion' => 'Plan de Trabajo',
+										'nombre'      => "Plan de Trabajo.pdf"
+										));
+			toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		}
-		
-		
 		$this->get_datos('inscripcion','plan_trabajo')->set($datos);
 	}
 
@@ -465,7 +488,7 @@ class ci_edicion extends becas_ci
 	function evt__form_activ_docentes__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/activ_docente/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/activ_docente/";
 		
 		$campos = array(
 						array('nombre' => 'anio_ingreso'),
@@ -485,8 +508,8 @@ class ci_edicion extends becas_ci
 
 	function conf__form_estudios_afines(becas_ei_formulario_ml $form_ml)
 	{
-		if($this->get_datos('alumno','antec_estudios_afines')->get_filas()){
-			$datos = $this->get_datos('alumno','antec_estudios_afines')->get_filas();
+		$datos = $this->get_datos('alumno','antec_estudios_afines')->get_filas();
+		if($datos){
 			$form_ml->set_datos($datos);
 			$this->s__estado_inicial = $datos;
 		}
@@ -501,8 +524,9 @@ class ci_edicion extends becas_ci
 
 	function evt__form_estudios_afines__modificacion($datos)
 	{
+		//var_dump($datos); return;
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/estudios_afines/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/estudios_afines/";
 		$campos = array(
 						array('nombre' => 'anio_desde'),
 						array('nombre' => 'anio_hasta', 'defecto' => 'Actualidad'),
@@ -531,7 +555,7 @@ class ci_edicion extends becas_ci
 	function evt__form_becas_obtenidas__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/becas_obtenidas/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/becas_obtenidas/";
 		$campos = array(
 						array('nombre' => 'fecha_desde'),
 						array('nombre' => 'fecha_hasta'),
@@ -559,7 +583,7 @@ class ci_edicion extends becas_ci
 	function evt__form_trabajos_publicados__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/trabajos_publicados/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/trabajos_publicados/";
 		$campos = array(
 						array('nombre' => 'fecha'),
 						array('nombre' => 'autores')
@@ -585,7 +609,7 @@ class ci_edicion extends becas_ci
 	function evt__form_present_reuniones__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/presentacion_reuniones/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/presentacion_reuniones/";
 		$campos = array(
 						array('nombre' => 'fecha'),
 						array('nombre' => 'autores')
@@ -611,7 +635,7 @@ class ci_edicion extends becas_ci
 	function evt__form_conoc_idiomas__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/conocimiento_idiomas/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/conocimiento_idiomas/";
 		$campos = array(
 						array('nombre' => 'idioma')
 						);
@@ -636,7 +660,7 @@ class ci_edicion extends becas_ci
 	function evt__form_otras_actividades__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/otras_actividades/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/otras_actividades/";
 		$campos = array(
 						array('nombre' => 'institucion'),
 						array('nombre' => 'actividad')
@@ -662,7 +686,7 @@ class ci_edicion extends becas_ci
 	function evt__form_part_dict_cursos__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/part_dict_cursos/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/part_dict_cursos/";
 		$campos = array(
 						array('nombre' => 'fecha'),
 						array('nombre' => 'institucion')
@@ -688,7 +712,7 @@ class ci_edicion extends becas_ci
 	function evt__form_cursos_perfec_aprob__modificacion($datos)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$ruta = "doc_probatoria/".$insc['id_tipo_doc']."-".$insc['nro_documento']."/cursos_perfec_aprob/";
+		$ruta = "doc_probatoria/".$insc['nro_documento']."/cursos_perfec_aprob/";
 		$campos = array(
 						array('nombre' => 'fecha'),
 						array('nombre' => 'institucion')
@@ -716,7 +740,7 @@ class ci_edicion extends becas_ci
 		*/
 	function ajax__get_docente($datos, toba_ajax_respuesta $respuesta)
 	{
-		$ayn = toba::consulta_php('co_docentes')->get_ayn($datos['tipo'].'||'.$datos['nro']);
+		$ayn = toba::consulta_php('co_docentes')->get_ayn($datos['nro']);
 		if( ! $ayn){
 			$respuesta->set(array('director'=>'Docente no encontrado','error'=>TRUE));
 		}else{
@@ -733,24 +757,24 @@ class ci_edicion extends becas_ci
 	function ajax__validar_edad($params, toba_ajax_respuesta $respuesta)
 	{
 		//$mensaje = ($this->edad_permitida_para_beca($params['id_tipo_doc'],$params['nro_documento'],$params['id_tipo_beca']))? TRUE : FALSE;
-		$mensaje = $this->edad_permitida_para_beca($params['id_tipo_doc'],$params['nro_documento'],$params['id_tipo_beca']);
+		$mensaje = $this->edad_permitida_para_beca($params['nro_documento'],$params['id_tipo_beca']);
 		$respuesta->set($mensaje);
 	}
 
-	function edad_permitida_para_beca($id_tipo_doc, $nro_documento, $id_tipo_beca)
+	function edad_permitida_para_beca($nro_documento, $id_tipo_beca)
 	{
 		$edad_limite  = toba::consulta_php('co_tipos_beca')->get_campo('edad_limite',$id_tipo_beca);
 		//se asegura que exista la persona en la BD local, sino, lo busca en WS
-		toba::consulta_php('co_personas')->existe_persona($id_tipo_doc,$nro_documento,'alumno');
-		$edad_persona =  $this->get_edad($id_tipo_doc,$nro_documento,date('Y-12-31'));
+		toba::consulta_php('co_personas')->existe_persona($nro_documento,'alumno');
+		$edad_persona =  $this->get_edad($nro_documento,date('Y-12-31'));
 		if($edad_persona){
 			return $edad_persona <= $edad_limite;
 		}
 	}
 
-	function get_edad($id_tipo_doc, $nro_documento, $fecha)
+	function get_edad($nro_documento, $fecha)
 	{
-		$persona = array('id_tipo_doc'=>$id_tipo_doc,'nro_documento'=>$nro_documento);
+		$persona = array('nro_documento'=>$nro_documento);
 		return toba::consulta_php('co_personas')->get_edad($persona,$fecha);
 	}
 
@@ -800,30 +824,7 @@ class ci_edicion extends becas_ci
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('nro_carpeta' => $nro)) ;
 	}
 
-	protected function subir_archivo($detalles = array(),$carpeta,$nombre_archivo)
-	{
-
-		if(!count($detalles)){
-			return;
-		}
-		$www = toba::proyecto()->get_www();
-		$www = $www['path'];
-		
-		
-		if( ! is_dir($www.$carpeta)){
-			if( ! mkdir($www.$carpeta,0777,TRUE)){
-				throw new toba_error('No se puede crear el directorio '.$carpeta.' en el directorio navegable del servidor. Por favor, pongase en contacto con el administrador del sistema');
-				return false;
-			}
-		}
-		$archivo = toba::proyecto()->get_www_temp($detalles['name']);
-		return move_uploaded_file($detalles['tmp_name'], $www.$carpeta."/".$nombre_archivo);
-	}
-
-	protected function eliminar_archivo($archivo)
-	{
-		unlink($archivo);
-	}
+	
 
 	/**
 	 * Esta funcion procesa los archivos involucrados en un formulario ML. Por cada linea pasada al ML, esta funcion procesa si se trata de un Alta, Baja o Modificación, y en consecuencia, Sube, Modifica o Elimina archivos vinculados a cada linea. Recibe como parámetros el estado inicial del ML, el estado luego de la moficiacion, la ruta donde se almacenarán los archivos y los nombres de los campos del ML que se utilizarán para darle el nombre a cada archivo
@@ -857,12 +858,12 @@ class ci_edicion extends becas_ci
 					//en el caso de una modificación, se elimina el archivo previo
 					if(isset($estado_inicial_ml)){
 						if($estado_inicial_ml[$nombre_input]){
-							$this->eliminar_archivo($ruta,$estado_inicial_ml[$nombre_input]);	
+							toba::consulta_php('helper_archivos')->eliminar_archivo($ruta,$estado_inicial_ml[$nombre_input]);	
 						}
 					}
 					
 					//se sube el nuevo archivo
-					if( ! $this->subir_archivo($item[$nombre_input],$ruta,utf8_encode($nombre))){
+					if( ! toba::consulta_php('helper_archivos')->subir_archivo($item[$nombre_input],$ruta,utf8_encode($nombre))){
 						//se utiliza substr y strlen para quitar el ".pdf" al final del nombre de la actividad
 						toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".substr($nombre,0,(strlen($nombre)-4) ) );
 					}
@@ -884,7 +885,7 @@ class ci_edicion extends becas_ci
 				foreach($estado_inicial_ml as $linea){
 					if($linea['x_dbr_clave'] == $fila){
 						$archivo = $ruta.utf8_encode($linea[$nombre_input]);
-						$this->eliminar_archivo($archivo);
+						toba::consulta_php('helper_archivos')->eliminar_archivo($archivo);
 					}
 				}
 			}

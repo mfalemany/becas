@@ -27,7 +27,6 @@ class co_personas
 			per.id_tipo_doc,
 			tip.tipo_doc,
 			per.nro_documento,
-			per.id_tipo_doc,
 			per.apellido,
 			per.nombres,
 			per.cuil,
@@ -67,9 +66,6 @@ class co_personas
 			per.apellido||', '||per.nombres as persona
 		FROM personas as per
 		WHERE 1=1";
-		if($id_tipo_doc){
-			$sql .= " AND per.id_tipo_doc = ".quote($id_tipo_doc);
-		}
 		if($nro_documento){
 			$sql .= " AND per.nro_documento = ".quote($nro_documento);
 		}
@@ -92,8 +88,7 @@ class co_personas
 		$sql = "SELECT
 			per.apellido||', '||per.nombres as persona
 		FROM personas as per
-		WHERE per.id_tipo_doc = $filtro[0]
-		AND per.nro_documento = ".quote($filtro[1]);
+		WHERE per.nro_documento = ".quote($filtro[1]);
 		$resultado = toba::db('becas')->consultar_fila($sql);
 		if(count($resultado)){
 			return $resultado['persona'];
@@ -109,25 +104,27 @@ class co_personas
 	 * @param  varchar $tipo          El parámetro tipo indica que tipo de persona se busca. En caso de ser alumno, si no se lo encuentra en la BD local, se lo importa desde el WS (a la base de personas y alumnos). En cambio, si se está buscando un docente, y no se lo encuentra en local, se realiza el mismo proceso de busqueda en el WS pero luego se lo guarda en la tabla de personas y en la de docentes
 	 * @return boolean                Retorna true en caso de encontrar la persona (en local o en el ws). Falso en caso contrario
 	 */
-	function existe_persona($id_tipo_doc,$nro_documento,$tipo)
+	function existe_persona($nro_documento,$tipo)
 	{
-		
-		if($this->existe_en_local($id_tipo_doc,$nro_documento)){
+		if(!$nro_documento){
+			return false;
+		}
+		if($this->existe_en_local($nro_documento)){
 			return true;
 		}else{
 			$persona = $this->buscar_en_ws($nro_documento); 
 			if($persona){
-				return $this->guardar_en_local($id_tipo_doc,$persona,$tipo);
+				return $this->guardar_en_local($persona,$tipo);
 			}else{
 				return false;
 			}
 		}
 	}
 
-	protected function existe_en_local($id_tipo_doc,$nro_documento)
+	protected function existe_en_local($nro_documento)
 	{
-		$sql = "SELECT id_tipo_doc, nro_documento FROM personas WHERE nro_documento = ".quote($nro_documento)." AND id_tipo_doc = ".quote($id_tipo_doc);	
-		
+
+		$sql = "SELECT * FROM personas WHERE nro_documento = ".quote($nro_documento)." limit 1";	
 		$resultado = toba::db()->consultar_fila($sql);
 		return ( ! empty($resultado));
 	}
@@ -138,11 +135,10 @@ class co_personas
 		$response = $cliente->get('agentes/'.$nro_documento.'/datoscomedor');
 		return rest_decode($response->json());
 	}
-	protected function guardar_en_local($id_tipo_doc, $persona, $tipo)
+	protected function guardar_en_local($persona, $tipo)
 	{
 		/* ******************** OBTENCIÓN DE LOS DATOS **************************/
-		$datos = array(	'id_tipo_doc'   => 1,
-						'nro_documento' => '',
+		$datos = array(	'nro_documento' => '',
 						'apellido'      => '',
 						'nombres'       => '',
 						'fecha_nac'     => '1900-01-01', //fecha_nac por defecto
@@ -162,8 +158,8 @@ class co_personas
 		
 		if(array_key_exists('GUARANI', $persona)){
 			$datos['nro_documento'] = $guarani['nro_doc'];
-			$datos['apellido'] = ucwords(strtolower($guarani['apellido']));
-			$datos['nombres'] = ucwords(strtolower($guarani['nombres']));
+			$datos['apellido'] = utf8_decode(ucwords(strtolower($guarani['apellido'])));
+			$datos['nombres'] = utf8_decode(ucwords(strtolower($guarani['nombres'])));
 			$datos['fecha_nac'] = ($guarani['fecha_nac']) ? $guarani['fecha_nac'] : $datos['fecha_nac'];
 			$datos['email'] = ($guarani['email']) ? strtolower($guarani['email']) : '';
 			$datos['sexo'] = ($guarani['sexo']) ? $guarani['sexo'] : '';
@@ -177,7 +173,7 @@ class co_personas
 		if(strtolower(trim($tipo)) === 'alumno'){
 			
 			$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,email,sexo,cuil) 
-			        VALUES ($id_tipo_doc,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$email','$sexo','$cuil')";
+			        VALUES (1,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$email','$sexo','$cuil')";
 			$afectados = toba::db()->ejecutar($sql);
 			return ($afectados >= 1);
 		}
@@ -212,8 +208,7 @@ class co_personas
 		$fecha = ($fecha) ? $fecha : date("Y-m-d");
 		$sql = "SELECT fecha_nac
 				FROM personas 
-				WHERE id_tipo_doc = ".quote($persona['id_tipo_doc'])."
-				AND nro_documento = ".quote($persona['nro_documento'])."
+				WHERE nro_documento = ".quote($persona['nro_documento'])."
 				LIMIT 1";
 		$resultado = toba::db()->consultar_fila($sql);
 		if(count($resultado)){

@@ -53,6 +53,16 @@ class ci_personas extends becas_ci
 
 	function evt__formulario__modificacion($datos)
 	{
+		$efs_archivos = array(array('ef'          => 'archivo_titulo_grado',
+							 	    'descripcion' => 'Titulo de Grado',
+							 	    'nombre'      => 'Titulo Grado.pdf') ,
+							  array('ef'          => 'archivo_cuil',
+							  	    'descripcion' => 'Constancia de CUIL',
+							  	    'nombre'      => 'CUIL.pdf')
+							);
+							 
+		$ruta = 'doc_probatoria/'.$datos['id_tipo_doc'].'-'.$datos['nro_documento'].'/';
+		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		$this->dep('datos')->tabla('personas')->set($datos);
 	}
 
@@ -85,7 +95,6 @@ class ci_personas extends becas_ci
 		$this->dep('datos')->sincronizar();
 		$this->resetear();
 	}
-
 }
 
 ?>

@@ -36,7 +36,6 @@ class ci_edicion_docente extends becas_ci
 
 	function conf__form_persona(becas_ei_formulario $form)
 	{
-
 		$form->set_datos($this->controlador()->datos()->tabla('personas')->get());
 		//se hacen de solo lectura porque estos datos se modifican en la pestaña de datos del docente
 		$this->dep('form_persona')->ef('id_tipo_doc')->set_solo_lectura();
@@ -44,7 +43,16 @@ class ci_edicion_docente extends becas_ci
 	}
 
 	function evt__form_persona__modificacion($datos)
-	{
+	{	
+		$efs_archivos = array(array('ef'          => 'archivo_titulo_grado',
+							 	    'descripcion' => 'Titulo de Grado',
+							 	    'nombre'      => 'Titulo Grado.pdf') ,
+							  array('ef'          => 'archivo_cuil',
+							  	    'descripcion' => 'Constancia de CUIL',
+							  	    'nombre'      => 'CUIL.pdf')
+							);
+		$ruta = 'doc_probatoria/'.$datos['id_tipo_doc'].'-'.$datos['nro_documento'].'/';
+		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		$this->controlador()->datos()->tabla('personas')->set($datos);
 	}
 

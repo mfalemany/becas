@@ -14,75 +14,26 @@ class form_inscripcion extends becas_ei_formulario
 		//---- Validacion de EFs -----------------------------------
 		
 		// ------- Se activa o desactiva el campo fecha_egreso en funcion de si es egresado o no --------
-		{$id_js}.ef('es_egresado').cuando_cambia_valor('\
-			activo = {$id_js}.ef(\'es_egresado\').get_estado(); \
-			{$id_js}.ef(\'anio_egreso\').set_estado(\'\');\
-			{$id_js}.ef(\'anio_egreso\').set_solo_lectura(!activo);\
-		');
-		
-		//--------Si se carga un DNI, se hace tambien obligatorio el campo id_tipo_doc_codir ------------
-		{$id_js}.ef('nro_documento_codir').cuando_cambia_valor('\
-			if($(this).prop(\'value\').length){\
-				{$id_js}.ef(\'id_tipo_doc_codir\').set_obligatorio(true);\
-			}else{\
-				{$id_js}.ef(\'id_tipo_doc_codir\').set_obligatorio(false);\
-			}\
-		');
-		
-		//--------Si se carga un DNI, se hace tambien obligatorio el campo id_tipo_doc_subdir ------------
-		{$id_js}.ef('nro_documento_subdir').cuando_cambia_valor('\
-			if($(this).prop(\'value\').length){\
-				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(true);\
-			}else{\
-				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(false);\
-			}\
-		');
-		
-		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL DIRECTOR -------
-		{$id_js}.ef('id_tipo_doc_dir').cuando_cambia_valor('\
-			if({$id_js}.ef(\'id_tipo_doc_dir\').get_estado() == \'nopar\'){ \
-				{$id_js}.ef(\'director\').set_estado(\'No se ha seleccionado un Tipo de Documento\');\
-				{$id_js}.ef(\'nro_documento_dir\').set_estado(\'\');\
-				{$this->objeto_js}.controlador.desactivar_tab(\'pant_director\');\
-				return false;\
-			}else{\
-				{$id_js}.ef(\'director\').set_estado(\'\');\
-			}\
-		');
-		
-		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL CODIRECTOR -------
-		{$id_js}.ef('id_tipo_doc_codir').cuando_cambia_valor('\
-			if({$id_js}.ef(\'id_tipo_doc_codir\').get_estado() == \'nopar\'){ \
-				{$id_js}.ef(\'nro_documento_codir\').set_estado(\'\');\
-				{$this->objeto_js}.controlador.desactivar_tab(\'pant_codirector\');\
-				{$id_js}.ef(\'nro_documento_codir\').set_obligatorio(false);\
-				return false;\
-			}else{\
-				{$id_js}.ef(\'nro_documento_codir\').set_obligatorio(true);\
-			}\
-		');
-		
-		// ---------CUANDO SE CAMBIA EL VALOR DEL CAMPO 'TIPO DE DOCUMENTO' DEL SUBDIRECTOR -------
-		{$id_js}.ef('id_tipo_doc_subdir').cuando_cambia_valor('\
-			if({$id_js}.ef(\'id_tipo_doc_subdir\').get_estado() == \'nopar\'){ \
-				{$id_js}.ef(\'nro_documento_subdir\').set_estado(\'\');\
-				{$this->objeto_js}.controlador.desactivar_tab(\'pant_subdirector\');\
-				{$id_js}.ef(\'nro_documento_subdir\').set_obligatorio(false);\
-				return false;\
-			}else{\
-				{$id_js}.ef(\'nro_documento_subdir\').set_obligatorio(true);\
-			}\
-		');
-		
+		{$id_js}.evt__es_egresado__procesar = function(es_inicial){
+			activo = {$id_js}.ef('es_egresado').get_estado(); 
+
+			if(activo){
+				{$id_js}.ef('materias_aprobadas').set_estado({$id_js}.ef('materias_plan').get_estado());
+			}else{
+				{$id_js}.ef('anio_egreso').set_estado('');
+			}
+			{$id_js}.ef('anio_egreso').set_solo_lectura(!(activo == 1));
+			
+		};
 		
 		
 		//--------Si se carga un DNI, se carga mediante ajax el nombre y apellido del director----------
 		{$id_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director()');
 		
 		//---------- Busco el director usando ajax -----------------------------------------------------
-		function buscar_director(tipo,nro)
+		function buscar_director(nro)
 		{
-			datos = {'tipo':{$id_js}.ef('id_tipo_doc_dir').get_estado(),'nro':{$id_js}.ef('nro_documento_dir').get_estado()};
+			datos = {'nro':{$id_js}.ef('nro_documento_dir').get_estado()};
 			{$this->controlador()->objeto_js}.ajax('get_docente',datos,this,mostrar_director);
 		}
 		
@@ -91,22 +42,52 @@ class form_inscripcion extends becas_ei_formulario
 		{    
 			{$id_js}.ef('director').set_estado(params.director);
 			if( ! params.error){
-				{$this->objeto_js}.controlador.activar_tab('pant_director');
+				{$id_js}.controlador.activar_tab('pant_director');
 			}else{
-				{$this->objeto_js}.controlador.desactivar_tab('pant_director');
+				{$id_js}.controlador.desactivar_tab('pant_director');
 			}
 		}
 		
 		
 		
-		//------- Si se carga un DNI, se hace tambien obligatorio el campo id_tipo_doc_subdir ----------
-		{$id_js}.ef('nro_documento_subdir').cuando_cambia_valor('\
-			if($(this).prop(\'value\').length){\
-				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(true);\
-			}else{\
-				{$id_js}.ef(\'id_tipo_doc_subdir\').set_obligatorio(false);\
-			}\
-		');
+		//---- Procesamiento de EFs --------------------------------
+		
+		{$id_js}.evt__id_area_conocimiento__procesar = function(es_inicial)
+		{
+			area = this.ef('id_area_conocimiento').get_estado();
+			{$this->controlador()->objeto_js}.ajax('get_disciplinas_incluidas',area,this,listar_disciplinas);
+		}
+		
+		function listar_disciplinas(respuesta)
+		{
+			$('#disciplinas_incluidas').html('Disciplinas incluídas: '+respuesta);	
+		}
+		
+		//---- Procesamiento de EFs --------------------------------
+		
+		{$id_js}.evt__nro_documento__procesar = function(es_inicial)
+		{
+			if( ! es_inicial){
+				if(this.ef('nro_documento').get_estado().length){
+					var params = {nro_documento : this.ef('nro_documento').get_estado(),
+								  id_tipo_beca  : this.ef('id_tipo_beca').get_estado()};
+					{$this->controlador()->objeto_js}.ajax('validar_edad',params,this,alertar_edad);
+				}
+			}
+		}
+		
+		function alertar_edad(edad_valida){
+			if(edad_valida !== null){
+				if( ! edad_valida){
+					notificacion.agregar('La persona indicada como postulante supera la edad límite para el tipo de beca al que intenta inscribirse. Esto hará que la inscripción resulte inadmisible.','error');
+					notificacion.ventana_modal();
+					notificacion.limpiar();
+				}
+			}
+		}	
+		
+		// ================== VALIDACIONES AL MOMENTO DE SUBMIT =======================================
+		
 		
 		// --------------- si no se carga un codirector, se desactiva ese tab -------------------------
 		{$id_js}.evt__nro_documento_codir__validar = function()
@@ -129,44 +110,37 @@ class form_inscripcion extends becas_ei_formulario
 			}
 			return true;
 		}
-		//---- Procesamiento de EFs --------------------------------
+		//---- Validacion general ----------------------------------
 		
-		{$this->objeto_js}.evt__id_area_conocimiento__procesar = function(es_inicial)
+		{$id_js}.evt__validar_datos = function()
 		{
-			area = this.ef('id_area_conocimiento').get_estado();
-			{$this->controlador()->objeto_js}.ajax('get_disciplinas_incluidas',area,this,listar_disciplinas);
-		}
-		
-		function listar_disciplinas(respuesta)
-		{
-			$('#disciplinas_incluidas').html('Disciplinas incluídas: '+respuesta);	
-		}
-		
-		//---- Procesamiento de EFs --------------------------------
-		
-		{$this->objeto_js}.evt__nro_documento__procesar = function(es_inicial)
-		{
-			if( ! es_inicial){
-				if(this.ef('nro_documento').get_estado().length && this.ef('id_tipo_doc').get_estado() != 'nopar'){
-					var params = {id_tipo_doc   : this.ef('id_tipo_doc').get_estado(),
-								  nro_documento : this.ef('nro_documento').get_estado(),
-								  id_tipo_beca  : this.ef('id_tipo_beca').get_estado()};
-					{$this->controlador()->objeto_js}.ajax('validar_edad',params,this,alertar_edad);
+			
+			
+			if(this.ef('anio_ingreso').get_estado() > new Date().getFullYear()){
+				notificacion.agregar('El año de ingreso no puede ser posterior al año actual');
+				false;
+			}
+			if(this.ef('es_egresado').get_estado()){
+				if(this.ef('materias_aprobadas').get_estado() != this.ef('materias_plan').get_estado()){
+					notificacion.agregar('Si el postulante es egresado, la cantidad de materias aprobadas debe ser igual a la cantidad de materias del plan de estudios.');
+					return false;
+				}
+				if(this.ef('anio_egreso').get_estado() <= this.ef('anio_ingreso').get_estado()){
+					notificacion.agregar('El año de egreso debe ser posterior al año de ingreso');
+					return false;
+				}
+				if(this.ef('anio_egreso').get_estado() > new Date().getFullYear()){
+					notificacion.agregar('El año de egreso no puede ser posterior al año actual');
+					return false;
 				}
 			}
-		}
-
-		function alertar_edad(edad_valida){
-			if(edad_valida !== null){
-				if( ! edad_valida){
-					notificacion.agregar('La persona indicada como postulante supera la edad límite para el tipo de beca al que intenta inscribirse. Esto hará que la inscripción resulte inadmisible.','error');
-					notificacion.ventana_modal();
-					notificacion.limpiar();
-				}
-			}
+			return true;
 		}
 		";
 	}
+
+
+
 
 
 

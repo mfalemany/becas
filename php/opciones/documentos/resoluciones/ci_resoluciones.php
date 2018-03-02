@@ -65,18 +65,15 @@ class ci_resoluciones extends becas_ci
 	{
 		//asigno el nombre que le corresponde al PDF ("aÃ±o"-"mes"-"dia"-"id_tipo_resol"-"nro_resol".pdf)
 		$pdf = $datos['anio'].'-'.$datos['nro_resol'].'-'.$this->get_tipo_resol_corto($datos['id_tipo_resol']).'.pdf';
-		
+
 		//si la persona selecciona un PDF, directamente hay que asignarlo y guardarlo
-		if ($datos['archivo_pdf'] != NULL) {
-			$img = toba::proyecto()->get_www()['path']."/resoluciones/".$pdf;
-			move_uploaded_file($datos['archivo_pdf']['tmp_name'], $img);
-			$datos['archivo_pdf'] = $pdf;
-		}else{
-			//se cumple cuando se cargó un archivo pero no se modificó
-			if($this->s__datos_resol['archivo_pdf'] != NULL){
-				rename(toba::proyecto()->get_www()['path']."/resoluciones/".$this->s__datos_resol['archivo_pdf'],toba::proyecto()->get_www()['path']."/resoluciones/".$pdf);
-				$datos['archivo_pdf'] = $pdf;
-			}		
+		if ($datos['archivo_pdf']) {
+			$efs_archivos = array(array('ef' => 'archivo_pdf',
+										'descripcion' => 'Resolucion',
+										'nombre'      => $pdf
+										)
+								);
+			toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,'resoluciones/');
 		}	
 		$this->dep('datos')->tabla('be_resoluciones')->set($datos);
 	}

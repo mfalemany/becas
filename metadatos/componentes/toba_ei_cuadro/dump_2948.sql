@@ -123,7 +123,7 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 	NULL, --titulo
 	NULL, --subtitulo
 	NULL, --sql
-	'nro_documento,id_tipo_doc,id_convocatoria,id_tipo_beca', --columnas_clave
+	'nro_documento,id_convocatoria,id_tipo_beca', --columnas_clave
 	NULL, --columna_descripcion
 	'0', --clave_dbr
 	NULL, --archivos_callbacks

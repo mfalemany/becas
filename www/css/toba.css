@@ -71,10 +71,7 @@
 	font-size: 1.1em;
 }
 .ef-upload-desc{
-	/*white-space: nowrap;*/
-    overflow: hidden;
-    display:block;
-    width : 130px;
+    display:none;
 }
 .ei-ml-columna{
 	text-align:center;

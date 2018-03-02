@@ -6,7 +6,7 @@ class co_docentes
 	{
 		$where = array();
 		if (isset($filtro['id_tipo_doc'])) {
-			$where[] = "doc.id_tipo_doc = ".quote("{$filtro['id_tipo_doc']}");
+			$where[] = "per.id_tipo_doc = ".quote("{$filtro['id_tipo_doc']}");
 		}
 		if (isset($filtro['nro_documento'])) {
 			$where[] = "doc.nro_documento ILIKE ".quote("%{$filtro['nro_documento']}%");
@@ -34,8 +34,8 @@ class co_docentes
 			niv.nivel_academico
 		FROM docentes as doc
 		LEFT JOIN categorias_incentivos as cat ON (doc.id_cat_incentivos = cat.id_cat_incentivos)
-		LEFT JOIN personas as per ON (per.id_tipo_doc = doc.id_tipo_doc AND per.nro_documento = doc.nro_documento)
-		LEFT JOIN tipo_documento as tip ON tip.id_tipo_doc = doc.id_tipo_doc
+		LEFT JOIN personas as per ON per.nro_documento = doc.nro_documento
+		LEFT JOIN tipo_documento as tip ON tip.id_tipo_doc = per.id_tipo_doc
 		LEFT JOIN niveles_academicos as niv on niv.id_nivel_academico = per.id_nivel_academico
 		ORDER BY nro_documento";
 		if (count($where)>0) {
@@ -55,8 +55,7 @@ class co_docentes
 				LEFT JOIN cargos_unne AS car_unne on car_unne.id_cargo_unne = car.id_cargo_unne
 				LEFT JOIN dedicacion AS ded ON ded.id_dedicacion = car.id_dedicacion 
 				LEFT JOIN dependencias AS dep ON dep.id_dependencia = car.id_dependencia
-				WHERE car.id_tipo_doc = ".quote($id_tipo_doc)."
-				AND car.nro_documento = ".quote($nro_documento);
+				WHERE car.nro_documento = ".quote($nro_documento);
 				if($solo_vigentes){
 					$sql .= " AND current_date BETWEEN car.fecha_desde AND car.fecha_hasta";
 				}
@@ -66,13 +65,11 @@ class co_docentes
 
 	static function get_ayn($params)
 	{
-		$filtro = explode('||',$params);
 		$sql = "SELECT
 			per.apellido||', '||per.nombres as docente
 		FROM docentes as doc 
-		LEFT JOIN personas as per ON per.id_tipo_doc = doc.id_tipo_doc AND per.nro_documento = doc.nro_documento
-		WHERE per.id_tipo_doc = $filtro[0]
-		AND per.nro_documento = ".quote($filtro[1]);
+		LEFT JOIN personas as per ON per.nro_documento = doc.nro_documento
+		WHERE per.nro_documento = ".quote($params);
 		$resultado = toba::db('becas')->consultar_fila($sql);
 		if(count($resultado)){
 			return $resultado['docente'];
@@ -81,7 +78,7 @@ class co_docentes
 
 	function get_resumen_docente($id_tipo_doc, $nro_documento)
 	{
-			$sql = "SELECT doc.id_tipo_doc,
+			$sql = "SELECT per.id_tipo_doc,
 						   td.tipo_doc,
 						   doc.nro_documento,
 						   per.apellido,
@@ -93,11 +90,10 @@ class co_docentes
 			FROM docentes AS doc
 			LEFT JOIN categorias_incentivos AS cat_inc ON cat_inc.id_cat_incentivos = doc.id_cat_incentivos
 			LEFT JOIN categorias_conicet AS cat_con ON cat_con.id_cat_conicet = doc.id_cat_conicet
-			LEFT JOIN personas AS per ON per.nro_documento = doc.nro_documento AND per.id_tipo_doc = doc.id_tipo_doc
+			LEFT JOIN personas AS per ON per.nro_documento = doc.nro_documento
 			LEFT JOIN niveles_academicos AS niv ON niv.id_nivel_academico = per.id_nivel_academico
 			LEFT JOIN tipo_documento AS td ON td.id_tipo_doc = per.id_tipo_doc
-			WHERE per.id_tipo_doc = ".quote($id_tipo_doc)."
-			AND per.nro_documento = ".quote($nro_documento);
+			WHERE per.nro_documento = ".quote($nro_documento);
 			return toba::db('becas')->consultar_fila($sql);
 
 	}
