@@ -11,6 +11,16 @@ class co_inscripcion_conv_beca
 		if(isset($filtro['nro_documento'])){
 			$where[] = 'insc.nro_documento = '.quote($filtro['nro_documento']);	
 		}
+		if(isset($filtro['id_convocatoria'])){
+			$where[] = 'insc.id_convocatoria = '.quote($filtro['id_convocatoria']);	
+		}
+		if(isset($filtro['id_tipo_beca'])){
+			$where[] = 'insc.id_tipo_beca = '.quote($filtro['id_tipo_beca']);	
+		}
+		if(isset($filtro['id_tipo_convocatoria'])){
+			$where[] = 'tip_con.id_tipo_convocatoria = '.quote($filtro['id_tipo_convocatoria']);	
+		}
+
 		$sql = "SELECT
 			insc.id_dependencia,
 			dep.nombre as dependencia,
@@ -49,6 +59,9 @@ class co_inscripcion_conv_beca
 		LEFT JOIN personas as director 
 			ON director.nro_documento = insc.nro_documento_dir
 		LEFT JOIN tipos_beca as tip_bec on tip_bec.id_tipo_beca = insc.id_tipo_beca
+		LEFT JOIN tipos_convocatoria as tip_con ON 
+			(tip_con.id_tipo_convocatoria = tip_bec.id_tipo_convocatoria 
+			AND tip_con.id_tipo_convocatoria = conv.id_tipo_convocatoria)
 		LEFT JOIN dependencias as dep ON (insc.id_dependencia = dep.id_dependencia)
 		LEFT JOIN area_conocimiento as area ON (insc.id_area_conocimiento = area.id_area_conocimiento)
 		LEFT JOIN carreras as carr ON (insc.id_carrera = carr.id_carrera)

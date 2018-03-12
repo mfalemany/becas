@@ -14,7 +14,7 @@ class ci_edicion_docente extends becas_ci
 		}
 		//cuando el docente ya existe como tal en la base, no se puede editar el tipo y dni
 		if($this->controlador()->datos()->tabla('docentes')->esta_cargada()){
-			$form->ef('id_tipo_doc')->set_solo_lectura();
+			
 			$form->ef('nro_documento')->set_solo_lectura();
 		}
 	}
@@ -23,10 +23,10 @@ class ci_edicion_docente extends becas_ci
 	function evt__form_docente__modificacion($datos)
 	{
 		$this->controlador()->datos()->tabla('personas')->cargar(
-			array('id_tipo_doc' => $datos['id_tipo_doc'], 'nro_documento' => $datos['nro_documento'])
+			array('nro_documento' => $datos['nro_documento'])
 		);
 		$this->controlador()->datos()->tabla('personas')->set(
-				array('id_tipo_doc' => $datos['id_tipo_doc'], 'nro_documento' => $datos['nro_documento'])
+				array('nro_documento' => $datos['nro_documento'])
 		);
 		$this->controlador()->datos()->tabla('docentes')->set($datos);
 	}

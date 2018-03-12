@@ -17,7 +17,6 @@ class ci_inscripcion extends becas_ci
 		
 		if(in_array('becario',toba::usuario()->get_perfiles_funcionales())){
 			$filtro = array('nro_documento' => toba::usuario()->get_id());
-			$cuadro->eliminar_evento('admitir');
 		}
 
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
@@ -47,13 +46,6 @@ class ci_inscripcion extends becas_ci
 
 		$this->set_pantalla('pant_edicion');
 	}
-
-	function evt__cuadro__admitir($datos)
-	{
-		$this->get_datos('inscripcion','inscripcion_conv_beca')->cargar($datos);
-		$this->set_pantalla('pant_admisibilidad');
-	}
-	
 
 	function resetear()
 	{
@@ -88,12 +80,24 @@ class ci_inscripcion extends becas_ci
 
 	function evt__guardar()
 	{
-		$this->dep('ci_edicion')->generar_nro_carpeta();
-		$this->get_datos('alumno')->sincronizar();
-		$this->get_datos('inscripcion')->sincronizar();
-		$this->dep('ci_edicion')->generar_registros_relacionados();
-
-		$this->resetear();
+		try{
+			$this->dep('ci_edicion')->generar_registros_relacionados();
+			$this->dep('ci_edicion')->generar_nro_carpeta();
+			$this->get_datos('alumno')->sincronizar();
+			$this->get_datos('inscripcion')->sincronizar();
+			$this->resetear();	
+		}catch(toba_error_db $e){
+			switch ($e->get_sqlstate()) {
+				case 'db_23505':
+					toba::notificacion()->agregar('Se ha producido un error al intentar guardar. Posiblemente, el alumno ingresado ya tenga una solicitud de beca para esta convocatoria y tipo de beca.');	
+					break;
+				
+				default:
+					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técnica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_sqlstate());	
+					break;
+			}
+		}
+		
 	}
 
 	function get_datos($relacion = NULL, $tabla = NULL)

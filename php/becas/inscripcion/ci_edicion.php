@@ -177,11 +177,10 @@ class ci_edicion extends becas_ci
 		}
 	}
 
-	protected function set_codirector($id_tipo_doc,$nro_documento)
+	protected function set_codirector($nro_documento)
 	{
 		//Consulto si la persona existe en la BD local (si no existe, se intenta importar desde el WS)
 		$existe_persona = toba::consulta_php('co_personas')->existe_persona($nro_documento,'docente');
-		
 		//si no existe el alumno, se obliga al usuario a completar los datos en el formulario "alumno"
 		if( ! $existe_persona){
 			$this->get_datos(NULL,'codirector')->resetear();
@@ -226,19 +225,17 @@ class ci_edicion extends becas_ci
 	**/
 	function generar_registros_relacionados()
 	{
+		
 		//obtengo los datos principales de la inscripcion
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		//verifico si ya se crearon los registros para el cumplimiento de requisitos
-		
 		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['nro_documento']);
-		
 		//la insercion de los requisitos iniciales se realiza solo una vez
 		if( ! $requisitos_inscripcion){
 			$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 			$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($datos['id_convocatoria']);
 
 			foreach($requisitos as $requisito){
-
 				$this->get_datos('inscripcion','requisitos_insc')->nueva_fila($requisito);
 			}
 		}
@@ -308,7 +305,7 @@ class ci_edicion extends becas_ci
 
 	function conf__form_director_docente(becas_ei_formulario $form)
 	{
-		$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+		$form->desactivar_efs(array('legajo','nro_documento'));
 		if($this->get_datos(NULL,'director')->get()){
 			$form->set_datos($this->get_datos(NULL,'director')->get());
 			
@@ -330,10 +327,10 @@ class ci_edicion extends becas_ci
 	{
 		$dir = $this->get_datos(NULL,'codirector')->get();
 		if($dir){
-			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
+			$codirector = array_shift(toba::consulta_php('co_personas')->get_personas(array(
 				'nro_documento' => $dir['nro_documento']
 			)));
-			$form->set_datos($director);
+			$form->set_datos($codirector);
 		}
 		
 		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_localidad'));
@@ -342,7 +339,7 @@ class ci_edicion extends becas_ci
 
 	function conf__form_codirector_docente(becas_ei_formulario $form)
 	{
-		$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+		$form->desactivar_efs(array('legajo','nro_documento'));
 		if($this->get_datos(NULL,'codirector')->get()){
 			$form->set_datos($this->get_datos(NULL,'codirector')->get());
 			
@@ -396,7 +393,7 @@ class ci_edicion extends becas_ci
 
 	function conf__form_subdirector_docente(becas_ei_formulario $form)
 	{
-		$form->desactivar_efs(array('legajo','id_tipo_doc','nro_documento'));
+		$form->desactivar_efs(array('legajo','nro_documento'));
 		if($this->get_datos(NULL,'subdirector')->get()){
 			$form->set_datos($this->get_datos(NULL,'subdirector')->get());
 		}
@@ -497,7 +494,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'cargo')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		
 		$this->get_datos('alumno','antec_activ_docentes')->procesar_filas($datos);
 	}
@@ -534,7 +531,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'titulo')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_estudios_afines')->procesar_filas($datos);
 	}
 
@@ -563,7 +560,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'tipo_beca')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_becas_obtenidas')->procesar_filas($datos);
 	}
 
@@ -589,7 +586,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'autores')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_trabajos_publicados')->procesar_filas($datos);
 	}
 
@@ -615,7 +612,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'autores')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_present_reuniones')->procesar_filas($datos);
 	}
 
@@ -640,7 +637,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'idioma')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_conoc_idiomas')->procesar_filas($datos);
 	}
 
@@ -666,7 +663,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'actividad')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_otras_actividades')->procesar_filas($datos);
 	}
 
@@ -692,7 +689,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'institucion')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_particip_dict_cursos')->procesar_filas($datos);
 	}
 
@@ -718,7 +715,7 @@ class ci_edicion extends becas_ci
 						array('nombre' => 'institucion')
 						);
 		
-		$this->procesar_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
+		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_cursos_perfec_aprob')->procesar_filas($datos);
 	}
 
@@ -826,70 +823,6 @@ class ci_edicion extends becas_ci
 
 	
 
-	/**
-	 * Esta funcion procesa los archivos involucrados en un formulario ML. Por cada linea pasada al ML, esta funcion procesa si se trata de un Alta, Baja o Modificación, y en consecuencia, Sube, Modifica o Elimina archivos vinculados a cada linea. Recibe como parámetros el estado inicial del ML, el estado luego de la moficiacion, la ruta donde se almacenarán los archivos y los nombres de los campos del ML que se utilizarán para darle el nombre a cada archivo
-	 * @param  array $estado_inicial_ml     Estado del ML al cargar el formulario
-	 * @param  array $estado_actual_ml      Estado del ML luego de que el usuario realiza cambios
-	 * @param  string $ruta                 Ruta donde se almacenarán/eliminaran los archivos involucrados
-	 * @param  array $campos_nombre_archivo Campos del ML que se utilizan para formatear el nombre del archivo subido
-	 * @param  string $nombre_input         Nombre del ef_upload que contiene el/los archivos subidos
-	 * @return void                        
-	 */
-	protected function procesar_archivos($estado_inicial_ml,&$estado_actual_ml,$ruta,$campos_nombre_archivo,$nombre_input)
-	{
-		//para cada linea de actividad docente
-		foreach($estado_actual_ml as $fila => $item){
-			
-			//se genera el nombre del archivo
-			$nombre = '';
-			foreach($campos_nombre_archivo as $campo){
-				//agrega un guión medio entre cada palabra del nombre
-				if(strlen($nombre)>0){
-					$nombre .= "-";
-				}
-				$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
-			}
-			$nombre .= '.pdf'; 
-
-			// =========== ALTA Y MODIFICACIÓN ===============
-			
-			if($item['apex_ei_analisis_fila'] == 'A' || $item['apex_ei_analisis_fila'] == 'M'){
-				if($item[$nombre_input]){
-					//en el caso de una modificación, se elimina el archivo previo
-					if(isset($estado_inicial_ml)){
-						if($estado_inicial_ml[$nombre_input]){
-							toba::consulta_php('helper_archivos')->eliminar_archivo($ruta,$estado_inicial_ml[$nombre_input]);	
-						}
-					}
-					
-					//se sube el nuevo archivo
-					if( ! toba::consulta_php('helper_archivos')->subir_archivo($item[$nombre_input],$ruta,utf8_encode($nombre))){
-						//se utiliza substr y strlen para quitar el ".pdf" al final del nombre de la actividad
-						toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".substr($nombre,0,(strlen($nombre)-4) ) );
-					}
-					$estado_actual_ml[$fila][$nombre_input] = $nombre;
-				}else{
-					if(file_exists($ruta.utf8_encode($estado_inicial_ml[$fila][$nombre_input])) && is_file($ruta.utf8_encode($estado_inicial_ml[$fila][$nombre_input]) )){
-						rename($ruta.utf8_encode($estado_inicial_ml[$fila][$nombre_input]),$ruta.utf8_encode($nombre) );
-						$estado_actual_ml[$fila][$nombre_input] = $nombre;
-					}else{
-						//esta linea sirve para que el formulario (cuando no se define un nuevo archivo) no pise el estado anterior
-						unset($estado_actual_ml[$fila][$nombre_input]);		
-					}
-					
-				}
-			}
-				
-			//si se está dando de baja un registro, se busca su nombre de archivo y se lo elimina tambien
-			if($item['apex_ei_analisis_fila'] == 'B'){
-				foreach($estado_inicial_ml as $linea){
-					if($linea['x_dbr_clave'] == $fila){
-						$archivo = $ruta.utf8_encode($linea[$nombre_input]);
-						toba::consulta_php('helper_archivos')->eliminar_archivo($archivo);
-					}
-				}
-			}
-		}
-	}
+	
 }
 ?>

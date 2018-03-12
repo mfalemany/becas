@@ -122,7 +122,54 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	NULL, --template
+	'<div>
+	<p>El plan de trabajo debe tener en cuenta los siguientes elementos:</p>
+	<ul>
+		<li>
+			T&iacute;tulo del Proyecto de Investigaci&oacute;n</li>
+		<li>
+			Origen y fundamentos de la investigaci&oacute;n.</li>
+		<li>
+			Antecedentes del tema y experiencia previa en relaci&oacute;n al mismo.</li>
+		<li>
+			Objetivos generales y particulares.</li>
+		<li>
+			Objetivos generales y particulares.</li>
+		<li>
+			Hip&oacute;tesis de trabajo.</li>
+		<li>
+			M&eacute;todos, t&eacute;cnicas y actividades.</li>
+		<li>
+			Fuentes de datos a emplear.</li>
+		<li>
+			Bibliograf&iacute;a.</li>
+		<li>
+			Descripci&oacute;n de las actividades a desarrollar para alcanzar los objetivos generales y particulares.</li>
+		<li>
+			Cronograma de actividades y tareas.</li>
+		<li>
+			Recursos disponibles.</li>
+		<li>
+			Lugar de trabajo, con el aval de la m&aacute;xima autoridad del mismo.</li>
+		<li>
+			Probables impactos y aportes de los resultados (cient&iacute;ficos, de transferencia, econ&oacute;mico, social, etc.).</li>
+		<li>
+			Presupuesto y fuentes de financiamiento del Proyecto, que garanticen el desarrollo del mismo</li>
+	</ul>
+</div>
+<table>
+	<tbody>
+		<tr>
+			<td>
+				[ef id=plan_trabajo]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=doc_probatoria]</td>
+		</tr>
+	</tbody>
+</table>
+<p>&nbsp;</p>', --template
 	NULL  --template_impresion
 );
 
@@ -221,7 +268,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
-	'Docum. Probatoria', --etiqueta
+	'Plan de trabajo en PDF', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	'0', --colapsado

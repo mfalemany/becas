@@ -167,4 +167,32 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'0', --externa
 	'requisitos_insc'  --tabla
 );
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2959', --objeto
+	'1739', --col_id
+	'requisito', --columna
+	'C', --tipo
+	'0', --pk
+	NULL, --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'1', --externa
+	NULL  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2959', --objeto
+	'1740', --col_id
+	'obligatorio', --columna
+	'L', --tipo
+	'0', --pk
+	NULL, --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'1', --externa
+	NULL  --tabla
+);
 --- FIN Grupo de desarrollo 0

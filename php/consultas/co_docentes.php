@@ -26,7 +26,7 @@ class co_docentes
 
 		$sql = "SELECT
 			doc.nro_documento,
-			doc.id_tipo_doc,
+			per.id_tipo_doc,
 			tip.tipo_doc,
 			per.apellido||', '||per.nombres as docente,
 			doc.legajo,
@@ -44,7 +44,7 @@ class co_docentes
 		return toba::db('becas')->consultar($sql);
 	}
 
-	function get_cargos_docente($id_tipo_doc,$nro_documento,$solo_vigentes = FALSE)
+	function get_cargos_docente($nro_documento,$solo_vigentes = FALSE)
 	{
 		$sql = "SELECT car_unne.cargo,
 					   ded.dedicacion,
@@ -76,7 +76,7 @@ class co_docentes
 		}
 	}
 
-	function get_resumen_docente($id_tipo_doc, $nro_documento)
+	function get_resumen_docente($nro_documento)
 	{
 			$sql = "SELECT per.id_tipo_doc,
 						   td.tipo_doc,
