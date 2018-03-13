@@ -32,18 +32,6 @@ class ci_inscripcion extends becas_ci
 
 		//se cargan los detalles de la inscripción
 		$this->get_datos('inscripcion')->cargar($datos);
-
-		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-		$this->get_datos(NULL,'director')->cargar(array('nro_documento' => $insc['nro_documento_dir']));
-
-		if($insc['nro_documento_codir']){
-			$this->get_datos(NULL,'codirector')->cargar(array('nro_documento' => $insc['nro_documento_codir']));
-		}
-
-		if($insc['nro_documento_subdir']){
-			$this->get_datos(NULL,'subdirector')->cargar(array('nro_documento' => $insc['nro_documento_subdir']));
-		}
-
 		$this->set_pantalla('pant_edicion');
 	}
 
@@ -52,10 +40,6 @@ class ci_inscripcion extends becas_ci
 		$this->get_datos('alumno')->resetear();
 		$this->get_datos('inscripcion')->resetear();
 		$this->get_datos('director')->resetear();
-		$this->get_datos('codirector')->resetear();
-		$this->get_datos('subdirector')->resetear();
-
-
 		$this->set_pantalla('pant_seleccion');
 	}
 

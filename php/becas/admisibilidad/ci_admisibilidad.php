@@ -167,7 +167,7 @@ class ci_admisibilidad extends becas_ci
 	function mostrar_detalles_director($detalles)
 	{
 		////se arma el template (tiene un encabezado que resume los datos del director)
-		$resumen = "<p>Director: <b class='etiqueta_info'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].". ".$detalles['nro_documento'].")</p>";
+		$resumen = "<p>Apellido y Nombre: <b class='etiqueta_info'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].". ".$detalles['nro_documento'].")</p>";
 		//$resumen .= "<p>CUIL: ".$detalles['cuil']."</p>";
 		$resumen .= "<p>M&aacute;ximo Grado: ".$detalles['nivel_academico']."</p>";
 		$resumen .= "<p>Cat. Incentivos: ".$detalles['cat_incentivos']."</p>";

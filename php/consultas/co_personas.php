@@ -75,20 +75,15 @@ class co_personas
 
 	/**
 	 * Retorna el apellido y nombres de una persona específica según tipo y nro de documento
-	 * @param  [string] $params [recibe un string con formato [id_tipo_doc]||[nro_documento]  ]
+	 * @param  [string] $nro_documento [recibe un string con formato [id_tipo_doc]||[nro_documento]  ]
 	 * @return [string]         [retorna un string simple con formato [Apellido],[nombres]  ]
 	 */
-	static function get_ayn($params)
+	static function get_ayn($nro_documento)
 	{
-		//toba::logger()->var_dump($params);
-
-
-
-		$filtro = explode('||',$params);
 		$sql = "SELECT
 			per.apellido||', '||per.nombres as persona
 		FROM personas as per
-		WHERE per.nro_documento = ".quote($filtro[1]);
+		WHERE per.nro_documento = ".quote($nro_documento);
 		$resultado = toba::db('becas')->consultar_fila($sql);
 		if(count($resultado)){
 			return $resultado['persona'];
