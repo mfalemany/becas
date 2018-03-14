@@ -27,26 +27,36 @@ class form_inscripcion extends becas_ei_formulario
 		};
 		
 		
-		//--------Si se carga un DNI, se carga mediante ajax el nombre y apellido del director----------
-		{$id_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director()');
+		/* ========================================================================================== */
+		// Si se carga un DNI, se carga mediante ajax el nombre y apellido del director
+		{$id_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director({$id_js}.ef(\'nro_documento_dir\').get_estado(),\'director\')');
+
+		// lo mismo para el co-director
+		{$id_js}.ef('nro_documento_codir').cuando_cambia_valor('buscar_director({$id_js}.ef(\'nro_documento_codir\').get_estado(),\'codirector\')');
+
+		//y para el subdirector
+		{$id_js}.ef('nro_documento_subdir').cuando_cambia_valor('buscar_director({$id_js}.ef(\'nro_documento_subdir\').get_estado(),\'subdirector\')');
+
 		
-		//---------- Busco el director usando ajax -----------------------------------------------------
-		function buscar_director(nro)
+		// Busco el director usando ajax
+		function buscar_director(nro_documento,campo)
 		{
-			datos = {'nro':{$id_js}.ef('nro_documento_dir').get_estado()};
+			datos = {'nro_documento':nro_documento,'campo':campo};
 			{$this->controlador()->objeto_js}.ajax('get_docente',datos,this,mostrar_director);
 		}
 		
-		// ------------ Asigno el valor obtenido por ajax al label Director ----------------------------
+		// Asigno el valor obtenido por ajax al label Director
 		function mostrar_director(params)
 		{    
-			{$id_js}.ef('director').set_estado(params.director);
 			if( ! params.error){
-				{$id_js}.controlador.activar_tab('pant_director');
+				{$id_js}.controlador.activar_tab('pant_'+params.campo);
+				{$id_js}.ef(params.campo).set_estado(params.docente);
 			}else{
-				{$id_js}.controlador.desactivar_tab('pant_director');
+				{$id_js}.ef(params.campo).set_estado('Persona no encontrada');
+				{$id_js}.controlador.desactivar_tab('pant_'+params.campo);
 			}
 		}
+		/* ========================================================================================= */
 		
 		
 		

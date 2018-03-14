@@ -22,24 +22,28 @@
 }
 .etiqueta_success{
 	font-weight: bold;
-	font-size: 1.4em;
+	font-size: 1.2em;
 	color: #fff;
 	background-color:#60c547;
 	text-shadow: 0px 0px 2px #222;
-	padding:5px 0px 5px 0px;
+	padding:2px 0px 2px 0px;
 	border-radius: 40px;
 	box-shadow: 2px 2px 10px #222;
 }
 .etiqueta_error{
 	font-weight: bold;
-	font-size: 1.4em;
+	font-size: 1.2em;
 	color: #fff;
 	background-color:#ec6060;
 	text-shadow: 0px 0px 2px #222;
-	padding:5px 0px 5px 0px;
+	padding:2px 0px 2px 0px;
 	border-radius: 40px;
 	box-shadow: 2px 2px 10px #222;
 
+}
+.lista_cargos{
+	margin: 1px 0px 1px 30px;
+	padding:1px;
 }
 .cargo_vigente{
 	color:#008400;
@@ -99,7 +103,6 @@
 	font-size: 1.2em;
 	background-color:#fbffb9;
 	box-shadow: 2px 2px 13px #333;
-
 }
 .detalle_director legend{
 	font-size:1.4em;
@@ -109,6 +112,10 @@
 	padding: 1px 10px 1px 10px;
 	box-shadow: 2px 2px 4px #333;
 	color:#906060;
+}
+.detalle_director p{
+	padding: 0px;
+	margin:2px
 }
 
 

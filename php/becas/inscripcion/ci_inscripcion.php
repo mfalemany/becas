@@ -58,8 +58,10 @@ class ci_inscripcion extends becas_ci
 	function evt__eliminar()
 	{
 		$this->get_datos('inscripcion','requisitos_insc')->eliminar();
+		$this->get_datos('inscripcion','plan_trabajo')->eliminar();
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->eliminar();
 		$this->resetear();
+		$this->set_pantalla('pant_seleccion');
 	}
 
 	function evt__guardar()
@@ -77,7 +79,7 @@ class ci_inscripcion extends becas_ci
 					break;
 				
 				default:
-					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técnica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_sqlstate());	
+					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técnica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_sql_ejecutado());	
 					break;
 			}
 		}

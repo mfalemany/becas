@@ -12,8 +12,14 @@ class ci_edicion extends becas_ci
 			$this->controlador()->pantalla()->eliminar_evento('eliminar');
 		};*/
 
-		//obtengo los datos de la inscripcion
-		$this->s__insc_actual = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		if($this->get_datos('inscripcion','inscripcion_conv_beca')->get()){
+			//obtengo los datos de la inscripcion
+			$this->s__insc_actual = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();	
+		}else{
+			unset($this->s__insc_actual);
+		}
+		
+		
 
 		//si se está modificando una inscripción, es necesario validar algunas cosas...
 		if($this->s__insc_actual){
@@ -224,16 +230,20 @@ class ci_edicion extends becas_ci
 	**/
 	function generar_registros_relacionados()
 	{
-		
-		//verifico si ya se crearon los registros para el cumplimiento de requisitos
-		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($this->s__insc_actual['id_convocatoria'],$this->s__insc_actual['id_tipo_beca'],$this->s__insc_actual['nro_documento']);
-		//la insercion de los requisitos iniciales se realiza solo una vez
-		if( ! $requisitos_inscripcion){
-			$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($this->s__insc_actual['id_convocatoria']);
-
-			foreach($requisitos as $requisito){
-				$this->get_datos('inscripcion','requisitos_insc')->nueva_fila($requisito);
+		if(isset($this->s__insc_actual)){
+			//verifico si ya se crearon los registros para el cumplimiento de requisitos
+			$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($this->s__insc_actual['id_convocatoria'],$this->s__insc_actual['id_tipo_beca'],$this->s__insc_actual['nro_documento']);
+			//la insercion de los requisitos iniciales se realiza solo una vez
+			if( ! $requisitos_inscripcion){
+				$insc = $this->s__insc_actual;
 			}
+		}else{
+			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+			
+		}
+		$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($insc['id_convocatoria']);
+		foreach($requisitos as $requisito){
+			$this->get_datos('inscripcion','requisitos_insc')->nueva_fila($requisito);
 		}
 	}
 	
@@ -769,11 +779,11 @@ class ci_edicion extends becas_ci
 		*/
 	function ajax__get_docente($datos, toba_ajax_respuesta $respuesta)
 	{
-		$ayn = toba::consulta_php('co_docentes')->get_ayn($datos['nro']);
+		$ayn = toba::consulta_php('co_docentes')->get_ayn($datos['nro_documento']);
 		if( ! $ayn){
-			$respuesta->set(array('director'=>'Docente no encontrado','error'=>TRUE));
+			$respuesta->set(array('docente'=>NULL,'error'=>TRUE,'campo'=>$datos['campo']));
 		}else{
-			$respuesta->set(array('director'=>$ayn,'error'=>FALSE));
+			$respuesta->set(array('docente'=>$ayn,'error'=>FALSE,'campo'=>$datos['campo']));
 		}
 		
 	}

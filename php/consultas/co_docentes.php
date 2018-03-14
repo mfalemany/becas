@@ -46,8 +46,10 @@ class co_docentes
 
 	function get_cargos_docente($nro_documento,$solo_vigentes = FALSE)
 	{
-		$sql = "SELECT car_unne.cargo,
+		$sql = "SELECT car_unne.id_cargo_unne,
+					   car_unne.cargo,
 					   ded.dedicacion,
+					   ded.id_dedicacion,
 					   dep.nombre as dependencia,
 					   car.fecha_desde,
 					   car.fecha_hasta
@@ -85,6 +87,8 @@ class co_docentes
 						   per.nombres,
 						   per.cuil,
 						   niv.nivel_academico,
+						   per.id_nivel_academico,
+						   cat_inc.nro_categoria,
 						   cat_inc.categoria as cat_incentivos,
 						   cat_con.categoria as cat_conicet
 			FROM docentes AS doc
