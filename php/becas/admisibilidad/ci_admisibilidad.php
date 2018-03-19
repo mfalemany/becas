@@ -156,11 +156,10 @@ class ci_admisibilidad extends becas_ci
 			$clase_css_edad = ($edad_asp > $edad_limite) ? 'etiqueta_error' : 'etiqueta_success';
 		}
 		
-		$cargo = ($datos_admisibilidad['cargo_unne']) ? "OK" : "No cumple";
 		$clase_css_cargos = ($datos_admisibilidad['cargo_unne']) ? "etiqueta_success" : "etiqueta_error";
 		
 		
-		$dedicacion = (in_array($datos_admisibilidad['dedicacion'],array('3','2'))) ? "OK" : "No cumplen con Mayor Dedicación"; 
+		
 		$clase_css_dedic = (in_array($datos_admisibilidad['dedicacion'],array('3','2'))) ? "etiqueta_success" : "etiqueta_error";
 
 
@@ -169,27 +168,24 @@ class ci_admisibilidad extends becas_ci
 			//debe ser magister o doctor (nivel academico 6 o 6)
 			if($datos_admisibilidad['nivel_academico'] >= 5){
 				$clase_css_categ = "etiqueta_success";
-				$nivel_categoria = "OK";
 			}else{
 				$clase_css_categ = "etiqueta_error";
-				$nivel_categoria = "No cumple con ser Magister, Doctor o Cat. de Incentivos mayor a III";
 			}
 		}else{
 			$clase_css_categ = "etiqueta_success";
-			$nivel_categoria = "OK";
 		}
 
 		$template = "<table>
 						<tr>
 							<td style='vertical-align: top;'>
-								<p class='".$clase_css_edad." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
-								<p class='".$clase_css_cargos." centrado'>Cargos: ".$cargo."</p>
-								<p class='".$clase_css_dedic." centrado'>Mayor Dedicación: ".$dedicacion."</p>
-								<p class='".$clase_css_categ." centrado'>Grado/Categoría: ".$nivel_categoria."</p>
 								[dep id=form_admisibilidad]
 								[dep id=ml_requisitos]
+								<p class='".$clase_css_edad." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
+								<p class='".$clase_css_cargos." centrado'>Cargos</p>
+								<p class='".$clase_css_dedic." centrado'>Mayor Dedicación</p>
+								<p class='".$clase_css_categ." centrado'>Grado/Categoría</p>
 							</td>
-							<td>
+							<td style='vertical-align: top;'>
 								<fieldset class='detalle_director'>
 									<legend>Resumen del Director de la beca</legend>
 									$resumen_dir

@@ -61,7 +61,7 @@ class ci_personas extends becas_ci
 							  	    'nombre'      => 'CUIL.pdf')
 							);
 							 
-		$ruta = 'doc_probatoria/'.$datos['id_tipo_doc'].'-'.$datos['nro_documento'].'/';
+		$ruta = 'doc_probatoria/'.$datos['nro_documento'].'/';
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		$this->dep('datos')->tabla('personas')->set($datos);
 	}
@@ -70,6 +70,18 @@ class ci_personas extends becas_ci
 	{
 		$this->dep('datos')->resetear();
 		$this->set_pantalla('pant_seleccion');
+	}
+
+	function conf__ml_cat_incentivos(becas_ei_formulario_ml $form_ml)
+	{
+		if ($this->dep('datos')->esta_cargada()) {
+			$form_ml->set_datos($this->dep('datos')->tabla('cat_incentivos_personas')->get_filas());
+		} 
+	}
+
+	function evt__ml_cat_incentivos__modificacion($datos)
+	{
+		$this->dep('datos')->tabla('cat_incentivos_personas')->procesar_filas($datos);
 	}
 
 	//---- EVENTOS CI -------------------------------------------------------------------

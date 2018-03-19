@@ -15,7 +15,7 @@ class co_docentes
 			$where[] = "doc.legajo ILIKE ".quote("%{$filtro['legajo']}%");
 		}
 		if (isset($filtro['id_cat_incentivos'])) {
-			$where[] = "doc.id_cat_incentivos = ".quote($filtro['id_cat_incentivos']);
+			$where[] = "cat_inc.id_cat_incentivos = ".quote($filtro['id_cat_incentivos']);
 		}
 		if (isset($filtro['apellido'])) {
 			$where[] = "per.apellido ILIKE ".quote("%{$filtro['apellido']}%");
@@ -30,11 +30,18 @@ class co_docentes
 			tip.tipo_doc,
 			per.apellido||', '||per.nombres as docente,
 			doc.legajo,
-			cat.categoria as id_cat_incentivos_nombre,
+			cat_inc.descripcion,
+			cat_inc.cat_incentivos,
 			niv.nivel_academico
 		FROM docentes as doc
-		LEFT JOIN categorias_incentivos as cat ON (doc.id_cat_incentivos = cat.id_cat_incentivos)
 		LEFT JOIN personas as per ON per.nro_documento = doc.nro_documento
+		LEFT JOIN cat_incentivos_personas AS cat_inc_per 
+				ON cat_inc_per.nro_documento = per.nro_documento
+				AND cat_inc_per.convocatoria = (select max(convocatoria) 
+									  from cat_incentivos_personas 
+									  where nro_documento = per.nro_documento)
+		LEFT JOIN cat_incentivos as cat_inc ON cat_inc.id_cat_incentivos = cat_inc_per.id_cat_incentivos
+		
 		LEFT JOIN tipo_documento as tip ON tip.id_tipo_doc = per.id_tipo_doc
 		LEFT JOIN niveles_academicos as niv on niv.id_nivel_academico = per.id_nivel_academico
 		ORDER BY nro_documento";
@@ -88,13 +95,17 @@ class co_docentes
 						   per.cuil,
 						   niv.nivel_academico,
 						   per.id_nivel_academico,
-						   cat_inc.nro_categoria,
-						   cat_inc.categoria as cat_incentivos,
+						   cat_inc.cat_incentivos as cat_incentivos,
 						   cat_con.categoria as cat_conicet
 			FROM docentes AS doc
-			LEFT JOIN categorias_incentivos AS cat_inc ON cat_inc.id_cat_incentivos = doc.id_cat_incentivos
 			LEFT JOIN categorias_conicet AS cat_con ON cat_con.id_cat_conicet = doc.id_cat_conicet
 			LEFT JOIN personas AS per ON per.nro_documento = doc.nro_documento
+			LEFT JOIN cat_incentivos_personas AS cat_inc_per 
+				ON cat_inc_per.nro_documento = per.nro_documento
+				AND cat_inc_per.convocatoria = (select max(convocatoria) 
+									  from cat_incentivos_personas 
+									  where nro_documento = per.nro_documento)
+			LEFT JOIN cat_incentivos as cat_inc ON cat_inc.id_cat_incentivos = cat_inc_per.id_cat_incentivos
 			LEFT JOIN niveles_academicos AS niv ON niv.id_nivel_academico = per.id_nivel_academico
 			LEFT JOIN tipo_documento AS td ON td.id_tipo_doc = per.id_tipo_doc
 			WHERE per.nro_documento = ".quote($nro_documento);

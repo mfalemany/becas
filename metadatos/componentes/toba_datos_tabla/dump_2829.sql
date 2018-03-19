@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2829]--  categorias_incentivos 
+--[2829]--  DT - cat_incentivos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'categorias_incentivos', --nombre
+	'DT - cat_incentivos', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -53,7 +53,7 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'categorias_incentivos', --tabla
+	'cat_incentivos', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
@@ -72,43 +72,43 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2829', --objeto
-	'1257', --col_id
+	'1752', --col_id
 	'id_cat_incentivos', --columna
 	'E', --tipo
 	'1', --pk
-	'be_categorias_incentivos_id_cat_incentivos_seq', --secuencia
+	'cat_incentivos_id_cat_incentivos_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'1', --no_nulo_db
+	'0', --externa
+	'cat_incentivos'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2829', --objeto
-	'1258', --col_id
-	'nro_categoria', --columna
-	'E', --tipo
-	NULL, --pk
-	NULL, --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'becas', --objeto_proyecto
-	'2829', --objeto
-	'1259', --col_id
-	'categoria', --columna
+	'1754', --col_id
+	'descripcion', --columna
 	'C', --tipo
-	NULL, --pk
-	NULL, --secuencia
-	NULL, --largo
+	'0', --pk
+	'', --secuencia
+	'30', --largo
 	NULL, --no_nulo
-	NULL, --no_nulo_db
-	NULL, --externa
-	NULL  --tabla
+	'1', --no_nulo_db
+	'0', --externa
+	'cat_incentivos'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2829', --objeto
+	'1755', --col_id
+	'cat_incentivos', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'5', --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'cat_incentivos'  --tabla
 );
 --- FIN Grupo de desarrollo 0

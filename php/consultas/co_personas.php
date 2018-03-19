@@ -32,7 +32,7 @@ class co_personas
 			per.cuil,
 			per.fecha_nac,
 			per.celular,
-			per.email,
+			per.mail,
 			per.telefono,
 			per.id_localidad,
 			loc.localidad,
@@ -137,7 +137,7 @@ class co_personas
 						'apellido'      => '',
 						'nombres'       => '',
 						'fecha_nac'     => '1900-01-01', //fecha_nac por defecto
-						'email'         => '',
+						'mail'         => '',
 						'sexo'          => '',
 						'cuil'          => '');
 		
@@ -156,7 +156,7 @@ class co_personas
 			$datos['apellido'] = utf8_decode(ucwords(strtolower($guarani['apellido'])));
 			$datos['nombres'] = utf8_decode(ucwords(strtolower($guarani['nombres'])));
 			$datos['fecha_nac'] = ($guarani['fecha_nac']) ? $guarani['fecha_nac'] : $datos['fecha_nac'];
-			$datos['email'] = ($guarani['email']) ? strtolower($guarani['email']) : '';
+			$datos['mail'] = ($guarani['email']) ? strtolower($guarani['email']) : '';
 			$datos['sexo'] = ($guarani['sexo']) ? $guarani['sexo'] : '';
 
 		}
@@ -167,8 +167,8 @@ class co_personas
 
 		if(strtolower(trim($tipo)) === 'alumno'){
 			
-			$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,email,sexo,cuil) 
-			        VALUES (1,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$email','$sexo','$cuil')";
+			$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,mail,sexo,cuil) 
+			        VALUES (1,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$mail','$sexo','$cuil')";
 			$afectados = toba::db()->ejecutar($sql);
 			return ($afectados >= 1);
 		}

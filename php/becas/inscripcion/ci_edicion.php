@@ -233,13 +233,15 @@ class ci_edicion extends becas_ci
 		if(isset($this->s__insc_actual)){
 			//verifico si ya se crearon los registros para el cumplimiento de requisitos
 			$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($this->s__insc_actual['id_convocatoria'],$this->s__insc_actual['id_tipo_beca'],$this->s__insc_actual['nro_documento']);
-			//la insercion de los requisitos iniciales se realiza solo una vez
-			if( ! $requisitos_inscripcion){
-				$insc = $this->s__insc_actual;
-			}
-		}else{
-			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 			
+			//la insercion de los requisitos iniciales se realiza solo una vez
+			if($requisitos_inscripcion){
+				return;
+			}
+			$insc = $this->s__insc_actual;
+		}else{
+			//si no se está modificando una solicitud existente, utilizo los datos recien cargados al datos_tabla
+			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		}
 		$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($insc['id_convocatoria']);
 		foreach($requisitos as $requisito){
@@ -304,7 +306,7 @@ class ci_edicion extends becas_ci
 		)));
 		$form->set_datos($director);
 		
-		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_localidad'));
+		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','mail','telefono','id_localidad'));
 		$form->set_solo_lectura();
 	}
 
@@ -350,7 +352,7 @@ class ci_edicion extends becas_ci
 		)));
 		$form->set_datos($director);
 		
-		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_localidad'));
+		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','mail','telefono','id_localidad'));
 		$form->set_solo_lectura();
 		
 	}
@@ -416,7 +418,7 @@ class ci_edicion extends becas_ci
 		)));
 		$form->set_datos($director);
 		
-		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','email','telefono','id_localidad'));
+		$form->desactivar_efs(array('id_tipo_doc','nro_documento','cuil','fecha_nac','celular','mail','telefono','id_localidad'));
 		$form->set_solo_lectura();
 	}
 

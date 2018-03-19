@@ -6,11 +6,11 @@ class co_categorias_incentivos
 	{
 		$sql = "SELECT
 			t_ci.id_cat_incentivos,
-			t_ci.nro_categoria,
-			t_ci.categoria
+			t_ci.cat_incentivos,
+			t_ci.descripcion
 		FROM
-			categorias_incentivos as t_ci
-		ORDER BY categoria";
+			cat_incentivos as t_ci
+		ORDER BY cat_incentivos";
 		return toba::db('becas')->consultar($sql);
 	}
 
