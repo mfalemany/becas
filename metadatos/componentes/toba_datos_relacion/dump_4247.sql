@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2830]--  Categorías - DR 
+--[4247]--  Areas de Conocimiento - DR 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,7 +9,7 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'becas', --proyecto
-	'2830', --objeto
+	'4247', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,12 +20,12 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'Categorías - DR', --nombre
+	'Areas de Conocimiento - DR', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -36,7 +36,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2017-09-22 11:24:57', --creacion
+	'2018-03-28 17:36:58', --creacion
 	NULL  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
@@ -46,7 +46,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 ------------------------------------------------------------
 INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_montaje, ap_clase, ap_archivo, sinc_susp_constraints, sinc_orden_automatico, sinc_lock_optimista) VALUES (
 	'becas', --proyecto
-	'2830', --objeto
+	'4247', --objeto
 	'0', --debug
 	NULL, --clave
 	'2', --ap
@@ -65,10 +65,10 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'1695', --dep_id
-	'2830', --objeto_consumidor
-	'2829', --objeto_proveedor
-	'categorias_incentivos', --identificador
+	'2908', --dep_id
+	'4247', --objeto_consumidor
+	'4246', --objeto_proveedor
+	'sap_area_conocimiento', --identificador
 	'1', --parametros_a
 	'1', --parametros_b
 	NULL, --parametros_c

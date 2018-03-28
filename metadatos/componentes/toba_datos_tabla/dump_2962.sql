@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2962]--  DT - planes_trabajo 
+--[2962]--  be_planes_trabajo 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,12 +20,12 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'DT - planes_trabajo', --nombre
+	'be_planes_trabajo', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -53,12 +53,12 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'planes_trabajo', --tabla
+	'be_planes_trabajo', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	'1', --permite_actualizacion_automatica
 	NULL, --esquema
 	'public'  --esquema_ext
@@ -72,7 +72,7 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2962', --objeto
-	'1467', --col_id
+	'1974', --col_id
 	'nro_documento', --columna
 	'C', --tipo
 	'1', --pk
@@ -80,13 +80,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'15', --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'planes_trabajo'  --tabla
+	NULL, --externa
+	'be_planes_trabajo'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2962', --objeto
-	'1468', --col_id
+	'1975', --col_id
 	'id_convocatoria', --columna
 	'E', --tipo
 	'1', --pk
@@ -94,13 +94,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'planes_trabajo'  --tabla
+	NULL, --externa
+	'be_planes_trabajo'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2962', --objeto
-	'1469', --col_id
+	'1976', --col_id
 	'id_tipo_beca', --columna
 	'E', --tipo
 	'1', --pk
@@ -108,13 +108,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'planes_trabajo'  --tabla
+	NULL, --externa
+	'be_planes_trabajo'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2962', --objeto
-	'1470', --col_id
+	'1977', --col_id
 	'plan_trabajo', --columna
 	'X', --tipo
 	'0', --pk
@@ -122,13 +122,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'planes_trabajo'  --tabla
+	NULL, --externa
+	'be_planes_trabajo'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2962', --objeto
-	'1575', --col_id
+	'1978', --col_id
 	'doc_probatoria', --columna
 	'C', --tipo
 	'0', --pk
@@ -136,7 +136,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'300', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'planes_trabajo'  --tabla
+	NULL, --externa
+	'be_planes_trabajo'  --tabla
 );
 --- FIN Grupo de desarrollo 0

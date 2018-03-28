@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2753]--  DT - tipos_resolucion 
+--[2753]--  be_tipos_resolucion 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,12 +20,12 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'DT - tipos_resolucion', --nombre
+	'be_tipos_resolucion', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -53,12 +53,12 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'tipos_resolucion', --tabla
+	'be_tipos_resolucion', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	'1', --permite_actualizacion_automatica
 	NULL, --esquema
 	'public'  --esquema_ext
@@ -72,7 +72,7 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2753', --objeto
-	'1211', --col_id
+	'2003', --col_id
 	'id_tipo_resol', --columna
 	'E', --tipo
 	'1', --pk
@@ -81,34 +81,34 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --no_nulo
 	'1', --no_nulo_db
 	NULL, --externa
-	'tipos_resolucion'  --tabla
+	'be_tipos_resolucion'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2753', --objeto
-	'1212', --col_id
+	'2004', --col_id
 	'tipo_resol', --columna
 	'C', --tipo
 	'0', --pk
 	'', --secuencia
-	'50', --largo
+	'100', --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
 	NULL, --externa
-	'tipos_resolucion'  --tabla
+	'be_tipos_resolucion'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2753', --objeto
-	'1213', --col_id
+	'2005', --col_id
 	'tipo_resol_corto', --columna
 	'C', --tipo
 	'0', --pk
 	'', --secuencia
-	'15', --largo
+	'25', --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
 	NULL, --externa
-	'tipos_resolucion'  --tabla
+	'be_tipos_resolucion'  --tabla
 );
 --- FIN Grupo de desarrollo 0

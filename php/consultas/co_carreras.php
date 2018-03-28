@@ -12,21 +12,16 @@ class co_carreras
 			$where[] = "dep.id_dependencia = ".$filtro['id_dependencia'];
 		}
 
-		$sql = "SELECT
+		$sql = "SELECT DISTINCT
 			car.id_carrera,
-			dep.id_dependencia,
-			dep.nombre,
 			car.carrera,
 			car.cod_araucano
-		FROM carreras as car
-		LEFT JOIN carrera_dependencia as cd ON cd.id_carrera = car.id_carrera
-		LEFT JOIN dependencias as dep on dep.id_dependencia = cd.id_dependencia
-
+		FROM be_carreras as car
 		ORDER BY car.carrera";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	function get_carreras_por_dependencia($id_dep = NULL) 
@@ -37,16 +32,14 @@ class co_carreras
 		
 		$sql = "SELECT
 			car.id_carrera,
-			dep.id_dependencia,
-			dep.nombre,
 			car.carrera,
 			car.cod_araucano
-		FROM carrera_dependencia as cd 
-		LEFT JOIN carreras as car on cd.id_carrera = car.id_carrera
-		LEFT JOIN dependencias as dep on dep.id_dependencia = cd.id_dependencia
-		WHERE dep.id_dependencia = $id_dep
+		FROM be_carrera_dependencia as cd 
+		LEFT JOIN be_carreras as car on cd.id_carrera = car.id_carrera
+		LEFT JOIN sap_dependencia as dep on dep.id = cd.id_dependencia
+		WHERE dep.id = $id_dep
 		ORDER BY dep.nombre, car.carrera";
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 	
 

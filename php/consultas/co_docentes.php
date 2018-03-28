@@ -27,49 +27,19 @@ class co_docentes
 		$sql = "SELECT
 			doc.nro_documento,
 			per.id_tipo_doc,
-			tip.tipo_doc,
 			per.apellido||', '||per.nombres as docente,
 			doc.legajo,
 			cat_inc.descripcion,
 			cat_inc.cat_incentivos,
 			niv.nivel_academico
-		FROM docentes as doc
-		LEFT JOIN personas as per ON per.nro_documento = doc.nro_documento
-		LEFT JOIN cat_incentivos_personas AS cat_inc_per 
-				ON cat_inc_per.nro_documento = per.nro_documento
-				AND cat_inc_per.convocatoria = (select max(convocatoria) 
-									  from cat_incentivos_personas 
-									  where nro_documento = per.nro_documento)
-		LEFT JOIN cat_incentivos as cat_inc ON cat_inc.id_cat_incentivos = cat_inc_per.id_cat_incentivos
-		
-		LEFT JOIN tipo_documento as tip ON tip.id_tipo_doc = per.id_tipo_doc
-		LEFT JOIN niveles_academicos as niv on niv.id_nivel_academico = per.id_nivel_academico
+		FROM be_docentes as doc
+		LEFT JOIN sap_personas as per ON per.nro_documento = doc.nro_documento
+		LEFT JOIN be_niveles_academicos as niv on niv.id_nivel_academico = per.id_nivel_academico
 		ORDER BY nro_documento";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
-	}
-
-	function get_cargos_docente($nro_documento,$solo_vigentes = FALSE)
-	{
-		$sql = "SELECT car_unne.id_cargo_unne,
-					   car_unne.cargo,
-					   ded.dedicacion,
-					   ded.id_dedicacion,
-					   dep.nombre as dependencia,
-					   car.fecha_desde,
-					   car.fecha_hasta
-				FROM cargos_docente AS car
-				LEFT JOIN cargos_unne AS car_unne on car_unne.id_cargo_unne = car.id_cargo_unne
-				LEFT JOIN dedicacion AS ded ON ded.id_dedicacion = car.id_dedicacion 
-				LEFT JOIN dependencias AS dep ON dep.id_dependencia = car.id_dependencia
-				WHERE car.nro_documento = ".quote($nro_documento);
-				if($solo_vigentes){
-					$sql .= " AND current_date BETWEEN car.fecha_desde AND car.fecha_hasta";
-				}
-				$sql .= " ORDER BY car.fecha_desde"; 
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	static function get_ayn($params)
@@ -79,7 +49,7 @@ class co_docentes
 		FROM docentes as doc 
 		LEFT JOIN personas as per ON per.nro_documento = doc.nro_documento
 		WHERE per.nro_documento = ".quote($params);
-		$resultado = toba::db('becas')->consultar_fila($sql);
+		$resultado = toba::db()->consultar_fila($sql);
 		if(count($resultado)){
 			return $resultado['docente'];
 		}
@@ -97,19 +67,18 @@ class co_docentes
 						   per.id_nivel_academico,
 						   cat_inc.cat_incentivos as cat_incentivos,
 						   cat_con.categoria as cat_conicet
-			FROM docentes AS doc
-			LEFT JOIN categorias_conicet AS cat_con ON cat_con.id_cat_conicet = doc.id_cat_conicet
-			LEFT JOIN personas AS per ON per.nro_documento = doc.nro_documento
-			LEFT JOIN cat_incentivos_personas AS cat_inc_per 
+			FROM be_docentes AS doc
+			LEFT JOIN be_categorias_conicet AS cat_con ON cat_con.id_cat_conicet = doc.id_cat_conicet
+			LEFT JOIN sap_personas AS per ON per.nro_documento = doc.nro_documento
+			LEFT JOIN sap_cat_incentivos AS cat_inc_per 
 				ON cat_inc_per.nro_documento = per.nro_documento
 				AND cat_inc_per.convocatoria = (select max(convocatoria) 
 									  from cat_incentivos_personas 
 									  where nro_documento = per.nro_documento)
-			LEFT JOIN cat_incentivos as cat_inc ON cat_inc.id_cat_incentivos = cat_inc_per.id_cat_incentivos
-			LEFT JOIN niveles_academicos AS niv ON niv.id_nivel_academico = per.id_nivel_academico
-			LEFT JOIN tipo_documento AS td ON td.id_tipo_doc = per.id_tipo_doc
+			LEFT JOIN be_niveles_academicos AS niv ON niv.id_nivel_academico = per.id_nivel_academico
+			LEFT JOIN be_tipo_documento AS td ON td.id_tipo_doc = per.id_tipo_doc
 			WHERE per.nro_documento = ".quote($nro_documento);
-			return toba::db('becas')->consultar_fila($sql);
+			return toba::db()->consultar_fila($sql);
 
 	}
 

@@ -24,8 +24,6 @@ class co_personas
 			$where[] = "per.id_nivel_academico = ".quote($filtro['id_nivel_academico']);
 		}
 		$sql = "SELECT
-			per.id_tipo_doc,
-			tip.tipo_doc,
 			per.nro_documento,
 			per.apellido,
 			per.nombres,
@@ -41,17 +39,17 @@ class co_personas
 			per.id_nivel_academico,
 			niv.nivel_academico
 		FROM
-			personas as per	
-		LEFT JOIN niveles_academicos as niv ON per.id_nivel_academico = niv.id_nivel_academico
-		LEFT JOIN tipo_documento AS tip ON tip.id_tipo_doc = per.id_tipo_doc
-		LEFT JOIN localidades AS loc ON loc.id_localidad = per.id_localidad
-		LEFT JOIN provincias as prov on prov.id_provincia = loc.id_provincia
-		LEFT JOIN paises as pai on pai.id_pais = prov.id_pais
+			sap_personas as per	
+		LEFT JOIN be_niveles_academicos as niv ON per.id_nivel_academico = niv.id_nivel_academico
+		LEFT JOIN be_localidades AS loc ON loc.id_localidad = per.id_localidad
+		LEFT JOIN be_provincias as prov on prov.id_provincia = loc.id_provincia
+		LEFT JOIN be_paises as pai on pai.id_pais = prov.id_pais
 		ORDER BY apellido";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		//echo nl2br($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	function get_personas_busqueda($filtro = NULL)
@@ -64,13 +62,23 @@ class co_personas
 			per.id_tipo_doc,
 			per.nro_documento,
 			per.apellido||', '||per.nombres as persona
-		FROM personas as per
+		FROM sap_personas as per
 		WHERE 1=1";
 		if($nro_documento){
 			$sql .= " AND per.nro_documento = ".quote($nro_documento);
 		}
-		$sql .= "ORDER BY persona";
-		return toba::db('becas')->consultar($sql);
+		if($id_tipo_doc){
+			$sql .= " AND per.id_tipo_doc = ".quote($id_tipo_doc);
+		}
+		if($apellido){
+			$sql .= " AND per.apellido ILIKE ".quote('%'.$apellido.'%');
+		}
+		if($nombres){
+			$sql .= " AND per.nombres ILIKE ".quote('%'.$nombres.'%');
+		}
+		$sql .= " ORDER BY persona";
+		//ei_arbol(toba::db()->consultar($sql));
+		return toba::db()->consultar($sql);
 	}
 
 	/**
@@ -82,9 +90,9 @@ class co_personas
 	{
 		$sql = "SELECT
 			per.apellido||', '||per.nombres as persona
-		FROM personas as per
+		FROM sap_personas as per
 		WHERE per.nro_documento = ".quote($nro_documento);
-		$resultado = toba::db('becas')->consultar_fila($sql);
+		$resultado = toba::db()->consultar_fila($sql);
 		if(count($resultado)){
 			return $resultado['persona'];
 		}
@@ -119,7 +127,7 @@ class co_personas
 	protected function existe_en_local($nro_documento)
 	{
 
-		$sql = "SELECT * FROM personas WHERE nro_documento = ".quote($nro_documento)." limit 1";	
+		$sql = "SELECT * FROM sap_personas WHERE nro_documento = ".quote($nro_documento)." limit 1";	
 		$resultado = toba::db()->consultar_fila($sql);
 		return ( ! empty($resultado));
 	}
@@ -167,7 +175,7 @@ class co_personas
 
 		if(strtolower(trim($tipo)) === 'alumno'){
 			
-			$sql = "INSERT INTO personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,mail,sexo,cuil) 
+			$sql = "INSERT INTO sap_personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,mail,sexo,cuil) 
 			        VALUES (1,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$mail','$sexo','$cuil')";
 			$afectados = toba::db()->ejecutar($sql);
 			return ($afectados >= 1);
@@ -202,7 +210,7 @@ class co_personas
 	{
 		$fecha = ($fecha) ? $fecha : date("Y-m-d");
 		$sql = "SELECT fecha_nac
-				FROM personas 
+				FROM sap_personas 
 				WHERE nro_documento = ".quote($persona['nro_documento'])."
 				LIMIT 1";
 		$resultado = toba::db()->consultar_fila($sql);

@@ -25,7 +25,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -148,52 +148,52 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 	'2978', --objeto
 	'116', --asoc_id
 	'2946', --padre_objeto
-	'1379', --padre_clave
+	'1843', --padre_clave
 	'2962', --hijo_objeto
-	'1468'  --hijo_clave
+	'1974'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2978', --objeto
 	'116', --asoc_id
 	'2946', --padre_objeto
-	'1380', --padre_clave
+	'1844', --padre_clave
 	'2962', --hijo_objeto
-	'1469'  --hijo_clave
+	'1975'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2978', --objeto
 	'116', --asoc_id
 	'2946', --padre_objeto
-	'1382', --padre_clave
+	'1865', --padre_clave
 	'2962', --hijo_objeto
-	'1467'  --hijo_clave
+	'1976'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2978', --objeto
 	'117', --asoc_id
 	'2946', --padre_objeto
-	'1379', --padre_clave
+	'1843', --padre_clave
 	'2959', --hijo_objeto
-	'1456'  --hijo_clave
+	'1835'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2978', --objeto
 	'117', --asoc_id
 	'2946', --padre_objeto
-	'1380', --padre_clave
+	'1844', --padre_clave
 	'2959', --hijo_objeto
-	'1457'  --hijo_clave
+	'1836'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2978', --objeto
 	'117', --asoc_id
 	'2946', --padre_objeto
-	'1382', --padre_clave
+	'1865', --padre_clave
 	'2959', --hijo_objeto
-	'1455'  --hijo_clave
+	'1837'  --hijo_clave
 );

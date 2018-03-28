@@ -21,13 +21,13 @@ class co_provincias
 			prov.id_provincia,
 			prov.provincia,
 			pai.pais
-		FROM provincias as prov
-		LEFT JOIN paises as pai ON prov.id_pais = pai.id_pais
+		FROM be_provincias as prov
+		LEFT JOIN be_paises as pai ON prov.id_pais = pai.id_pais
 		ORDER BY prov.provincia";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 }

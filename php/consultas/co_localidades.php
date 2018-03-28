@@ -26,14 +26,14 @@ class co_localidades
 			loc.id_localidad,
 			loc.localidad
 		FROM
-			localidades AS loc
-		LEFT JOIN provincias AS prov on prov.id_provincia = loc.id_provincia 
-		LEFT JOIN paises AS pai on pai.id_pais = prov.id_pais
+			be_localidades AS loc
+		LEFT JOIN be_provincias AS prov on prov.id_provincia = loc.id_provincia 
+		LEFT JOIN be_paises AS pai on pai.id_pais = prov.id_pais
 		ORDER BY localidad";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 
@@ -47,21 +47,21 @@ class co_localidades
 			prov.provincia,
 			pai.pais
 		FROM
-			localidades as loc
-		LEFT JOIN provincias as prov on prov.id_provincia = loc.id_provincia 
-		LEFT JOIN paises as pai on pai.id_pais = prov.id_pais
+			be_localidades as loc
+		LEFT JOIN be_provincias as prov on prov.id_provincia = loc.id_provincia 
+		LEFT JOIN be_paises as pai on pai.id_pais = prov.id_pais
 		WHERE prov.id_pais = $id_pais AND prov.id_provincia = $id_provincia
 		ORDER BY localidad";
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	function buscar_localidad($patron)
 	{
 		$sql = "SELECT id_localidad, 
 						loc.localidad||' - '||prov.provincia||' - '||pai.pais AS localidad 
-				FROM localidades as loc
-				LEFT JOIN provincias as prov on prov.id_provincia = loc.id_provincia
-				LEFT JOIN paises as pai ON pai.id_pais = prov.id_pais
+				FROM be_localidades as loc
+				LEFT JOIN be_provincias as prov on prov.id_provincia = loc.id_provincia
+				LEFT JOIN be_paises as pai ON pai.id_pais = prov.id_pais
 				WHERE localidad ilike ".quote('%'.$patron.'%');
 		return toba::db()->consultar($sql);
 	}
@@ -69,9 +69,9 @@ class co_localidades
 	function get_localidad_provincia_pais($id_localidad)
 	{
 		$sql = "SELECT loc.localidad||' - '||prov.provincia||' - '||pai.pais as localidad
-				FROM localidades as loc
-				LEFT JOIN provincias as prov on prov.id_provincia = loc.id_provincia
-				LEFT JOIN paises as pai ON pai.id_pais = prov.id_pais
+				FROM be_localidades as loc
+				LEFT JOIN be_provincias as prov on prov.id_provincia = loc.id_provincia
+				LEFT JOIN be_paises as pai ON pai.id_pais = prov.id_pais
 				WHERE loc.id_localidad = ".quote($id_localidad);
 		$resultado = toba::db()->consultar_fila($sql);
 		return $resultado['localidad'];

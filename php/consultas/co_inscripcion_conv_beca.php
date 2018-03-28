@@ -53,30 +53,30 @@ class co_inscripcion_conv_beca
 			insc.cant_fojas,
 			insc.es_titular
 			
-		FROM inscripcion_conv_beca as insc	
-		LEFT JOIN convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
-		LEFT JOIN personas as becario on becario.nro_documento = insc.nro_documento
-		LEFT JOIN personas as director 
+		FROM be_inscripcion_conv_beca as insc	
+		LEFT JOIN be_convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
+		LEFT JOIN sap_personas as becario on becario.nro_documento = insc.nro_documento
+		LEFT JOIN sap_personas as director 
 			ON director.nro_documento = insc.nro_documento_dir
-		LEFT JOIN tipos_beca as tip_bec on tip_bec.id_tipo_beca = insc.id_tipo_beca
-		LEFT JOIN tipos_convocatoria as tip_con ON 
+		LEFT JOIN be_tipos_beca as tip_bec on tip_bec.id_tipo_beca = insc.id_tipo_beca
+		LEFT JOIN be_tipos_convocatoria as tip_con ON 
 			(tip_con.id_tipo_convocatoria = tip_bec.id_tipo_convocatoria 
 			AND tip_con.id_tipo_convocatoria = conv.id_tipo_convocatoria)
-		LEFT JOIN dependencias as dep ON (insc.id_dependencia = dep.id_dependencia)
-		LEFT JOIN area_conocimiento as area ON (insc.id_area_conocimiento = area.id_area_conocimiento)
-		LEFT JOIN carreras as carr ON (insc.id_carrera = carr.id_carrera)
+		LEFT JOIN sap_dependencia as dep ON (insc.id_dependencia = dep.id)
+		LEFT JOIN be_area_conocimiento as area ON (insc.id_area_conocimiento = area.id_area_conocimiento)
+		LEFT JOIN be_carreras as carr ON (insc.id_carrera = carr.id_carrera)
 		ORDER BY admisible";
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);
 		}
 		//echo nl2br($sql);
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	function get_ultimo_nro_carpeta($id_convocatoria,$id_tipo_beca)
 	{
 		$sql = "SELECT nro_carpeta 
-				FROM inscripcion_conv_beca
+				FROM be_inscripcion_conv_beca
 				WHERE id_convocatoria = ".quote($id_convocatoria)."
 				AND id_tipo_beca = ".quote($id_tipo_beca)."
 				ORDER BY fecha_hora DESC

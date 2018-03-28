@@ -26,23 +26,23 @@ class co_convocatoria_beca
 			conv.fecha_desde,
 			conv.fecha_hasta,
 			conv.limite_movimientos
-		FROM convocatoria_beca as conv
-		LEFT JOIN tipos_convocatoria as tip on tip.id_tipo_convocatoria = conv.id_tipo_convocatoria
+		FROM be_convocatoria_beca as conv
+		LEFT JOIN be_tipos_convocatoria as tip on tip.id_tipo_convocatoria = conv.id_tipo_convocatoria
 		WHERE 1=1";
 		$sql .= $solo_vigentes ? " AND current_date BETWEEN conv.fecha_desde AND conv.fecha_hasta" : "";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	function get_anios_convocatorias()
 	{
 		$sql = "select distinct extract(year from fecha_desde) as anio 
-				FROM convocatoria_beca
+				FROM be_convocatoria_beca
 				ORDER BY anio DESC";
 		
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	/**
@@ -57,7 +57,7 @@ class co_convocatoria_beca
 	function existen_inscripciones($id_convocatoria,$id_tipo_beca)
 	{
 		$sql = "SELECT count(*) AS cantidad 
-		FROM inscripcion_conv_beca 
+		FROM be_inscripcion_conv_beca 
 		WHERE id_convocatoria = ".quote($id_convocatoria);
 		$resultado = toba::db()->consultar_fila($sql);
 		return ($resultado['cantidad'] > 0);
@@ -65,7 +65,7 @@ class co_convocatoria_beca
 
 	function existen_convocatorias_vigentes()
 	{
-		$sql = "select count(*) as cant from convocatoria_beca where current_date between fecha_desde and fecha_hasta";
+		$sql = "select count(*) as cant from be_convocatoria_beca where current_date between fecha_desde and fecha_hasta";
 		$resultado = toba::db()->consultar_fila($sql);
 		return ($resultado['cant'] > 0);
 
@@ -73,7 +73,7 @@ class co_convocatoria_beca
 
 	function get_campo($campo, $id_convocatoria)
 	{
-		$sql = "SELECT $campo FROM convocatoria_beca WHERE id_convocatoria = ".quote($id_convocatoria)." LIMIT 1";
+		$sql = "SELECT $campo FROM be_convocatoria_beca WHERE id_convocatoria = ".quote($id_convocatoria)." LIMIT 1";
 		$resultado = toba::db()->consultar_fila($sql);
 		if( array_key_exists($campo,$resultado)){
 			if($resultado[$campo]){

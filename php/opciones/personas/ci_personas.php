@@ -27,10 +27,9 @@ class ci_personas extends becas_ci
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
+		$cuadro->agregar_notificacion('Debe filtrar para visualizar los datos','info');
 		if (isset($this->s__datos_filtro)) {
 			$cuadro->set_datos(toba::consulta_php('co_personas')->get_personas($this->s__datos_filtro));
-		}else{
-			$cuadro->set_datos(toba::consulta_php('co_personas')->get_personas());
 		}
 	}
 
@@ -65,6 +64,39 @@ class ci_personas extends becas_ci
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		$this->dep('datos')->tabla('personas')->set($datos);
 	}
+
+	//-----------------------------------------------------------------------------------
+	//---- ml_cargos --------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__ml_cargos(becas_ei_formulario_ml $form_ml)
+	{
+		if($this->dep('datos')->tabla('sap_cargos_persona')->get_filas()){
+			$form_ml->set_datos($this->dep('datos')->tabla('sap_cargos_persona')->get_filas());	
+		}
+	}
+
+	function evt__ml_cargos__modificacion($datos)
+	{
+		foreach($datos as $indice => $valor){
+			switch (substr($datos[$indice]['cargo'],3,1)) {
+				case 'E':
+					$datos[$indice]['dedicacion'] = 'EXCL';
+					break;
+				case 'S':
+					$datos[$indice]['dedicacion'] = 'SEMI';
+					break;
+				case '1':
+					$datos[$indice]['dedicacion'] = 'SIMP';
+					break;
+			}
+		}
+		$this->dep('datos')->tabla('sap_cargos_persona')->procesar_filas($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- ml_cargos --------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------	
 
 	function resetear()
 	{

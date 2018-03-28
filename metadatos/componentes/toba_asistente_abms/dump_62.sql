@@ -15,7 +15,7 @@ INSERT INTO apex_molde_operacion (proyecto, molde, operacion_tipo, nombre, item,
 	'3633', --item
 	'becas/convocatorias/tipos_de_beca', --carpeta_archivos
 	'_tipos_de_beca', --prefijo_clases
-	'becas', --fuente
+	'sap', --fuente
 	'22'  --punto_montaje
 );
 --- FIN Grupo de desarrollo 0

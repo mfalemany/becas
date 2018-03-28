@@ -15,7 +15,7 @@ INSERT INTO apex_molde_operacion (proyecto, molde, operacion_tipo, nombre, item,
 	'3596', --item
 	'tipos_de_documento', --carpeta_archivos
 	'_tipos_de_documento', --prefijo_clases
-	'becas', --fuente
+	'sap', --fuente
 	'22'  --punto_montaje
 );
 --- FIN Grupo de desarrollo 0

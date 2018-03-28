@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2812]--  niveles_academicos 
+--[2812]--  be_niveles_academicos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,12 +20,12 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'niveles_academicos', --nombre
+	'be_niveles_academicos', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -53,12 +53,12 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'niveles_academicos', --tabla
+	'be_niveles_academicos', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	'1', --permite_actualizacion_automatica
 	NULL, --esquema
 	'public'  --esquema_ext
@@ -72,35 +72,21 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2812', --objeto
-	'1238', --col_id
-	'id_nivel_academico', --columna
-	'N', --tipo
-	'1', --pk
-	'niveles_academicos_id_nivel_academico_seq', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'becas', --objeto_proyecto
-	'2812', --objeto
-	'1239', --col_id
+	'1988', --col_id
 	'nivel_academico', --columna
 	'C', --tipo
 	'0', --pk
-	NULL, --secuencia
-	NULL, --largo
+	'', --secuencia
+	'50', --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
+	NULL, --externa
+	'be_niveles_academicos'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2812', --objeto
-	'1240', --col_id
+	'1989', --col_id
 	'orden', --columna
 	'N', --tipo
 	'0', --pk
@@ -108,7 +94,21 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'niveles_academicos'  --tabla
+	NULL, --externa
+	'be_niveles_academicos'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'2812', --objeto
+	'1990', --col_id
+	'id_nivel_academico', --columna
+	'E', --tipo
+	'1', --pk
+	'niveles_academicos_id_nivel_academico_seq', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	NULL, --externa
+	'be_niveles_academicos'  --tabla
 );
 --- FIN Grupo de desarrollo 0

@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2967]--  antec_conoc_idiomas 
+--[2967]--  be_antec_conoc_idiomas 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,12 +20,12 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'antec_conoc_idiomas', --nombre
+	'be_antec_conoc_idiomas', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -53,12 +53,12 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'antec_conoc_idiomas', --tabla
+	'be_antec_conoc_idiomas', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	'1', --permite_actualizacion_automatica
 	NULL, --esquema
 	'public'  --esquema_ext
@@ -72,7 +72,7 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1501', --col_id
+	'1924', --col_id
 	'id_conocimiento_idioma', --columna
 	'E', --tipo
 	'1', --pk
@@ -80,13 +80,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1502', --col_id
+	'1925', --col_id
 	'idioma', --columna
 	'C', --tipo
 	'0', --pk
@@ -94,13 +94,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'100', --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1503', --col_id
+	'1926', --col_id
 	'lectura', --columna
 	'N', --tipo
 	'0', --pk
@@ -108,13 +108,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1504', --col_id
+	'1927', --col_id
 	'escritura', --columna
 	'N', --tipo
 	'0', --pk
@@ -122,13 +122,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1505', --col_id
+	'1928', --col_id
 	'conversacion', --columna
 	'N', --tipo
 	'0', --pk
@@ -136,13 +136,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1506', --col_id
+	'1929', --col_id
 	'traduccion', --columna
 	'N', --tipo
 	'0', --pk
@@ -150,13 +150,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1508', --col_id
+	'1930', --col_id
 	'nro_documento', --columna
 	'C', --tipo
 	'0', --pk
@@ -164,13 +164,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'15', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2967', --objeto
-	'1571', --col_id
+	'1931', --col_id
 	'doc_probatoria', --columna
 	'C', --tipo
 	'0', --pk
@@ -178,7 +178,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'300', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'antec_conoc_idiomas'  --tabla
+	NULL, --externa
+	'be_antec_conoc_idiomas'  --tabla
 );
 --- FIN Grupo de desarrollo 0

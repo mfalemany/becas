@@ -15,7 +15,7 @@ INSERT INTO apex_molde_operacion (proyecto, molde, operacion_tipo, nombre, item,
 	'3607', --item
 	'academica/niveles_academicos', --carpeta_archivos
 	'_niveles_academicos', --prefijo_clases
-	'becas', --fuente
+	'sap', --fuente
 	'22'  --punto_montaje
 );
 --- FIN Grupo de desarrollo 0

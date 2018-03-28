@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2792]--  universidades 
+--[2792]--  be_universidades 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,12 +20,12 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'universidades', --nombre
+	'be_universidades', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -53,12 +53,12 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'universidades', --tabla
+	'be_universidades', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	'1', --permite_actualizacion_automatica
 	NULL, --esquema
 	'public'  --esquema_ext
@@ -72,49 +72,49 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2792', --objeto
-	'1225', --col_id
+	'1979', --col_id
 	'id_universidad', --columna
 	'E', --tipo
 	'1', --pk
 	'be_universidades_id_universidad_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
+	'1', --no_nulo_db
+	NULL, --externa
+	'be_universidades'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2792', --objeto
-	'1226', --col_id
+	'1980', --col_id
 	'universidad', --columna
 	'C', --tipo
 	'0', --pk
-	NULL, --secuencia
-	NULL, --largo
+	'', --secuencia
+	'200', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
+	NULL, --externa
+	'be_universidades'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2792', --objeto
-	'1227', --col_id
+	'1981', --col_id
 	'id_pais', --columna
-	'C', --tipo
+	'E', --tipo
 	'0', --pk
-	NULL, --secuencia
+	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
+	NULL, --externa
+	'be_universidades'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2792', --objeto
-	'1228', --col_id
+	'1982', --col_id
 	'sigla', --columna
 	'C', --tipo
 	'0', --pk
@@ -122,7 +122,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'50', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'universidades'  --tabla
+	NULL, --externa
+	'be_universidades'  --tabla
 );
 --- FIN Grupo de desarrollo 0

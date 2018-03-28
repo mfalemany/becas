@@ -17,17 +17,17 @@ class co_universidades
 			t_u.sigla,
 			t_p.pais as id_pais_nombre
 		FROM
-			universidades as t_u	LEFT OUTER JOIN paises as t_p ON (t_u.id_pais = t_p.id_pais)
+			be_universidades as t_u	LEFT OUTER JOIN be_paises as t_p ON (t_u.id_pais = t_p.id_pais)
 		ORDER BY universidad";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 	function get_descripciones()
 	{
-		$sql = "SELECT id_universidad, universidad FROM universidades ORDER BY universidad";
-		return toba::db('becas')->consultar($sql);
+		$sql = "SELECT id_universidad, universidad FROM be_universidades ORDER BY universidad";
+		return toba::db()->consultar($sql);
 	}
 
 }

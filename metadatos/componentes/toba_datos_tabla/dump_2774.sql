@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2774]--  paises 
+--[2774]--  be_paises 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,12 +20,12 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'paises', --nombre
+	'be_paises', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -53,12 +53,12 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'paises', --tabla
+	'be_paises', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	'1', --permite_actualizacion_automatica
 	NULL, --esquema
 	'public'  --esquema_ext
@@ -72,29 +72,29 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2774', --objeto
-	'1216', --col_id
+	'2015', --col_id
 	'id_pais', --columna
 	'E', --tipo
 	'1', --pk
-	NULL, --secuencia
+	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
+	NULL, --externa
+	'be_paises'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'2774', --objeto
-	'1217', --col_id
+	'2016', --col_id
 	'pais', --columna
 	'C', --tipo
 	'0', --pk
-	NULL, --secuencia
-	NULL, --largo
+	'', --secuencia
+	'100', --largo
 	NULL, --no_nulo
-	'1', --no_nulo_db
-	'0', --externa
-	NULL  --tabla
+	'0', --no_nulo_db
+	NULL, --externa
+	'be_paises'  --tabla
 );
 --- FIN Grupo de desarrollo 0

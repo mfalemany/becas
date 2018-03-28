@@ -9,9 +9,9 @@ class co_niveles_academicos
 			niv.nivel_academico,
 			niv.orden
 		FROM
-			niveles_academicos as niv
+			be_niveles_academicos as niv
 		ORDER BY niv.orden ASC";
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 }
 ?>

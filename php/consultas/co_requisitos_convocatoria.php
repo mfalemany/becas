@@ -8,7 +8,7 @@ class co_requisitos_convocatoria
 						id_convocatoria,
 						'N' as cumplido,
 						null as fecha 
-				FROM requisitos_convocatoria 
+				FROM be_requisitos_convocatoria 
 				WHERE id_convocatoria = ".quote($id_convocatoria);
 		return toba::db()->consultar($sql);
 	}

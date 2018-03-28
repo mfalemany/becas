@@ -25,7 +25,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -344,79 +344,79 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 	'2947', --objeto
 	'98', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2965', --hijo_objeto
-	'1494'  --hijo_clave
+	'1915'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'99', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2966', --hijo_objeto
-	'1500'  --hijo_clave
+	'1920'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'100', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2967', --hijo_objeto
-	'1508'  --hijo_clave
+	'1930'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'101', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2968', --hijo_objeto
-	'1515'  --hijo_clave
+	'1937'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'102', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2969', --hijo_objeto
-	'1523'  --hijo_clave
+	'1942'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'103', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2970', --hijo_objeto
-	'1529'  --hijo_clave
+	'1950'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'104', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2971', --hijo_objeto
-	'1535'  --hijo_clave
+	'1956'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'105', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2972', --hijo_objeto
-	'1541'  --hijo_clave
+	'1962'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
 	'2947', --objeto
 	'106', --asoc_id
 	'2952', --padre_objeto
-	'1405', --padre_clave
+	'1819', --padre_clave
 	'2973', --hijo_objeto
-	'1547'  --hijo_clave
+	'1968'  --hijo_clave
 );

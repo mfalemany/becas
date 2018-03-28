@@ -25,7 +25,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -120,7 +120,7 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 	'2805', --objeto
 	'75', --asoc_id
 	'2804', --padre_objeto
-	'1233', --padre_clave
+	'1983', --padre_clave
 	'2811', --hijo_objeto
-	'1237'  --hijo_clave
+	'1987'  --hijo_clave
 );

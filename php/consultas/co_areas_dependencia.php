@@ -16,12 +16,12 @@ class co_areas_dependencia
 			are.area,
 			dep.nombre as id_dependencia_nombre
 		FROM
-			areas_dependencia as are LEFT OUTER JOIN dependencias as dep ON (are.id_dependencia = dep.id_dependencia)
+			be_areas_dependencia as are LEFT OUTER JOIN dependencias as dep ON (are.id_dependencia = dep.id_dependencia)
 		ORDER BY are.area";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 }

@@ -1,17 +1,9 @@
-<?php
-class co_cargos
-{
-
-	function get_cargos()
+<?php 
+class co_cargos{
+	function get_descripciones($filtro=array())
 	{
-		$sql = "SELECT
-			car.cargo,
-			car.id_cargo_unne
-		FROM
-			cargos_unne as car
-		ORDER BY cargo";
-		return toba::db('becas')->consultar($sql);
+		$sql = "SELECT cargo, descripcion FROM sap_cargos_descripcion WHERE activo = 'S'";
+		return toba::db()->consultar($sql);
 	}
-
 }
 ?>

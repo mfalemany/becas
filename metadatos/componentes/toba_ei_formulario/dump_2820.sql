@@ -25,7 +25,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'0', --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
-	'becas', --fuente_datos
+	'sap', --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -240,7 +240,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_dt
 	'14', --carga_consulta_php
 	NULL, --carga_sql
-	'becas', --carga_fuente
+	'sap', --carga_fuente
 	NULL, --carga_lista
 	'id_tipo_doc', --carga_col_clave
 	'tipo_doc', --carga_col_desc
@@ -456,7 +456,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'2820', --objeto_ei_formulario
 	'becas', --objeto_ei_formulario_proyecto
 	'cuil', --identificador
-	'ef_cuit', --elemento_formulario
+	'ef_editable', --elemento_formulario
 	'cuil', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
@@ -800,7 +800,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_dt
 	'21', --carga_consulta_php
 	NULL, --carga_sql
-	'becas', --carga_fuente
+	'sap', --carga_fuente
 	NULL, --carga_lista
 	'id_nivel_academico', --carga_col_clave
 	'nivel_academico', --carga_col_desc
@@ -880,7 +880,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_dt
 	NULL, --carga_consulta_php
 	NULL, --carga_sql
-	'becas', --carga_fuente
+	'sap', --carga_fuente
 	'M/Masculino,F/Femenino', --carga_lista
 	NULL, --carga_col_clave
 	NULL, --carga_col_desc
@@ -1279,8 +1279,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_include
 	NULL, --carga_dt
 	NULL, --carga_consulta_php
-	'select id_disciplina, disciplina from disciplinas', --carga_sql
-	'becas', --carga_fuente
+	'select id_disciplina, disciplina from be_disciplinas', --carga_sql
+	'sap', --carga_fuente
 	NULL, --carga_lista
 	'id_disciplina', --carga_col_clave
 	'disciplina', --carga_col_desc

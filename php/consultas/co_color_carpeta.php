@@ -7,9 +7,9 @@ class co_color_carpeta
 			t_cc.id_color,
 			t_cc.color
 		FROM
-			color_carpeta as t_cc
+			be_color_carpeta as t_cc
 		ORDER BY color";
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 

@@ -261,6 +261,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
+	'2914', --dep_id
+	'2822', --objeto_consumidor
+	'4251', --objeto_proveedor
+	'ml_cargos', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
 	'2902', --dep_id
 	'2822', --objeto_consumidor
 	'4236', --objeto_proveedor
@@ -348,6 +360,13 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'2822', --objeto_ci
 	'1', --orden
 	'2902'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1357', --pantalla
+	'2822', --objeto_ci
+	'2', --orden
+	'2914'  --dep_id
 );
 
 ------------------------------------------------------------

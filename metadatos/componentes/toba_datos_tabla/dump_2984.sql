@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2984]--  Inscripción - CI - sap_proyectos 
+--[2984]--  sap_proyectos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'Inscripción - CI - sap_proyectos', --nombre
+	'sap_proyectos', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion

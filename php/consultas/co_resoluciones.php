@@ -29,22 +29,22 @@ class co_resoluciones{
 			t_btr.tipo_resol_corto as id_tipo_resol_nombre_corto
 
 		FROM
-			resoluciones as t_br	LEFT OUTER JOIN tipos_resolucion as t_btr ON (t_br.id_tipo_resol = t_btr.id_tipo_resol)
+			be_resoluciones as t_br	LEFT OUTER JOIN be_tipos_resolucion as t_btr ON (t_br.id_tipo_resol = t_btr.id_tipo_resol)
 		ORDER BY fecha DESC";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 	function get_archivo_pdf($anio,$nro_resol,$id_tipo_resol)
 	{
 		$sql = "SELECT archivo_pdf 
-				FROM resoluciones 
+				FROM be_resoluciones 
 				WHERE anio = $anio 
 				AND nro_resol = $nro_resol
 				AND id_tipo_resol = $id_tipo_resol";
-		$resultado = toba::db('becas')->consultar_fila($sql);
+		$resultado = toba::db()->consultar_fila($sql);
 		return $resultado['archivo_pdf'];
 	}
 

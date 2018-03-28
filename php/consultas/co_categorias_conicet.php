@@ -9,9 +9,9 @@ class co_categorias_conicet
 			cat.nro_categoria,
 			cat.categoria
 		FROM
-			categorias_conicet as cat
+			be_categorias_conicet as cat
 		ORDER BY categoria";
-		return toba::db('becas')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 }

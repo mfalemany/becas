@@ -1,18 +1,21 @@
 <?php
+
 class co_categorias_incentivos
 {
-
-	function get_categorias_incentivos()
+	function get_categorias_incentivos($filtro = array())
 	{
-		$sql = "SELECT
-			t_ci.id_cat_incentivos,
-			t_ci.cat_incentivos,
-			t_ci.descripcion
-		FROM
-			cat_incentivos as t_ci
-		ORDER BY cat_incentivos";
-		return toba::db('becas')->consultar($sql);
+		$where = array();
+		if(isset($filtro['nro_documento'])){
+			$where[] = "nro_documento = ".quote($filtro['nro_documento']);
+		}
+
+		$sql = "SELECT convocatoria, nro_documento, cuil, categoria FROM sap_cat_incentivos;";
+		if(count($where)){
+			$sql = sql_concatenar_where($sql, $where);
+		}
+		return toba::db()->consultar($sql);
 	}
 
 }
+
 ?>
