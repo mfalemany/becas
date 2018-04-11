@@ -2,7 +2,7 @@
 class co_dependencias
 {
 
-	function get_dependencias($filtro=array())
+	function get_dependencias($filtro=array(),$solo_mapuche=TRUE)
 	{
 		$where = array();
 		if (isset($filtro['nombre'])) {
@@ -16,8 +16,10 @@ class co_dependencias
 			dep.nombre,
 			dep.sigla_mapuche,
 			dep.id_universidad
-		FROM sap_dependencia AS dep
-		ORDER BY nombre";
+
+		FROM sap_dependencia AS dep";
+		$sql .= ($solo_mapuche) ? " WHERE sigla_mapuche is not null" : "";
+		$sql .= " ORDER BY nombre";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}

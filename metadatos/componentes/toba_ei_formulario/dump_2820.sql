@@ -456,7 +456,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'2820', --objeto_ei_formulario
 	'becas', --objeto_ei_formulario_proyecto
 	'cuil', --identificador
-	'ef_editable', --elemento_formulario
+	'ef_cuit', --elemento_formulario
 	'cuil', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio

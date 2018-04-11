@@ -113,6 +113,8 @@
 
 /* FIELDSET "Detalle de Director" */
 .detalle_director{
+	width:100%;
+	margin: auto auto auto 40px;
 	font-size:1.1em;
 	background-color:#ffffff;
 	box-shadow: 2px 2px 13px #333;

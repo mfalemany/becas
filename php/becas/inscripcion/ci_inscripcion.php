@@ -86,7 +86,7 @@ class ci_inscripcion extends becas_ci
 		
 	}
 
-	function get_datos($relacion = NULL, $tabla = NULL)
+	function get_datos($relacion, $tabla = NULL)
 	{
 		if($tabla){
 			if($relacion){

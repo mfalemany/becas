@@ -216,7 +216,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'4236', --objeto_ei_formulario
 	'becas', --objeto_ei_formulario_proyecto
 	'categoria', --identificador
-	'ef_editable', --elemento_formulario
+	'ef_combo', --elemento_formulario
 	'categoria', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
@@ -238,12 +238,12 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
-	'24', --carga_consulta_php
+	NULL, --carga_consulta_php
 	NULL, --carga_sql
-	'becas', --carga_fuente
-	NULL, --carga_lista
-	'id_cat_incentivos', --carga_col_clave
-	'descripcion', --carga_col_desc
+	'sap', --carga_fuente
+	'1/Categoría I,2/Categoría II,3/Categoría III,4/Categoría IV,5/Categoría V', --carga_lista
+	NULL, --carga_col_clave
+	NULL, --carga_col_desc
 	NULL, --carga_maestros
 	'0', --carga_cascada_relaj
 	'0', --cascada_mantiene_estado

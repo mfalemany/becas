@@ -1,11 +1,11 @@
 <?php
-class ci_cargos extends becas_ci
+class ci_tipos_de_documento extends becas_ci
 {
 	//---- Cuadro -----------------------------------------------------------------------
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
-		$cuadro->set_datos(toba::consulta_php('co_cargos')->get_cargos());
+		$cuadro->set_datos(toba::consulta_php('co_tipos_documento')->get_tipos_documento());
 	}
 
 	function evt__cuadro__eliminar($datos)
@@ -26,20 +26,20 @@ class ci_cargos extends becas_ci
 	function conf__formulario(toba_ei_formulario $form)
 	{
 		if ($this->dep('datos')->esta_cargada()) {
-			$form->set_datos($this->dep('datos')->tabla('cargos_unne')->get());
+			$form->set_datos($this->dep('datos')->tabla('tipo_documento')->get());
 		}
 	}
 
 	function evt__formulario__alta($datos)
 	{
-		$this->dep('datos')->tabla('cargos_unne')->set($datos);
+		$this->dep('datos')->tabla('tipo_documento')->set($datos);
 		$this->dep('datos')->sincronizar();
 		$this->resetear();
 	}
 
 	function evt__formulario__modificacion($datos)
 	{
-		$this->dep('datos')->tabla('cargos_unne')->set($datos);
+		$this->dep('datos')->tabla('tipo_documento')->set($datos);
 		$this->dep('datos')->sincronizar();
 		$this->resetear();
 	}

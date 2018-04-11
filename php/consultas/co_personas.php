@@ -25,6 +25,7 @@ class co_personas
 		}
 		$sql = "SELECT
 			per.nro_documento,
+			per.id_tipo_doc,
 			per.apellido,
 			per.nombres,
 			per.cuil,
@@ -32,18 +33,22 @@ class co_personas
 			per.celular,
 			per.mail,
 			per.telefono,
+			per.sexo,
 			per.id_localidad,
 			loc.localidad,
 			prov.provincia,
 			pai.pais,
 			per.id_nivel_academico,
-			niv.nivel_academico
+			niv.nivel_academico,
+			per.id_disciplina,
+			dis.disciplina
 		FROM
 			sap_personas as per	
 		LEFT JOIN be_niveles_academicos as niv ON per.id_nivel_academico = niv.id_nivel_academico
 		LEFT JOIN be_localidades AS loc ON loc.id_localidad = per.id_localidad
 		LEFT JOIN be_provincias as prov on prov.id_provincia = loc.id_provincia
 		LEFT JOIN be_paises as pai on pai.id_pais = prov.id_pais
+		LEFT JOIN sap_disciplinas as dis on dis.id_disciplina = per.id_disciplina
 		ORDER BY apellido";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
@@ -107,7 +112,7 @@ class co_personas
 	 * @param  varchar $tipo          El parámetro tipo indica que tipo de persona se busca. En caso de ser alumno, si no se lo encuentra en la BD local, se lo importa desde el WS (a la base de personas y alumnos). En cambio, si se está buscando un docente, y no se lo encuentra en local, se realiza el mismo proceso de busqueda en el WS pero luego se lo guarda en la tabla de personas y en la de docentes
 	 * @return boolean                Retorna true en caso de encontrar la persona (en local o en el ws). Falso en caso contrario
 	 */
-	function existe_persona($nro_documento,$tipo)
+	function existe_persona($nro_documento)
 	{
 		if(!$nro_documento){
 			return false;
@@ -117,7 +122,7 @@ class co_personas
 		}else{
 			$persona = $this->buscar_en_ws($nro_documento); 
 			if($persona){
-				return $this->guardar_en_local($persona,$tipo);
+				return $this->guardar_en_local($persona);
 			}else{
 				return false;
 			}
@@ -138,7 +143,7 @@ class co_personas
 		$response = $cliente->get('agentes/'.$nro_documento.'/datoscomedor');
 		return rest_decode($response->json());
 	}
-	protected function guardar_en_local($persona, $tipo)
+	protected function guardar_en_local($persona)
 	{
 		/* ******************** OBTENCIÓN DE LOS DATOS **************************/
 		$datos = array(	'nro_documento' => '',
@@ -166,6 +171,7 @@ class co_personas
 			$datos['fecha_nac'] = ($guarani['fecha_nac']) ? $guarani['fecha_nac'] : $datos['fecha_nac'];
 			$datos['mail'] = ($guarani['email']) ? strtolower($guarani['email']) : '';
 			$datos['sexo'] = ($guarani['sexo']) ? $guarani['sexo'] : '';
+			$datos['cuil'] = 'XX'.$guarani['nro_doc']."X";
 
 		}
 		
@@ -173,18 +179,10 @@ class co_personas
 		
 		/* **********************************************************************/
 
-		if(strtolower(trim($tipo)) === 'alumno'){
-			
-			$sql = "INSERT INTO sap_personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,mail,sexo,cuil) 
-			        VALUES (1,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$mail','$sexo','$cuil')";
-			$afectados = toba::db()->ejecutar($sql);
-			return ($afectados >= 1);
-		}
-		if(strtolower(trim($tipo)) === 'docente'){
-			//acá hay que hacer la inserción del registro del docente y de los cargos	
-		}	
-		
-		
+		$sql = "INSERT INTO sap_personas (id_tipo_doc,nro_documento,apellido,nombres,fecha_nac,mail,sexo,cuil) 
+		        VALUES (1,'$nro_documento','".ucwords(strtolower($apellido))."','".ucwords(strtolower($nombres))."','$fecha_nac','$mail','$sexo','$cuil')";
+		$afectados = toba::db()->ejecutar($sql);
+		return ($afectados >= 1);
 
 	}
 	private function array_a_minusculas($array)
@@ -222,6 +220,30 @@ class co_personas
 			return FALSE;
 		}
 		
+	}
+
+	function get_resumen_director($nro_documento)
+	{
+			$sql = "SELECT 1 as id_tipo_doc,
+							'DNI' as tipo_doc,
+							per.nro_documento,
+							per.apellido,
+							per.nombres,
+							per.cuil,
+							per.id_nivel_academico,
+							niv.nivel_academico,
+							cat_inc.categoria,
+							cat_con.cat_conicet
+					FROM sap_personas as per
+					LEFT JOIN be_niveles_academicos as niv ON niv.id_nivel_academico = per.id_nivel_academico
+					LEFT JOIN sap_cat_incentivos as cat_inc on cat_inc.nro_documento = per.nro_documento
+						AND cat_inc.convocatoria = (SELECT MAX(convocatoria) 
+													FROM sap_cat_incentivos 
+													WHERE nro_documento = per.nro_documento)
+					LEFT JOIN be_cat_conicet as cat_con ON cat_con.id_cat_conicet = per.id_cat_conicet
+			WHERE per.nro_documento = ".quote($nro_documento);
+			return toba::db()->consultar_fila($sql);
+
 	}
 
 }

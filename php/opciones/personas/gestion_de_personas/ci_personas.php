@@ -44,7 +44,7 @@ class ci_personas extends becas_ci
 	function conf__formulario(toba_ei_formulario $form)
 	{
 		if ($this->dep('datos')->esta_cargada()) {
-			$form->set_datos($this->dep('datos')->tabla('personas')->get());
+			$form->set_datos($this->dep('datos')->tabla('sap_personas')->get());
 		} else {
 			$this->pantalla()->eliminar_evento('eliminar');
 		}
@@ -52,6 +52,7 @@ class ci_personas extends becas_ci
 
 	function evt__formulario__modificacion($datos)
 	{
+
 		$efs_archivos = array(array('ef'          => 'archivo_titulo_grado',
 							 	    'descripcion' => 'Titulo de Grado',
 							 	    'nombre'      => 'Titulo Grado.pdf') ,
@@ -62,7 +63,7 @@ class ci_personas extends becas_ci
 							 
 		$ruta = 'doc_probatoria/'.$datos['nro_documento'].'/';
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
-		$this->dep('datos')->tabla('personas')->set($datos);
+		$this->dep('datos')->tabla('sap_personas')->set($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -107,13 +108,13 @@ class ci_personas extends becas_ci
 	function conf__ml_cat_incentivos(becas_ei_formulario_ml $form_ml)
 	{
 		if ($this->dep('datos')->esta_cargada()) {
-			$form_ml->set_datos($this->dep('datos')->tabla('cat_incentivos_personas')->get_filas());
+			$form_ml->set_datos($this->dep('datos')->tabla('sap_cat_incentivos')->get_filas());
 		} 
 	}
 
 	function evt__ml_cat_incentivos__modificacion($datos)
 	{
-		$this->dep('datos')->tabla('cat_incentivos_personas')->procesar_filas($datos);
+		$this->dep('datos')->tabla('sap_cat_incentivos')->procesar_filas($datos);
 	}
 
 	//---- EVENTOS CI -------------------------------------------------------------------

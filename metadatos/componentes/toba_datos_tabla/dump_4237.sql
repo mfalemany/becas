@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[4237]--  sap_cat_incentivos 
+--[4237]--  DT - sap_cat_incentivos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'sap_cat_incentivos', --nombre
+	'DT - sap_cat_incentivos', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -72,7 +72,7 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4237', --objeto
-	'1991', --col_id
+	'2037', --col_id
 	'convocatoria', --columna
 	'C', --tipo
 	'1', --pk
@@ -86,7 +86,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4237', --objeto
-	'1992', --col_id
+	'2038', --col_id
 	'nro_documento', --columna
 	'C', --tipo
 	'1', --pk
@@ -100,7 +100,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4237', --objeto
-	'1993', --col_id
+	'2039', --col_id
 	'cuil', --columna
 	'C', --tipo
 	'0', --pk
@@ -114,12 +114,12 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4237', --objeto
-	'1994', --col_id
+	'2040', --col_id
 	'categoria', --columna
-	'N', --tipo
+	'C', --tipo
 	'0', --pk
 	'', --secuencia
-	NULL, --largo
+	'1', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	NULL, --externa
@@ -128,11 +128,11 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4237', --objeto
-	'1995', --col_id
+	'2041', --col_id
 	'id', --columna
 	'E', --tipo
 	'0', --pk
-	'sap_cat_incentivos_id_seq', --secuencia
+	'sap_cat_incentivos_id_seq1', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db

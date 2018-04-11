@@ -249,9 +249,9 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'1882', --dep_id
+	'2916', --dep_id
 	'2950', --objeto_consumidor
-	'2834', --objeto_proveedor
+	'2952', --objeto_proveedor
 	'director', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b

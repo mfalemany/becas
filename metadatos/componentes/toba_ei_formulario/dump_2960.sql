@@ -185,7 +185,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'plan_trabajo', --identificador
 	'ef_editable_textarea', --elemento_formulario
 	'plan_trabajo', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
 	'Plan de Trabajo', --etiqueta
@@ -265,7 +265,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'doc_probatoria', --identificador
 	'ef_upload', --elemento_formulario
 	'doc_probatoria', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
 	'Plan de trabajo en PDF', --etiqueta

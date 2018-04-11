@@ -52,6 +52,7 @@ class ci_admisibilidad extends becas_ci
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		if($insc){
+			//se calcula el porcentaje de aprobacion y la cantidad de materias que adeuda para egresar.
 			if(isset($insc['materias_aprobadas']) && isset($insc['materias_plan'])){
 				$insc['porcentaje_aprobacion'] = $insc['materias_aprobadas'] / $insc['materias_plan'] * 100;
 				$insc['mat_para_egresar'] = $insc['materias_plan'] - $insc['materias_aprobadas'];
@@ -107,9 +108,9 @@ class ci_admisibilidad extends becas_ci
 									);
 
 		/* ================================== DIRECTOR ================================ */
-		$det = toba::consulta_php('co_docentes')->get_resumen_docente($insc['nro_documento_dir']);
-
-		$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($insc['nro_documento_dir']);
+		$det = toba::consulta_php('co_personas')->get_resumen_director($insc['nro_documento_dir']);
+		ei_arbol($det); 
+		$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_dir']);
 		$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
 		$resumen_dir = $this->mostrar_detalles_director($detalles);
 		/* ============================================================================ */
@@ -122,8 +123,8 @@ class ci_admisibilidad extends becas_ci
 
 		/* ================================= CODIRECTOR =============================== */
 		if($insc['nro_documento_codir']){
-			$det = toba::consulta_php('co_docentes')->get_resumen_docente($insc['nro_documento_codir']);
-			$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($insc['nro_documento_codir']);
+			$det = toba::consulta_php('co_personas')->get_resumen_director($insc['nro_documento_codir']);
+			$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_codir']);
 			$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
 			$resumen_codir = $this->mostrar_detalles_director($detalles);	
 		
@@ -139,8 +140,8 @@ class ci_admisibilidad extends becas_ci
 
 		/* ================================= SUBDIRECTOR =============================== */
 		if($insc['nro_documento_subdir']){
-			$det = toba::consulta_php('co_docentes')->get_resumen_docente($insc['nro_documento_subdir']);
-			$detalles_cargos = toba::consulta_php('co_docentes')->get_cargos_docente($insc['nro_documento_subdir']);
+			$det = toba::consulta_php('co_personas')->get_resumen_director($insc['nro_documento_subdir']);
+			$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_subdir']);
 			$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
 			$resumen_subdir = $this->mostrar_detalles_director($detalles);	
 

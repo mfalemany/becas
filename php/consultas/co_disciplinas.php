@@ -7,7 +7,7 @@ class co_disciplinas
 			t_d.id_disciplina,
 			t_d.disciplina
 		FROM
-			be_disciplinas as t_d
+			sap_disciplinas as t_d
 		ORDER BY disciplina";
 		return toba::db()->consultar($sql);
 	}

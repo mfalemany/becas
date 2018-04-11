@@ -65,10 +65,22 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
+	'2915', --dep_id
+	'2818', --objeto_consumidor
+	'4252', --objeto_proveedor
+	'sap_cargos_persona', --identificador
+	'', --parametros_a
+	'', --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'3'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
 	'2903', --dep_id
 	'2818', --objeto_consumidor
 	'4237', --objeto_proveedor
-	'cat_incentivos_personas', --identificador
+	'sap_cat_incentivos', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -80,24 +92,12 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'1847', --dep_id
 	'2818', --objeto_consumidor
 	'2952', --objeto_proveedor
-	'personas', --identificador
+	'sap_personas', --identificador
 	NULL, --parametros_a
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
 	'1'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becas', --proyecto
-	'2915', --dep_id
-	'2818', --objeto_consumidor
-	'4252', --objeto_proveedor
-	'sap_cargos_persona', --identificador
-	'', --parametros_a
-	'', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'3'  --orden
 );
 --- FIN Grupo de desarrollo 0
 
@@ -113,11 +113,11 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'personas', --padre_id
+	'sap_personas', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'4237', --hijo_objeto
-	'cat_incentivos_personas', --hijo_id
+	'sap_cat_incentivos', --hijo_id
 	NULL, --hijo_clave
 	NULL, --cascada
 	'1'  --orden
@@ -129,7 +129,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'personas', --padre_id
+	'sap_personas', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'4252', --hijo_objeto
@@ -150,7 +150,7 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 	'2952', --padre_objeto
 	'1819', --padre_clave
 	'4237', --hijo_objeto
-	'1992'  --hijo_clave
+	'2038'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto

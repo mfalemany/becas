@@ -42,7 +42,7 @@ class form_inscripcion extends becas_ei_formulario
 		function buscar_director(nro_documento,campo)
 		{
 			datos = {'nro_documento':nro_documento,'campo':campo};
-			{$this->controlador()->objeto_js}.ajax('get_docente',datos,this,mostrar_director);
+			{$this->controlador()->objeto_js}.ajax('get_persona',datos,this,mostrar_director);
 		}
 		
 		// Asigno el valor obtenido por ajax al label Director
@@ -50,7 +50,7 @@ class form_inscripcion extends becas_ei_formulario
 		{    
 			if( ! params.error){
 				{$id_js}.controlador.activar_tab('pant_'+params.campo);
-				{$id_js}.ef(params.campo).set_estado(params.docente);
+				{$id_js}.ef(params.campo).set_estado(params.persona);
 			}else{
 				{$id_js}.ef(params.campo).set_estado('Persona no encontrada');
 				{$id_js}.controlador.desactivar_tab('pant_'+params.campo);
