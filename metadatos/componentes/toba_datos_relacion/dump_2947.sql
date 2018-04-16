@@ -65,18 +65,6 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'1821', --dep_id
-	'2947', --objeto_consumidor
-	'2952', --objeto_proveedor
-	'alumno', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'1'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becas', --proyecto
 	'1860', --dep_id
 	'2947', --objeto_consumidor
 	'2965', --objeto_proveedor
@@ -183,6 +171,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL, --inicializar
 	'10'  --orden
 );
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'1821', --dep_id
+	'2947', --objeto_consumidor
+	'2952', --objeto_proveedor
+	'persona', --identificador
+	NULL, --parametros_a
+	'1', --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'1'  --orden
+);
 --- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
@@ -197,7 +197,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2965', --hijo_objeto
@@ -213,7 +213,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2966', --hijo_objeto
@@ -229,7 +229,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2967', --hijo_objeto
@@ -245,7 +245,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2968', --hijo_objeto
@@ -261,7 +261,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2969', --hijo_objeto
@@ -277,7 +277,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2970', --hijo_objeto
@@ -293,7 +293,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2971', --hijo_objeto
@@ -309,7 +309,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2972', --hijo_objeto
@@ -325,7 +325,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --identificador
 	'becas', --padre_proyecto
 	'2952', --padre_objeto
-	'alumno', --padre_id
+	'persona', --padre_id
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2973', --hijo_objeto

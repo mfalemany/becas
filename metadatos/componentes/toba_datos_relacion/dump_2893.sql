@@ -65,14 +65,14 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'1752', --dep_id
+	'2917', --dep_id
 	'2893', --objeto_consumidor
-	'2889', --objeto_proveedor
+	'4246', --objeto_proveedor
 	'area_conocimiento', --identificador
-	'1', --parametros_a
+	NULL, --parametros_a
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
-	NULL  --orden
+	'1'  --orden
 );
 --- FIN Grupo de desarrollo 0

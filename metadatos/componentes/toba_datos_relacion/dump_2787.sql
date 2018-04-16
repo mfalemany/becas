@@ -70,7 +70,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'4243', --objeto_proveedor
 	'localidades', --identificador
 	NULL, --parametros_a
-	NULL, --parametros_b
+	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
 	'1'  --orden
