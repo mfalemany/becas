@@ -7,16 +7,32 @@ class ci_edicion extends becas_ci
 	//protected $s__detalles_inscripcion;
 	function conf()
 	{
-		/*if($this->pantalla()->get_etiqueta() != 'Plan de Trabajo'){
-			$this->controlador()->pantalla()->eliminar_evento('guardar');
-			$this->controlador()->pantalla()->eliminar_evento('eliminar');
-		};*/
-
+		
+			
 		if($this->get_datos('inscripcion','inscripcion_conv_beca')->get()){
 			//obtengo los datos de la inscripcion
 			$this->s__insc_actual = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+
+			//si la inscripción no está abierta...
+			if($this->s__insc_actual['estado'] != 'A'){
+				//obtengo todos los formularios que dependen del CI
+				$deps = $this->get_dependencias_clase('form');
+				foreach($deps as $dep){
+					//y los marco como solo lectura (el usuario no puede modificar nada)
+					$this->dep($dep)->set_solo_lectura();
+					//y si es un ML, desactivo el agregado de filas
+					if(method_exists($this->dep($dep), 'desactivar_agregado_filas')){
+						$this->dep($dep)->desactivar_agregado_filas();
+					}
+				}
+				//además, elimino todos los eventos que puedan modificar la solicitud
+				$this->controlador()->pantalla()->eliminar_evento('eliminar');
+				$this->controlador()->pantalla()->eliminar_evento('guardar');
+				$this->controlador()->pantalla()->eliminar_evento('cerrar_inscripcion');
+			}
 		}else{
 			unset($this->s__insc_actual);
+			$this->controlador()->pantalla()->eliminar_evento('cerrar_inscripcion');
 		}
 		
 		
@@ -109,8 +125,7 @@ class ci_edicion extends becas_ci
 		/* ========================================================================= */
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
-		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => 'A',
-																			'fecha_hora'  => date('Y-m-d'),
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'fecha_hora'  => date('Y-m-d'),
 																			'es_titular'  => 'S',
 																			'puntaje'     => $this->calcular_puntaje()
 																			
@@ -183,12 +198,12 @@ class ci_edicion extends becas_ci
 
 	function conf__form_alumno(becas_ei_formulario $form)
 	{	
-		
+		//si el alumno no es egresado, se desactiva el EF que permite subir el titulo de grado
 		if( ! $this->s__insc_actual['es_egresado']){
 			$form->desactivar_efs(array('archivo_titulo_grado'));
 		}
 
-		
+		//si existe una inscripción actual
 		if($this->s__insc_actual){
 			$alu = array_shift(toba::consulta_php('co_personas')->get_personas(array('nro_documento' => $this->s__insc_actual['nro_documento'])));
 			$form->set_datos($alu);
@@ -217,11 +232,7 @@ class ci_edicion extends becas_ci
 							 
 		$ruta = 'doc_probatoria/'.$datos['nro_documento'].'/';
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
-		
-		$this->get_datos('alumno')->resetear();
-		$this->get_datos('alumno')->cargar(array('nro_documento'=>$datos['nro_documento']));
-		$this->get_datos('alumno','alumno')->set($datos);
-		$this->get_datos('alumno')->sincronizar();
+		$this->sincronizar_datos_persona($datos);
 	}
 
 	
@@ -247,13 +258,9 @@ class ci_edicion extends becas_ci
 
 	function evt__form_director__modificacion($datos)
 	{
-		$this->get_datos(NULL,'director')->resetear();
-		$this->get_datos(NULL,'director')->cargar(array('nro_documento'=>$datos['nro_documento']));
-		$this->get_datos(NULL,'director')->set($datos);
-		$this->get_datos(NULL,'director')->sincronizar();
+		$this->sincronizar_datos_persona($datos);
 	}
 
-	
 
 	//-----------------------------------------------------------------------------------
 	//---- form_codirector --------------------------------------------------------------
@@ -276,10 +283,7 @@ class ci_edicion extends becas_ci
 
 	function evt__form_codirector__modificacion($datos)
 	{
-		$this->get_datos(NULL,'director')->resetear();
-		$this->get_datos(NULL,'director')->cargar(array('nro_documento'=>$datos['nro_documento']));
-		$this->get_datos(NULL,'director')->set($datos);
-		$this->get_datos(NULL,'director')->sincronizar();
+		$this->sincronizar_datos_persona($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -318,6 +322,11 @@ class ci_edicion extends becas_ci
 		
 		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','sexo'));
 		$form->set_solo_lectura(array('nro_documento'));
+	}
+
+	function evt__form_subdirector__modificacion($datos)
+	{
+		$this->sincronizar_datos_persona($datos);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -767,6 +776,18 @@ class ci_edicion extends becas_ci
 			}
 		}
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('nro_carpeta' => $nro)) ;
+	}
+
+	function sincronizar_datos_persona($datos)
+	{
+		//reseteo el datos table, sincronizo, y vuelvo al estado original
+		$this->get_datos('alumno','persona')->resetear();
+		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
+		$this->get_datos('alumno','persona')->set($datos);
+		$this->get_datos('alumno','persona')->sincronizar();
+
+		$this->get_datos('alumno','persona')->resetear();
+		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$this->s__insc_actual['nro_documento']));
 	}
 
 	

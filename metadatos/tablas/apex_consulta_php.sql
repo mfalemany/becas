@@ -141,15 +141,6 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 );
 INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
 	'becas', --proyecto
-	'27', --consulta_php
-	'co_dedicaciones', --clase
-	'co_dedicaciones', --archivo_clase
-	'consultas/co_dedicaciones.php', --archivo
-	NULL, --descripcion
-	'22'  --punto_montaje
-);
-INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
-	'becas', --proyecto
 	'28', --consulta_php
 	'co_categorias_conicet', --clase
 	'co_categorias_conicet', --archivo_clase
@@ -213,15 +204,6 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 );
 INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
 	'becas', --proyecto
-	'40', --consulta_php
-	'co_convocatoria_tipo_beca', --clase
-	'co_convocatoria_tipo_beca', --archivo_clase
-	'consultas/co_convocatoria_tipo_beca.php', --archivo
-	NULL, --descripcion
-	'22'  --punto_montaje
-);
-INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
-	'becas', --proyecto
 	'41', --consulta_php
 	'co_inscripcion_conv_beca', --clase
 	'co_inscripcion_conv_beca', --archivo_clase
@@ -280,6 +262,15 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	'co_disciplinas', --clase
 	'co_disciplinas', --archivo_clase
 	'consultas/co_disciplinas.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'50', --consulta_php
+	'co_cargos_persona', --clase
+	'co_cargos_persona', --archivo_clase
+	'consultas/co_cargos_persona.php', --archivo
 	NULL, --descripcion
 	'22'  --punto_montaje
 );

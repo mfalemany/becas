@@ -28,7 +28,7 @@ class co_dependencias
 
 	function get_univ_dependencias($id_universidad = NULL)
 	{
-		$sql = "SELECT dep.id, (uni.sigla||' - '||dep.nombre) as nombre
+		$sql = "SELECT dep.id, (coalesce(uni.sigla,'Otra'))||' - '||dep.nombre as nombre
 				FROM sap_dependencia AS dep
 				LEFT JOIN be_universidades AS uni ON uni.id_universidad = dep.id_universidad";
 		if($id_universidad){

@@ -5,7 +5,8 @@ class ci_areas_conocimiento extends becas_ci
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
-		$cuadro->set_datos(toba::consulta_php('co_areas_conocimiento')->get_areas_conocimiento());
+		//ei_arbol(toba::consulta_php('co_areas_conocimiento')->get_areas_conocimiento_becas());
+		$cuadro->set_datos(toba::consulta_php('co_areas_conocimiento')->get_areas_conocimiento_becas());
 	}
 
 	function evt__cuadro__eliminar($datos)

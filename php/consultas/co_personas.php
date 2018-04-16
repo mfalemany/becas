@@ -23,6 +23,9 @@ class co_personas
 		if (isset($filtro['id_nivel_academico'])) {
 			$where[] = "per.id_nivel_academico = ".quote($filtro['id_nivel_academico']);
 		}
+		if (isset($filtro['id_cat_conicet'])) {
+			$where[] = "per.id_cat_conicet = ".quote($filtro['id_cat_conicet']);
+		}
 		$sql = "SELECT
 			per.nro_documento,
 			per.id_tipo_doc,
@@ -41,7 +44,8 @@ class co_personas
 			per.id_nivel_academico,
 			niv.nivel_academico,
 			per.id_disciplina,
-			dis.disciplina
+			dis.disciplina,
+			per.id_cat_conicet
 		FROM
 			sap_personas as per	
 		LEFT JOIN be_niveles_academicos as niv ON per.id_nivel_academico = niv.id_nivel_academico
@@ -232,7 +236,15 @@ class co_personas
 							per.cuil,
 							per.id_nivel_academico,
 							niv.nivel_academico,
-							cat_inc.categoria,
+							cat_inc.categoria as cat_incentivos,
+							case cat_inc.categoria 
+								when 1 then 'Categoría I'
+								when 2 then 'Categoría II'
+								when 3 then 'Categoría III'
+								when 4 then 'Categoría IV'
+								when 5 then 'Categoría V'
+								else 'No categorizado'
+								end as cat_incentivos_descripcion, 
 							cat_con.cat_conicet
 					FROM sap_personas as per
 					LEFT JOIN be_niveles_academicos as niv ON niv.id_nivel_academico = per.id_nivel_academico

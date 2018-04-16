@@ -11,11 +11,11 @@ class co_comision_asesora
 		$sql = "SELECT
 			ca.id_area_conocimiento,
 			ca.id_convocatoria,
-			ac.area_conocimiento,
+			ac.nombre,
 			cb.convocatoria
 		FROM be_comision_asesora as ca
 		LEFT JOIN be_convocatoria_beca as cb on ca.id_convocatoria = cb.id_convocatoria
-		LEFT JOIN be_area_conocimiento as ac on ac.id_area_conocimiento = ca.id_area_conocimiento";
+		LEFT JOIN sap_area_conocimiento as ac on ac.id = ca.id_area_conocimiento";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}

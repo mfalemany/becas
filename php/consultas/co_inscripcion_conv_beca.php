@@ -36,7 +36,7 @@ class co_inscripcion_conv_beca
 			insc.admisible,
 			insc.puntaje,
 			insc.beca_otorgada,
-			area.area_conocimiento as area_conocimiento,
+			area.nombre as area_conocimiento,
 			insc.titulo_plan_beca,
 			insc.justif_codirector,
 			carr.carrera as carrera,
@@ -63,7 +63,7 @@ class co_inscripcion_conv_beca
 			(tip_con.id_tipo_convocatoria = tip_bec.id_tipo_convocatoria 
 			AND tip_con.id_tipo_convocatoria = conv.id_tipo_convocatoria)
 		LEFT JOIN sap_dependencia as dep ON (insc.id_dependencia = dep.id)
-		LEFT JOIN be_area_conocimiento as area ON (insc.id_area_conocimiento = area.id_area_conocimiento)
+		LEFT JOIN sap_area_conocimiento as area ON (insc.id_area_conocimiento = area.id)
 		LEFT JOIN be_carreras as carr ON (insc.id_carrera = carr.id_carrera)
 		ORDER BY admisible";
 		if(count($where)){

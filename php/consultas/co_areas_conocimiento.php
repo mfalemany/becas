@@ -4,7 +4,7 @@ class co_areas_conocimiento
 
 	function get_areas_conocimiento()
 	{
-		$sql = "SELECT id, area_conocimiento, area_conocimiento_corto,disciplinas_incluidas
+		$sql = "SELECT id, descripcion, nombre, aplicable, disciplinas_incluidas
 				FROM sap_area_conocimiento";
 		return toba::db()->consultar($sql);
 	}
@@ -16,6 +16,14 @@ class co_areas_conocimiento
     	$resultado = toba::db()->consultar_fila($sql);
     	return count($resultado) ? $resultado['disciplinas_incluidas'] : '';
     }
+
+    function get_areas_conocimiento_becas()
+	{
+		$sql = "SELECT id, descripcion, nombre, aplicable, disciplinas_incluidas
+				FROM sap_area_conocimiento
+				WHERE prefijo_orden_poster is not null";
+		return toba::db()->consultar($sql);
+	}
 
 }
 ?>

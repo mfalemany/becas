@@ -102,14 +102,12 @@ class ci_admisibilidad extends becas_ci
 		   al máximo grado del director y codirector y la cantidad de becarios a cargo. */
 		$datos_admisibilidad = array(
 									'nivel_academico' => NULL,
-									'cargo_unne'      => NULL,
-									'dedicacion'      => NULL,
+									'mayor_dedicacion'=> FALSE,
 									'cat_incentivos'  => NULL
 									);
 
 		/* ================================== DIRECTOR ================================ */
 		$det = toba::consulta_php('co_personas')->get_resumen_director($insc['nro_documento_dir']);
-		ei_arbol($det); 
 		$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_dir']);
 		$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
 		$resumen_dir = $this->mostrar_detalles_director($detalles);
@@ -156,13 +154,7 @@ class ci_admisibilidad extends becas_ci
 		if($edad_limite){
 			$clase_css_edad = ($edad_asp > $edad_limite) ? 'etiqueta_error' : 'etiqueta_success';
 		}
-		
-		$clase_css_cargos = ($datos_admisibilidad['cargo_unne']) ? "etiqueta_success" : "etiqueta_error";
-		
-		
-		
-		$clase_css_dedic = (in_array($datos_admisibilidad['dedicacion'],array('3','2'))) ? "etiqueta_success" : "etiqueta_error";
-
+		$clase_css_dedic = ($datos_admisibilidad['mayor_dedicacion']) ? "etiqueta_success" : "etiqueta_error";
 
 		//si no tiene una categoria de incentivos 1, 2 o 3
 		if( ! $datos_admisibilidad['cat_incentivos'] <= 3){
@@ -182,7 +174,6 @@ class ci_admisibilidad extends becas_ci
 								[dep id=form_admisibilidad]
 								[dep id=ml_requisitos]
 								<p class='".$clase_css_edad." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
-								<p class='".$clase_css_cargos." centrado'>Cargos</p>
 								<p class='".$clase_css_dedic." centrado'>Mayor Dedicación</p>
 								<p class='".$clase_css_categ." centrado'>Grado/Categoría</p>
 							</td>
@@ -230,23 +221,10 @@ class ci_admisibilidad extends becas_ci
 			}
 		}
 
-		//guardo el mayor cargo
+		//verifico si existe mayor dedicacion
 		foreach($detalles_cargos as $cargo){
-			// Los cargos mas altos tienen numeros mas bajos: 1-Titular -- 2-Adjunto -- 3-JTP
-			if( ! $datos_admisibilidad['cargo_unne']){
-				$datos_admisibilidad['cargo_unne'] = $cargo['id_cargo_unne'];
-			}else{
-				if($datos_admisibilidad['cargo_unne'] > $cargo['id_cargo_unne']){
-					$datos_admisibilidad['cargo_unne'] = $cargo['id_cargo_unne'];
-				}
-			}
-			// Las dedicaciones mas altas, tienen numeros mas altas: 3-Exclusiva -- 2-Semi-Exclusiva -- 1-Simple
-			if( ! $datos_admisibilidad['dedicacion']){
-				$datos_admisibilidad['dedicacion'] = $cargo['id_dedicacion'];
-			}else{
-				if($datos_admisibilidad['dedicacion'] < $cargo['id_dedicacion']){
-					$datos_admisibilidad['dedicacion'] = $cargo['id_dedicacion'];
-				}
+			if(in_array($cargo['dedicacion'],array('EXCL','SEMI'))){
+				$datos_admisibilidad['mayor_dedicacion'] = TRUE;
 			}
 		}
 	}
@@ -257,7 +235,7 @@ class ci_admisibilidad extends becas_ci
 		$resumen = "<p><b>Apellido y Nombre:</b> <b class='etiqueta_info'>".$detalles['apellido'].", ".$detalles['nombres']."</b> (".$detalles['tipo_doc'].". ".$detalles['nro_documento'].")</p>";
 		//$resumen .= "<p>CUIL: ".$detalles['cuil']."</p>";
 		$resumen .= "<p><b>M&aacute;ximo Grado:</b> ".$detalles['nivel_academico']."</p>";
-		$resumen .= "<p><b>Cat. Incentivos:</b> ".$detalles['cat_incentivos']."</p>";
+		$resumen .= "<p><b>Cat. Incentivos:</b> ".$detalles['cat_incentivos_descripcion']."</p>";
 		$resumen .= "<p><b>Cat. CONICET: </b>".$detalles['cat_conicet']."</p>";
 		$resumen .= "<b>Cargos:</b><ul class='lista_cargos'>";
 		foreach($detalles['cargos'] as $indice => $cargo){
