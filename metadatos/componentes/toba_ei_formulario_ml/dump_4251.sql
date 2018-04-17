@@ -394,7 +394,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --estado_defecto
 	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
-	'get_dependencias', --carga_metodo
+	'get_univ_dependencias', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
@@ -402,7 +402,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_sql
 	'sap', --carga_fuente
 	NULL, --carga_lista
-	'sigla_mapuche', --carga_col_clave
+	'id', --carga_col_clave
 	'nombre', --carga_col_desc
 	NULL, --carga_maestros
 	'0', --carga_cascada_relaj
