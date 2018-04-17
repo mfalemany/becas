@@ -2,29 +2,31 @@
 class co_dependencias
 {
 
-	function get_dependencias($filtro=array(),$solo_mapuche=TRUE)
+	function get_dependencias($filtro=array())
 	{
 		$where = array();
 		if (isset($filtro['nombre'])) {
-			$where[] = "dep.nombre ILIKE ".quote("%{$filtro['nombre']}%");
+			$where[] = "nombre ILIKE ".quote("%{$filtro['nombre']}%");
 		}
-		if (isset($filtro['descripcion_corta'])) {
-			$where[] = "dep.descripcion_corta ILIKE ".quote("%{$filtro['descripcion_corta']}%");
+		if (isset($filtro['id_universidad'])) {
+			$where[] = "id_universidad = ".quote($filtro['id_universidad']);
 		}
 		$sql = "SELECT
 			dep.id,
 			dep.nombre,
+			dep.descripcion,
 			dep.sigla_mapuche,
-			dep.id_universidad
-
-		FROM sap_dependencia AS dep";
-		$sql .= ($solo_mapuche) ? " WHERE sigla_mapuche is not null" : "";
-		$sql .= " ORDER BY nombre";
+			t_bu.universidad as id_universidad_nombre
+		FROM
+			sap_dependencia as dep	
+		LEFT JOIN be_universidades AS uni ON dep.id_universidad = uni.id_universidad
+		ORDER BY dep.nombre";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db()->consultar($sql);
+		return toba::db('sap')->consultar($sql);
 	}
+
 
 	function get_univ_dependencias($id_universidad = NULL)
 	{

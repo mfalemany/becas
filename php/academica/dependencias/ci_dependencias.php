@@ -45,7 +45,7 @@ class ci_dependencias extends becas_ci
 	function conf__formulario(toba_ei_formulario $form)
 	{
 		if ($this->dep('datos')->esta_cargada()) {
-			$form->set_datos($this->dep('datos')->tabla('dependencias')->get());
+			$form->set_datos($this->dep('datos')->tabla('sap_dependencia')->get());
 		} else {
 			$this->pantalla()->eliminar_evento('eliminar');
 		}
@@ -53,7 +53,7 @@ class ci_dependencias extends becas_ci
 
 	function evt__formulario__modificacion($datos)
 	{
-		$this->dep('datos')->tabla('dependencias')->set($datos);
+		$this->dep('datos')->tabla('sap_dependencia')->set($datos);
 	}
 
 	function resetear()
