@@ -38,7 +38,7 @@ class ci_edicion extends becas_ci
 		
 
 		//si se está modificando una inscripción, es necesario validar algunas cosas...
-		if($this->s__insc_actual){
+		if(isset($this->s__insc_actual)){
 			//y los datos de la convocatoria
 			$conv = array_shift(toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$this->s__insc_actual['id_convocatoria'])));
 			
@@ -93,7 +93,7 @@ class ci_edicion extends becas_ci
 	{
 		//$sql = "SELECT id, descripcion FROM sap_proyectos WHERE descripcion ILIKE ".quote("%".$patron."%")." LIMIT 10";
 		
-		if($this->s__insc_actual){
+		if(isset($this->s__insc_actual)){
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
 			$form->set_solo_lectura(array('id_convocatoria','id_tipo_beca'));
 

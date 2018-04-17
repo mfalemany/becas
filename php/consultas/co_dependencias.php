@@ -9,14 +9,14 @@ class co_dependencias
 			$where[] = "nombre ILIKE ".quote("%{$filtro['nombre']}%");
 		}
 		if (isset($filtro['id_universidad'])) {
-			$where[] = "id_universidad = ".quote($filtro['id_universidad']);
+			$where[] = "dep.id_universidad = ".quote($filtro['id_universidad']);
 		}
 		$sql = "SELECT
 			dep.id,
 			dep.nombre,
 			dep.descripcion,
 			dep.sigla_mapuche,
-			t_bu.universidad as id_universidad_nombre
+			uni.universidad as id_universidad
 		FROM
 			sap_dependencia as dep	
 		LEFT JOIN be_universidades AS uni ON dep.id_universidad = uni.id_universidad
@@ -24,7 +24,7 @@ class co_dependencias
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		return toba::db('sap')->consultar($sql);
+		return toba::db()->consultar($sql);
 	}
 
 

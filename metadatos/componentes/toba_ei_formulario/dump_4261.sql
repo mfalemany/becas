@@ -21,8 +21,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Dependencias - Filtro', --nombre
-	NULL, --titulo
-	NULL, --colapsable
+	'Filtrar lista de universidades', --titulo
+	'0', --colapsable
 	NULL, --descripcion
 	'becas', --fuente_datos_proyecto
 	'sap', --fuente_datos
@@ -37,7 +37,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_f
 	NULL, --usuario
 	'2018-04-17 16:06:21', --creacion
-	NULL  --posicion_botonera
+	'abajo'  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
 
@@ -134,9 +134,9 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase_proyecto
 	NULL, --clase
 	NULL, --auto_reset
-	NULL, --ancho
-	NULL, --ancho_etiqueta
-	NULL, --expandir_descripcion
+	'100%', --ancho
+	'150px', --ancho_etiqueta
+	'0', --expandir_descripcion
 	NULL, --campo_bl
 	NULL, --scroll
 	NULL, --filas
@@ -171,9 +171,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nombre', --identificador
 	'ef_editable', --elemento_formulario
 	'nombre', --columnas
-	NULL, --obligatorio
-	NULL, --oculto_relaja_obligatorio
-	'0', --orden
+	'0', --obligatorio
+	'0', --oculto_relaja_obligatorio
+	'1', --orden
 	'Nombre', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -251,38 +251,38 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_universidad', --identificador
 	'ef_combo', --elemento_formulario
 	'id_universidad', --columnas
-	NULL, --obligatorio
-	NULL, --oculto_relaja_obligatorio
-	'1', --orden
-	'Id Universidad', --etiqueta
+	'0', --obligatorio
+	'0', --oculto_relaja_obligatorio
+	'2', --orden
+	'Universidad', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
-	NULL, --colapsado
-	NULL, --desactivado
+	'0', --colapsado
+	'0', --desactivado
 	NULL, --estilo
 	NULL, --total
 	NULL, --inicializacion
-	NULL, --permitir_html
-	NULL, --deshabilitar_rest_func
+	'0', --permitir_html
+	'0', --deshabilitar_rest_func
 	NULL, --estado_defecto
-	NULL, --solo_lectura
+	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
 	'get_descripciones', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
-	'2792', --carga_dt
-	NULL, --carga_consulta_php
+	NULL, --carga_dt
+	'19', --carga_consulta_php
 	NULL, --carga_sql
-	NULL, --carga_fuente
+	'sap', --carga_fuente
 	NULL, --carga_lista
 	'id_universidad', --carga_col_clave
 	'universidad', --carga_col_desc
 	NULL, --carga_maestros
-	NULL, --carga_cascada_relaj
+	'0', --carga_cascada_relaj
 	'0', --cascada_mantiene_estado
-	'0', --carga_permite_no_seteado
-	'-- Seleccione --', --carga_no_seteado
-	NULL, --carga_no_seteado_ocultar
+	'1', --carga_permite_no_seteado
+	'-- Indistinto --', --carga_no_seteado
+	'0', --carga_no_seteado_ocultar
 	NULL, --edit_tamano
 	NULL, --edit_maximo
 	NULL, --edit_mascara
@@ -321,7 +321,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --selec_serializar
 	NULL, --selec_cant_columnas
 	NULL, --upload_extensiones
-	NULL, --punto_montaje
+	'22', --punto_montaje
 	NULL  --placeholder
 );
 --- FIN Grupo de desarrollo 0
