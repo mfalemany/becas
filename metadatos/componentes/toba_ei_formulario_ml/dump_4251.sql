@@ -402,7 +402,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_sql
 	'sap', --carga_fuente
 	NULL, --carga_lista
-	'id', --carga_col_clave
+	'sigla_mapuche', --carga_col_clave
 	'nombre', --carga_col_desc
 	NULL, --carga_maestros
 	'0', --carga_cascada_relaj

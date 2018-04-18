@@ -125,7 +125,9 @@ class ci_edicion extends becas_ci
 		/* ========================================================================= */
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
-		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'fecha_hora'  => date('Y-m-d'),
+		$estado = ($this->s__insc_actual['estado']) ? $this->s__insc_actual['estado'] : 'A';
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => $estado,
+																			'fecha_hora'  => date('Y-m-d'),
 																			'es_titular'  => 'S',
 																			'puntaje'     => $this->calcular_puntaje()
 																			
@@ -134,8 +136,8 @@ class ci_edicion extends becas_ci
 		//esta funcion carga los datos del alumno (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de alumno
 		if( ! $this->existe_persona($datos['nro_documento']) ){
 			$this->get_datos('alumno')->resetear();
-			$this->get_datos('alumno','alumno')->set(array(
-				'nro_documento' => $nro_documento
+			$this->get_datos('alumno','persona')->set(array(
+				'nro_documento' => $datos['nro_documento']
 			));
 			$this->set_pantalla('pant_alumno');
 
@@ -206,9 +208,12 @@ class ci_edicion extends becas_ci
 		//si existe una inscripción actual
 		if($this->s__insc_actual){
 			$alu = array_shift(toba::consulta_php('co_personas')->get_personas(array('nro_documento' => $this->s__insc_actual['nro_documento'])));
+			$alu['nro_documento'] = ($alu['nro_documento']) ? $alu['nro_documento'] : $this->s__insc_actual['nro_documento']; 
 			$form->set_datos($alu);
-			//se bloquean los efs principales
-			$form->set_solo_lectura(array('id_tipo_doc','nro_documento','sexo'));
+			
+			
+			$form->set_solo_lectura(array('nro_documento'));
+
 			if(isset($alu['apellido'])){
 				$form->set_solo_lectura(array('apellido'));
 			}
@@ -679,7 +684,7 @@ class ci_edicion extends becas_ci
 		* @param  string $tabla Nombre de la tabla que se desea obtener (null para obtener el datos_relacion)
 		* @return datos_tabla o datos_relacion 
 		*/
-	function get_datos($relacion,$tabla)
+	function get_datos($relacion,$tabla=NULL)
 	{
 		return $this->controlador()->get_datos($relacion,$tabla);
 	}
@@ -711,18 +716,24 @@ class ci_edicion extends becas_ci
 	function ajax__validar_edad($params, toba_ajax_respuesta $respuesta)
 	{
 		//$mensaje = ($this->edad_permitida_para_beca($params['id_tipo_doc'],$params['nro_documento'],$params['id_tipo_beca']))? TRUE : FALSE;
-		$mensaje = $this->edad_permitida_para_beca($params['nro_documento'],$params['id_tipo_beca']);
-		$respuesta->set($mensaje);
+		$permitida = $this->edad_permitida_para_beca($params['nro_documento'],$params['id_tipo_beca']);
+		$respuesta->set($permitida);
+		
 	}
 
 	function edad_permitida_para_beca($nro_documento, $id_tipo_beca)
 	{
 		$edad_limite  = toba::consulta_php('co_tipos_beca')->get_campo('edad_limite',$id_tipo_beca);
 		//se asegura que exista la persona en la BD local, sino, lo busca en WS
-		toba::consulta_php('co_personas')->existe_persona($nro_documento);
+		if( ! toba::consulta_php('co_personas')->existe_persona($nro_documento)){
+			return NULL;
+		}
+
 		$edad_persona =  $this->get_edad($nro_documento,date('Y-12-31'));
 		if($edad_persona){
 			return $edad_persona <= $edad_limite;
+		}else{
+			return NULL;
 		}
 	}
 
