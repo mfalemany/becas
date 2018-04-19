@@ -133,16 +133,7 @@ class ci_edicion extends becas_ci
 																			
 															));
 
-		//esta funcion carga los datos del alumno (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de alumno
-		if( ! $this->existe_persona($datos['nro_documento']) ){
-			$this->get_datos('alumno')->resetear();
-			$this->get_datos('alumno','persona')->set(array(
-				'nro_documento' => $datos['nro_documento']
-			));
-			$this->set_pantalla('pant_alumno');
-
-			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ningún alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
-		}
+		
 
 		
 		//esta funcion carga los datos del director (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de director
@@ -159,6 +150,17 @@ class ci_edicion extends becas_ci
 			if( ! $this->existe_persona($datos['nro_documento_subdir'])){
 				throw new toba_error('El Nro. de Documento del Sub-Director ingresado no se corresponde con ningúna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
 			}
+		}
+
+		//esta funcion carga los datos del alumno (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de alumno
+		if( ! $this->existe_persona($datos['nro_documento']) ){
+			$this->get_datos('alumno')->resetear();
+			$this->get_datos('alumno','persona')->set(array(
+				'nro_documento' => $datos['nro_documento']
+			));
+			$this->set_pantalla('pant_alumno');
+
+			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ningún alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
 		}
 	}
 
