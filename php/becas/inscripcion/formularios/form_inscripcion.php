@@ -8,34 +8,33 @@ class form_inscripcion extends becas_ei_formulario
 
 	function extender_objeto_js()
 	{
-		$id_js = toba::escaper()->escapeJs($this->objeto_js);
 		echo "
 		
 		//---- Validacion de EFs -----------------------------------
 		
 		// ------- Se activa o desactiva el campo fecha_egreso en funcion de si es egresado o no --------
-		{$id_js}.evt__es_egresado__procesar = function(es_inicial){
-			activo = {$id_js}.ef('es_egresado').get_estado(); 
+		{$this->objeto_js}.evt__es_egresado__procesar = function(es_inicial){
+			activo = {$this->objeto_js}.ef('es_egresado').get_estado(); 
 
 			if(activo){
-				{$id_js}.ef('materias_aprobadas').set_estado({$id_js}.ef('materias_plan').get_estado());
+				{$this->objeto_js}.ef('materias_aprobadas').set_estado({$this->objeto_js}.ef('materias_plan').get_estado());
 			}else{
-				{$id_js}.ef('anio_egreso').set_estado('');
+				{$this->objeto_js}.ef('anio_egreso').set_estado('');
 			}
-			{$id_js}.ef('anio_egreso').set_solo_lectura(!(activo == 1));
+			{$this->objeto_js}.ef('anio_egreso').set_solo_lectura(!(activo == 1));
 			
 		};
 		
 		
 		/* ========================================================================================== */
 		// Si se carga un DNI, se carga mediante ajax el nombre y apellido del director
-		{$id_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director({$id_js}.ef(\'nro_documento_dir\').get_estado(),\'director\')');
+		{$this->objeto_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director({$this->objeto_js}.ef(\'nro_documento_dir\').get_estado(),\'director\')');
 
 		// lo mismo para el co-director
-		{$id_js}.ef('nro_documento_codir').cuando_cambia_valor('buscar_director({$id_js}.ef(\'nro_documento_codir\').get_estado(),\'codirector\')');
+		{$this->objeto_js}.ef('nro_documento_codir').cuando_cambia_valor('buscar_director({$this->objeto_js}.ef(\'nro_documento_codir\').get_estado(),\'codirector\')');
 
 		//y para el subdirector
-		{$id_js}.ef('nro_documento_subdir').cuando_cambia_valor('buscar_director({$id_js}.ef(\'nro_documento_subdir\').get_estado(),\'subdirector\')');
+		{$this->objeto_js}.ef('nro_documento_subdir').cuando_cambia_valor('buscar_director({$this->objeto_js}.ef(\'nro_documento_subdir\').get_estado(),\'subdirector\')');
 
 		
 		// Busco el director usando ajax
@@ -49,11 +48,11 @@ class form_inscripcion extends becas_ei_formulario
 		function mostrar_director(params)
 		{    
 			if( ! params.error){
-				{$id_js}.controlador.activar_tab('pant_'+params.campo);
-				{$id_js}.ef(params.campo).set_estado(params.persona);
+				{$this->objeto_js}.controlador.activar_tab('pant_'+params.campo);
+				{$this->objeto_js}.ef(params.campo).set_estado(params.persona);
 			}else{
-				{$id_js}.ef(params.campo).set_estado('Persona no encontrada');
-				{$id_js}.controlador.desactivar_tab('pant_'+params.campo);
+				{$this->objeto_js}.ef(params.campo).set_estado('Persona no encontrada');
+				{$this->objeto_js}.controlador.desactivar_tab('pant_'+params.campo);
 			}
 		}
 		/* ========================================================================================= */
@@ -62,7 +61,7 @@ class form_inscripcion extends becas_ei_formulario
 		
 		//---- Procesamiento de EFs --------------------------------
 		
-		{$id_js}.evt__id_area_conocimiento__procesar = function(es_inicial)
+		{$this->objeto_js}.evt__id_area_conocimiento__procesar = function(es_inicial)
 		{
 			area = this.ef('id_area_conocimiento').get_estado();
 			{$this->controlador()->objeto_js}.ajax('get_disciplinas_incluidas',area,this,listar_disciplinas);
@@ -75,7 +74,7 @@ class form_inscripcion extends becas_ei_formulario
 		
 		//---- Procesamiento de EFs --------------------------------
 		
-		{$id_js}.evt__nro_documento__procesar = function(es_inicial)
+		{$this->objeto_js}.evt__nro_documento__procesar = function(es_inicial)
 		{
 			if( ! es_inicial){
 				if(this.ef('nro_documento').get_estado().length){
@@ -98,7 +97,7 @@ class form_inscripcion extends becas_ei_formulario
 		
 		
 		// --------------- si no se carga un codirector, se desactiva ese tab -------------------------
-		{$id_js}.evt__nro_documento_codir__validar = function()
+		{$this->objeto_js}.evt__nro_documento_codir__validar = function()
 		{
 			if( ! this.ef('nro_documento_codir').get_estado().length){
 				this.controlador.desactivar_tab('pant_codirector');
@@ -109,7 +108,7 @@ class form_inscripcion extends becas_ei_formulario
 		}
 		
 		// ------------ si no se carga un subdirector, se desactiva ese tab ---------------------------
-		{$id_js}.evt__nro_documento_subdir__validar = function()
+		{$this->objeto_js}.evt__nro_documento_subdir__validar = function()
 		{
 			if( ! this.ef('nro_documento_subdir').get_estado().length){
 				this.controlador.desactivar_tab('pant_subdirector');
@@ -120,7 +119,7 @@ class form_inscripcion extends becas_ei_formulario
 		}
 		//---- Validacion general ----------------------------------
 		
-		{$id_js}.evt__validar_datos = function()
+		{$this->objeto_js}.evt__validar_datos = function()
 		{
 			
 			
