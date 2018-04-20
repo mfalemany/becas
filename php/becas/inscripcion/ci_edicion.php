@@ -15,20 +15,7 @@ class ci_edicion extends becas_ci
 
 			//si la inscripción no está abierta...
 			if($this->s__insc_actual['estado'] != 'A'){
-				//obtengo todos los formularios que dependen del CI
-				$deps = $this->get_dependencias_clase('form');
-				foreach($deps as $dep){
-					//y los marco como solo lectura (el usuario no puede modificar nada)
-					$this->dep($dep)->set_solo_lectura();
-					//y si es un ML, desactivo el agregado de filas
-					if(method_exists($this->dep($dep), 'desactivar_agregado_filas')){
-						$this->dep($dep)->desactivar_agregado_filas();
-					}
-				}
-				//además, elimino todos los eventos que puedan modificar la solicitud
-				$this->controlador()->pantalla()->eliminar_evento('eliminar');
-				$this->controlador()->pantalla()->eliminar_evento('guardar');
-				$this->controlador()->pantalla()->eliminar_evento('cerrar_inscripcion');
+				$this->bloquear_formularios();
 			}
 		}else{
 			unset($this->s__insc_actual);
@@ -45,8 +32,8 @@ class ci_edicion extends becas_ci
 			//si ya pasó la fecha de fin de la convocatoria, no se puede editar la inscripcion
 			if($conv['fecha_hasta'] < date('Y-m-d')){
 				//bloqueo el formulario para evitar que se modifiquen  los datos
-				$this->dep('form_inscripcion')->set_solo_lectura();
 				$this->dep('form_inscripcion')->agregar_notificacion('No se pueden modificar los datos de la inscripción debido a que finalizó la convocatoria.','warning');
+				$this->bloquear_formularios();
 
 				//elimino todas las pantallas que no sean el formulario de inscripci?
 				$this->pantalla()->eliminar_tab('pant_alumno');
@@ -65,9 +52,6 @@ class ci_edicion extends becas_ci
 		}
 		
 
-		if( ! $this->get_datos('inscripcion','inscripcion_conv_beca')->esta_cargada()){
-			$this->controlador()->pantalla()->eliminar_evento('eliminar');
-		}
 		//si no est? cargados el codirector y/o subdirector, se deshabilitan las pesta?s correspondientes
 		if( (!isset($this->s__insc_actual['nro_documento_dir'])) || (!$this->s__insc_actual['nro_documento_dir']) ){
 			$this->pantalla()->tab('pant_director')->desactivar();
@@ -81,9 +65,24 @@ class ci_edicion extends becas_ci
 		}
 	}
 
+	private function bloquear_formularios()
+	{
+		//obtengo todos los formularios que dependen del CI
+		$deps = $this->get_dependencias_clase('form');
+		foreach($deps as $dep){
+			//y los marco como solo lectura (el usuario no puede modificar nada)
+			$this->dep($dep)->set_solo_lectura();
+			//y si es un ML, desactivo el agregado de filas
+			if(method_exists($this->dep($dep), 'desactivar_agregado_filas')){
+				$this->dep($dep)->desactivar_agregado_filas();
+			}
+		}
+		//además, elimino todos los eventos que puedan modificar la solicitud
+		$this->controlador()->pantalla()->eliminar_evento('eliminar');
+		$this->controlador()->pantalla()->eliminar_evento('guardar');
+		$this->controlador()->pantalla()->eliminar_evento('cerrar_inscripcion');
 
-
-	
+	}
 
 	//-----------------------------------------------------------------------------------
 	//---- form_inscripcion -------------------------------------------------------------

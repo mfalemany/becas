@@ -64,7 +64,10 @@ class form_inscripcion extends becas_ei_formulario
 		{$this->objeto_js}.evt__id_area_conocimiento__procesar = function(es_inicial)
 		{
 			area = this.ef('id_area_conocimiento').get_estado();
-			{$this->controlador()->objeto_js}.ajax('get_disciplinas_incluidas',area,this,listar_disciplinas);
+			if(area != 'nopar'){
+				{$this->controlador()->objeto_js}.ajax('get_disciplinas_incluidas',area,this,listar_disciplinas);	
+			}
+			
 		}
 		
 		function listar_disciplinas(respuesta)
