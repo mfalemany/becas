@@ -23,9 +23,7 @@ class co_personas
 		if (isset($filtro['id_nivel_academico'])) {
 			$where[] = "per.id_nivel_academico = ".quote($filtro['id_nivel_academico']);
 		}
-		if (isset($filtro['id_cat_conicet'])) {
-			$where[] = "per.id_cat_conicet = ".quote($filtro['id_cat_conicet']);
-		}
+		
 		$sql = "SELECT
 			per.nro_documento,
 			per.id_tipo_doc,
@@ -45,7 +43,10 @@ class co_personas
 			niv.nivel_academico,
 			per.id_disciplina,
 			dis.disciplina,
-			per.id_cat_conicet
+			per.archivo_cuil,
+			per.archivo_titulo_grado,
+			cat_con.id_cat_conicet,
+			cat.cat_conicet
 		FROM
 			sap_personas as per	
 		LEFT JOIN be_niveles_academicos as niv ON per.id_nivel_academico = niv.id_nivel_academico
@@ -53,6 +54,8 @@ class co_personas
 		LEFT JOIN be_provincias as prov on prov.id_provincia = loc.id_provincia
 		LEFT JOIN be_paises as pai on pai.id_pais = prov.id_pais
 		LEFT JOIN sap_disciplinas as dis on dis.id_disciplina = per.id_disciplina
+		LEFT JOIN be_cat_conicet_persona as cat_con on cat_con.nro_documento = per.nro_documento
+		LEFT JOIN be_cat_conicet as cat on cat.id_cat_conicet = cat_con.id_cat_conicet
 		ORDER BY apellido";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
@@ -244,15 +247,17 @@ class co_personas
 								when 4 then 'Categoría IV'
 								when 5 then 'Categoría V'
 								else 'No categorizado'
-								end as cat_incentivos_descripcion, 
-							cat_con.cat_conicet
+								end as cat_incentivos_descripcion,
+							cat_con.id_cat_conicet,
+							cat.cat_conicet
 					FROM sap_personas as per
 					LEFT JOIN be_niveles_academicos as niv ON niv.id_nivel_academico = per.id_nivel_academico
 					LEFT JOIN sap_cat_incentivos as cat_inc on cat_inc.nro_documento = per.nro_documento
 						AND cat_inc.convocatoria = (SELECT MAX(convocatoria) 
 													FROM sap_cat_incentivos 
 													WHERE nro_documento = per.nro_documento)
-					LEFT JOIN be_cat_conicet as cat_con ON cat_con.id_cat_conicet = per.id_cat_conicet
+					LEFT JOIN be_cat_conicet_persona as cat_con on cat_con.nro_documento = per.nro_documento
+					LEFT JOIN be_cat_conicet as cat on cat.id_cat_conicet = cat_con.id_cat_conicet
 			WHERE per.nro_documento = ".quote($nro_documento);
 			return toba::db()->consultar_fila($sql);
 

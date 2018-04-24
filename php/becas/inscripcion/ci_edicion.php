@@ -201,10 +201,18 @@ class ci_edicion extends becas_ci
 
 	function conf__form_alumno(becas_ei_formulario $form)
 	{	
+
 		//si el alumno no es egresado, se desactiva el EF que permite subir el titulo de grado
 		if( ! $this->s__insc_actual['es_egresado']){
 			$form->desactivar_efs(array('archivo_titulo_grado'));
+		}else{
+			$form->ef('archivo_titulo_grado')->set_obligatorio();
 		}
+		//seteo como obligatorios los campos necesarios
+		$form->ef('archivo_cuil')->set_obligatorio();
+
+		//desactivo los efs innecesarios para un alumno
+		$form->desactivar_efs(array('id_disciplina'));
 
 		//si existe una inscripción actual
 		if($this->s__insc_actual){
@@ -227,7 +235,6 @@ class ci_edicion extends becas_ci
 
 	function evt__form_alumno__modificacion($datos)
 	{
-
 		$efs_archivos = array(array('ef'          => 'archivo_titulo_grado',
 							 	    'descripcion' => 'Titulo de Grado',
 							 	    'nombre'      => 'Titulo Grado.pdf') ,
@@ -241,6 +248,7 @@ class ci_edicion extends becas_ci
 		$this->sincronizar_datos_persona($datos);
 	}
 
+	
 	
 
 	//-----------------------------------------------------------------------------------
@@ -258,7 +266,7 @@ class ci_edicion extends becas_ci
 		)));
 		$form->set_datos($director);
 		
-		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','sexo','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','sexo','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 	}
 
@@ -266,7 +274,6 @@ class ci_edicion extends becas_ci
 	{
 		$this->sincronizar_datos_persona($datos);
 	}
-
 
 	//-----------------------------------------------------------------------------------
 	//---- form_codirector --------------------------------------------------------------
@@ -795,11 +802,67 @@ class ci_edicion extends becas_ci
 		//reseteo el datos table, sincronizo, y vuelvo al estado original
 		$this->get_datos('alumno','persona')->resetear();
 		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
+
 		$this->get_datos('alumno','persona')->set($datos);
 		$this->get_datos('alumno','persona')->sincronizar();
 
 		$this->get_datos('alumno','persona')->resetear();
 		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$this->s__insc_actual['nro_documento']));
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form_cat_conicet_director ----------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+	function conf__form_cat_conicet_director(becas_ei_formulario $form)
+	{
+		$form->set_datos($this->get_categoria_conicet($this->s__insc_actual['nro_documento_dir']));
+	}
+
+	function evt__form_cat_conicet_director__modificacion($datos)
+	{
+		$datos['nro_documento'] = $this->s__insc_actual['nro_documento_dir'];
+		$this->set_categoria_conicet($datos);
+	}
+
+	function conf__form_cat_conicet_codirector(becas_ei_formulario $form)
+	{
+		$form->set_datos($this->get_categoria_conicet($this->s__insc_actual['nro_documento_codir']));
+	}
+
+	function evt__form_cat_conicet_codirector__modificacion($datos)
+	{
+		$datos['nro_documento'] = $this->s__insc_actual['nro_documento_codir'];
+		$this->set_categoria_conicet($datos);
+	}
+
+	function conf__form_cat_conicet_subdirector(becas_ei_formulario $form)
+	{
+		$form->set_datos($this->get_categoria_conicet($this->s__insc_actual['nro_documento_subdir']));
+	}
+
+	function evt__form_cat_conicet_subdirector__modificacion($datos)
+	{
+		$datos['nro_documento'] = $this->s__insc_actual['nro_documento_subdir'];
+		$this->set_categoria_conicet($datos);
+	}
+
+	
+	//se usa para llenar los tres formularios de categoria conicet
+	private function get_categoria_conicet($nro_documento)
+	{
+		return toba::consulta_php('co_cat_conicet_persona')->get_categoria_persona($nro_documento);
+	}
+
+	//se usa para setear los tres formularios de categorias conicet
+	private function set_categoria_conicet($datos){
+		$cat = toba::consulta_php('co_cat_conicet_persona')->get_categoria_persona($datos['nro_documento']);
+		if(count($cat)){
+			$this->get_datos(NULL,'cat_conicet_persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
+		}
+		$this->get_datos(NULL,'cat_conicet_persona')->set($datos);
+		$this->get_datos(NULL,'cat_conicet_persona')->sincronizar();
+		$this->get_datos(NULL,'cat_conicet_persona')->resetear();
+
 	}
 
 	

@@ -274,4 +274,13 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	NULL, --descripcion
 	'22'  --punto_montaje
 );
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'becas', --proyecto
+	'51', --consulta_php
+	'co_cat_conicet_persona', --clase
+	'co_cat_conicet_persona', --archivo_clase
+	'consultas/co_cat_conicet_persona.php', --archivo
+	NULL, --descripcion
+	'22'  --punto_montaje
+);
 --- FIN Grupo de desarrollo 0
