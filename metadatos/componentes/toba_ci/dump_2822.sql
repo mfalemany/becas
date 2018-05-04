@@ -249,6 +249,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
+	'2935', --dep_id
+	'2822', --objeto_consumidor
+	'4267', --objeto_proveedor
+	'form_cat_conicet', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
 	'1688', --dep_id
 	'2822', --objeto_consumidor
 	'2820', --objeto_proveedor
@@ -295,11 +307,11 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'2822', --objeto_ci
 	'1356', --pantalla
 	'pant_seleccion', --identificador
-	'0', --orden
+	'1', --orden
 	'Selección', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
-	NULL, --imagen_recurso_origen
+	'apex', --imagen_recurso_origen
 	NULL, --imagen
 	NULL, --objetos
 	NULL, --eventos
@@ -314,11 +326,11 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'2822', --objeto_ci
 	'1357', --pantalla
 	'pant_edicion', --identificador
-	'1', --orden
+	'2', --orden
 	'Edición', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
-	NULL, --imagen_recurso_origen
+	'apex', --imagen_recurso_origen
 	NULL, --imagen
 	NULL, --objetos
 	NULL, --eventos
@@ -326,7 +338,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --subclase_archivo
 	NULL, --template
 	NULL, --template_impresion
-	NULL  --punto_montaje
+	'22'  --punto_montaje
 );
 --- FIN Grupo de desarrollo 0
 
@@ -358,15 +370,22 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'becas', --proyecto
 	'1357', --pantalla
 	'2822', --objeto_ci
-	'1', --orden
+	'2', --orden
 	'2902'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'becas', --proyecto
 	'1357', --pantalla
 	'2822', --objeto_ci
-	'2', --orden
+	'3', --orden
 	'2914'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1357', --pantalla
+	'2822', --objeto_ci
+	'1', --orden
+	'2935'  --dep_id
 );
 
 ------------------------------------------------------------

@@ -9,16 +9,16 @@ class ci_inscripcion extends becas_ci
 			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripción abierto');
 		}
 	}
-	//---- Cuadro -----------------------------------------------------------------------
+	//---- Cuadro Inscripciones ------------------------------------------------------------
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
 		$filtro = array();
 		
+		//si el usuario es becario, solo puede ver sus propias inscripciones
 		if(in_array('becario',toba::usuario()->get_perfiles_funcionales())){
-			$filtro = array('nro_documento' => toba::usuario()->get_id());
+			$filtro['nro_documento'] = toba::usuario()->get_id();
 		}
-
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 		
 	}
@@ -32,6 +32,7 @@ class ci_inscripcion extends becas_ci
 
 		//se cargan los detalles de la inscripción
 		$this->get_datos('inscripcion')->cargar($datos);
+
 		$this->set_pantalla('pant_edicion');
 	}
 
@@ -52,6 +53,7 @@ class ci_inscripcion extends becas_ci
 	function evt__volver()
 	{
 		$this->resetear();
+		$this->set_pantalla('pant_seleccion');
 	}
 
 	function evt__eliminar()
@@ -68,11 +70,21 @@ class ci_inscripcion extends becas_ci
 		try{
 			$this->dep('ci_edicion')->generar_registros_relacionados();
 			$this->dep('ci_edicion')->generar_nro_carpeta();
+			
+			//verifico campos obligatorios (por si no se recorrieron todas las solapas)
+			$alumno = $this->get_datos('alumno','persona')->get();
+			if(!$alumno['archivo_cuil']){
+				$this->dep('ci_edicion')->set_pantalla('pant_alumno');
+				throw new toba_error("No se ha cargado la constancia de CUIL del solicitante");
+			}
+
 			$this->get_datos('alumno')->sincronizar();
 			$this->get_datos('inscripcion')->sincronizar();
 			$this->resetear();	
 		}catch(toba_error_db $e){
+			echo "<hr>".$e->get_mensaje_motor()."<hr>";
 			switch ($e->get_sqlstate()) {
+
 				case 'db_23505':
 					toba::notificacion()->agregar('Se ha producido un error al intentar guardar. Posiblemente, el alumno ingresado ya tenga una solicitud de beca para esta convocatoria y tipo de beca.');	
 					break;

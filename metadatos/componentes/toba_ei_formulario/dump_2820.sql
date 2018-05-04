@@ -102,7 +102,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase
 	NULL, --auto_reset
 	'100%', --ancho
-	'150px', --ancho_etiqueta
+	'140px', --ancho_etiqueta
 	'0', --expandir_descripcion
 	NULL, --campo_bl
 	NULL, --scroll
@@ -122,73 +122,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	'<table>
-	<tbody>
-		<tr>
-			<td colspan="2">
-				[ef id=id_tipo_doc]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=nro_documento]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=apellido]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=nombres]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=sexo]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=cuil]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=mail]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=fecha_nac]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=celular]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=telefono]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=id_nivel_academico]</td>
-			<td>
-				(M&aacute;ximo nivel acad&eacute;mico alcanzado por la persona)</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=id_localidad]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=archivo_titulo_grado]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=archivo_cuil]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[ef id=id_disciplina]</td>
-		</tr>
-	</tbody>
-</table>
-<p>&nbsp;</p>', --template
+	NULL, --template
 	NULL  --template_impresion
 );
 
@@ -847,9 +781,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'11', --orden
-	'Nivel Academico', --etiqueta
+	'Nivel Académico', --etiqueta
 	NULL, --etiqueta_estilo
-	NULL, --descripcion
+	'Máximo nivel académico alcanzado por la persona', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo

@@ -75,14 +75,50 @@ class co_inscripcion_conv_beca
 
 	function get_ultimo_nro_carpeta($id_convocatoria,$id_tipo_beca)
 	{
-		$sql = "SELECT nro_carpeta 
+		//se obtiene el prefijo de carpeta para el tipo de beca actual
+		$prefijo = toba::consulta_php('co_tipos_beca')->get_campo('prefijo_carpeta',$id_tipo_beca);
+		if(!$prefijo){
+			throw new toba_error("No se ha definido un prefijo de carpeta para el tipo de beca seleccionado. Por favor, pongase en contacto con la Secretaría General de Ciencia y Técnica");
+		}
+		/**
+		 * Esta consulta retorna un string con formato json conteniendo todos los numeros de carpetas existentes.
+		 * @var string
+		 */
+		$sql = "SELECT array_to_json(array_agg(nro_carpeta)) as existentes
 				FROM be_inscripcion_conv_beca
 				WHERE id_convocatoria = ".quote($id_convocatoria)."
-				AND id_tipo_beca = ".quote($id_tipo_beca)."
-				ORDER BY fecha_hora DESC
-				LIMIT 1";
+				AND id_tipo_beca = ".quote($id_tipo_beca);
+
 		$resultado = toba::db()->consultar_fila($sql);
-		return ($resultado['nro_carpeta']) ? $resultado['nro_carpeta'] : FALSE;
+		
+
+
+		if(count($resultado)){
+			//convierto el resultado de la consulta a un array
+			$existentes = json_decode($resultado['existentes']);
+
+			//una vez que tengo todos los numeros de carpeta existentes en un array, lo recorro hasta encontrar uno que no exista. Esto permite llenar los "huecos" generados por la eliminación de numeros de carpetas.
+			for($i=1;$i<9999;$i++){
+				//genero el numero de tres digitos con relleno de ceros: 001, 002, 003, etc...
+				$nro = sprintf("%'.03d",$i);
+				//lo concateno con el prefijo de carpeta de la beca seleccionada
+				$nro_carpeta = $prefijo."-".$nro;
+
+				//si ya existe, continúo el bucle hasta encontrar uno que no existe
+				if(in_array($nro_carpeta,$existentes)){
+					continue;
+				}else{
+					//si no existe, BINGO!! Se retorna ese numero de carpeta para ser utilizado
+					return $nro_carpeta;
+				}
+			}
+		}else{
+			//si no obtuve resultados, es porque se está cargando el primer numero de carpeta
+			return $prefijo."-001";
+		}
+		
+		
+		
 	}
 
 	

@@ -117,6 +117,19 @@ class ci_personas extends becas_ci
 		$this->dep('datos')->tabla('sap_cat_incentivos')->procesar_filas($datos);
 	}
 
+
+	function conf__form_cat_conicet(becas_ei_formulario $form)
+	{
+		if ($this->dep('datos')->esta_cargada()) {
+			$form->set_datos($this->dep('datos')->tabla('cat_conicet_persona')->get());
+		} 
+	}
+
+	function evt__form_cat_conicet__modificacion($datos)
+	{
+		$this->dep('datos')->tabla('cat_conicet_persona')->set($datos);
+	}
+
 	//---- EVENTOS CI -------------------------------------------------------------------
 
 	function evt__agregar()

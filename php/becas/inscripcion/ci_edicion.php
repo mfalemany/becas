@@ -3,12 +3,18 @@ class ci_edicion extends becas_ci
 {
 	protected $s__estado_inicial;
 	protected $s__insc_actual;
+	protected $s__convocatoria;
 
 	//protected $s__detalles_inscripcion;
 	function conf()
 	{
-		
-			
+		toba::consulta_php('co_inscripcion_conv_beca')->get_ultimo_nro_carpeta(1,1);
+		//recupero la convocatoria seleccionada por el usuario
+		if(toba::memoria()->get_dato('id_convocatoria')){
+			$this->s__convocatoria = toba::memoria()->get_dato('id_convocatoria');
+			toba::memoria()->eliminar_dato('id_convocatoria');
+		}
+
 		if($this->get_datos('inscripcion','inscripcion_conv_beca')->get()){
 			//obtengo los datos de la inscripcion
 			$this->s__insc_actual = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
@@ -20,6 +26,7 @@ class ci_edicion extends becas_ci
 		}else{
 			unset($this->s__insc_actual);
 			$this->controlador()->pantalla()->eliminar_evento('cerrar_inscripcion');
+			$this->controlador()->pantalla()->eliminar_evento('eliminar');
 		}
 		
 		
@@ -90,11 +97,12 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-		//$sql = "SELECT id, descripcion FROM sap_proyectos WHERE descripcion ILIKE ".quote("%".$patron."%")." LIMIT 10";
-		
+		//asigno la convocatoria seleccionada por el usuario previamente
+		$form->ef('id_convocatoria')->set_estado($this->s__convocatoria);
+
 		if(isset($this->s__insc_actual)){
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
-			$form->set_solo_lectura(array('id_convocatoria','id_tipo_beca'));
+			$form->set_solo_lectura(array('id_tipo_beca'));
 
 			//asigno los datos al formulario
 			$form->set_datos($this->s__insc_actual);
@@ -104,6 +112,7 @@ class ci_edicion extends becas_ci
 			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
 
 		}else{
+
 			$this->pantalla()->tab('pant_director')->desactivar();
 		}
 	}
@@ -126,7 +135,7 @@ class ci_edicion extends becas_ci
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
 		$estado = ($this->s__insc_actual['estado']) ? $this->s__insc_actual['estado'] : 'A';
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => $estado,
-																			'fecha_hora'  => date('Y-m-d'),
+																			'fecha_hora'  => date('Y-m-d H:i:s'),
 																			'es_titular'  => 'S',
 																			'puntaje'     => $this->calcular_puntaje()
 																			
@@ -176,20 +185,33 @@ class ci_edicion extends becas_ci
 	**/
 	function generar_registros_relacionados()
 	{
+		
+		//si ya tiene los requisitos generados, no se generan nuevamente
+		if($this->get_datos('inscripcion','requisitos_insc')->get_filas()){
+			return;
+		}
+
 		if(isset($this->s__insc_actual)){
-			//verifico si ya se crearon los registros para el cumplimiento de requisitos
-			$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc($this->s__insc_actual['id_convocatoria'],$this->s__insc_actual['id_tipo_beca'],$this->s__insc_actual['nro_documento']);
-			
-			//la insercion de los requisitos iniciales se realiza solo una vez
-			if($requisitos_inscripcion){
-				return;
-			}
 			$insc = $this->s__insc_actual;
 		}else{
 			//si no se está modificando una solicitud existente, utilizo los datos recien cargados al datos_tabla
 			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		}
+		//ei_arbol($insc);
+		//verifico si ya se crearon los registros para el cumplimiento de requisitos
+		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc(
+			$insc['id_convocatoria'],
+			$insc['id_tipo_beca'],
+			$insc['nro_documento']
+		);
+		
+		//la insercion de los requisitos iniciales se realiza solo una vez
+		if($requisitos_inscripcion){
+			return;
+		}
+		
 		$requisitos = toba::consulta_php('co_requisitos_convocatoria')->get_requisitos_iniciales($insc['id_convocatoria']);
+		
 		foreach($requisitos as $requisito){
 			$this->get_datos('inscripcion','requisitos_insc')->nueva_fila($requisito);
 		}
@@ -772,29 +794,14 @@ class ci_edicion extends becas_ci
 
 	function generar_nro_carpeta(){
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+
 		//si ya tiene numero de carpeta asignado no se hace nada
-		if($insc['nro_carpeta']){
+		if(isset($insc['nro_carpeta'])){
 			return;
 		}
-		//se obtiene el prefijo de carpeta para el tipo de beca actual
-		$prefijo = toba::consulta_php('co_tipos_beca')->get_campo('prefijo_carpeta',$insc['id_tipo_beca']);
-		
-		$nro = NULL;
-		
-		//si el tipo de beca actual tiene asignado un prefijo de carpeta, se busca el último número (o se genera el primero)
-		if($prefijo) {
-			$nro_carpeta = toba::consulta_php('co_inscripcion_conv_beca')->get_ultimo_nro_carpeta($insc['id_convocatoria'],$insc['id_tipo_beca']);
-			if($nro_carpeta){
-				if(strpos($nro_carpeta,$prefijo) !== FALSE){
-					$partes = explode('-',$nro_carpeta);
-					$nro = $prefijo."-".sprintf("%'.03d\n",($partes[1] + 1));
-				}
-			}else{
-				$nro = $prefijo."-001";
-				
-			}
-		}
-		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('nro_carpeta' => $nro)) ;
+
+		$nro = toba::consulta_php('co_inscripcion_conv_beca')->get_ultimo_nro_carpeta($insc['id_convocatoria'],$insc['id_tipo_beca']);
+		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('nro_carpeta' => $nro));
 	}
 
 	function sincronizar_datos_persona($datos)

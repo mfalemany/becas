@@ -23,6 +23,9 @@ class co_personas
 		if (isset($filtro['id_nivel_academico'])) {
 			$where[] = "per.id_nivel_academico = ".quote($filtro['id_nivel_academico']);
 		}
+		if (isset($filtro['id_cat_conicet'])) {
+			$where[] = "cat_con.id_cat_conicet = ".quote($filtro['id_cat_conicet']);
+		}
 		
 		$sql = "SELECT
 			per.nro_documento,

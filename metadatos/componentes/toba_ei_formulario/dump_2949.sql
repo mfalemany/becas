@@ -397,7 +397,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_dt
 	'38', --carga_consulta_php
 	NULL, --carga_sql
-	'becas', --carga_fuente
+	'sap', --carga_fuente
 	NULL, --carga_lista
 	'id_tipo_beca', --carga_col_clave
 	'tipo_beca', --carga_col_desc
@@ -1180,7 +1180,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'14', --orden
 	'Carrera Posgrado', --etiqueta
 	NULL, --etiqueta_estilo
-	NULL, --descripcion
+	'Carrera de posgrado a la que se encuentra inscripto o se compromete a inscribirse (aplicable solo a becas de Iniciación)', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo
