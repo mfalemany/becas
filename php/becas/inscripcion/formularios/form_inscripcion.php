@@ -12,20 +12,6 @@ class form_inscripcion extends becas_ei_formulario
 		
 		//---- Validacion de EFs -----------------------------------
 		
-		// ------- Se activa o desactiva el campo fecha_egreso en funcion de si es egresado o no --------
-		{$this->objeto_js}.evt__es_egresado__procesar = function(es_inicial){
-			activo = {$this->objeto_js}.ef('es_egresado').get_estado(); 
-
-			if(activo){
-				{$this->objeto_js}.ef('materias_aprobadas').set_estado({$this->objeto_js}.ef('materias_plan').get_estado());
-			}else{
-				{$this->objeto_js}.ef('anio_egreso').set_estado('');
-			}
-			{$this->objeto_js}.ef('anio_egreso').set_solo_lectura(!(activo == 1));
-			
-		};
-		
-		
 		/* ========================================================================================== */
 		// Si se carga un DNI, se carga mediante ajax el nombre y apellido del director
 		{$this->objeto_js}.ef('nro_documento_dir').cuando_cambia_valor('buscar_director({$this->objeto_js}.ef(\'nro_documento_dir\').get_estado(),\'director\')');
@@ -130,20 +116,7 @@ class form_inscripcion extends becas_ei_formulario
 				notificacion.agregar('El año de ingreso no puede ser posterior al año actual');
 				false;
 			}
-			if(this.ef('es_egresado').get_estado()){
-				if(this.ef('materias_aprobadas').get_estado() != this.ef('materias_plan').get_estado()){
-					notificacion.agregar('Si el postulante es egresado, la cantidad de materias aprobadas debe ser igual a la cantidad de materias del plan de estudios.');
-					return false;
-				}
-				if(this.ef('anio_egreso').get_estado() <= this.ef('anio_ingreso').get_estado()){
-					notificacion.agregar('El año de egreso debe ser posterior al año de ingreso');
-					return false;
-				}
-				if(this.ef('anio_egreso').get_estado() > new Date().getFullYear()){
-					notificacion.agregar('El año de egreso no puede ser posterior al año actual');
-					return false;
-				}
-			}
+			
 			return true;
 		}
 		";

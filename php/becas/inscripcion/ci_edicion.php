@@ -131,6 +131,16 @@ class ci_edicion extends becas_ci
 
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		/* ========================================================================= */
+
+		/* ============ UPLOAD DE LA CONST. INSCRIPCIÓN A POSGRADO ================= */
+		$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
+		$efs_archivos = array(array('ef'          => 'archivo_insc_posgrado',
+							  		'descripcion' => 'Const. Inscripción a Posgrado(o compromiso) ',
+							  		'nombre'      => 'Insc. o Compromiso Posgrado.pdf')
+							);
+
+		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
+		/* ========================================================================= */
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
 		$estado = ($this->s__insc_actual['estado']) ? $this->s__insc_actual['estado'] : 'A';
@@ -170,6 +180,7 @@ class ci_edicion extends becas_ci
 
 			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ningún alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
 		}
+
 	}
 
 	private function existe_persona($nro_documento)
@@ -224,12 +235,6 @@ class ci_edicion extends becas_ci
 	function conf__form_alumno(becas_ei_formulario $form)
 	{	
 
-		//si el alumno no es egresado, se desactiva el EF que permite subir el titulo de grado
-		if( ! $this->s__insc_actual['es_egresado']){
-			$form->desactivar_efs(array('archivo_titulo_grado'));
-		}else{
-			$form->ef('archivo_titulo_grado')->set_obligatorio();
-		}
 		//seteo como obligatorios los campos necesarios
 		$form->ef('archivo_cuil')->set_obligatorio();
 
@@ -240,6 +245,9 @@ class ci_edicion extends becas_ci
 		if($this->s__insc_actual){
 			$alu = array_shift(toba::consulta_php('co_personas')->get_personas(array('nro_documento' => $this->s__insc_actual['nro_documento'])));
 			$alu['nro_documento'] = ($alu['nro_documento']) ? $alu['nro_documento'] : $this->s__insc_actual['nro_documento']; 
+			if(isset($alu['cuil'])){
+				$alu['cuil'] = str_replace("-","",$alu['cuil']);
+			}
 			$form->set_datos($alu);
 			
 			

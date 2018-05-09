@@ -24,7 +24,7 @@
 	font-weight: bold;
 	font-size: 1.2em;
 	color: #fff;
-	background-color:#60c547;
+	background-color: #489c33;
 	text-shadow: 0px 0px 2px #222;
 	padding:2px 0px 2px 0px;
 	border-radius: 40px;
@@ -135,22 +135,25 @@
 }
 
 #enlace_analitico{
-	background-color: #328dea;
-	color:#FFF;
-	float:left;
-	font-size:1.3em;
-	font-weight: bold;
 	margin: 0px auto 10px 162px;
-	padding: 2px 30px;
-	text-align:center;
-	text-decoration:none;
 	position:absolute;
 	top: 115px;
 	left: 75px;
-	box-shadow: 1px 1px 3px #000;
 }
 .derecha{
 	text-align: right;
+}
+
+.enlace_boton{
+	margin-top: 100px;
+	background-color: #328dea;
+	color:#FFF;
+	font-size:1.3em;
+	font-weight: bold;
+	padding: 2px 30px;
+	text-align:center;
+	text-decoration:none;
+	box-shadow: 1px 1px 3px #000;
 }
 
 	

@@ -2,20 +2,33 @@
 class co_tipos_beca
 {
 
-	function get_tipos_beca()
+	function get_tipos_beca($filtro = array())
 	{
+		$where = array();
+		if(isset($filtro['id_tipo_beca'])){
+			$where[] = 'tip.id_tipo_beca = '.quote($filtro['id_tipo_beca']);
+		}
 		$sql = "SELECT
 			tip.id_tipo_beca,
 			tip_con.tipo_convocatoria,
 			tip.tipo_beca,
+			tip.duracion_meses,
+			tip.meses_present_avance,
 			tip.cupo_maximo,
 			tip.id_color,
 			tip.factor,
-			col.color
+			tip.edad_limite,
+			tip.prefijo_carpeta,
+			col.color,
+			tip.requiere_insc_posgrado,
+			tip.debe_adeudar_hasta
 		FROM be_tipos_beca as tip	
 		LEFT JOIN be_tipos_convocatoria as tip_con ON tip.id_tipo_convocatoria = tip_con.id_tipo_convocatoria
 		LEFT JOIN be_color_carpeta as col on col.id_color = tip.id_color
 		ORDER BY tipo_beca";
+		if (count($where)>0) {
+			$sql = sql_concatenar_where($sql, $where);
+		}
 		return toba::db()->consultar($sql);
 	}
 

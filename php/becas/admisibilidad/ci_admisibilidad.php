@@ -131,8 +131,6 @@ class ci_admisibilidad extends becas_ci
 		}
 		/* ============================================================================ */
 
-		
-		
 		unset($det);
 		unset($detalles_cargos);
 
@@ -148,12 +146,21 @@ class ci_admisibilidad extends becas_ci
 		}
 		/* ============================================================================ */
 
+		//obtengo los detalles del tipo de beca seleccionado
+		$det_tipo_beca = toba::consulta_php('co_tipos_beca')->get_tipos_beca($insc['id_tipo_beca']);
+		if(count($det_tipo_beca)){
+			$det_tipo_beca = $det_tipo_beca[0];
+		}
+
+		//obtengo la edad del aspirante
 		$edad_asp = toba::consulta_php('co_personas')->get_edad(array('nro_documento' => $insc['nro_documento']),
 																date('Y-12-31'));
-		$edad_limite = toba::consulta_php('co_tipos_beca')->get_campo('edad_limite',$insc['id_tipo_beca']);
-		if($edad_limite){
-			$clase_css_edad = ($edad_asp > $edad_limite) ? 'etiqueta_error' : 'etiqueta_success';
+
+		//se valida la edad del aspirante. En caso de no cumplir, se muestra un mensaje en rojo
+		if($det_tipo_beca['edad_limite']){
+			$clase_css_edad = ($edad_asp > $det_tipo_beca['edad_limite']) ? 'etiqueta_error' : 'etiqueta_success';
 		}
+		//lo mismo para la dedicación
 		$clase_css_dedic = ($datos_admisibilidad['mayor_dedicacion']) ? "etiqueta_success" : "etiqueta_error";
 
 		//si no tiene una categoria de incentivos 1, 2 o 3
@@ -168,6 +175,28 @@ class ci_admisibilidad extends becas_ci
 			$clase_css_categ = "etiqueta_success";
 		}
 
+		//se valida si la beca exige inscripción a un posgrado (o compromiso)
+		if($det_tipo_beca['requiere_insc_posgrado'] === 'S'){
+			if($insc['archivo_insc_posgrado']){
+				$clase_css_insc_posgrado = 'etiqueta_success';		
+			}else{
+				$clase_css_insc_posgrado = 'etiqueta_error';		
+			}
+		}
+
+		//se valida si la beca exige inscripción a un posgrado (o compromiso)
+		if(isset($det_tipo_beca['debe_adeudar_hasta'])){
+			if(is_numeric($det_tipo_beca['debe_adeudar_hasta']) && $det_tipo_beca['debe_adeudar_hasta'] != 0){
+				//se valida si el postulante adeuda menos materias que las exigidas
+				if( ($insc['materias_plan'] - $insc['materias_aprobadas']) <= $det_tipo_beca['debe_adeudar_hasta']){
+					$clase_css_adeuda_materias = 'etiqueta_success';		
+				}else{
+					$clase_css_adeuda_materias = 'etiqueta_error';		
+				}
+			}
+		}
+
+
 		$template = "<table>
 						<tr>
 							<td style='vertical-align: top;'>
@@ -175,8 +204,16 @@ class ci_admisibilidad extends becas_ci
 								[dep id=ml_requisitos]
 								<p class='".$clase_css_edad." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
 								<p class='".$clase_css_dedic." centrado'>Mayor Dedicación</p>
-								<p class='".$clase_css_categ." centrado'>Grado/Categoría</p>
-							</td>
+								<p class='".$clase_css_categ." centrado'>Grado/Categoría</p>";
+		//si el tipo de beca requiere inscripción a posgrado, se muestra la validación
+		if(isset($clase_css_insc_posgrado)){
+			$template .= 		"<p class='".$clase_css_insc_posgrado." centrado'>Inscripción o compromiso a un posgrado</p>";
+		}
+		//si el tipo de beca requiere un limite de materias adeudadas, se muestra la validacion
+		if(isset($clase_css_adeuda_materias)){
+			$template .= 		"<p class='".$clase_css_adeuda_materias." centrado'>Cantidad de materias que adeuda</p>";
+		}							
+		$template .=		"</td>
 							<td style='vertical-align: top;'>
 								<fieldset class='detalle_director'>
 									<legend>Resumen del Director de la beca</legend>

@@ -82,7 +82,6 @@ class ci_inscripcion extends becas_ci
 			$this->get_datos('inscripcion')->sincronizar();
 			$this->resetear();	
 		}catch(toba_error_db $e){
-			echo "<hr>".$e->get_mensaje_motor()."<hr>";
 			switch ($e->get_sqlstate()) {
 
 				case 'db_23505':
@@ -93,6 +92,8 @@ class ci_inscripcion extends becas_ci
 					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técnica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_mensaje_motor());	
 					break;
 			}
+		}catch(toba_error $e){
+			toba::notificacion()->agregar($e->get_mensaje());
 		}
 		
 	}

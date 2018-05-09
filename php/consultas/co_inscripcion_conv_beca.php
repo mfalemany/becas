@@ -47,6 +47,7 @@ class co_inscripcion_conv_beca
 			insc.carrera_posgrado,
 			insc.nombre_inst_posgrado,
 			insc.titulo_carrera_posgrado,
+			insc.archivo_insc_posgrado,
 			insc.nro_carpeta,
 			insc.observaciones,
 			insc.estado,
