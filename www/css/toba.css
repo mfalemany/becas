@@ -155,6 +155,11 @@
 	text-decoration:none;
 	box-shadow: 1px 1px 3px #000;
 }
+.ef-fijo {
+	text-align: left;
+	line-height:  23px;
+	font-size:1.3em; 
+}
 
 	
 

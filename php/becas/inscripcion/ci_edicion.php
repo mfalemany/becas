@@ -110,7 +110,6 @@ class ci_edicion extends becas_ci
 			//se completa el label que contiene el nombre y apellido del director
 			$director = $this->s__insc_actual['nro_documento_dir'];
 			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
-
 		}else{
 
 			$this->pantalla()->tab('pant_director')->desactivar();
@@ -133,14 +132,18 @@ class ci_edicion extends becas_ci
 		/* ========================================================================= */
 
 		/* ============ UPLOAD DE LA CONST. INSCRIPCIÓN A POSGRADO ================= */
-		$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
-		$efs_archivos = array(array('ef'          => 'archivo_insc_posgrado',
-							  		'descripcion' => 'Const. Inscripción a Posgrado(o compromiso) ',
-							  		'nombre'      => 'Insc. o Compromiso Posgrado.pdf')
-							);
+		if( ! $datos['archivo_insc_posgrado']['error']){
+			$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
+			$efs_archivos = array(array('ef'          => 'archivo_insc_posgrado',
+								  		'descripcion' => 'Const. Inscripción a Posgrado(o compromiso) ',
+								  		'nombre'      => 'Insc. o Compromiso Posgrado.pdf')
+								);
 
-		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
+			toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
+		}
 		/* ========================================================================= */
+
+
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
 		$estado = ($this->s__insc_actual['estado']) ? $this->s__insc_actual['estado'] : 'A';

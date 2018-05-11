@@ -57,6 +57,13 @@ class ci_admisibilidad extends becas_ci
 				$insc['porcentaje_aprobacion'] = $insc['materias_aprobadas'] / $insc['materias_plan'] * 100;
 				$insc['mat_para_egresar'] = $insc['materias_plan'] - $insc['materias_aprobadas'];
 			}
+			$persona = toba::consulta_php('co_personas')->get_personas(array('nro_documento'=>$insc['nro_documento']));
+			if(count($persona)){
+				$insc['es_egresado'] = ($persona[0]['archivo_titulo_grado']) ? 'Si' : 'No';
+			}else{
+				$insc['es_egresado'] = 'No';
+			}
+
 			$form->set_datos($insc);
 		}
 	}
