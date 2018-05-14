@@ -6,6 +6,10 @@ class co_personas
 	{
 		$where = array();
 		if (isset($filtro['nro_documento'])) {
+		
+			if( ! $this->existe_persona($filtro['nro_documento'])){
+				return array();
+			}
 			$where[] = "per.nro_documento ILIKE ".quote("%{$filtro['nro_documento']}%");
 		}
 		if (isset($filtro['apellido'])) {
@@ -64,7 +68,10 @@ class co_personas
 			$sql = sql_concatenar_where($sql, $where);
 		}
 		//echo nl2br($sql);
-		return toba::db()->consultar($sql);
+		$resultado = toba::db()->consultar($sql);
+		if(count($resultado) > 0){
+			return $resultado;
+		}
 	}
 
 	function get_personas_busqueda($filtro = NULL)
@@ -172,9 +179,10 @@ class co_personas
 		}
 		
 		
-		$guarani = $this->array_a_minusculas($persona['GUARANI'][0]);
+		
 		
 		if(array_key_exists('GUARANI', $persona)){
+			$guarani = $this->array_a_minusculas($persona['GUARANI'][0]);
 			$datos['nro_documento'] = $guarani['nro_doc'];
 			$datos['apellido'] = utf8_decode(ucwords(strtolower($guarani['apellido'])));
 			$datos['nombres'] = utf8_decode(ucwords(strtolower($guarani['nombres'])));

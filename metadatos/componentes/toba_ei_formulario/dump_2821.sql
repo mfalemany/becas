@@ -155,7 +155,41 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'1', --no_imprimir_efs_sin_estado
 	'1', --resaltar_efs_con_estado
-	NULL, --template
+	'<table>
+	<tbody>
+		<tr>
+			<td>
+				[ef id=nro_documento]</td>
+			<td>
+				(busca tambi&eacute;n en fuentes externas)</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				[ef id=apellido]</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				[ef id=nombres]</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				[ef id=fecha_nac]</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				[ef id=id_localidad]</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				[ef id=id_nivel_academico]</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				[ef id=id_cat_conicet]</td>
+		</tr>
+	</tbody>
+</table>
+<p>&nbsp;</p>', --template
 	NULL  --template_impresion
 );
 
