@@ -8,12 +8,11 @@ class ci_edicion extends becas_ci
 	//protected $s__detalles_inscripcion;
 	function conf()
 	{
-		toba::consulta_php('co_inscripcion_conv_beca')->get_ultimo_nro_carpeta(1,1);
 		//recupero la convocatoria seleccionada por el usuario
-		if(toba::memoria()->get_dato('id_convocatoria')){
+		/*if(toba::memoria()->get_dato('id_convocatoria')){
 			$this->s__convocatoria = toba::memoria()->get_dato('id_convocatoria');
 			toba::memoria()->eliminar_dato('id_convocatoria');
-		}
+		}*/
 
 		if($this->get_datos('inscripcion','inscripcion_conv_beca')->get()){
 			//obtengo los datos de la inscripcion
@@ -97,10 +96,17 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
+		//ei_arbol($this->s__convocatoria);
 		//asigno la convocatoria seleccionada por el usuario previamente
-		$form->ef('id_convocatoria')->set_estado($this->s__convocatoria);
+		//$form->ef('id_convocatoria')->set_estado($this->s__convocatoria);
 
 		if(isset($this->s__insc_actual)){
+			//verifico si el tipo de beca requiere o no una inscripcion a posgrado.
+			$requiere = toba::consulta_php('co_tipos_beca')->requiere_posgrado($this->s__insc_actual['id_tipo_beca']);
+			if(!$requiere){
+				$form->desactivar_efs(array('archivo_insc_posgrado','titulo_carrera_posgrado','nombre_inst_posgrado','carrera_posgrado','fecha_insc_posgrado'));
+			}
+
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
 			$form->set_solo_lectura(array('id_tipo_beca'));
 
@@ -132,14 +138,16 @@ class ci_edicion extends becas_ci
 		/* ========================================================================= */
 
 		/* ============ UPLOAD DE LA CONST. INSCRIPCIÓN A POSGRADO ================= */
-		if( ! $datos['archivo_insc_posgrado']['error']){
-			$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
-			$efs_archivos = array(array('ef'          => 'archivo_insc_posgrado',
-								  		'descripcion' => 'Const. Inscripción a Posgrado(o compromiso) ',
-								  		'nombre'      => 'Insc. o Compromiso Posgrado.pdf')
-								);
+		if(isset($datos['archivo_insc_posgrado'])){
+			if( ! $datos['archivo_insc_posgrado']['error']){
+				$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
+				$efs_archivos = array(array('ef'          => 'archivo_insc_posgrado',
+									  		'descripcion' => 'Const. Inscripción a Posgrado(o compromiso) ',
+									  		'nombre'      => 'Insc. o Compromiso Posgrado.pdf')
+									);
 
-			toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
+				toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
+			}
 		}
 		/* ========================================================================= */
 
@@ -293,13 +301,13 @@ class ci_edicion extends becas_ci
 
 		if(isset($this->s__insc_actual['nro_documento_dir']) && $this->s__insc_actual['nro_documento_dir']){
 			$dir = $this->s__insc_actual['nro_documento_dir'];	
-		}
-		$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-			'nro_documento' => $dir
-		)));
-		$form->set_datos($director);
 		
-		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','sexo','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
+				'nro_documento' => $dir
+			)));
+			$form->set_datos($director);
+		}
+		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 	}
 
@@ -315,14 +323,13 @@ class ci_edicion extends becas_ci
 	function conf__form_codirector(becas_ei_formulario $form)
 	{
 		if(isset($this->s__insc_actual['nro_documento_codir']) && $this->s__insc_actual['nro_documento_codir']){
-			$dir = $this->s__insc_actual['nro_documento_codir'];	
+			$dir = $this->s__insc_actual['nro_documento_codir'];
+			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
+				'nro_documento' => $dir
+			)));
+			$form->set_datos($director);	
 		}
-		$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-			'nro_documento' => $dir
-		)));
-		$form->set_datos($director);
-		
-		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','sexo','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 		
 	}
@@ -359,14 +366,15 @@ class ci_edicion extends becas_ci
 	{
 
 		if(isset($this->s__insc_actual['nro_documento_subdir']) && $this->s__insc_actual['nro_documento_subdir']){
-			$dir = $this->s__insc_actual['nro_documento_subdir'];	
+			$dir = $this->s__insc_actual['nro_documento_subdir'];
+			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
+				'nro_documento' => $dir
+			)));
+			$form->set_datos($director);	
 		}
-		$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-			'nro_documento' => $dir
-		)));
-		$form->set_datos($director);
 		
-		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','sexo'));
+		
+		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
 		$form->set_solo_lectura(array('nro_documento'));
 	}
 
@@ -759,6 +767,13 @@ class ci_edicion extends becas_ci
 		//$mensaje = ($this->edad_permitida_para_beca($params['id_tipo_doc'],$params['nro_documento'],$params['id_tipo_beca']))? TRUE : FALSE;
 		$permitida = $this->edad_permitida_para_beca($params['nro_documento'],$params['id_tipo_beca']);
 		$respuesta->set($permitida);
+		
+	}
+
+	function ajax__requiere_inscripcion_posgrado($params, toba_ajax_respuesta $respuesta)
+	{
+		$requiere = toba::consulta_php('co_tipos_beca')->requiere_posgrado($params);
+		$respuesta->set($requiere);
 		
 	}
 

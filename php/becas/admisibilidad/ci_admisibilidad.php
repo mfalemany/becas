@@ -255,13 +255,13 @@ class ci_admisibilidad extends becas_ci
 				$datos_admisibilidad['nivel_academico'] = $det['id_nivel_academico'];
 			}
 		}
-		
+		//_arbol($det);
 		//guardo el mayor nivel academico
 		if( ! $datos_admisibilidad['cat_incentivos']){
-			$datos_admisibilidad['cat_incentivos'] = $det['nro_categoria'];
+			$datos_admisibilidad['cat_incentivos'] = $det['cat_incentivos'];
 		}else{
-			if($datos_admisibilidad['cat_incentivos'] < $det['nro_categoria']){
-				$datos_admisibilidad['cat_incentivos'] = $det['nro_categoria'];
+			if($datos_admisibilidad['cat_incentivos'] < $det['cat_incentivos']){
+				$datos_admisibilidad['cat_incentivos'] = $det['cat_incentivos'];
 			}
 		}
 

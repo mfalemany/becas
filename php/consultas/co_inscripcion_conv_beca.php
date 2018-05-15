@@ -106,11 +106,15 @@ class co_inscripcion_conv_beca
 				$nro_carpeta = $prefijo."-".$nro;
 
 				//si ya existe, continúo el bucle hasta encontrar uno que no existe
-				if(in_array($nro_carpeta,$existentes)){
-					continue;
+				if(is_array($existentes)){
+					if(in_array($nro_carpeta,$existentes)){
+						continue;
+					}else{
+						//si no existe, BINGO!! Se retorna ese numero de carpeta para ser utilizado
+						return $nro_carpeta;
+					}
 				}else{
-					//si no existe, BINGO!! Se retorna ese numero de carpeta para ser utilizado
-					return $nro_carpeta;
+					return $prefijo."-001";
 				}
 			}
 		}else{

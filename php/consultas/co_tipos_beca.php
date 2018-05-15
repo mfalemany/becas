@@ -65,6 +65,20 @@ class co_tipos_beca
 		return FALSE;
 	}
 
+	function requiere_posgrado($id_tipo_beca)
+	{
+		//si no se recibi ningun tipo de beca, se asume la respuesta "SI"
+		if(!$id_tipo_beca){
+			return TRUE;
+		}
+		$resultado = toba::db()->consultar_fila("SELECT requiere_insc_posgrado FROM be_tipos_beca WHERE id_tipo_beca = ".quote($id_tipo_beca));
+		if(count($resultado) > 0){
+			return ($resultado['requiere_insc_posgrado'] == 'S') ? TRUE : FALSE;
+		}else{
+			return TRUE;
+		}
+	}
+
 	
 
 

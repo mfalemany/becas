@@ -215,7 +215,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 </fieldset>
 <p>&nbsp;</p>
 <fieldset>
-	<legend>Inscripci&oacute;n/Compromiso a carrera de posgrado</legend>
+	<legend>Inscripci&oacute;n/Compromiso a carrera de posgrado (Aplicable solo a algunos tipos de becas)</legend>
 	<table>
 		<tbody>
 			<tr>

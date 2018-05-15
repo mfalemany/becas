@@ -8,6 +8,9 @@ class ci_cambiar_clave extends becas_ci
 
 	function evt__procesar($datos)
 	{
+		$this->dep('datos')->sincronizar();
+		$this->resetear();
+
 
 	}
 
@@ -54,9 +57,6 @@ class ci_cambiar_clave extends becas_ci
 			return;
 		}
 		$this->actualizar_mail(toba::usuario()->get_id(),$datos['mail']);
-		
-    	toba::vinculador()->navegar_a('becas','2');
-    	
 	}
 
 	function actualizar_mail($usuario,$mail)
@@ -69,6 +69,22 @@ class ci_cambiar_clave extends becas_ci
 		
 		//falta validar la respuesta de ejecucion de esta consulta!!!
 		toba::instancia()->get_db()->ejecutar($sql);
+	}
+
+	function conf__form_persona(becas_ei_formulario $form)
+	{		
+		$usuario = toba::usuario()->get_id();
+		
+		if(is_numeric($usuario)){
+			$this->dep('datos')->cargar(array('nro_documento'=>$usuario));
+		}else{
+			$this->dep('form_persona')->set_solo_lectura();
+		}
+	}
+
+	function evt__form_persona__modificacion($datos){
+		$this->dep('datos')->tabla('sap_personas')->set($datos);
+
 	}
 
 }

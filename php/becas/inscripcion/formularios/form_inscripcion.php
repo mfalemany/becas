@@ -119,6 +119,35 @@ class form_inscripcion extends becas_ei_formulario
 			
 			return true;
 		}
+
+		// ---------- Cuando se elije el tipo de beca, se determina si será obligatorio o no la carga
+		// de una inscripción/compromiso a carrera de posgrado
+		{$this->objeto_js}.ef('id_tipo_beca').cuando_cambia_valor('requiere_inscripcion_posgrado({$this->objeto_js}.ef(\'id_tipo_beca\').get_estado())');
+
+		function requiere_inscripcion_posgrado(id_tipo_beca){
+			if(id_tipo_beca != 'nopar'){
+				{$this->controlador()->objeto_js}.ajax('requiere_inscripcion_posgrado',id_tipo_beca,this,datos_posgrado);
+			}else{
+				this.datos_posgrado(true);
+			}
+			
+		}
+		function datos_posgrado(requerir){
+			if(!requerir){
+				{$this->objeto_js}.ef('archivo_insc_posgrado').desactivar();
+				{$this->objeto_js}.ef('nombre_inst_posgrado').desactivar();
+				{$this->objeto_js}.ef('carrera_posgrado').desactivar();
+				{$this->objeto_js}.ef('fecha_insc_posgrado').desactivar();	
+				{$this->objeto_js}.ef('titulo_carrera_posgrado').desactivar();	
+			}else{
+				{$this->objeto_js}.ef('archivo_insc_posgrado').activar();
+				{$this->objeto_js}.ef('nombre_inst_posgrado').activar();
+				{$this->objeto_js}.ef('carrera_posgrado').activar();
+				{$this->objeto_js}.ef('fecha_insc_posgrado').activar();	
+				{$this->objeto_js}.ef('titulo_carrera_posgrado').activar();	
+			}
+			
+		}
 		";
 	}
 
