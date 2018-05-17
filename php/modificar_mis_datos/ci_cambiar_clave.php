@@ -17,8 +17,10 @@ class ci_cambiar_clave extends becas_ci
 
 	function evt__procesar($datos)
 	{
-		$this->dep('datos')->sincronizar();
-		$this->dep('datos')->resetear();
+		if($this->dep('datos')->esta_cargada()){
+			$this->dep('datos')->sincronizar();
+			$this->dep('datos')->resetear();
+		}
 	}
 
 	function evt__cancelar()
