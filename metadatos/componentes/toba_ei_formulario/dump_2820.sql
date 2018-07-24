@@ -102,7 +102,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase
 	NULL, --auto_reset
 	'100%', --ancho
-	'140px', --ancho_etiqueta
+	'160px', --ancho_etiqueta
 	'0', --expandir_descripcion
 	NULL, --campo_bl
 	NULL, --scroll
@@ -781,7 +781,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'11', --orden
-	'Nivel Académico', --etiqueta
+	'Máxima titulación alcanzada', --etiqueta
 	NULL, --etiqueta_estilo
 	'Máximo nivel académico alcanzado por la persona', --descripcion
 	'0', --colapsado
