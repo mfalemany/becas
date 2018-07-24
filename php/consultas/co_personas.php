@@ -104,7 +104,7 @@ class co_personas
 	}
 
 	/**
-	 * Retorna el apellido y nombres de una persona específica según tipo y nro de documento
+	 * Retorna el apellido y nombres de una persona espec?ica seg?n tipo y nro de documento
 	 * @param  [string] $nro_documento [recibe un string con formato [id_tipo_doc]||[nro_documento]  ]
 	 * @return [string]         [retorna un string simple con formato [Apellido],[nombres]  ]
 	 */
@@ -121,12 +121,12 @@ class co_personas
 	}
 
 	/**
-	 * Este método consulta en  la BD local para verificar la existencia de la persona. En caso de no
+	 * Este m?odo consulta en  la BD local para verificar la existencia de la persona. En caso de no
 	 * encontrarla, se conecta al servicio web para obtener los datos y guardarlos en la BD local.
 	 * 
-	 * @param  varchar $id_tipo_doc   Tipo de documento de la persona que se está buscando
-	 * @param  varchar $nro_documento Número de documento de la persona que se está buscando
-	 * @param  varchar $tipo          El parámetro tipo indica que tipo de persona se busca. En caso de ser alumno, si no se lo encuentra en la BD local, se lo importa desde el WS (a la base de personas y alumnos). En cambio, si se está buscando un docente, y no se lo encuentra en local, se realiza el mismo proceso de busqueda en el WS pero luego se lo guarda en la tabla de personas y en la de docentes
+	 * @param  varchar $id_tipo_doc   Tipo de documento de la persona que se est?buscando
+	 * @param  varchar $nro_documento N?mero de documento de la persona que se est?buscando
+	 * @param  varchar $tipo          El par?etro tipo indica que tipo de persona se busca. En caso de ser alumno, si no se lo encuentra en la BD local, se lo importa desde el WS (a la base de personas y alumnos). En cambio, si se est?buscando un docente, y no se lo encuentra en local, se realiza el mismo proceso de busqueda en el WS pero luego se lo guarda en la tabla de personas y en la de docentes
 	 * @return boolean                Retorna true en caso de encontrar la persona (en local o en el ws). Falso en caso contrario
 	 */
 	function existe_persona($nro_documento)
@@ -156,13 +156,20 @@ class co_personas
 
 	protected function buscar_en_ws($nro_documento)
 	{
-		$cliente = toba::servicio_web_rest('ws_unne')->guzzle();
-		$response = $cliente->get('agentes/'.$nro_documento.'/datoscomedor');
-		return rest_decode($response->json());
+		
+		try{
+			$cliente = toba::servicio_web_rest('ws_unne')->guzzle();
+			$response = $cliente->get('agentes/'.$nro_documento.'/datoscomedor');
+			return rest_decode($response->json());	
+		} catch (Exception $e) {
+			return array();
+		}
+		
 	}
+	
 	protected function guardar_en_local($persona)
 	{
-		/* ******************** OBTENCIÓN DE LOS DATOS **************************/
+		/* ******************** OBTENCI? DE LOS DATOS **************************/
 		$datos = array(	'nro_documento' => '',
 						'apellido'      => '',
 						'nombres'       => '',
@@ -217,7 +224,7 @@ class co_personas
 	}
 
 	/**
-	 * Retorna la edad de una persona. Si se pasa una fecha (como segundo argumento), este método retorna la edad de la persona'a esa fecha 
+	 * Retorna la edad de una persona. Si se pasa una fecha (como segundo argumento), este m?odo retorna la edad de la persona'a esa fecha 
 	 * @param  array $persona array que contien el id_tipo_doc y el nro_documento de la persona
 	 * @param  date $fecha   Fecha a la que se quiere saber la edad de la persona. Si no se establece, se asume la fecha actual
 	 * @return integer       Edad de la persona a la fecha establecida
@@ -252,11 +259,11 @@ class co_personas
 							niv.nivel_academico,
 							cat_inc.categoria as cat_incentivos,
 							case cat_inc.categoria 
-								when 1 then 'Categoría I'
-								when 2 then 'Categoría II'
-								when 3 then 'Categoría III'
-								when 4 then 'Categoría IV'
-								when 5 then 'Categoría V'
+								when 1 then 'Categor? I'
+								when 2 then 'Categor? II'
+								when 3 then 'Categor? III'
+								when 4 then 'Categor? IV'
+								when 5 then 'Categor? V'
 								else 'No categorizado'
 								end as cat_incentivos_descripcion,
 							cat_con.id_cat_conicet,

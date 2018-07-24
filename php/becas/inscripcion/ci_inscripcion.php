@@ -6,7 +6,7 @@ class ci_inscripcion extends becas_ci
 		//si no existen convocatorias con inscripcion abierta, elimino el evento 'agregar (Nueva Inscripcion'
 		if( ! toba::consulta_php('co_convocatoria_beca')->existen_convocatorias_vigentes()){
 			$this->pantalla()->eliminar_evento('agregar');
-			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripción abierto');
+			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripci? abierto');
 		}
 	}
 	//---- Cuadro Inscripciones ------------------------------------------------------------
@@ -22,18 +22,31 @@ class ci_inscripcion extends becas_ci
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 		
 	}
-	
 
 	function evt__cuadro__seleccion($datos)
 	{
-		//se carga la relación de "Alumno"
+		//se carga la relaciÃ³n de "Alumno"
 		$alumno = array('nro_documento'=>$datos['nro_documento']);
 		$this->get_datos('alumno')->cargar($alumno);
 
-		//se cargan los detalles de la inscripción
+		//se cargan los detalles de la inscripciÃ³n
 		$this->get_datos('inscripcion')->cargar($datos);
 
 		$this->set_pantalla('pant_edicion');
+	}
+
+	function servicio__generar_comprobante()
+	{
+		$params = toba::memoria()->get_parametros();
+		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$params['fila']);
+		ei_arbol($clave);
+		//validar si existe el archivo, sino, hay que generarlo.
+	}
+
+	function conf_evt__cuadro__generar_comprobante(toba_evento_usuario $evento, $fila)
+	{
+		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$fila);
+		//si el estado es cerrado, hay que mostrar el boton
 	}
 
 	function resetear()
@@ -55,7 +68,7 @@ class ci_inscripcion extends becas_ci
 		$this->resetear();
 		$this->set_pantalla('pant_seleccion');
 	}
-
+	
 	function evt__eliminar()
 	{
 		$this->get_datos('inscripcion','requisitos_insc')->eliminar();
@@ -89,7 +102,7 @@ class ci_inscripcion extends becas_ci
 					break;
 				
 				default:
-					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técnica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_mensaje_motor());	
+					toba::notificacion()->agregar('OcurriÃ³ un error inesperado al intentar guardar la inscripciÃ³n. por favor, comuniquese con la SecretarÃ­a General de Ciencia y TÃ©nica para solucionarlo (cyt.unne@gmail.com). CÃ³digo de error: '.$e->get_mensaje_motor());	
 					break;
 			}
 		}catch(toba_error $e){
@@ -122,7 +135,6 @@ class ci_inscripcion extends becas_ci
 
 	}
 
-	
 
 }
 ?>

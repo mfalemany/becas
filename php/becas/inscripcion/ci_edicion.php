@@ -18,7 +18,7 @@ class ci_edicion extends becas_ci
 			//obtengo los datos de la inscripcion
 			$this->s__insc_actual = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 
-			//si la inscripción no está abierta...
+			//si la inscripci? no est?abierta...
 			if($this->s__insc_actual['estado'] != 'A'){
 				$this->bloquear_formularios();
 			}
@@ -30,12 +30,13 @@ class ci_edicion extends becas_ci
 		
 		
 
-		//si se está modificando una inscripción, es necesario validar algunas cosas...
+		//si se est?modificando una inscripci?, es necesario validar algunas cosas...
 		if(isset($this->s__insc_actual)){
 			//y los datos de la convocatoria
-			$conv = array_shift(toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$this->s__insc_actual['id_convocatoria'])));
+			$conv = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$this->s__insc_actual['id_convocatoria']));
+			$conv = array_shift($conv);
 			
-			//si ya pasó la fecha de fin de la convocatoria, no se puede editar la inscripcion
+			//si ya pas?la fecha de fin de la convocatoria, no se puede editar la inscripcion
 			if($conv['fecha_hasta'] < date('Y-m-d')){
 				//bloqueo el formulario para evitar que se modifiquen  los datos
 				$this->dep('form_inscripcion')->agregar_notificacion('No se pueden modificar los datos de la inscripción debido a que finalizó la convocatoria.','warning');
@@ -50,9 +51,9 @@ class ci_edicion extends becas_ci
 				$this->controlador()->pantalla()->eliminar_evento('eliminar');
 			}
 		}
-		//si se está cargando una nueva inscripción, se valida si es un usuario normal o un admin
+		//si se est?cargando una nueva inscripci?, se valida si es un usuario normal o un admin
 		if( ! in_array('admin',toba::usuario()->get_perfiles_funcionales())){
-			//si es un usuario normal, solo puede cargar una solicitud para sí mismo
+			//si es un usuario normal, solo puede cargar una solicitud para s?mismo
 			$this->dep('form_inscripcion')->ef('nro_documento')->set_estado(toba::usuario()->get_id());
 			$this->dep('form_inscripcion')->set_solo_lectura(array('nro_documento'));
 		}
@@ -83,7 +84,7 @@ class ci_edicion extends becas_ci
 				$this->dep($dep)->desactivar_agregado_filas();
 			}
 		}
-		//además, elimino todos los eventos que puedan modificar la solicitud
+		//adem?, elimino todos los eventos que puedan modificar la solicitud
 		$this->controlador()->pantalla()->eliminar_evento('eliminar');
 		$this->controlador()->pantalla()->eliminar_evento('guardar');
 		$this->controlador()->pantalla()->eliminar_evento('cerrar_inscripcion');
@@ -96,19 +97,27 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
+
 		//ei_arbol($this->s__convocatoria);
 		//asigno la convocatoria seleccionada por el usuario previamente
 		//$form->ef('id_convocatoria')->set_estado($this->s__convocatoria);
 
 		if(isset($this->s__insc_actual)){
+
 			//verifico si el tipo de beca requiere o no una inscripcion a posgrado.
 			$requiere = toba::consulta_php('co_tipos_beca')->requiere_posgrado($this->s__insc_actual['id_tipo_beca']);
+			//en caso de no requerir inscripci? a Posgrado, desactivo todos los efs relacionados
 			if(!$requiere){
-				$form->desactivar_efs(array('archivo_insc_posgrado','titulo_carrera_posgrado','nombre_inst_posgrado','carrera_posgrado','fecha_insc_posgrado'));
+				$efs_innecesarios = array('archivo_insc_posgrado','titulo_carrera_posgrado','nombre_inst_posgrado','carrera_posgrado','fecha_insc_posgrado');
+				foreach ($efs_innecesarios as $ef) {
+					if($form->existe_ef($ef)){
+						$form->desactivar_efs($ef);
+					}
+				}
 			}
 
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
-			$form->set_solo_lectura(array('id_tipo_beca'));
+			$form->set_solo_lectura(array('id_tipo_beca','id_convocatoria'));
 
 			//asigno los datos al formulario
 			$form->set_datos($this->s__insc_actual);
@@ -124,31 +133,33 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
-
-		/* ================== UPLOAD DEL CERTIFICADO ANALÍTICO =================== */
+		/* ================== UPLOAD DEL CERTIFICADO ANAL?ICO =================== */
 		$conv = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$datos['id_convocatoria']);
 		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$datos['id_tipo_beca']);
 		$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
-		$efs_archivos = array(array('ef'          => 'archivo_analitico',
-							  		'descripcion' => 'Certificado Analítico',
-							  		'nombre'      => 'Cert. Analitico.pdf')
-							);
-
+		$efs_archivos[] = array('ef'          => 'archivo_analitico',
+						  		'descripcion' => 'Certificado Analitico',
+						  		'nombre'      => 'Cert. Analitico.pdf'
+								);
+		$efs_archivos[] = array('ef'          => 'archivo_insc_posgrado',
+							  	'descripcion' => 'Const. Inscripci? a Posgrado(o compromiso) ',
+							  	'nombre'      => 'Insc. o Compromiso Posgrado.pdf'
+								);
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		/* ========================================================================= */
 
-		/* ============ UPLOAD DE LA CONST. INSCRIPCIÓN A POSGRADO ================= */
-		if(isset($datos['archivo_insc_posgrado'])){
+		/* ============ UPLOAD DE LA CONST. INSCRIPCI? A POSGRADO ================= */
+/*		if(isset($datos['archivo_insc_posgrado'])){
 			if( ! $datos['archivo_insc_posgrado']['error']){
 				$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
 				$efs_archivos = array(array('ef'          => 'archivo_insc_posgrado',
-									  		'descripcion' => 'Const. Inscripción a Posgrado(o compromiso) ',
+									  		'descripcion' => 'Const. Inscripci? a Posgrado(o compromiso) ',
 									  		'nombre'      => 'Insc. o Compromiso Posgrado.pdf')
 									);
 
 				toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 			}
-		}
+		}*/
 		/* ========================================================================= */
 
 
@@ -165,23 +176,23 @@ class ci_edicion extends becas_ci
 		
 
 		
-		//esta funcion carga los datos del director (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de director
+		//esta funcion carga los datos del director (si es posible encontrarlo en wl WS o en la base local). En caso contrario env? al usuario a la pantalla de carga de datos de director
 		if( ! $this->existe_persona($datos['nro_documento_dir'])){
-			throw new toba_error('El Nro. de Documento del director ingresado no se corresponde con ningúna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+			throw new toba_error('El Nro. de Documento del director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretar? General de Ciencia y T?nica para obtener una soluci?.');
 		}
 		if($datos['nro_documento_codir']){
 			if( ! $this->existe_persona($datos['nro_documento_codir'])){
-				throw new toba_error('El Nro. de Documento del Co-Director ingresado no se corresponde con ningúna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+				throw new toba_error('El Nro. de Documento del Co-Director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretar? General de Ciencia y T?nica para obtener una soluci?.');
 			}
 		}
 
 		if($datos['nro_documento_subdir']){
 			if( ! $this->existe_persona($datos['nro_documento_subdir'])){
-				throw new toba_error('El Nro. de Documento del Sub-Director ingresado no se corresponde con ningúna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
+				throw new toba_error('El Nro. de Documento del Sub-Director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretar? General de Ciencia y T?nica para obtener una soluci?.');
 			}
 		}
 
-		//esta funcion carga los datos del alumno (si es posible encontrarlo en wl WS o en la base local). En caso contrario envía al usuario a la pantalla de carga de datos de alumno
+		//esta funcion carga los datos del alumno (si es posible encontrarlo en wl WS o en la base local). En caso contrario env? al usuario a la pantalla de carga de datos de alumno
 		if( ! $this->existe_persona($datos['nro_documento']) ){
 			$this->get_datos('alumno')->resetear();
 			$this->get_datos('alumno','persona')->set(array(
@@ -189,7 +200,7 @@ class ci_edicion extends becas_ci
 			));
 			$this->set_pantalla('pant_alumno');
 
-			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ningún alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
+			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ning?n alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuaci?.');
 		}
 
 	}
@@ -207,7 +218,6 @@ class ci_edicion extends becas_ci
 	**/
 	function generar_registros_relacionados()
 	{
-		
 		//si ya tiene los requisitos generados, no se generan nuevamente
 		if($this->get_datos('inscripcion','requisitos_insc')->get_filas()){
 			return;
@@ -216,10 +226,10 @@ class ci_edicion extends becas_ci
 		if(isset($this->s__insc_actual)){
 			$insc = $this->s__insc_actual;
 		}else{
-			//si no se está modificando una solicitud existente, utilizo los datos recien cargados al datos_tabla
+			//si no se est?modificando una solicitud existente, utilizo los datos recien cargados al datos_tabla
 			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		}
-		//ei_arbol($insc);
+
 		//verifico si ya se crearon los registros para el cumplimiento de requisitos
 		$requisitos_inscripcion = toba::consulta_php('co_requisitos_insc')->get_requisitos_insc(
 			$insc['id_convocatoria'],
@@ -245,16 +255,23 @@ class ci_edicion extends becas_ci
 
 	function conf__form_alumno(becas_ei_formulario $form)
 	{	
-
+		//borra el estado de los efs (bug por la reutilización del form_personas)
+		unset($form->_memoria['efs']);
+		
 		//seteo como obligatorios los campos necesarios
 		$form->ef('archivo_cuil')->set_obligatorio();
 
 		//desactivo los efs innecesarios para un alumno
-		$form->desactivar_efs(array('id_disciplina'));
+		if($form->existe_ef('id_disciplina')){
+			$form->desactivar_efs(array('id_disciplina'));		
+		}
+		
+		
 
 		//si existe una inscripción actual
 		if($this->s__insc_actual){
-			$alu = array_shift(toba::consulta_php('co_personas')->get_personas(array('nro_documento' => $this->s__insc_actual['nro_documento'])));
+			$alu = toba::consulta_php('co_personas')->get_personas(array('nro_documento' => $this->s__insc_actual['nro_documento']));
+			$alu = array_shift($alu);
 			$alu['nro_documento'] = ($alu['nro_documento']) ? $alu['nro_documento'] : $this->s__insc_actual['nro_documento']; 
 			if(isset($alu['cuil'])){
 				$alu['cuil'] = str_replace("-","",$alu['cuil']);
@@ -298,22 +315,25 @@ class ci_edicion extends becas_ci
 
 	function conf__form_director(becas_ei_formulario $form)
 	{
+		//borra el estado de los efs (bug por la reutilización del form_personas)
+		unset($form->_memoria['efs']);
 
 		if(isset($this->s__insc_actual['nro_documento_dir']) && $this->s__insc_actual['nro_documento_dir']){
 			$dir = $this->s__insc_actual['nro_documento_dir'];	
 		
-			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-				'nro_documento' => $dir
-			)));
+			$director = toba::consulta_php('co_personas')->get_personas(array('nro_documento' => $dir));
+			$director = array_shift($director);
 			$form->set_datos($director);
 		}
-		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->set_efs_obligatorios(array('cuil','celular'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 	}
 
 	function evt__form_director__modificacion($datos)
 	{
 		$this->sincronizar_datos_persona($datos);
+		
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -322,6 +342,9 @@ class ci_edicion extends becas_ci
 	
 	function conf__form_codirector(becas_ei_formulario $form)
 	{
+		//borra el estado de los efs (bug por la reutilización del form_personas)
+		unset($form->_memoria['efs']);
+
 		if(isset($this->s__insc_actual['nro_documento_codir']) && $this->s__insc_actual['nro_documento_codir']){
 			$dir = $this->s__insc_actual['nro_documento_codir'];
 			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
@@ -364,6 +387,8 @@ class ci_edicion extends becas_ci
 
 	function conf__form_subdirector(becas_ei_formulario $form)
 	{
+		//borra el estado de los efs (bug por la reutilización del form_personas)
+		unset($form->_memoria['efs']);
 
 		if(isset($this->s__insc_actual['nro_documento_subdir']) && $this->s__insc_actual['nro_documento_subdir']){
 			$dir = $this->s__insc_actual['nro_documento_subdir'];
@@ -403,7 +428,7 @@ class ci_edicion extends becas_ci
 			$convocatoria = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$insc['id_convocatoria']);
 			//nombre del tipo de beca
 			$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
-			//conformación de la ruta donde se almacenará el plan de trabajo
+			//conformaci? de la ruta donde se almacenar?el plan de trabajo
 			$ruta = 'doc_por_convocatoria/'.$convocatoria.'/'.$tipo_beca.'/'.$insc['nro_documento'].'/';
 			//campos que contienen archivos
 			$efs_archivos = array(array('ef'          => 'doc_probatoria',
@@ -478,7 +503,7 @@ class ci_edicion extends becas_ci
 		
 		$this->get_datos('alumno','antec_activ_docentes')->procesar_filas($datos);
 
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas, como antec_activ_docentes
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas, como antec_activ_docentes
 		$this->get_datos('alumno')->sincronizar();
 	}
 
@@ -495,7 +520,7 @@ class ci_edicion extends becas_ci
 			$this->s__estado_inicial = $datos;
 		}
 		
-		//se arma un array para cargar los combos de añois
+		//se arma un array para cargar los combos de a?is
 		for($i=date("Y");$i>(date("Y")-50);$i--){
 			$anios[$i] = $i;
 		}
@@ -517,7 +542,7 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_estudios_afines')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 	}
 
@@ -549,7 +574,7 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_becas_obtenidas')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 	}
 
@@ -578,7 +603,7 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_trabajos_publicados')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 	}
 
@@ -607,7 +632,7 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_present_reuniones')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 	}
 
@@ -635,7 +660,7 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_conoc_idiomas')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 
 	}
@@ -665,7 +690,7 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_otras_actividades')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 	}
 
@@ -694,7 +719,7 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_particip_dict_cursos')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 	}
 
@@ -723,13 +748,13 @@ class ci_edicion extends becas_ci
 		
 		toba::consulta_php('helper_archivos')->procesar_ml_con_archivos($this->s__estado_inicial,$datos,$ruta,$campos,'doc_probatoria');
 		$this->get_datos('alumno','antec_cursos_perfec_aprob')->procesar_filas($datos);
-		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pestaña y provocando la perdida de las tablas hijas
+		//se sincroniza porque el datos tabla que referencia a "sap_personas" se utiliza tanto para alumnos como para director, codirector y subdirector. Esto provoca que el datos_relacion "Alumno" se resetee entre cambios de pesta? y provocando la perdida de las tablas hijas
 		$this->get_datos('alumno')->sincronizar();
 	}
 
 
 	/**
-		* Retorna un datos_relación (si no se especifica ninguna tabla en particular), sino, devuelve el datos tabla solicitado
+		* Retorna un datos_relaci? (si no se especifica ninguna tabla en particular), sino, devuelve el datos tabla solicitado
 		* @param  string $tabla Nombre de la tabla que se desea obtener (null para obtener el datos_relacion)
 		* @return datos_tabla o datos_relacion 
 		*/
@@ -741,7 +766,7 @@ class ci_edicion extends becas_ci
 	/**
 		* Retorna el nombre y apellido de un docente
 		* @param  array              $datos     Array asociativo que contiene el tipo_doc y el nro_doc
-		* @param  toba_ajax_respuesta $respuesta Respuesta que se envía al cliente
+		* @param  toba_ajax_respuesta $respuesta Respuesta que se env? al cliente
 		*/
 	function ajax__get_persona($datos, toba_ajax_respuesta $respuesta)
 	{

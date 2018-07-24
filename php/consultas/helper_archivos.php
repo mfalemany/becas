@@ -29,11 +29,12 @@ class helper_archivos
 
 	function procesar_campos($efs_archivos,&$datos_form,$ruta)
 	{
+
 		foreach($efs_archivos as $archivo){
 			if(array_key_exists($archivo['ef'], $datos_form)){
 				if($datos_form[$archivo['ef']]){
 					if( ! $this->subir_archivo($datos_form[$archivo['ef']],utf8_encode($ruta),$archivo['nombre'])){
-						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretaría General de Ciencia y Técnica');
+						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretar? General de Ciencia y T?nica');
 					}else{
 						$datos_form[$archivo['ef']] = $archivo['nombre'];
 					}
@@ -45,10 +46,10 @@ class helper_archivos
 	}
 
 	/**
-	 * Esta funcion procesa los archivos involucrados en un formulario ML. Por cada linea pasada al ML, esta funcion procesa si se trata de un Alta, Baja o Modificación, y en consecuencia, Sube, Modifica o Elimina archivos vinculados a cada linea. Recibe como parámetros el estado inicial del ML, el estado luego de la moficiacion, la ruta donde se almacenarán los archivos y los nombres de los campos del ML que se utilizarán para darle el nombre a cada archivo
+	 * Esta funcion procesa los archivos involucrados en un formulario ML. Por cada linea pasada al ML, esta funcion procesa si se trata de un Alta, Baja o Modificaci?, y en consecuencia, Sube, Modifica o Elimina archivos vinculados a cada linea. Recibe como par?etros el estado inicial del ML, el estado luego de la moficiacion, la ruta donde se almacenar? los archivos y los nombres de los campos del ML que se utilizar? para darle el nombre a cada archivo
 	 * @param  array $estado_inicial_ml     Estado del ML al cargar el formulario
 	 * @param  array $estado_actual_ml      Estado del ML luego de que el usuario realiza cambios
-	 * @param  string $ruta                 Ruta donde se almacenarán/eliminaran los archivos involucrados
+	 * @param  string $ruta                 Ruta donde se almacenar?/eliminaran los archivos involucrados
 	 * @param  array $campos_nombre_archivo Campos del ML que se utilizan para formatear el nombre del archivo subido
 	 * @param  string $nombre_input         Nombre del ef_upload que contiene el/los archivos subidos
 	 * @return void                        
@@ -61,7 +62,7 @@ class helper_archivos
 			//se genera el nombre del archivo
 			$nombre = '';
 			foreach($campos_nombre_archivo as $campo){
-				//agrega un guión medio entre cada palabra del nombre
+				//agrega un gui? medio entre cada palabra del nombre
 				if(strlen($nombre)>0){
 					$nombre .= "-";
 				}
@@ -69,11 +70,11 @@ class helper_archivos
 			}
 			$nombre .= '.pdf'; 
 
-			// =========== ALTA Y MODIFICACIÓN ===============
+			// =========== ALTA Y MODIFICACI? ===============
 			
 			if($item['apex_ei_analisis_fila'] == 'A' || $item['apex_ei_analisis_fila'] == 'M'){
 				if($item[$nombre_input]){
-					//en el caso de una modificación, se elimina el archivo previo
+					//en el caso de una modificaci?, se elimina el archivo previo
 					if(isset($estado_inicial_ml)){
 						if($estado_inicial_ml[$nombre_input]){
 							$this->eliminar_archivo($ruta,$estado_inicial_ml[$nombre_input]);	
@@ -83,7 +84,7 @@ class helper_archivos
 					//se sube el nuevo archivo
 					if( ! $this->subir_archivo($item[$nombre_input],$ruta,utf8_encode($nombre))){
 						//se utiliza substr y strlen para quitar el ".pdf" al final del nombre de la actividad
-						toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".substr($nombre,0,(strlen($nombre)-4) ) );
+						toba::notificacion()->agregar("No se pudo subir la documentaci? probatoria correspondiente a la actividad: ".substr($nombre,0,(strlen($nombre)-4) ) );
 					}
 					$estado_actual_ml[$fila][$nombre_input] = $nombre;
 				}else{
@@ -98,7 +99,7 @@ class helper_archivos
 				}
 			}
 				
-			//si se está dando de baja un registro, se busca su nombre de archivo y se lo elimina tambien
+			//si se est?dando de baja un registro, se busca su nombre de archivo y se lo elimina tambien
 			if($item['apex_ei_analisis_fila'] == 'B'){
 				foreach($estado_inicial_ml as $linea){
 					if($linea['x_dbr_clave'] == $fila){
