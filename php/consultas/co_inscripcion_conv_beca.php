@@ -125,25 +125,172 @@ class co_inscripcion_conv_beca
 		}
 	}
 
+
+	function get_campo($campos,$filtro = array())
+	{
+		$where = array();
+		foreach($filtro as $campo => $valor){
+			$where[] = $campo." = ".quote($valor);
+		}
+		$sql = "SELECT ".implode(',',$campos)." FROM be_inscripcion_conv_beca";
+		if(count($where)){
+			$sql = sql_concatenar_where($sql,$where);
+		}
+		return toba::db()->consultar($sql);
+	}
+
 	/**
-	 * Obtiene todos los datos necesarios para generar el comprobante de inscripci√≥n que presenta el alumno en papel, con los avales de las autoridades necesarias.
-	 * @param array $inscripcion Array que contiene el id_convocatoria, el id_tipo_beca y el nro_documento que identifican a una inscripci√≥n
+	 * Obtiene todos los datos necesarios para generar el comprobante de inscripci? que presenta el alumno en papel, con los avales de las autoridades necesarias.
+	 * @param array $inscripcion Array que contiene el id_convocatoria, el id_tipo_beca y el nro_documento que identifican a una inscripci?
 	 * @return array
 	 */
 	function get_detalles_comprobante($inscripcion = array())
 	{
-		/*- convocatoria
+		$detalles = array();
+		/*
+		-------------- SOLICITANTE ---------------------
+		- alumno.apellido y nombres
+		- alumno.nro_documento
+		- alumno.correo_electronico
+		- alumno.facultad-Universidad
+		- alumno.cuil
+		- alumno.fecha_nacimiento
+		- alumno.celular
+		- alumno.telefono
+		- lugar_trabajo_becario
+		- area_dpto_laboratorio
+		*/
+		$sql = "SELECT 
+				per.apellido,
+				per.nombres,
+				insc.nro_documento,
+				insc.id_dependencia,
+				dep.nombre as nombre_dependencia,
+				coalesce(per.cuil,'No declarado') AS cuil,
+				per.fecha_nac,
+				coalesce(per.celular,'No declarado') AS celular,
+				coalesce(per.telefono,'No declarado') AS telefono,
+				insc.lugar_trabajo_becario AS lugar_trabajo_becario_id,
+				lugtrab.nombre AS lugar_trabajo_becario,
+				insc.area_trabajo,
+				insc.prom_hist_egresados, 
+				insc.prom_hist,
+				insc.nro_documento_codir,
+				insc.nro_documento_subdir
+				FROM be_inscripcion_conv_beca AS insc
+				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
+				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
+				LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario
+				WHERE per.nro_documento = ".quote($inscripcion['nro_documento'])."
+				AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+				AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
+				AND insc.estado <> 'A'
+				LIMIT 1";
+		$detalles['postulante'] = toba::db()->consultar_fila($sql);
+
+		
+
+		/*
+		-------------- BECA ---------------------
+		- convocatoria
 		- tipo_beca
 		- area_conocimiento
-		- titulo_plan_beca
-		- titulo_proyecto
-		- lugar_trabajo_becario
-		- area_dpto_laboratoria
-		- alumno
-		- alumno.facultad_o_instituto
-		- alumno.carrera
-		- alumno.anio_ingreso
-		- alumno.*/
+		- titulo_plan_beca	*/
+		$sql = "SELECT conv.convocatoria, tipbec.tipo_beca, areacon.nombre AS area_conocimiento, insc.titulo_plan_beca
+				FROM be_inscripcion_conv_beca AS insc
+				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
+				LEFT JOIN be_tipos_beca AS tipbec ON tipbec.id_tipo_beca = insc.id_tipo_beca
+				LEFT JOIN sap_area_conocimiento AS areacon ON areacon.id = insc.id_area_conocimiento
+				WHERE insc.nro_documento = ".quote($inscripcion['nro_documento'])."
+				AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+				AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
+				AND insc.estado <> 'A'
+				LIMIT 1";
+		$detalles['beca'] = toba::db()->consultar_fila($sql);
+		
+
+		/*-------------- PROMEDIOS (SE OBTIENE DE LA VARIABLE $persona) ---------------------
+		- promedio_hist_carrera
+		- promedio_hist_alumno */
+		$detalles['promedio'] = array('prom_hist_egresados' => $detalles['postulante']['prom_hist_egresados'],
+										'prom_hist'         => $detalles['postulante']['prom_hist']);
+		
+		
+		/*-------------- DIRECTOR (CO y SUB)---------------------
+		- Apellido y Nombres
+		- DNI
+		- cuil
+		- celular / -Telefono
+		- mail
+		- cargos vigentes (cargo-dedicacion-facultad-universidad)
+		- Maxima titulacion
+		- Cat- Conicet (Lugar trabajo conicet
+		- Cat. Incentivos */
+		$detalles['director'] = $this->get_detalles_director($inscripcion);
+
+		if($detalles['postulante']['nro_documento_codir']){
+			$detalles['codirector'] = $this->get_detalles_director($inscripcion,'codir');	
+		}
+		
+		if($detalles['postulante']['nro_documento_subdir']){
+			$detalles['subdirector'] = $this->get_detalles_director($inscripcion,'subdir');	
+		}
+
+		/*--------- PROYECTO DE INVESTIGACI”N ACREDITADO --------
+		- Titulo
+		- CÛdigo
+		- Director */
+
+		$sql = "SELECT proy.descripcion AS proyecto,
+						proy.codigo, 
+						proy.nro_documento_dir AS nro_documento, 
+						per.apellido, 
+						per.nombres,
+						proy.fecha_hasta
+				FROM be_inscripcion_conv_beca AS insc
+				LEFT JOIN sap_proyectos AS proy ON proy.id = insc.id_proyecto
+				LEFT JOIN sap_personas AS per ON per.nro_documento = proy.nro_documento_dir
+				WHERE insc.nro_documento = ".quote($inscripcion['nro_documento'])."
+					AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+					AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
+					AND insc.estado <> 'A'
+					LIMIT 1";
+		$detalles['proyecto'] = toba::db()->consultar_fila($sql);
+
+		return $detalles;
+
+		
+	}
+
+	function get_detalles_director($inscripcion, $tipo = 'dir')
+	{
+		$sql = "SELECT 
+					insc.nro_documento_dir AS nro_documento, 
+					per.apellido, 
+					per.nombres, 
+					per.cuil, 
+					coalesce(per.celular,'No declarado') as celular, 
+					coalesce(per.telefono,'No declarado') as telefono,
+					coalesce(per.mail,'No declarado') as mail,
+					nivac.nivel_academico,
+					coalesce(catcon.cat_conicet,'No declarado') as catconicet,
+					coalesce(catconper.lugar_trabajo,'No declarado') as lugar_trabajo_conicet,
+					catinc.categoria AS catinc,
+					coalesce(catinc.convocatoria) AS catinc_conv
+					FROM be_inscripcion_conv_beca AS insc
+					LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento_".$tipo."
+					LEFT JOIN be_niveles_academicos AS nivac ON nivac.id_nivel_academico = per.id_nivel_academico
+					LEFT JOIN be_cat_conicet_persona AS catconper ON catconper.nro_documento = per.nro_documento
+					LEFT JOIN be_cat_conicet AS catcon ON catcon.id_cat_conicet = catconper.id_cat_conicet
+					LEFT JOIN sap_cat_incentivos AS catinc ON catinc.nro_documento = per.nro_documento 
+					                                      AND catinc.convocatoria  = (SELECT MAX(convocatoria) FROM sap_cat_incentivos WHERE nro_documento = per.nro_documento)
+					WHERE insc.nro_documento = ".quote($inscripcion['nro_documento'])."
+					AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+					AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
+					AND insc.estado <> 'A'
+					LIMIT 1";
+		return toba::db()->consultar_fila($sql);
+
 	}
 }
 ?>

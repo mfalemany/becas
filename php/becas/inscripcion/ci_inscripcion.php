@@ -25,11 +25,11 @@ class ci_inscripcion extends becas_ci
 
 	function evt__cuadro__seleccion($datos)
 	{
-		//se carga la relación de "Alumno"
+		//se carga la relaci? de "Alumno"
 		$alumno = array('nro_documento'=>$datos['nro_documento']);
 		$this->get_datos('alumno')->cargar($alumno);
 
-		//se cargan los detalles de la inscripción
+		//se cargan los detalles de la inscripci?
 		$this->get_datos('inscripcion')->cargar($datos);
 
 		$this->set_pantalla('pant_edicion');
@@ -39,13 +39,20 @@ class ci_inscripcion extends becas_ci
 	{
 		$params = toba::memoria()->get_parametros();
 		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$params['fila']);
-		ei_arbol($clave);
+		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_comprobante($clave);
+		//ei_arbol($detalles);
+		$reporte = new becas_inscripcion_comprobante($detalles);
+		$reporte->mostrar();
 		//validar si existe el archivo, sino, hay que generarlo.
 	}
 
 	function conf_evt__cuadro__generar_comprobante(toba_evento_usuario $evento, $fila)
 	{
 		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$fila);
+		$estado = toba::consulta_php('co_inscripcion_conv_beca')->get_campo(array('estado'),$clave);
+		if($estado[0]['estado'] == 'A'){
+			$evento->ocultar();
+		}
 		//si el estado es cerrado, hay que mostrar el boton
 	}
 
@@ -102,7 +109,7 @@ class ci_inscripcion extends becas_ci
 					break;
 				
 				default:
-					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Ténica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_mensaje_motor());	
+					toba::notificacion()->agregar('Ocurri?un error inesperado al intentar guardar la inscripci?. por favor, comuniquese con la Secretar? General de Ciencia y T?ica para solucionarlo (cyt.unne@gmail.com). C?igo de error: '.$e->get_mensaje_motor());	
 					break;
 			}
 		}catch(toba_error $e){

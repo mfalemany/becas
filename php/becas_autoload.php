@@ -1,6 +1,6 @@
 <?php
 /**
- * Esta clase fue y será generada automáticamente. NO EDITAR A MANO.
+ * Esta clase fue y ser?generada autom?icamente. NO EDITAR A MANO.
  * @ignore
  */
 class becas_autoload 
@@ -37,6 +37,8 @@ class becas_autoload
 		'becas_ei_grafico' => 'extension_toba/componentes/becas_ei_grafico.php',
 		'becas_ei_mapa' => 'extension_toba/componentes/becas_ei_mapa.php',
 		'becas_servicio_web' => 'extension_toba/componentes/becas_servicio_web.php',
+		'FPDF' => '3ros/fpdf/fpdf.php',
+		'becas_inscripcion_comprobante' => 'generadores_pdf/becas_inscripcion_comprobante.php',
 	);
 }
 ?>

@@ -9,7 +9,8 @@ class helper_archivos
 			return;
 		}
 		$www = toba::proyecto()->get_www();
-		$www = $www['path'];
+		//se utiliza el mismo directorio que SAP
+		$www = str_replace('becas','sap',$www['path']);
 		
 		
 		if( ! is_dir($www.$carpeta)){
@@ -29,12 +30,13 @@ class helper_archivos
 
 	function procesar_campos($efs_archivos,&$datos_form,$ruta)
 	{
-
 		foreach($efs_archivos as $archivo){
+
 			if(array_key_exists($archivo['ef'], $datos_form)){
+			
 				if($datos_form[$archivo['ef']]){
 					if( ! $this->subir_archivo($datos_form[$archivo['ef']],utf8_encode($ruta),$archivo['nombre'])){
-						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretar? General de Ciencia y T?nica');
+						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretaría General de Ciencia y Ténica');
 					}else{
 						$datos_form[$archivo['ef']] = $archivo['nombre'];
 					}

@@ -136,7 +136,7 @@ class ci_edicion extends becas_ci
 		/* ================== UPLOAD DEL CERTIFICADO ANAL?ICO =================== */
 		$conv = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$datos['id_convocatoria']);
 		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$datos['id_tipo_beca']);
-		$ruta = 'doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
+		$ruta = 'becas/doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
 		$efs_archivos[] = array('ef'          => 'archivo_analitico',
 						  		'descripcion' => 'Certificado Analitico',
 						  		'nombre'      => 'Cert. Analitico.pdf'
@@ -263,7 +263,7 @@ class ci_edicion extends becas_ci
 
 		//desactivo los efs innecesarios para un alumno
 		if($form->existe_ef('id_disciplina')){
-			$form->desactivar_efs(array('id_disciplina'));		
+			$form->desactivar_efs(array('id_disciplina','archivo_cvar','id_nivel_academico'));		
 		}
 		
 		
@@ -332,8 +332,20 @@ class ci_edicion extends becas_ci
 
 	function evt__form_director__modificacion($datos)
 	{
+		$this->procesar_cvar_director($datos);
 		$this->sincronizar_datos_persona($datos);
 		
+	}
+
+	function procesar_cvar_director(&$datos)
+	{
+		//campos que contienen archivos
+		$ruta = 'docum_personal/'.$datos['nro_documento'].'/';
+		$efs_archivos = array(array('ef'          => 'archivo_cvar',
+									'descripcion' => 'CVAr',
+									'nombre'      => "cvar.pdf"
+									));
+		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -347,9 +359,10 @@ class ci_edicion extends becas_ci
 
 		if(isset($this->s__insc_actual['nro_documento_codir']) && $this->s__insc_actual['nro_documento_codir']){
 			$dir = $this->s__insc_actual['nro_documento_codir'];
-			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
+			$director = toba::consulta_php('co_personas')->get_personas(array(
 				'nro_documento' => $dir
-			)));
+			));
+			$director = array_shift($director);
 			$form->set_datos($director);	
 		}
 		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
@@ -359,6 +372,7 @@ class ci_edicion extends becas_ci
 
 	function evt__form_codirector__modificacion($datos)
 	{
+		$this->procesar_cvar_director($datos);
 		$this->sincronizar_datos_persona($datos);
 	}
 
@@ -368,7 +382,7 @@ class ci_edicion extends becas_ci
 
 	function conf__form_codirector_justif(becas_ei_formulario $form)
 	{
-		if($this->s__insc_actual){
+		if($this->s__insc_actual && isset($this->s__insc_actual['justif_codirector'])){
 			$form->set_datos(array('justif_codirector' => $this->s__insc_actual['justif_codirector']));
 			
 		}
@@ -405,6 +419,7 @@ class ci_edicion extends becas_ci
 
 	function evt__form_subdirector__modificacion($datos)
 	{
+		$this->procesar_cvar_director($datos);
 		$this->sincronizar_datos_persona($datos);
 	}
 
@@ -429,7 +444,7 @@ class ci_edicion extends becas_ci
 			//nombre del tipo de beca
 			$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
 			//conformaci? de la ruta donde se almacenar?el plan de trabajo
-			$ruta = 'doc_por_convocatoria/'.$convocatoria.'/'.$tipo_beca.'/'.$insc['nro_documento'].'/';
+			$ruta = 'becas/doc_por_convocatoria/'.$convocatoria.'/'.$tipo_beca.'/'.$insc['nro_documento'].'/';
 			//campos que contienen archivos
 			$efs_archivos = array(array('ef'          => 'doc_probatoria',
 										'descripcion' => 'Plan de Trabajo',

@@ -53,7 +53,8 @@ class co_personas
 			per.archivo_cuil,
 			per.archivo_titulo_grado,
 			cat_con.id_cat_conicet,
-			cat.cat_conicet
+			cat.cat_conicet,
+			per.archivo_cvar
 		FROM
 			sap_personas as per	
 		LEFT JOIN be_niveles_academicos as niv ON per.id_nivel_academico = niv.id_nivel_academico
