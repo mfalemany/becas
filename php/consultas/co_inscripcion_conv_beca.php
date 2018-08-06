@@ -264,8 +264,9 @@ class co_inscripcion_conv_beca
 
 	function get_detalles_director($inscripcion, $tipo = 'dir')
 	{
+
 		$sql = "SELECT 
-					insc.nro_documento_dir AS nro_documento, 
+					insc.nro_documento_".$tipo." AS nro_documento, 
 					per.apellido, 
 					per.nombres, 
 					per.cuil, 

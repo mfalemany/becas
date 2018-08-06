@@ -8,11 +8,17 @@ class ci_login extends toba_ci
 	private $es_cambio_contrasenia = false;
 	
 	/**
-	 * Guarda el id de la operación original así se hace una redirección una vez logueado
+	 * Guarda el id de la operaci? original as?se hace una redirecci? una vez logueado
 	 */
 	function ini__operacion()
 	{
-		//--- Si el usuario pidio originalmente algún item distinto al de login, se fuerza como item de inicio de sesión
+			// Si existe notificaciÃƒÂ³n pendiente, se muestra en pantallaensa
+	$mensaje = toba::memoria()->get_dato("mensaje");
+	if (isset($mensaje)) {
+		toba::notificacion()->agregar($mensaje,'info');
+		toba::memoria()->eliminar_dato("mensaje");
+	}
+		//--- Si el usuario pidio originalmente alg?n item distinto al de login, se fuerza como item de inicio de sesi?
 		$item_original = toba::memoria()->get_item_solicitado_original();
 		$item_actual = toba::memoria()->get_item_solicitado();
 		if (isset($item_original) && isset($item_actual) &&
@@ -33,7 +39,7 @@ class ci_login extends toba_ci
 			try {
 				toba::manejador_sesiones()->get_autenticacion()->verificar_acceso();
 			} catch (toba_error_autenticacion $e) {
-				//-- Caso error de validación
+				//-- Caso error de validaci?
 				toba::notificacion()->agregar($e->getMessage());
 			}
 		}
@@ -114,7 +120,7 @@ class ci_login extends toba_ci
 		try {		
 			$this->invocar_autenticacion_por_tipo();
 		} catch (toba_error_autenticacion $e) {
-			//-- Caso error de validación
+			//-- Caso error de validaci?
 			$this->resetear_marca_login();
 			toba::notificacion()->agregar($e->getMessage());
 		} catch (toba_error_autenticacion_intentos $e) {
@@ -188,7 +194,7 @@ class ci_login extends toba_ci
 		}		
 		toba::logger()->desactivar();
 		if (isset($datos['test_error_repetido']) && !$datos['test_error_repetido']) {
-			throw new toba_error_autenticacion('El valor ingresado de confirmación no es correcto');
+			throw new toba_error_autenticacion('El valor ingresado de confirmaci? no es correcto');
 		} else {
 			$this->s__datos = $datos;
 		}
@@ -246,7 +252,7 @@ class ci_login extends toba_ci
 		try {
 			toba::manejador_sesiones()->get_autenticacion()->verificar_acceso();
 		} catch (toba_error_autenticacion $e) {
-			//-- Caso error de validación				
+			//-- Caso error de validaci?				
 			toba::notificacion()->agregar($e->getMessage());	
 		}
 	}
@@ -272,7 +278,7 @@ class ci_login extends toba_ci
 	{
 		$largo_clave =  toba_parametros::get_largo_pwd(toba::proyecto()->get_id());
 		$form->ef('clave_nueva')->set_expreg(toba_usuario::get_exp_reg_pwd($largo_clave));
-		$form->ef('clave_nueva')->set_descripcion("La clave debe tener al menos $largo_clave caracteres, entre letras mayúsculas, minúsculas, números y símbolos, no pudiendo repetir caracteres adyacentes");
+		$form->ef('clave_nueva')->set_descripcion("La clave debe tener al menos $largo_clave caracteres, entre letras may?sculas, min?sculas, n?meros y s?bolos, no pudiendo repetir caracteres adyacentes");
 		$form->set_datos(array());
 	}
 	
@@ -285,7 +291,7 @@ class ci_login extends toba_ci
 			$dias_minimos = toba_parametros::get_clave_validez_minima($proyecto);
 			if (! is_null($dias_minimos)) {
 				if (! toba_usuario::verificar_periodo_minimo_cambio($usuario, $dias_minimos)) {
-					toba::notificacion()->agregar('No transcurrio el período minimo para poder volver a cambiar su contraseña. Intentelo en otra ocasión');
+					toba::notificacion()->agregar('No transcurrio el per?do minimo para poder volver a cambiar su contrase?. Intentelo en otra ocasi?');
 					return;
 				}
 			}		
