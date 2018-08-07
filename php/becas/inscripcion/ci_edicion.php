@@ -301,7 +301,7 @@ class ci_edicion extends becas_ci
 							  	    'nombre'      => 'CUIL.pdf')
 							);
 							 
-		$ruta = 'doc_probatoria/'.$datos['nro_documento'].'/';
+		$ruta = 'docum_personal/'.$datos['nro_documento'].'/';
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);
 		$this->sincronizar_datos_persona($datos);
 	}
