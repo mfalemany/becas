@@ -49,9 +49,15 @@ class ci_inscripcion extends becas_ci
 	function conf_evt__cuadro__generar_comprobante(toba_evento_usuario $evento, $fila)
 	{
 		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$fila);
+		if(count($clave) == 0){
+			$evento->ocultar();
+			return;
+		}
 		$estado = toba::consulta_php('co_inscripcion_conv_beca')->get_campo(array('estado'),$clave);
 		if($estado[0]['estado'] == 'A'){
 			$evento->ocultar();
+		}else{
+			$evento->mostrar();
 		}
 		//si el estado es cerrado, hay que mostrar el boton
 	}
