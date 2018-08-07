@@ -16,8 +16,8 @@ class ci_inscripcion extends becas_ci
 		$filtro = array();
 		
 		//si el usuario es becario, solo puede ver sus propias inscripciones
-		if(in_array('becario',toba::usuario()->get_perfiles_funcionales())){
-			$filtro['nro_documento'] = toba::usuario()->get_id();
+		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
+			$filtro['nro_documento'] = toba::usuario()->get_id();	
 		}
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 		

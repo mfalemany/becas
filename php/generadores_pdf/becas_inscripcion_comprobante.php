@@ -40,6 +40,8 @@ class Becas_inscripcion_comprobante extends FPDF
 		//Codirector
 		if(isset($datos['codirector'])){
 			$this->Ln();
+			$this->justificacion_codireccion($datos['postulante']['justif_codirector'],$params);
+			$this->Ln();
 			$this->direccion($datos['codirector'],$params,'codirector');
 		}
 		//Subdirector
@@ -63,10 +65,6 @@ class Becas_inscripcion_comprobante extends FPDF
 		//Aval Autoridades UA
 		$this->Ln();
 		$this->aval_autoridades_ua();
-
-
-
-
 	}
 
 	function postulante($datos,$params)
@@ -152,6 +150,19 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell($ancho_titulo,$alto_fila,'Título del Plan de Beca:',$bordes,0,$alin_rotulo,false);
 		$this->setFont('','');
 		$this->MultiCell($ancho_info,$alto_fila-1,$datos['titulo_plan_beca'],$bordes,'J',false);
+	}
+
+	function justificacion_codireccion($justificacion,$params)
+	{
+		extract($params);
+		$this->setFont('','B');
+		$this->Cell(190,7,'JUSTIFICACIÓN CODIRECTOR/SUBDIRECTOR',1,1,'C',true);	
+		$this->setFont('','',6);
+		$this->Cell($ancho_total,$alto_fila,'El Director de Beca deberá justificar la inclusión de un Co-Director y/o Sub-Director de Beca, expresando claramente los motivos que hacen necesaria tal inclusión.',$bordes,1,'C',false);
+		$this->setFont('','B',7);
+		$this->Cell($ancho_titulo,$alto_fila,'Justificación:',$bordes,0,$alin_rotulo,false);
+		$this->setFont('','');
+		$this->MultiCell($ancho_info,$alto_fila-1,$justificacion,$bordes,'J',false);
 	}
 
 	function direccion($datos,$params,$tipo)

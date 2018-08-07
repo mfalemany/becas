@@ -178,7 +178,8 @@ class co_inscripcion_conv_beca
 				insc.prom_hist_egresados, 
 				insc.prom_hist,
 				insc.nro_documento_codir,
-				insc.nro_documento_subdir
+				insc.nro_documento_subdir,
+				insc.justif_codirector
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
