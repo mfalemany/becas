@@ -6,7 +6,7 @@ class ci_inscripcion extends becas_ci
 		//si no existen convocatorias con inscripcion abierta, elimino el evento 'agregar (Nueva Inscripcion'
 		if( ! toba::consulta_php('co_convocatoria_beca')->existen_convocatorias_vigentes()){
 			$this->pantalla()->eliminar_evento('agregar');
-			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripci? abierto');
+			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripción abierto');
 		}
 	}
 	//---- Cuadro Inscripciones ------------------------------------------------------------
@@ -109,7 +109,7 @@ class ci_inscripcion extends becas_ci
 					break;
 				
 				default:
-					toba::notificacion()->agregar('Ocurri?un error inesperado al intentar guardar la inscripci?. por favor, comuniquese con la Secretar? General de Ciencia y T?ica para solucionarlo (cyt.unne@gmail.com). C?igo de error: '.$e->get_mensaje_motor());	
+					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_mensaje_motor());	
 					break;
 			}
 		}catch(toba_error $e){

@@ -129,8 +129,10 @@ class co_inscripcion_conv_beca
 	function get_campo($campos,$filtro = array())
 	{
 		$where = array();
-		foreach($filtro as $campo => $valor){
-			$where[] = $campo." = ".quote($valor);
+		if(count($filtro)){
+			foreach($filtro as $campo => $valor){
+				$where[] = $campo." = ".quote($valor);
+			}	
 		}
 		$sql = "SELECT ".implode(',',$campos)." FROM be_inscripcion_conv_beca";
 		if(count($where)){

@@ -12,10 +12,9 @@ class form_admisibilidad extends becas_ei_formulario
 		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
 
 		if($insc['archivo_analitico']){
-			$base = toba::proyecto()->get_www();
-			$base = str_replace('becas','sap',$base);
-			$ruta = $base['url'].'/becas/doc_por_convocatoria/'.$conv."/".$tipo_beca."/".$insc['nro_documento']."/";
-			echo "<a id='enlace_analitico' class='enlace_boton' href='".$ruta.'Cert. Analitico.pdf'."' target='_BLANK'>Ver analítico</a>";
+			$base = toba::consulta_php('helper_archivos')->base_url();
+			$ruta = $base.'becas/doc_por_convocatoria/'.$conv."/".$tipo_beca."/".$insc['nro_documento']."/";
+			echo "<a id='enlace_analitico' class='enlace_boton' href='".$ruta.'Cert. Analitico.pdf'."' target='_BLANK'>Ver anal?ico</a>";
 		}
 
 		$this->generar_html_ef('porcentaje_aprobacion');
@@ -26,7 +25,7 @@ class form_admisibilidad extends becas_ei_formulario
 		$this->generar_html_ef('admisible');
 		$this->generar_html_ef('beca_otorgada');
 		if($insc['archivo_insc_posgrado']){
-			echo "<div style='margin:10px auto 10px auto; text-align:center;'><a href='".$ruta."/Insc. o Compromiso Posgrado.pdf"."' class='enlace_boton' target='_BLANK'>Ver inscripción/compromiso a posgrado</a></div>";
+			echo "<div style='margin:10px auto 10px auto; text-align:center;'><a href='".$ruta."/Insc. o Compromiso Posgrado.pdf"."' class='enlace_boton' target='_BLANK'>Ver inscripci?/compromiso a posgrado</a></div>";
 		}
 	}
 
