@@ -98,9 +98,9 @@ class Becas_inscripcion_comprobante extends FPDF
 
 		/* NÚMERO CARPETA */
 		$this->Ln();
-		$this->setFont('','B',11);
+		$this->setFont('','B',15);
 		$this->SetFillColor(250,250,250);
-		$this->Cell($ancho,$alto_linea,'Número de Carpeta: '.$datos['nro_carpeta'],1,1,'C',true);
+		$this->Cell($ancho,$alto_linea,'Carpeta Nº: '.$datos['nro_carpeta'],1,1,'C',true);
 		
 		//Cuandro
 		/*$y += $alto_linea;
