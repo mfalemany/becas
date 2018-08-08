@@ -199,7 +199,7 @@ class co_inscripcion_conv_beca
 		- tipo_beca
 		- area_conocimiento
 		- titulo_plan_beca	*/
-		$sql = "SELECT conv.convocatoria, tipbec.tipo_beca, areacon.nombre AS area_conocimiento, insc.titulo_plan_beca
+		$sql = "SELECT insc.nro_carpeta, conv.convocatoria, tipbec.tipo_beca, areacon.nombre AS area_conocimiento, insc.titulo_plan_beca
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 				LEFT JOIN be_tipos_beca AS tipbec ON tipbec.id_tipo_beca = insc.id_tipo_beca

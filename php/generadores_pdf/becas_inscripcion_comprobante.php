@@ -9,9 +9,10 @@ class Becas_inscripcion_comprobante extends FPDF
 		parent::__construct();
 		//Formato A4 y Apaisado
 		$this->SetTopMargin(35);
+		
 		$this->SetAutoPageBreak(true,20);
 		$this->AddPage('Portrait','A4');
-		$this->SetFillColor(200,200,200);
+		
 
 		
 		/* ---------- PARÁMETROS DEL FORMULARIO ---------------*/
@@ -23,6 +24,22 @@ class Becas_inscripcion_comprobante extends FPDF
 						'distancia_cuadros' => 3);
 		$params['ancho_info'] = $params['ancho_total'] - $params['ancho_titulo'];
 		/* ----------------------------------------------------*/
+
+		//Carátula
+		$caratula = array('tipo_beca'         => $datos['beca']['tipo_beca'],
+						  'postulante'        => $datos['postulante']['apellido'].', '.$datos['postulante']['nombres'],
+						  'cuil'              => $datos['postulante']['cuil'],
+						  'director'          => $datos['director']['apellido'].', '.$datos['director']['nombres'],
+						  'area_conocimiento' => $datos['beca']['area_conocimiento'],
+						  'nro_carpeta'       => $datos['beca']['nro_carpeta'],
+						  'convocatoria'      => $datos['beca']['convocatoria']);
+		$this->caratula($caratula,$params);
+
+		//agrego otra hoja
+		$this->AddPage('Portrait','A4');
+
+		$this->SetFont('','',7);
+		$this->SetFillColor(200,200,200);
 
 		//Cuadro Postulante
 		$this->postulante($datos['postulante'],$params);
@@ -65,6 +82,79 @@ class Becas_inscripcion_comprobante extends FPDF
 		//Aval Autoridades UA
 		$this->Ln();
 		$this->aval_autoridades_ua();
+	}
+
+	function caratula($datos,$params)
+	{
+		extract($params);
+		//manejan la posición del cuadro
+		$x = 29;
+		$y = 47;
+		$ancho = 190;
+		$alto = 130;
+
+		//alto de la linea
+		$alto_linea = 8;
+
+		/* NÚMERO CARPETA */
+		$this->Ln();
+		$this->setFont('','B',11);
+		$this->SetFillColor(250,250,250);
+		$this->Cell($ancho,$alto_linea,'Número de Carpeta: '.$datos['nro_carpeta'],1,1,'C',true);
+		
+		//Cuandro
+		/*$y += $alto_linea;
+		$this->Rect($x,$y,$ancho,$alto,'DF');*/
+		
+		$this->SetFillColor(256,256,256);
+		$ancho_etiq = 40;
+		
+		//Convocatoria
+		$this->setFont('','B',10);
+		$this->Cell($ancho_etiq,$alto_linea,'Convocatoria ',1,0,'C',false);
+		$this->setFont('','',10);
+		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['convocatoria'],1,1,'L',false);
+		//Tipo de Beca
+		$this->setFont('','B',10);
+		$this->Cell($ancho_etiq,$alto_linea,'Tipo de Beca ',1,0,'C',false);
+		$this->setFont('','',10);
+		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['tipo_beca'],1,1,'L',false);
+		//Area Conocimiento
+		$this->setFont('','B',10);
+		$this->Cell($ancho_etiq,$alto_linea,'Área Conocimiento ',1,0,'C',false);
+		$this->setFont('','',10);
+		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['area_conocimiento'],1,1,'L',false);
+		//Postulante
+		$this->setFont('','B',10);
+		$this->Cell($ancho_etiq,$alto_linea,'Postulante ',1,0,'C',false);
+		$this->setFont('','',10);
+		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['postulante'],1,1,'L',false);
+		//CUIL
+		$this->setFont('','B',10);
+		$this->Cell($ancho_etiq,$alto_linea,'CUIL ',1,0,'C',false);
+		$this->setFont('','',10);
+		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['cuil'],1,1,'L',false);
+		//Director
+		$this->setFont('','B',10);
+		$this->Cell($ancho_etiq,$alto_linea,'Director ',1,0,'C',false);
+		$this->setFont('','',10);
+		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['director'],1,1,'L',false);
+		
+		$this->Ln();
+		$this->Ln();
+		$this->SetFont('','',7);
+		//Lugar y Fecha
+		$this->Cell(75,$alto_linea,'','B',0,'C',false);
+		$this->SetX($this->GetX()+40);
+		$this->Cell(75,$alto_linea,'','B',1,'C',false);
+		
+		$this->Cell(75,$alto_linea,'Lugar y Fecha',0,0,'C',false);
+		$this->SetX($this->GetX()+40);
+		$this->Cell(75,$alto_linea,'Firma del Postulante',0,1,'C',false);
+
+		//Linea para corte
+		$this->Ln();
+		$this->Cell($ancho,$alto_linea,'','T',1,'C',false);
 	}
 
 	function postulante($datos,$params)
@@ -155,8 +245,8 @@ class Becas_inscripcion_comprobante extends FPDF
 	function justificacion_codireccion($justificacion,$params)
 	{
 		extract($params);
-		$this->setFont('','B');
-		$this->Cell(190,7,'JUSTIFICACIÓN CODIRECTOR/SUBDIRECTOR',1,1,'C',true);	
+		$this->setFont('','B',6);
+		$this->Cell(190,4,'JUSTIFICACIÓN CODIRECTOR/SUBDIRECTOR',1,1,'C',true);	
 		$this->setFont('','',6);
 		$this->Cell($ancho_total,$alto_fila,'El Director de Beca deberá justificar la inclusión de un Co-Director y/o Sub-Director de Beca, expresando claramente los motivos que hacen necesaria tal inclusión.',$bordes,1,'C',false);
 		$this->setFont('','B',7);
@@ -314,7 +404,8 @@ class Becas_inscripcion_comprobante extends FPDF
 	function Footer()
 	{
 		$this->SetXY(84,-10);
-		$this->Cell(40,5,'Página '.$this->PageNo(),0,0,'C',false);
+		//Se usa el menos uno porque la carátula no debe tener el numero 1
+		$this->Cell(40,5,'Página '.($this->PageNo() - 1),0,0,'C',false);
 	}
 	function mostrar()
 	{
