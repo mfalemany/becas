@@ -216,7 +216,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'2975', --objeto_ei_formulario
 	'becas', --objeto_ei_formulario_proyecto
 	'tipo_beca', --identificador
-	'ef_combo', --elemento_formulario
+	'ef_editable', --elemento_formulario
 	'tipo_beca', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
@@ -234,7 +234,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --estado_defecto
 	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
-	'get_tipos_beca', --carga_metodo
+	NULL, --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
@@ -251,7 +251,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'--Seleccione--', --carga_no_seteado
 	'0', --carga_no_seteado_ocultar
 	NULL, --edit_tamano
-	NULL, --edit_maximo
+	'50', --edit_maximo
 	NULL, --edit_mascara
 	NULL, --edit_unidad
 	NULL, --edit_rango

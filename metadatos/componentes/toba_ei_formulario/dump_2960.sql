@@ -156,7 +156,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 		<li>
 			Presupuesto y fuentes de financiamiento del Proyecto, que garanticen el desarrollo del mismo</li>
 	</ul>
-</div>
+	<p style="text-align: center;"><strong><span style="color:#ff0000;">El plan de trabajo impreso tambi&eacute;n debe ser presentado a la SGCyT al momento de la de inscripci&oacute;n</span></strong></p></div>
 <table>
 	<tbody>
 		<tr>

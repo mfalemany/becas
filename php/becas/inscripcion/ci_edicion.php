@@ -21,6 +21,8 @@ class ci_edicion extends becas_ci
 			//si la inscripci? no est?abierta...
 			if($this->s__insc_actual['estado'] != 'A'){
 				$this->bloquear_formularios();
+				$this->controlador()->pantalla()->agregar_evento('ver_comprobante');
+
 			}
 		}else{
 			unset($this->s__insc_actual);
@@ -406,9 +408,8 @@ class ci_edicion extends becas_ci
 
 		if(isset($this->s__insc_actual['nro_documento_subdir']) && $this->s__insc_actual['nro_documento_subdir']){
 			$dir = $this->s__insc_actual['nro_documento_subdir'];
-			$director = array_shift(toba::consulta_php('co_personas')->get_personas(array(
-				'nro_documento' => $dir
-			)));
+			$director = toba::consulta_php('co_personas')->get_personas(array('nro_documento' => $dir));
+			$director = array_shift($director);
 			$form->set_datos($director);	
 		}
 		

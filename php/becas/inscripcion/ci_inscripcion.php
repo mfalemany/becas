@@ -39,11 +39,20 @@ class ci_inscripcion extends becas_ci
 	{
 		$params = toba::memoria()->get_parametros();
 		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$params['fila']);
+		$this->generar_comprobante($clave);
+		//validar si existe el archivo, sino, hay que generarlo.
+	}
+
+	function generar_comprobante($clave)
+	{
+		if(!count($clave)){
+			return;
+		}
 		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_comprobante($clave);
 		//ei_arbol($detalles);
 		$reporte = new becas_inscripcion_comprobante($detalles);
 		$reporte->mostrar();
-		//validar si existe el archivo, sino, hay que generarlo.
+
 	}
 
 	function conf_evt__cuadro__generar_comprobante(toba_evento_usuario $evento, $fila)
@@ -70,7 +79,13 @@ class ci_inscripcion extends becas_ci
 	}
 
 	//---- EVENTOS CI -------------------------------------------------------------------
-
+	function evt__ver_comprobante()
+	{
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$clave = array('nro_documento' => $insc['nro_documento'], 'id_tipo_beca' => $insc['id_tipo_beca'], 'id_convocatoria' => $insc['id_convocatoria']);
+		
+		$this->generar_comprobante($clave);
+	}
 	function evt__agregar()
 	{
 		$this->set_pantalla('pant_edicion');
@@ -106,7 +121,7 @@ class ci_inscripcion extends becas_ci
 
 			$this->get_datos('alumno')->sincronizar();
 			$this->get_datos('inscripcion')->sincronizar();
-			$this->resetear();	
+			toba::notificacion()->agregar('Se ha cerrado correctamente la solicitud. En la parte inferior de esta pantalla puede descargar el comprobante de inscripción, el cual debe ser entregado a la SGCyT.','info');	
 		}catch(toba_error_db $e){
 			switch ($e->get_sqlstate()) {
 
