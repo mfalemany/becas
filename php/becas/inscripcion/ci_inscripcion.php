@@ -121,7 +121,7 @@ class ci_inscripcion extends becas_ci
 
 			$this->get_datos('alumno')->sincronizar();
 			$this->get_datos('inscripcion')->sincronizar();
-			toba::notificacion()->agregar('Se ha cerrado correctamente la solicitud. En la parte inferior de esta pantalla puede descargar el comprobante de inscripción, el cual debe ser entregado a la SGCyT.','info');	
+			
 		}catch(toba_error_db $e){
 			switch ($e->get_sqlstate()) {
 
@@ -142,6 +142,7 @@ class ci_inscripcion extends becas_ci
 	function evt__cerrar_inscripcion()
 	{
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('estado'=>'C'));
+		toba::notificacion()->agregar('Se ha cerrado correctamente la solicitud. En la parte inferior de esta pantalla puede descargar el comprobante de inscripción, el cual debe ser entregado a la SGCyT.','info');	
 		$this->evt__guardar();
 	}
 
