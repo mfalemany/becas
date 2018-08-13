@@ -295,6 +295,9 @@ class ci_edicion extends becas_ci
 
 	function evt__form_alumno__modificacion($datos)
 	{
+		if(isset($datos['cuil'])){
+			$datos['cuil'] = str_replace("-","",$datos['cuil']);
+		}
 		$efs_archivos = array(array('ef'          => 'archivo_titulo_grado',
 							 	    'descripcion' => 'Titulo de Grado',
 							 	    'nombre'      => 'Titulo Grado.pdf') ,
@@ -334,6 +337,9 @@ class ci_edicion extends becas_ci
 
 	function evt__form_director__modificacion($datos)
 	{
+		if(isset($datos['cuil'])){
+			$datos['cuil'] = str_replace("-","",$datos['cuil']);
+		}
 		$this->procesar_cvar_director($datos);
 		$this->sincronizar_datos_persona($datos);
 		
@@ -356,6 +362,7 @@ class ci_edicion extends becas_ci
 	
 	function conf__form_codirector(becas_ei_formulario $form)
 	{
+		
 		//borra el estado de los efs (bug por la reutilización del form_personas)
 		unset($form->_memoria['efs']);
 
@@ -367,13 +374,17 @@ class ci_edicion extends becas_ci
 			$director = array_shift($director);
 			$form->set_datos($director);	
 		}
-		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->set_efs_obligatorios(array('cuil','celular'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 		
 	}
 
 	function evt__form_codirector__modificacion($datos)
 	{
+		if(isset($datos['cuil'])){
+			$datos['cuil'] = str_replace("-","",$datos['cuil']);
+		}
 		$this->procesar_cvar_director($datos);
 		$this->sincronizar_datos_persona($datos);
 	}
@@ -414,12 +425,16 @@ class ci_edicion extends becas_ci
 		}
 		
 		
-		$form->desactivar_efs(array('id_tipo_doc','cuil','fecha_nac','celular','mail','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->set_efs_obligatorios(array('cuil','celular'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
 		$form->set_solo_lectura(array('nro_documento'));
 	}
 
 	function evt__form_subdirector__modificacion($datos)
 	{
+		if(isset($datos['cuil'])){
+			$datos['cuil'] = str_replace("-","",$datos['cuil']);
+		}
 		$this->procesar_cvar_director($datos);
 		$this->sincronizar_datos_persona($datos);
 	}

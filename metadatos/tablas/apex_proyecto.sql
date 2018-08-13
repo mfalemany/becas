@@ -57,7 +57,7 @@ INSERT INTO apex_proyecto (proyecto, descripcion, descripcion_corta, estilo, con
 	NULL, --version_link
 	NULL, --tiempo_espera_ms
 	'0', --navegacion_ajax
-	NULL, --codigo_ga_tracker
+	'UA-51336609-3', --codigo_ga_tracker
 	TRUE, --extension_toba
 	FALSE  --extension_proyecto
 );
