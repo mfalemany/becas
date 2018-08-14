@@ -118,7 +118,6 @@ class ci_inscripcion extends becas_ci
 				$this->dep('ci_edicion')->set_pantalla('pant_alumno');
 				throw new toba_error("No se ha cargado la constancia de CUIL del solicitante");
 			}
-
 			$this->get_datos('alumno')->sincronizar();
 			$this->get_datos('inscripcion')->sincronizar();
 			
@@ -139,11 +138,74 @@ class ci_inscripcion extends becas_ci
 		
 	}
 
+	function validar_datos_obligatorios($inscripcion)
+	{	
+		$obligatorios = array(
+			array(
+				'pantalla'     => 'Alumno',
+				'campo'        => 'nro_documento',
+				'obligatorios' => array('sexo','cuil','mail','fecha_nac','celular','archivo_cuil')
+			),
+			array(
+				'pantalla'     => 'Director',
+				'campo'        => 'nro_documento_dir',
+				'obligatorios' => array('sexo','cuil','mail','celular','nivel_academico','id_disciplina','archivo_cvar')
+			)
+		);
+		if($inscripcion['nro_documento_codir']){
+			$obligatorios[] = array(
+				'pantalla'     => 'Co-Director',
+				'campo'        => 'nro_documento_codir',
+				'obligatorios' => array('sexo','cuil','mail','celular','nivel_academico','id_disciplina','archivo_cvar')
+			);
+		}
+
+		if($inscripcion['nro_documento_subdir']){
+			$obligatorios[] = array(
+				'pantalla'     => 'Sub-Director',
+				'campo'        => 'nro_documento_subdir',
+				'obligatorios' => array('sexo','cuil','mail','celular','nivel_academico','id_disciplina','archivo_cvar')
+			);
+		}
+			
+		$faltantes = array();
+		
+		foreach($obligatorios as $obligatorio) {
+			$buscado = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+			$persona = toba::consulta_php('co_personas')->get_resumen_director($buscado[$obligatorio['campo']]);
+			foreach ($obligatorio['obligatorios'] as $campo) {
+				if(array_key_exists($campo,$persona)){
+					if($persona[$campo] == NULL){
+						$faltantes[$obligatorio['pantalla']][] = $campo; 
+					}	
+				}
+			}
+		}
+		return $faltantes;
+		
+	}
+
 	function evt__cerrar_inscripcion()
 	{
-		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('estado'=>'C'));
-		toba::notificacion()->agregar('Se ha cerrado correctamente la solicitud. En la parte inferior de esta pantalla puede descargar el comprobante de inscripción, el cual debe ser entregado a la SGCyT.','info');	
 		$this->evt__guardar();
+		
+		$faltantes = $this->validar_datos_obligatorios($this->get_datos('inscripcion','inscripcion_conv_beca')->get());
+		
+		if(count($faltantes) > 0){
+			$mensaje = "<ul>";
+			foreach ($faltantes as $pantalla => $campos) {
+				$mensaje .= "<li>Sección '$pantalla': ".implode(', ',$campos)."</li>";
+			}
+			$mensaje .= "</ul>";
+			throw new toba_error('Faltan datos por completar: '.$mensaje);
+		}else{
+			toba::notificacion()->agregar('Se ha cerrado correctamente la solicitud. En la parte inferior de esta pantalla puede descargar el comprobante de inscripción, el cual debe ser entregado a la SGCyT.','info');
+			$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('estado'=>'C'));
+			$this->evt__guardar();
+		}
+		
+		
+		
 	}
 
 	function &get_datos($relacion, $tabla = NULL)

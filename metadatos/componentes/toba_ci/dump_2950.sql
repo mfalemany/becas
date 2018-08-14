@@ -259,7 +259,7 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 	NULL, --posicion_botonera
 	NULL, --tipo_navegacion
 	'0', --botonera_barra_item
-	'0', --con_toc
+	'1', --con_toc
 	NULL, --incremental
 	NULL, --debug_eventos
 	NULL, --activacion_procesar

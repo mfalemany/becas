@@ -256,15 +256,20 @@ class co_personas
 							per.apellido,
 							per.nombres,
 							per.cuil,
+							per.sexo,
+							per.mail,
+							per.celular,
 							per.id_nivel_academico,
+							per.id_disciplina,
+							per.archivo_cvar,
 							niv.nivel_academico,
 							cat_inc.categoria as cat_incentivos,
 							case cat_inc.categoria 
-								when 1 then 'Categor? I'
-								when 2 then 'Categor? II'
-								when 3 then 'Categor? III'
-								when 4 then 'Categor? IV'
-								when 5 then 'Categor? V'
+								when 1 then 'Categoría I'
+								when 2 then 'Categoría II'
+								when 3 then 'Categoría III'
+								when 4 then 'Categoría IV'
+								when 5 then 'Categoría V'
 								else 'No categorizado'
 								end as cat_incentivos_descripcion,
 							cat_con.id_cat_conicet,

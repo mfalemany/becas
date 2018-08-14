@@ -280,7 +280,7 @@ class ci_edicion extends becas_ci
 			}
 			$form->set_datos($alu);
 			
-			
+			$form->set_efs_obligatorios(array('cuil','celular'));
 			$form->set_solo_lectura(array('nro_documento'));
 
 			if(isset($alu['apellido'])){
