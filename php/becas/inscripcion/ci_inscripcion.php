@@ -181,7 +181,7 @@ class ci_inscripcion extends becas_ci
 				}
 			}
 		}
-		if(!$inscripcion['justif_codirector']){
+		if( ($inscripcion['nro_documento_codir'] || $inscripcion['nro_documento_codir']) &&  !$inscripcion['justif_codirector']){
 			$faltantes['Co-Director'][] = 'Justificación del Co-Director/Sub-Director';
 		}
 		return $faltantes;
