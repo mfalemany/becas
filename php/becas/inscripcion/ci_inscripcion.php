@@ -138,7 +138,7 @@ class ci_inscripcion extends becas_ci
 		
 	}
 
-	function validar_datos_obligatorios($inscripcion)
+	function validar_datos_obligatorios($inscripcion,$plan_trabajo)
 	{	
 		$obligatorios = array(
 			array(
@@ -184,6 +184,9 @@ class ci_inscripcion extends becas_ci
 		if( ($inscripcion['nro_documento_codir'] || $inscripcion['nro_documento_codir']) &&  !$inscripcion['justif_codirector']){
 			$faltantes['Co-Director'][] = 'Justificación del Co-Director/Sub-Director';
 		}
+		if(!$plan_trabajo['doc_probatoria']){
+			$faltantes['Plan Trabajo'][] = 'Archivo PDF con el plan de trabajo';
+		}
 		return $faltantes;
 		
 	}
@@ -192,7 +195,7 @@ class ci_inscripcion extends becas_ci
 	{
 		$this->evt__guardar();
 		
-		$faltantes = $this->validar_datos_obligatorios($this->get_datos('inscripcion','inscripcion_conv_beca')->get());
+		$faltantes = $this->validar_datos_obligatorios($this->get_datos('inscripcion','inscripcion_conv_beca')->get(),$this->get_datos('inscripcion','plan_trabajo')->get());
 		
 		if(count($faltantes) > 0){
 			$mensaje = "<ul>";

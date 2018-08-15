@@ -149,19 +149,8 @@ class co_inscripcion_conv_beca
 	function get_detalles_comprobante($inscripcion = array())
 	{
 		$detalles = array();
-		/*
-		-------------- SOLICITANTE ---------------------
-		- alumno.apellido y nombres
-		- alumno.nro_documento
-		- alumno.correo_electronico
-		- alumno.facultad-Universidad
-		- alumno.cuil
-		- alumno.fecha_nacimiento
-		- alumno.celular
-		- alumno.telefono
-		- lugar_trabajo_becario
-		- area_dpto_laboratorio
-		*/
+
+		/* ============================================================================================== */
 		$sql = "SELECT 
 				per.apellido,
 				per.nombres,
@@ -172,18 +161,17 @@ class co_inscripcion_conv_beca
 				per.fecha_nac,
 				coalesce(per.celular,'No declarado') AS celular,
 				coalesce(per.telefono,'No declarado') AS telefono,
-				insc.lugar_trabajo_becario AS lugar_trabajo_becario_id,
-				lugtrab.nombre AS lugar_trabajo_becario,
-				insc.area_trabajo,
 				insc.prom_hist_egresados, 
 				insc.prom_hist,
 				insc.nro_documento_codir,
 				insc.nro_documento_subdir,
-				insc.justif_codirector
+				insc.justif_codirector,
+				insc.materias_plan,
+				insc.materias_aprobadas
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
-				LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario
+				
 				WHERE per.nro_documento = ".quote($inscripcion['nro_documento'])."
 				AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
 				AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
@@ -191,19 +179,20 @@ class co_inscripcion_conv_beca
 				LIMIT 1";
 		$detalles['postulante'] = toba::db()->consultar_fila($sql);
 
-		
-
-		/*
-		-------------- BECA ---------------------
-		- convocatoria
-		- tipo_beca
-		- area_conocimiento
-		- titulo_plan_beca	*/
-		$sql = "SELECT insc.nro_carpeta, conv.convocatoria, tipbec.tipo_beca, areacon.nombre AS area_conocimiento, insc.titulo_plan_beca
+		/* ============================================================================================== */
+		$sql = "SELECT insc.nro_carpeta, 
+						conv.convocatoria, 
+						tipbec.tipo_beca, 
+						areacon.nombre AS area_conocimiento, 
+						insc.titulo_plan_beca,
+						insc.lugar_trabajo_becario AS lugar_trabajo_becario_id,
+						lugtrab.nombre AS lugar_trabajo_becario,
+						insc.area_trabajo
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 				LEFT JOIN be_tipos_beca AS tipbec ON tipbec.id_tipo_beca = insc.id_tipo_beca
 				LEFT JOIN sap_area_conocimiento AS areacon ON areacon.id = insc.id_area_conocimiento
+				LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario
 				WHERE insc.nro_documento = ".quote($inscripcion['nro_documento'])."
 				AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
 				AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
@@ -211,39 +200,28 @@ class co_inscripcion_conv_beca
 				LIMIT 1";
 		$detalles['beca'] = toba::db()->consultar_fila($sql);
 		
-
+		/* ============================================================================================== */
 		/*-------------- PROMEDIOS (SE OBTIENE DE LA VARIABLE $persona) ---------------------
 		- promedio_hist_carrera
 		- promedio_hist_alumno */
+
 		$detalles['promedio'] = array('prom_hist_egresados' => $detalles['postulante']['prom_hist_egresados'],
 										'prom_hist'         => $detalles['postulante']['prom_hist']);
 		
-		
-		/*-------------- DIRECTOR (CO y SUB)---------------------
-		- Apellido y Nombres
-		- DNI
-		- cuil
-		- celular / -Telefono
-		- mail
-		- cargos vigentes (cargo-dedicacion-facultad-universidad)
-		- Maxima titulacion
-		- Cat- Conicet (Lugar trabajo conicet
-		- Cat. Incentivos */
+		/* ============================================================================================== */
 		$detalles['director'] = $this->get_detalles_director($inscripcion);
 
+		/* ============================================================================================== */
 		if($detalles['postulante']['nro_documento_codir']){
 			$detalles['codirector'] = $this->get_detalles_director($inscripcion,'codir');	
 		}
-		
+
+		/* ============================================================================================== */
 		if($detalles['postulante']['nro_documento_subdir']){
 			$detalles['subdirector'] = $this->get_detalles_director($inscripcion,'subdir');	
 		}
 
-		/*--------- PROYECTO DE INVESTIGACIÓN ACREDITADO --------
-		- Titulo
-		- Código
-		- Director */
-
+		/* ============================================================================================== */
 		$sql = "SELECT proy.descripcion AS proyecto,
 						proy.codigo, 
 						proy.nro_documento_dir AS nro_documento, 
@@ -260,6 +238,7 @@ class co_inscripcion_conv_beca
 					LIMIT 1";
 		$detalles['proyecto'] = toba::db()->consultar_fila($sql);
 
+		/* ============================================================================================== */
 		return $detalles;
 
 		

@@ -38,10 +38,15 @@ class Becas_inscripcion_comprobante extends FPDF
 		//agrego otra hoja
 		$this->AddPage('Portrait','A4');
 
-		$this->SetFont('','',7);
+		
 		$this->SetFillColor(200,200,200);
 
+		//Encabezado nota
+		$this->encabezado_nota();
+
 		//Cuadro Postulante
+		$this->SetFont('','',7);
+		$this->Ln();
 		$this->postulante($datos['postulante'],$params);
 
 		//Cuadro Beca
@@ -99,14 +104,12 @@ class Becas_inscripcion_comprobante extends FPDF
 		/* NÚMERO CARPETA */
 		$this->Ln();
 		$this->setFont('','B',15);
-		$this->SetFillColor(250,250,250);
-		$this->Cell($ancho,$alto_linea,'Carpeta Nº: '.$datos['nro_carpeta'],1,1,'C',true);
+		$this->Cell($ancho,$alto_linea,'Carpeta Nº: '.$datos['nro_carpeta'],1,1,'C',false);
 		
 		//Cuandro
 		/*$y += $alto_linea;
 		$this->Rect($x,$y,$ancho,$alto,'DF');*/
 		
-		$this->SetFillColor(256,256,256);
 		$ancho_etiq = 40;
 		
 		//Convocatoria
@@ -157,6 +160,15 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell($ancho,$alto_linea,'','T',1,'C',false);
 	}
 
+	function encabezado_nota()
+	{
+		//Convocatoria
+		$this->setFont('','B',8);
+		$this->MultiCell(190,4,"Señora\nSecretaria General de Ciencia y Técnica\nde la Universidad Nacional del Nordeste\nSU DESPACHO",0,'L',false);
+		$this->setFont('','',8);
+		$this->MultiCell(190,5,"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tTengo el agrado de dirigirme a Ud. con el objeto de solicitar mi inscripción al Concurso de Becas de Investigación del corriente año.\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tA tal efecto adjunto los datos y documentación requeridos en el formulario que acompaña la presente solicitud:",0,'L',false);
+	}
+
 	function postulante($datos,$params)
 	{
 		extract($params);
@@ -194,28 +206,38 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell($ancho_titulo,$alto_fila,'Teléfono fijo:',$bordes,0,$alin_rotulo,false);
 		$this->setFont('','');
 		$this->Cell(($ancho_total-($ancho_titulo*2)) / 2,$alto_fila,$datos['telefono'],$bordes,1,'L',false);
-		/* LUGAR DE TRABAJO Y AREA */
+		/* Cantidad de materias aprobadas por el postulante */
 		$this->setFont('','B');
-		$this->Cell($ancho_titulo,$alto_fila,'Lugar trabajo becario:',$bordes,0,$alin_rotulo,false);
+		$this->Cell(60,$alto_fila,'Cantidad de Materias Aprobadas:',$bordes,0,$alin_rotulo,false);
 		$this->setFont('','');
-		$this->Cell(($ancho_total-($ancho_titulo*2)) / 2,$alto_fila,$datos['lugar_trabajo_becario'],$bordes,0,'L',false);
+		$this->Cell(35,$alto_fila,$datos['materias_aprobadas'],$bordes,0,'L',false);
+		/* Promedio Histórico del Postulante */
 		$this->setFont('','B');
-		$this->Cell($ancho_titulo,$alto_fila,'Área:',$bordes,0,$alin_rotulo,false);
+		$this->Cell(60,$alto_fila,'Promedio Histórico del Postulante (incluye aplazos):',$bordes,0,$alin_rotulo,false);
 		$this->setFont('','');
-		$this->Cell(($ancho_total-($ancho_titulo*2)) / 2,$alto_fila,$datos['area_trabajo'],$bordes,1,'L',false);
+		$this->Cell(35,$alto_fila,$datos['prom_hist'],$bordes,1,'L',false);
+		/* Cantidad de Materias que tiene el plan de estudios */
+		$this->setFont('','B');
+		$this->Cell(60,$alto_fila,'Cantidad de materias del Plan de Estudios:',$bordes,0,$alin_rotulo,false);
+		$this->setFont('','');
+		$this->Cell(35,$alto_fila,$datos['materias_plan'],$bordes,0,'L',false);
 		/* Promedio Histórico Egresados */
 		$this->setFont('','B');
 		$this->Cell(60,$alto_fila,'Promedio Histórico de Egresados:',$bordes,0,$alin_rotulo,false);
 		$this->setFont('','');
-		$this->Cell(35,$alto_fila,$datos['prom_hist_egresados'],$bordes,0,'L',false);
-		/* Promedio Historico Postulante */
-		$this->setFont('','B');
-		$this->Cell(60,$alto_fila,'Promedio Histórico del Postulante:',$bordes,0,$alin_rotulo,false);
-		$this->setFont('','');
-		$this->Cell(35,$alto_fila,$datos['prom_hist'],$bordes,1,'L',false);
+		$this->Cell(35,$alto_fila,$datos['prom_hist_egresados'],$bordes,1,'L',false);
+		/* Aval de la Dirección Gestión Estudios */
+		
+		$this->Cell(190,4,'Firma del responsable de la Dirección Gestión Estudios',1,1,'C',true);
+		$this->Cell(50 ,10,'',1,0,'',false);
+		$this->Cell(90,10,'',1,0,'',false);
+		$this->Cell(50,10,'',1,1,'',false);
+		$this->Cell(50,6,'Firma',1,0,'C',false);
+		$this->Cell(90,6,'Aclaración',1,0,'C',false);
+		$this->Cell(50,6,'Cargo',1,1,'C',false);
 	}
 
-	function beca($datos,$params)
+	function beca($datos,$params)	
 	{
 		extract($params);
 
@@ -240,6 +262,15 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell($ancho_titulo,$alto_fila,'Título del Plan de Beca:',$bordes,0,$alin_rotulo,false);
 		$this->setFont('','');
 		$this->MultiCell($ancho_info,$alto_fila-1,$datos['titulo_plan_beca'],$bordes,'J',false);
+		/* LUGAR DE TRABAJO Y AREA */
+		$this->setFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Lugar trabajo becario:',$bordes,0,$alin_rotulo,false);
+		$this->setFont('','');
+		$this->Cell(($ancho_total-($ancho_titulo*2)) / 2,$alto_fila,$datos['lugar_trabajo_becario'],$bordes,0,'L',false);
+		$this->setFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Área:',$bordes,0,$alin_rotulo,false);
+		$this->setFont('','');
+		$this->Cell(($ancho_total-($ancho_titulo*2)) / 2,$alto_fila,$datos['area_trabajo'],$bordes,1,'L',false);
 	}
 
 	function justificacion_codireccion($justificacion,$params)
@@ -396,8 +427,8 @@ class Becas_inscripcion_comprobante extends FPDF
 		$path = toba::proyecto()->get_www();
         $path = $path['path']."img/logo_membrete.png";
 		$this->Image($path,19,5,160,40);
-		$this->SetFont('arial','BU',16);
-		$this->Cell(190,10,'INSCRIPCIÓN A CONVOCATORIA DE BECAS CyT - UNNE',0,1,'C',false);	
+		$this->SetFont('arial','BU',13);
+		$this->Cell(190,10,'SOLICITUD DE INSCRIPCIÓN - CONCURSO DE BECAS DE INVESTIGACIÓN',0,1,'C',false);	
 		$this->SetFont('arial','',7);
 	}	
 
