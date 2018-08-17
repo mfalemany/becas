@@ -171,7 +171,6 @@ class co_inscripcion_conv_beca
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
-				
 				WHERE per.nro_documento = ".quote($inscripcion['nro_documento'])."
 				AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
 				AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
@@ -187,7 +186,8 @@ class co_inscripcion_conv_beca
 						insc.titulo_plan_beca,
 						insc.lugar_trabajo_becario AS lugar_trabajo_becario_id,
 						lugtrab.nombre AS lugar_trabajo_becario,
-						insc.area_trabajo
+						insc.area_trabajo,
+						tipbec.requiere_insc_posgrado
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 				LEFT JOIN be_tipos_beca AS tipbec ON tipbec.id_tipo_beca = insc.id_tipo_beca

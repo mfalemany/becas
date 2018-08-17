@@ -80,7 +80,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'1779', --dep_id
 	'2911', --objeto_consumidor
 	'2920', --objeto_proveedor
-	'integrante_comision_asesora', --identificador
+	'comision_asesora_integrante', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -105,7 +105,7 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	NULL, --padre_clave
 	'becas', --hijo_proyecto
 	'2920', --hijo_objeto
-	'integrante_comision_asesora', --hijo_id
+	'comision_asesora_integrante', --hijo_id
 	NULL, --hijo_clave
 	NULL, --cascada
 	'1'  --orden
@@ -122,7 +122,7 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 	'2886', --padre_objeto
 	'1880', --padre_clave
 	'2920', --hijo_objeto
-	'1879'  --hijo_clave
+	'2190'  --hijo_clave
 );
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'becas', --proyecto
@@ -131,5 +131,5 @@ INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_obje
 	'2886', --padre_objeto
 	'1881', --padre_clave
 	'2920', --hijo_objeto
-	'1878'  --hijo_clave
+	'2189'  --hijo_clave
 );

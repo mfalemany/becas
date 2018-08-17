@@ -105,19 +105,6 @@ class ci_edicion extends becas_ci
 		//$form->ef('id_convocatoria')->set_estado($this->s__convocatoria);
 
 		if(isset($this->s__insc_actual)){
-
-			//verifico si el tipo de beca requiere o no una inscripcion a posgrado.
-			$requiere = toba::consulta_php('co_tipos_beca')->requiere_posgrado($this->s__insc_actual['id_tipo_beca']);
-			//en caso de no requerir inscripci? a Posgrado, desactivo todos los efs relacionados
-			if(!$requiere){
-				$efs_innecesarios = array('archivo_insc_posgrado','titulo_carrera_posgrado','nombre_inst_posgrado','carrera_posgrado','fecha_insc_posgrado');
-				foreach ($efs_innecesarios as $ef) {
-					if($form->existe_ef($ef)){
-						$form->desactivar_efs($ef);
-					}
-				}
-			}
-
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
 			$form->set_solo_lectura(array('id_tipo_beca','id_convocatoria'));
 
@@ -127,10 +114,26 @@ class ci_edicion extends becas_ci
 			//se completa el label que contiene el nombre y apellido del director
 			$director = $this->s__insc_actual['nro_documento_dir'];
 			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
-		}else{
 
+			$efs_involucrados = array('archivo_insc_posgrado','titulo_carrera_posgrado','nombre_inst_posgrado','carrera_posgrado','fecha_insc_posgrado');
+			//verifico si el tipo de beca requiere o no una inscripcion a posgrado.
+			$requiere = toba::consulta_php('co_tipos_beca')->requiere_posgrado($this->s__insc_actual['id_tipo_beca']);
+			//en caso de no requerir inscripci? a Posgrado, desactivo todos los efs relacionados
+			if(!$requiere){
+				
+				foreach ($efs_involucrados as $ef) {
+					if($form->existe_ef($ef)){
+						$form->desactivar_efs($ef);
+					}
+				}
+			}else{
+				$form->set_efs_obligatorios($efs_involucrados);
+			}
+
+		}else{
 			$this->pantalla()->tab('pant_director')->desactivar();
 		}
+		
 	}
 
 	function evt__form_inscripcion__modificacion($datos)

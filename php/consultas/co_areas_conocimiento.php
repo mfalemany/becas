@@ -5,7 +5,7 @@ class co_areas_conocimiento
 	function get_areas_conocimiento()
 	{
 		$sql = "SELECT id, descripcion, nombre, aplicable, disciplinas_incluidas
-				FROM sap_area_conocimiento";
+				FROM sap_area_conocimiento WHERE aplicable = 'BECARIOS'";
 		return toba::db()->consultar($sql);
 	}
 

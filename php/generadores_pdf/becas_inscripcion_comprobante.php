@@ -3,17 +3,16 @@ class Becas_inscripcion_comprobante extends FPDF
 {
 	protected $x;
 	protected $y;
+	protected $nombre_pdf;
 
 	function __construct($datos)
 	{
 		parent::__construct();
 		//Formato A4 y Apaisado
 		$this->SetTopMargin(35);
-		
+		$this->nombre_pdf = $datos['beca']['nro_carpeta'].".pdf";
 		$this->SetAutoPageBreak(true,20);
 		$this->AddPage('Portrait','A4');
-		
-
 		
 		/* ---------- PARÁMETROS DEL FORMULARIO ---------------*/
 		$params = array('ancho_total'       => 190,
@@ -27,19 +26,31 @@ class Becas_inscripcion_comprobante extends FPDF
 
 		//Carátula
 		$caratula = array('tipo_beca'         => $datos['beca']['tipo_beca'],
+						  'requiere_posgrado' => $datos['beca']['requiere_insc_posgrado'],
+						  'nombre_dependencia'=> $datos['postulante']['nombre_dependencia'],
 						  'postulante'        => $datos['postulante']['apellido'].', '.$datos['postulante']['nombres'],
 						  'cuil'              => $datos['postulante']['cuil'],
 						  'director'          => $datos['director']['apellido'].', '.$datos['director']['nombres'],
 						  'area_conocimiento' => $datos['beca']['area_conocimiento'],
 						  'nro_carpeta'       => $datos['beca']['nro_carpeta'],
-						  'convocatoria'      => $datos['beca']['convocatoria']);
+						  'convocatoria'      => $datos['beca']['convocatoria'],
+						  'lugar_trabajo'     => $datos['beca']['lugar_trabajo_becario']);
+
+		if(isset($datos['codirector'])){
+			$caratula['codirector'] = $datos['codirector']['apellido'].', '.$datos['codirector']['nombres']; 
+		}
+		if(isset($datos['subdirector'])){
+			$caratula['subdirector'] = $datos['subdirector']['apellido'].', '.$datos['subdirector']['nombres']; 
+		}
+		$this->SetFillColor(200,200,200);
+
 		$this->caratula($caratula,$params);
 
 		//agrego otra hoja
 		$this->AddPage('Portrait','A4');
 
 		
-		$this->SetFillColor(200,200,200);
+		
 
 		//Encabezado nota
 		$this->encabezado_nota();
@@ -87,14 +98,32 @@ class Becas_inscripcion_comprobante extends FPDF
 		//Aval Autoridades UA
 		$this->Ln();
 		$this->aval_autoridades_ua();
+
+		//agrego otra hoja
+		$this->AddPage('Portrait','A4');
+		$this->comision($caratula,$params);
+
+		//agrego otra hoja
+		$this->AddPage('Portrait','A4');
+		$this->junta($caratula,$params);
+
+
 	}
 
 	function caratula($datos,$params)
 	{
+		//$x = $this->GetX();
+		//$y = $this->GetY();
+
+		//$this->setXY(10,43);
+		//Convocatoria
+		$this->setFont('','BU',14);
+		$this->Cell(190,6,strtoupper($datos['convocatoria']),0,1,'C',false);
+		//$this->setXY($x,$y);
+
 		extract($params);
+		
 		//manejan la posición del cuadro
-		$x = 29;
-		$y = 47;
 		$ancho = 190;
 		$alto = 130;
 
@@ -103,45 +132,58 @@ class Becas_inscripcion_comprobante extends FPDF
 
 		/* NÚMERO CARPETA */
 		$this->Ln();
-		$this->setFont('','B',15);
-		$this->Cell($ancho,$alto_linea,'Carpeta Nº: '.$datos['nro_carpeta'],1,1,'C',false);
+		$this->setFont('','B',17);
+		$this->Cell($ancho,$alto_linea,$datos['postulante'],1,1,'C',true);
 		
 		//Cuandro
 		/*$y += $alto_linea;
 		$this->Rect($x,$y,$ancho,$alto,'DF');*/
 		
 		$ancho_etiq = 40;
-		
-		//Convocatoria
-		$this->setFont('','B',10);
-		$this->Cell($ancho_etiq,$alto_linea,'Convocatoria ',1,0,'C',false);
-		$this->setFont('','',10);
-		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['convocatoria'],1,1,'L',false);
-		//Tipo de Beca
-		$this->setFont('','B',10);
-		$this->Cell($ancho_etiq,$alto_linea,'Tipo de Beca ',1,0,'C',false);
-		$this->setFont('','',10);
-		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['tipo_beca'],1,1,'L',false);
 		//Area Conocimiento
 		$this->setFont('','B',10);
 		$this->Cell($ancho_etiq,$alto_linea,'Área Conocimiento ',1,0,'C',false);
 		$this->setFont('','',10);
 		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['area_conocimiento'],1,1,'L',false);
-		//Postulante
+		
+		//Facultad / Instituto
 		$this->setFont('','B',10);
-		$this->Cell($ancho_etiq,$alto_linea,'Postulante ',1,0,'C',false);
+		$this->Cell($ancho_etiq,$alto_linea,'Facultad',1,0,'C',false);
 		$this->setFont('','',10);
-		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['postulante'],1,1,'L',false);
-		//CUIL
-		$this->setFont('','B',10);
-		$this->Cell($ancho_etiq,$alto_linea,'CUIL ',1,0,'C',false);
-		$this->setFont('','',10);
-		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['cuil'],1,1,'L',false);
+		/*Si la beca requiere inscripción a posgrado, el campo facultad es el lugar de trabajo de postulante. En cambio, si la beca no requiere inscripcion a posgrado, como es el caso de las becas de PREGRADO, la facultad es el lugar donde estudia el postulante */
+		if($datos['requiere_posgrado'] == 'S'){
+			$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['lugar_trabajo'],1,1,'L',false);	
+		}else{
+			$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['nombre_dependencia'],1,1,'L',false);
+		}
+		
+		
 		//Director
 		$this->setFont('','B',10);
 		$this->Cell($ancho_etiq,$alto_linea,'Director ',1,0,'C',false);
 		$this->setFont('','',10);
 		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['director'],1,1,'L',false);
+		
+		if(isset($datos['codirector'])){
+			//Director
+			$this->setFont('','B',10);
+			$this->Cell($ancho_etiq,$alto_linea,'Co-Director ',1,0,'C',false);
+			$this->setFont('','',10);
+			$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['codirector'],1,1,'L',false);
+		}
+		if(isset($datos['subdirector'])){
+			//Director
+			$this->setFont('','B',10);
+			$this->Cell($ancho_etiq,$alto_linea,'Sub-Director ',1,0,'C',false);
+			$this->setFont('','',10);
+			$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['subdirector'],1,1,'L',false);
+		}
+
+		//Tipo de Beca
+		$this->setFont('','B',10);
+		$this->Cell($ancho_etiq,$alto_linea,'Nro. Carpeta',1,0,'C',false);
+		$this->setFont('','',10);
+		$this->Cell($ancho-$ancho_etiq,$alto_linea,$datos['nro_carpeta'],1,1,'L',false);
 		
 		$this->Ln();
 		$this->Ln();
@@ -383,7 +425,6 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell(140,19,'',1,1,'',false);
 		$this->Cell(50,6,'Firma del postulante',1,0,'C',false);
 		$this->Cell(140,6,'Lugar y fecha',1,1,'C',false);
-
 	}
 
 	function aval_directores()
@@ -402,8 +443,6 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell($ancho,6,'Firma del Co-Director',1,0,'C',false);
 		$this->Cell($ancho,6,'Firma del Sub-Director',1,0,'C',false);
 		$this->Cell($ancho,6,'Firma del Director del Proyecto',1,1,'C',false);
-		
-
 	}
 
 	function aval_autoridades_ua()
@@ -418,7 +457,137 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell($ancho ,19,'',1,1,'',false);
 		$this->Cell($ancho,6,'Firma del Secretario de Investigación',1,0,'C',false);
 		$this->Cell($ancho,6,'Firma del Decano',1,1,'C',false);
+	}
+
+	function comision($datos,$params)
+	{
+		extract($params);
+		$this->SetFont('','BU',20);
+		$this->Cell($ancho_total,$alto_fila*2,'DICTAMEN DE COMISIÓN ASESORA',0,1,'C',false);	
+		$this->SetFont('','B',9);
+		$this->cabecera_postulacion($datos,$params);
+
+		$this->setFont('','B');
+		$this->Cell($ancho_total,$alto_fila,'DICTAMEN DE LA COMISIÓN ASESORA',1,1,'C',true);	
+		$this->setFont('','');
+		$this->Cell($ancho_total,$alto_fila,'De acuerdo con los criterios establecidos por el Reglamento de Becas de Investigación (Resol. Nº 368/16 C.S.)',1,1,'L',false);	
 		
+		$alto_fila = $alto_fila*2;
+		$this->SetFont('','B',7);
+		$this->Cell($ancho_total/3*2,$alto_fila,'CRITERIO DE EVALUACIÓN DE BECAS',1,0,'C',true);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'PUNTAJE MÁXIMO',1,0,'C',true);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'PUNTAJE OTORGADO',1,1,'C',true);	
+		$this->setFont('','B',12);
+		//Puntaje Académico
+		$this->Cell($ancho_total/3*2,$alto_fila,'Puntaje Académico',1,0,'L',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'50',1,0,'C',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	
+		//Antecedentes en investigación y docencia
+		$this->Cell($ancho_total/3*2,$alto_fila,'Antecedentes en Investigación y Docencia',1,0,'L',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'10',1,0,'C',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	
+		//Direccion
+		$this->Cell($ancho_total/3*2,$alto_fila,'Dirección',1,0,'L',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'20',1,0,'C',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	
+		//Plan de Trabajo
+		$this->Cell($ancho_total/3*2,$alto_fila,'Plan de Trabajo',1,0,'L',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'20',1,0,'C',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	
+		//Puntaje Total
+		$this->Cell(($ancho_total/3*2)+(($ancho_total/3)/2),$alto_fila,'PUNTAJE TOTAL',1,0,'L',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	
+		
+		//Justificacion del Puntaje
+		$this->SetFont('','',9);
+		$this->Cell($ancho_total,$alto_fila-4,'Justificación del Puntaje Otorgado:','TRL',1,'L',false);	
+		$this->Cell($ancho_total,$alto_fila*5,'','BLR',1,'C',false);	
+		
+		//Lugar y fecha
+		$this->Cell($ancho_total,$alto_fila,'Lugar y fecha:','B',1,'L',false);	
+		//Evaluadores
+		$this->Cell($ancho_total/3*2,$alto_fila,'EVALUADORES',1,0,'C',true);	
+		$this->Cell($ancho_total/3*1,$alto_fila,'FIRMA',1,1,'C',true);	
+		for($i=0;$i<4;$i++){
+			$this->Cell($ancho_total/3*2,$alto_fila-2,'',1,0,'C',false);	
+			$this->Cell($ancho_total/3*1,$alto_fila-2,'',1,1,'C',false);		
+		}
+	}
+
+	function junta($datos,$params)
+	{
+		extract($params);	
+		$this->SetFont('','BU',20);
+		$this->Cell($ancho_total,$alto_fila*2,'DICTAMEN DE JUNTA COORDINADORA',0,1,'C',false);	
+		$this->SetFont('','B',9);
+		$this->cabecera_postulacion($datos,$params);
+
+		$alto_fila = $alto_fila*2;
+		$this->SetFont('','B');
+		//Opinion de la junta coordinadora
+		$this->Cell($ancho_total,$alto_fila-4,'OPINIÓN DE LA JUNTA COORDINADORA',1,1,'C',true);	
+		$this->Cell($ancho_total,$alto_fila*4,'',1,1,'C',false);
+		//Observaciones
+		$this->Cell($ancho_total,$alto_fila-4,'OBSERVACIONES',1,1,'C',true);	
+		$this->Cell($ancho_total,$alto_fila*3,'',1,1,'C',false);
+		//Observaciones
+		$this->Cell($ancho_total,$alto_fila-4,'EVALUACIÓN FINAL',1,1,'C',true);	
+		$this->Cell($ancho_total,$alto_fila*4,'',1,1,'C',false);
+		//Lugar y fecha
+		$this->Cell($ancho_total,$alto_fila,'Lugar y fecha:','B',1,'L',false);	
+		//e
+		$this->Cell($ancho_total/3*2,$alto_fila,'EVALUADORES',1,0,'C',true);	
+		$this->Cell($ancho_total/3*1,$alto_fila,'FIRMA',1,1,'C',true);	
+		for($i=0;$i<5;$i++){
+			$this->Cell($ancho_total/3*2,$alto_fila-3,'',1,0,'C',false);	
+			$this->Cell($ancho_total/3*1,$alto_fila-3,'',1,1,'C',false);		
+		}
+	}
+
+	function cabecera_postulacion($datos,$params){
+		extract($params);
+		$this->setFont('','B');
+		$this->Cell($ancho_total,$alto_fila,'DATOS DE LA POSTULACIÓN',1,1,'C',true);	
+
+		$this->setFont('','');
+		//Apellido, nombres y cuil
+		$tmp = $datos['postulante'].' ('.$datos['cuil'].')';
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Postulante','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell($ancho_info,$alto_fila,$tmp,'B',1,'L',false);
+
+		//Director
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Director','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,$datos['director'],'B',0,'L',false);
+
+		//Area de conocimiento
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Área','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,'CS. NATURALES Y EXACTAS','B',1,'L',false);
+		//$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,$datos['area_conocimiento'],1,1,'L',false);
+
+		//Area de conocimiento, convocatoria y numero de carpeta
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Convocatoria','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell($ancho_info,$alto_fila,$datos['convocatoria'],'B',1,'L',false);
+		//nro de carpeta
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Nro. Carpeta','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,$datos['nro_carpeta'],'B',0,'L',false);
+		
+		//Tipo de beca
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Tipo de Beca','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,$datos['tipo_beca'],'B',0,'L',false);
+		$this->Ln();
+		$this->Ln();
 
 	}
 
@@ -440,7 +609,7 @@ class Becas_inscripcion_comprobante extends FPDF
 	}
 	function mostrar()
 	{
-		$this->Output('I','pepe.pdf');
+		$this->Output('I',$this->nombre_pdf);
 	}
 }
 ?>

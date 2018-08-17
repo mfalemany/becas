@@ -24,8 +24,8 @@ class ci_edicion extends becas_ci
 	//
 	function conf__ml_integrantes(becas_ei_formulario_ml $form)
 	{
-		if($this->get_datos('integrante_comision_asesora')->get_filas()){
-			$integrantes = $this->get_datos('integrante_comision_asesora')->get_filas();
+		if($this->get_datos('comision_asesora_integrante')->get_filas()){
+			$integrantes = $this->get_datos('comision_asesora_integrante')->get_filas();
 			
 			foreach($integrantes as $i => $registro){
 				$integrantes[$i]['persona'] = $registro['nro_documento']; 
@@ -44,7 +44,7 @@ class ci_edicion extends becas_ci
 								  'x_dbr_clave'           => $registro['x_dbr_clave'],
 								  'apex_ei_analisis_fila' => $registro['apex_ei_analisis_fila']);
 		}
-		$this->get_datos('integrante_comision_asesora')->procesar_filas($integrantes);
+		$this->get_datos('comision_asesora_integrante')->procesar_filas($integrantes);
 	}
 
 	function get_datos($tabla = NULL)
