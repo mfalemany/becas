@@ -167,7 +167,8 @@ class co_inscripcion_conv_beca
 				insc.nro_documento_subdir,
 				insc.justif_codirector,
 				insc.materias_plan,
-				insc.materias_aprobadas
+				insc.materias_aprobadas,
+				insc.puntaje
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
@@ -187,7 +188,9 @@ class co_inscripcion_conv_beca
 						insc.lugar_trabajo_becario AS lugar_trabajo_becario_id,
 						lugtrab.nombre AS lugar_trabajo_becario,
 						insc.area_trabajo,
-						tipbec.requiere_insc_posgrado
+						tipbec.requiere_insc_posgrado,
+						tipbec.suma_puntaje_academico,
+						tipbec.puntaje_academico_maximo
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 				LEFT JOIN be_tipos_beca AS tipbec ON tipbec.id_tipo_beca = insc.id_tipo_beca
@@ -199,7 +202,19 @@ class co_inscripcion_conv_beca
 				AND insc.estado <> 'A'
 				LIMIT 1";
 		$detalles['beca'] = toba::db()->consultar_fila($sql);
-		
+		/* ============================================================================================== */
+		$sql = "SELECT cri.id_convocatoria,
+						cri.id_tipo_beca,
+						cri.id_criterio_evaluacion,
+						cri.puntaje_maximo,
+						cri.criterio_evaluacion
+				FROM be_tipo_beca_criterio_eval AS cri
+				WHERE id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+				AND id_tipo_beca = ".quote($inscripcion['id_tipo_beca']);
+		$detalles['criterios_eval'] = toba::db()->consultar($sql);
+
+
+
 		/* ============================================================================================== */
 		/*-------------- PROMEDIOS (SE OBTIENE DE LA VARIABLE $persona) ---------------------
 		- promedio_hist_carrera

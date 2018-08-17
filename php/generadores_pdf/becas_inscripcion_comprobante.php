@@ -25,16 +25,17 @@ class Becas_inscripcion_comprobante extends FPDF
 		/* ----------------------------------------------------*/
 
 		//Carátula
-		$caratula = array('tipo_beca'         => $datos['beca']['tipo_beca'],
-						  'requiere_posgrado' => $datos['beca']['requiere_insc_posgrado'],
-						  'nombre_dependencia'=> $datos['postulante']['nombre_dependencia'],
-						  'postulante'        => $datos['postulante']['apellido'].', '.$datos['postulante']['nombres'],
-						  'cuil'              => $datos['postulante']['cuil'],
-						  'director'          => $datos['director']['apellido'].', '.$datos['director']['nombres'],
-						  'area_conocimiento' => $datos['beca']['area_conocimiento'],
-						  'nro_carpeta'       => $datos['beca']['nro_carpeta'],
-						  'convocatoria'      => $datos['beca']['convocatoria'],
-						  'lugar_trabajo'     => $datos['beca']['lugar_trabajo_becario']);
+		$caratula = array('tipo_beca'              => $datos['beca']['tipo_beca'],
+						  'requiere_posgrado'      => $datos['beca']['requiere_insc_posgrado'],
+						  'nombre_dependencia'     => $datos['postulante']['nombre_dependencia'],
+						  'postulante'             => $datos['postulante']['apellido'].', '.$datos['postulante']['nombres'],
+						  'cuil'                   => $datos['postulante']['cuil'],
+						  'director'               => $datos['director']['apellido'].', '.$datos['director']['nombres'],
+						  'area_conocimiento'      => $datos['beca']['area_conocimiento'],
+						  'nro_carpeta'            => $datos['beca']['nro_carpeta'],
+						  'convocatoria'           => $datos['beca']['convocatoria'],
+						  'lugar_trabajo'          => $datos['beca']['lugar_trabajo_becario']);
+						  
 
 		if(isset($datos['codirector'])){
 			$caratula['codirector'] = $datos['codirector']['apellido'].', '.$datos['codirector']['nombres']; 
@@ -101,6 +102,11 @@ class Becas_inscripcion_comprobante extends FPDF
 
 		//agrego otra hoja
 		$this->AddPage('Portrait','A4');
+
+		$caratula['criterios_eval'] = $datos['criterios_eval'];
+		$caratula['suma_puntaje_academico'] = $datos['beca']['suma_puntaje_academico'];
+		$caratula['puntaje_academico_maximo'] = $datos['beca']['puntaje_academico_maximo'];
+		$caratula['puntaje'] = $datos['postulante']['puntaje'];
 		$this->comision($caratula,$params);
 
 		//agrego otra hoja
@@ -478,10 +484,21 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Cell(($ancho_total/3)/2,$alto_fila,'PUNTAJE MÁXIMO',1,0,'C',true);	
 		$this->Cell(($ancho_total/3)/2,$alto_fila,'PUNTAJE OTORGADO',1,1,'C',true);	
 		$this->setFont('','B',12);
-		//Puntaje Académico
-		$this->Cell($ancho_total/3*2,$alto_fila,'Puntaje Académico',1,0,'L',false);	
-		$this->Cell(($ancho_total/3)/2,$alto_fila,'50',1,0,'C',false);	
-		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	
+		if($datos['suma_puntaje_academico'] == 'S'){
+			//Puntaje Académico
+			$this->Cell($ancho_total/3*2,$alto_fila,'Puntaje Académico',1,0,'L',false);	
+			$this->Cell(($ancho_total/3)/2,$alto_fila,intval($datos['puntaje_academico_maximo']),1,0,'C',false);	
+			$this->Cell(($ancho_total/3)/2,$alto_fila,$datos['puntaje'],1,1,'C',false);	
+		}
+		foreach($datos['criterios_eval'] as $criterio){
+			//Puntaje Académico
+			$this->Cell($ancho_total/3*2,$alto_fila,$criterio['criterio_evaluacion'],1,0,'L',false);	
+			$this->Cell(($ancho_total/3)/2,$alto_fila,intval($criterio['puntaje_maximo']),1,0,'C',false);	
+			$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);		
+		}
+
+		/*
+		
 		//Antecedentes en investigación y docencia
 		$this->Cell($ancho_total/3*2,$alto_fila,'Antecedentes en Investigación y Docencia',1,0,'L',false);	
 		$this->Cell(($ancho_total/3)/2,$alto_fila,'10',1,0,'C',false);	
@@ -493,7 +510,8 @@ class Becas_inscripcion_comprobante extends FPDF
 		//Plan de Trabajo
 		$this->Cell($ancho_total/3*2,$alto_fila,'Plan de Trabajo',1,0,'L',false);	
 		$this->Cell(($ancho_total/3)/2,$alto_fila,'20',1,0,'C',false);	
-		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	
+		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);
+		*/
 		//Puntaje Total
 		$this->Cell(($ancho_total/3*2)+(($ancho_total/3)/2),$alto_fila,'PUNTAJE TOTAL',1,0,'L',false);	
 		$this->Cell(($ancho_total/3)/2,$alto_fila,'',1,1,'C',false);	

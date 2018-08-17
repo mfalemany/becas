@@ -79,6 +79,21 @@ class co_tipos_beca
 		}
 	}
 
+	function get_criterios_evaluacion()
+	{
+		$sql = "SELECT cri.id_convocatoria, 
+						cri.id_tipo_beca, 
+						cri.id_criterio_evaluacion, 
+						cri.puntaje_maximo, 
+						cri.criterio_evaluacion,
+						conv.convocatoria,
+						tip.tipo_beca
+				FROM be_tipo_beca_criterio_eval AS cri
+				LEFT JOIN be_tipos_beca AS tip ON tip.id_tipo_beca = cri.id_tipo_beca
+				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = cri.id_convocatoria";
+		return toba::db()->consultar($sql);
+	}
+
 	
 
 
