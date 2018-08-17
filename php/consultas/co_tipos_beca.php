@@ -23,7 +23,7 @@ class co_tipos_beca
 			tip.requiere_insc_posgrado,
 			tip.debe_adeudar_hasta,
 			tip.suma_puntaje_academico,
-			tip.puntaje_maximo_academico
+			tip.puntaje_academico_maximo
 		FROM be_tipos_beca as tip	
 		LEFT JOIN be_tipos_convocatoria as tip_con ON tip.id_tipo_convocatoria = tip_con.id_tipo_convocatoria
 		LEFT JOIN be_color_carpeta as col on col.id_color = tip.id_color
