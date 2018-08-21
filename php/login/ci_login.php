@@ -162,13 +162,14 @@ class ci_login extends toba_ci
 
 			if (toba_autenticacion::es_autenticacion_centralizada($tipo_auth)) {
 				toba::manejador_sesiones()->get_autenticacion()->usar_login_basico();
-			}			
+			}	
+			$this->asignar_perfil_usuario_existente($usuario);
 			toba::manejador_sesiones()->login($usuario, $clave);
 
 		} elseif (toba_autenticacion::es_autenticacion_centralizada($tipo_auth) && toba::manejador_sesiones()->get_autenticacion()->uso_login_centralizado()) {	//El control por session es para que no redireccione automaticamente
 			toba::manejador_sesiones()->get_autenticacion()->verificar_acceso();
 		}	
-	}	
+	}
 	
 	/**
 	 * Elimina  la marca del login basico ante un fallido, de manera que si luego loguea centralizado desloguee correctamente
@@ -194,7 +195,7 @@ class ci_login extends toba_ci
 		}		
 		toba::logger()->desactivar();
 		if (isset($datos['test_error_repetido']) && !$datos['test_error_repetido']) {
-			throw new toba_error_autenticacion('El valor ingresado de confirmaci? no es correcto');
+			throw new toba_error_autenticacion('El valor ingresado de confirmación no es correcto');
 		} else {
 			$this->s__datos = $datos;
 		}
@@ -278,7 +279,7 @@ class ci_login extends toba_ci
 	{
 		$largo_clave =  toba_parametros::get_largo_pwd(toba::proyecto()->get_id());
 		$form->ef('clave_nueva')->set_expreg(toba_usuario::get_exp_reg_pwd($largo_clave));
-		$form->ef('clave_nueva')->set_descripcion("La clave debe tener al menos $largo_clave caracteres, entre letras may?sculas, min?sculas, n?meros y s?bolos, no pudiendo repetir caracteres adyacentes");
+		$form->ef('clave_nueva')->set_descripcion("La clave debe tener al menos $largo_clave caracteres, entre letras mayúsculas, minúsculas, números y símbolos, no pudiendo repetir caracteres adyacentes");
 		$form->set_datos(array());
 	}
 	
@@ -291,7 +292,7 @@ class ci_login extends toba_ci
 			$dias_minimos = toba_parametros::get_clave_validez_minima($proyecto);
 			if (! is_null($dias_minimos)) {
 				if (! toba_usuario::verificar_periodo_minimo_cambio($usuario, $dias_minimos)) {
-					toba::notificacion()->agregar('No transcurrio el per?do minimo para poder volver a cambiar su contrase?. Intentelo en otra ocasi?');
+					toba::notificacion()->agregar('No transcurrio el período minimo para poder volver a cambiar su contraseña. Intentelo en otra ocasión');
 					return;
 				}
 			}		
@@ -352,6 +353,17 @@ class ci_login extends toba_ci
 					window.close();
 				';
 		}		
+	}
+
+	function asignar_perfil_usuario_existente($usuario)
+	{
+		try {
+			if(toba::instancia()->get_info_usuario($usuario)){
+				toba::instancia()->vincular_usuario('becas',$usuario,'becario');
+			}
+		} catch (Exception $e) {
+			
+		}
 	}
 }
 ?>
