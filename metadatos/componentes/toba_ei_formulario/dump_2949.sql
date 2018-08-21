@@ -234,7 +234,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 				<td>
 					[ef id=archivo_insc_posgrado]</td>
 				<td>
-					Debe cargar el comprobante de inscripci&oacute;n a una carrera de posgrado, o bien el compromiso de inscripci&oacute;n firmado. Puede descargar el modelo de compromiso haciendo click <a href="http://www.google.com.ar/" target="_BLANK">aqu&iacute;</a></td>
+					Debe cargar el comprobante de inscripci&oacute;n a una carrera de posgrado, o bien el compromiso de inscripci&oacute;n firmado. Puede descargar el modelo de compromiso haciendo click <a href="http://becas.cyt.unne.edu.ar/documentos/becas/estaticos/compromiso_posgrado.pdf" target="_BLANK">aqu&iacute;</a></td>
 			</tr>
 		</tbody>
 	</table>
