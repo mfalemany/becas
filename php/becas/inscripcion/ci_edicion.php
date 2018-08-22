@@ -481,7 +481,7 @@ class ci_edicion extends becas_ci
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		
 		if($insc){
-			$template = "<table>
+			$template = "<table width='100%'>
 							<tr>
 								<td><h1 class='centrado sombreado'>".quote($insc['titulo_plan_beca'])."</h1></td>
 							</tr>

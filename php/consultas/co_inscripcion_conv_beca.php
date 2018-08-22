@@ -13,11 +13,17 @@ class co_inscripcion_conv_beca
 		if(isset($filtro['id_convocatoria'])){
 			$where[] = 'insc.id_convocatoria = '.quote($filtro['id_convocatoria']);	
 		}
+		if(isset($filtro['id_area_conocimiento'])){
+			$where[] = 'area.id = '.quote($filtro['id_area_conocimiento']);	
+		}
 		if(isset($filtro['id_tipo_beca'])){
 			$where[] = 'insc.id_tipo_beca = '.quote($filtro['id_tipo_beca']);	
 		}
 		if(isset($filtro['id_tipo_convocatoria'])){
 			$where[] = 'tip_con.id_tipo_convocatoria = '.quote($filtro['id_tipo_convocatoria']);	
+		}
+		if(isset($filtro['id_dependencia'])){
+			$where[] = 'insc.id_dependencia = '.quote($filtro['id_dependencia']);	
 		}
 
 		$sql = "SELECT
@@ -51,8 +57,8 @@ class co_inscripcion_conv_beca
 			insc.observaciones,
 			insc.estado,
 			insc.cant_fojas,
-			insc.es_titular
-			
+			insc.es_titular,
+			lugtrab.nombre AS lugar_trabajo_becario
 		FROM be_inscripcion_conv_beca as insc	
 		LEFT JOIN be_convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
 		LEFT JOIN sap_personas as becario on becario.nro_documento = insc.nro_documento
@@ -65,6 +71,7 @@ class co_inscripcion_conv_beca
 		LEFT JOIN sap_dependencia as dep ON (insc.id_dependencia = dep.id)
 		LEFT JOIN sap_area_conocimiento as area ON (insc.id_area_conocimiento = area.id)
 		LEFT JOIN be_carreras as carr ON (insc.id_carrera = carr.id_carrera)
+		LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario
 		ORDER BY admisible";
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);

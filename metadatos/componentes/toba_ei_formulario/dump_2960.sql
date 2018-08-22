@@ -122,7 +122,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	'<div>
+	'<div width="100%">
 	<p>Debe subir un archivo en formato PDF: El plan de trabajo debe tener en cuenta los siguientes elementos:</p>
 	<ul>
 		<li>
