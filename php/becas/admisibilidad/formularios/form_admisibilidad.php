@@ -12,7 +12,7 @@ class form_admisibilidad extends becas_ei_formulario
 		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
 
 		if($insc['archivo_analitico']){
-			$base = toba::consulta_php('helper_archivos')->base_url();
+			$base = toba::consulta_php('helper_archivos')->ruta_base();
 			$ruta = $base.'becas/doc_por_convocatoria/'.$conv."/".$tipo_beca."/".$insc['nro_documento']."/";
 			echo "<a id='enlace_analitico' class='enlace_boton' href='".$ruta.'Cert. Analitico.pdf'."' target='_BLANK'>Ver anal?ico</a>";
 		}
