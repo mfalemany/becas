@@ -48,8 +48,13 @@ class ci_crear_usuario extends toba_ci
 		$datos['ayn'] = $datos['apellido'].", ".$datos['nombre'];
 		
 		//guardo en local
-		toba::db()->ejecutar('INSERT INTO sap_personas (nro_documento,apellido,nombres,mail) 
-							  VALUES ('.quote($datos['nro_documento']).','.quote($datos['apellido']).','.quote($datos['nombre']).','.quote($datos['mail']).')');
+		try {
+			toba::db()->ejecutar('INSERT INTO sap_personas (nro_documento,apellido,nombres,mail) 
+							  VALUES ('.quote($datos['nro_documento']).','.quote($datos['apellido']).','.quote($datos['nombre']).','.quote($datos['mail']).')');	
+		} catch (Exception $e) {
+			
+		}
+		
 
 		//elimino indices innecesarios            
 		unset($datos['apellido']);
