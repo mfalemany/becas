@@ -25,6 +25,12 @@ class co_inscripcion_conv_beca
 		if(isset($filtro['id_dependencia'])){
 			$where[] = 'insc.id_dependencia = '.quote($filtro['id_dependencia']);	
 		}
+		if(isset($filtro['admisible'])){
+			$where[] = 'insc.admisible = '.quote($filtro['admisible']);	
+		}
+		if(isset($filtro['estado'])){
+			$where[] = 'insc.estado = '.quote($filtro['estado']);	
+		}
 
 		$sql = "SELECT
 			insc.id_dependencia,
