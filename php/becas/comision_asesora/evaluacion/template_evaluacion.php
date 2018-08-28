@@ -1,7 +1,7 @@
 <div id="evaluacion_beca">
 	<div id="datos_beca">
 		<div>
-			<span id='titulo_plan_beca'>Titulo del Plan de Beca</span>
+			<div id='titulo_plan_beca'>Titulo del Plan de Beca</div>
 		</div>
 		<div>
 			El Plan de Beca propuesto estará incluido en el siguiente Proyecto de Investigación Acreditado

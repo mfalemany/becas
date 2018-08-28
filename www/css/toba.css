@@ -161,5 +161,33 @@
 	font-size:1.3em; 
 }
 
+/* EVALUACIÓN DE BECAS */
+#evaluacion_beca{
+	
+	border: 1px solid blue;
+	margin: auto;
+	width:90%;
+	background-color:#de0000;
+
+}
+#evaluacion_beca #datos_beca{
+	
+}
+#evaluacion_beca #datos_postulante{
+	
+}
+#evaluacion_beca #datos_direccion{
+	
+}
+#evaluacion_beca #plan_trabajo{
+	
+}
+#evaluacion_beca #antecedentes{
+	
+}
+
+
+
 	
 
+ CSS & Fonts
