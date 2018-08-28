@@ -113,6 +113,10 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->AddPage('Portrait','A4');
 		$this->junta($caratula,$params);
 
+		//agrego otra hoja
+		$this->AddPage('Portrait','A4');
+		$this->talon_postulante($caratula,$params);
+
 
 	}
 
@@ -607,6 +611,59 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->Ln();
 		$this->Ln();
 
+	}
+
+	function talon_postulante($datos,$params)
+	{
+		extract($params);
+		$alto_fila += 2;
+		$this->setFont('','B',13);
+		$this->Cell($ancho_total,$alto_fila+5,$datos['convocatoria']."     --Talón para el usuario--",1,1,'C',true);	
+
+		$this->setFont('','',9);
+		//Apellido, nombres y cuil
+		$tmp = $datos['postulante'].' ('.$datos['cuil'].')';
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Postulante','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell($ancho_info,$alto_fila,$tmp,'B',1,'L',false);
+
+		//director
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Director','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell($ancho_info,$alto_fila,$datos['director'],'B',1,'L',false);
+
+		//lugar y fecha
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila+3,'Lugar y fecha','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell($ancho_info,$alto_fila+3,'','B',1,'L',false);
+
+		//Texto fijo
+		$this->SetFont('','');
+		$this->MultiCell($ancho_total,$alto_fila,'Ha presentado a la Secretaría General de Ciencia y Técnica, la documentación requerida como postulante del Concurso de Becas de Investigación.-','B','L',false);	
+		
+		//tipo de beca
+		$this->SetFont('','B');
+		$this->Cell($ancho_titulo,$alto_fila,'Tipo de Beca','B',0,'R',false);	
+		$this->SetFont('','');
+		$this->Cell($ancho_info,$alto_fila,$datos['tipo_beca'],'B',1,'L',false);
+		
+		$this->setFont('','B');
+		$this->Cell($ancho_total,$alto_fila,"A llenar por el recepcionista",1,1,'C',true);	
+
+		$ancho = 190/3;
+		$this->SetFont('','B',15);
+		$this->Cell($ancho,19,$datos['nro_carpeta'],1,0,'C',false);
+		$this->SetFont('','B',7);
+		$this->Cell($ancho*2,19,'',1,1,'',false);
+		$this->Cell($ancho,6,'Número de Carpeta',1,0,'C',false);
+		$this->Cell($ancho*2,6,'Firma del recepcionista',1,1,'C',false);
+
+		$this->setFont('','',8);
+		$this->MultiCell($ancho_total,$alto_fila,'-En caso de ser otorgada la beca, se deberá realizar el acto de toma de posesión antes del 1 de Marzo de '.(intval(date("Y"))+1).'-
+De no ser otorgada la beca, la documentación deberá ser retirada dentro de los treinta (30) días corridos de dictada la Resolución de adjudicación del Consejo Superior. Caso contrario será destruida..-','BLR','L',true);	
 	}
 
 	function Header()
