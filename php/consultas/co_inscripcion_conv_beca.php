@@ -181,10 +181,12 @@ class co_inscripcion_conv_beca
 				insc.justif_codirector,
 				insc.materias_plan,
 				insc.materias_aprobadas,
-				insc.puntaje
+				insc.puntaje,
+				carr.carrera
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
+				LEFT JOIN be_carreras AS carr ON carr.id_carrera = insc.id_carrera
 				WHERE per.nro_documento = ".quote($inscripcion['nro_documento'])."
 				AND insc.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
 				AND insc.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
@@ -274,7 +276,7 @@ class co_inscripcion_conv_beca
 
 	function get_detalles_director($inscripcion, $tipo = 'dir')
 	{
-
+		$cat_incentivos = array(1=>'Categoría I',2=>'Categoría II',3=>'Categoría III',4=>'Categoría IV',5=>'Categoría V')
 		$sql = "SELECT 
 					insc.nro_documento_".$tipo." AS nro_documento, 
 					per.apellido, 

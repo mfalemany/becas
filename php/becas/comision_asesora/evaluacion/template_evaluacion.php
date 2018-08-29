@@ -1,28 +1,35 @@
 <div id="evaluacion_beca">
 	<div id="datos_beca">
 		<div>
-			<div id='titulo_plan_beca'>La población del Nordeste Argentino como Sociedad Moderna</div>
+			<div id='titulo_plan_beca'>{{titulo_plan_beca}}</div>
 		</div>
-		<div>
-			El Plan de Beca propuesto estará incluido en el siguiente Proyecto de Investigación Acreditado
-			<span id='proyecto_acreditado'>Estudios de biología reproductiva comparada, ontogenia y desarrollo gonadal de vertebrados amniotas y anamniotas del Nordeste de Argentina.</span>
+		<div id="proyecto_acreditado">
+			<p>El Plan de Beca propuesto estará incluido en el siguiente Proyecto de Investigación Acreditado:</p>
+			<p id='proyecto_nombre'>{{proyecto_nombre}}
+			</p>
 		</div>
-		<div>
-			<div>Convocatoria: <span id='convocatoria'>Convocatoria a Becas CYT 2018</span></div>
-			<div>Tipo de Beca: <span id='tipo_beca'>PREGRADO</span></div>
-			<div>Área de Conocimiento: <span id='area_conocimiento'>Ciencias Exactas, Naturales y Agrimensura</span></div>
-			<div>Lugar de Trabajo: <span id='lugar_trabajo'>Facultad de Ciencias Agrarias</span></div>
-			<div>Área/Departamento: <span id='area_trabajo'>Departamento de Suelos</span></div>
-		</div>
+		<table class='tabla' id='tabla_resumen_beca'>
+			<caption>Resumen de la solicitud</caption>
+			<tr>
+				<td>Nombre del Postulante:</td><td colspan="3">{{nombre_postulante}} ({{cuil}})</td>
+			</tr>
+			<tr>
+				<td>Estudiante/Egresado de:</td><td colspan="3">{{carrera}}</td>
+			</tr>
+			<tr>
+				<td>Tipo de Beca</td><td>{{tipo_beca}}</td>
+				<td>Carpeta Nro:</td><td>{{nro_carpeta}}</td>
+			</tr>
+			<tr>	
+				<td>Área de Conocimiento</td><td colspan="3">{{area_conocimiento}}</td>
+			</tr>
+		</table>
 	</div>
-	<div id="datos_postulante">
-		
-	</div>
-	<div id="datos_direccion">
-		
+	<div id="direccion">
+		{{direccion}}
 	</div>
 	<div id="plan_trabajo">
-		
+		<a href="{{enlace_plan_trab}}" target="_BLANK">Descargar el Plan de Trabajo</a>	
 	</div>
 	<div id="antecedentes">
 		
