@@ -206,7 +206,7 @@ class ci_admisibilidad extends becas_ci
 
 		$template = "<table width='100%'>
 						<tr>
-							<td style='vertical-align: top;max-width:350px'>
+							<td style='vertical-align:'>
 								[dep id=form_admisibilidad]
 								[dep id=ml_requisitos]
 								<p class='".$clase_css_edad." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
