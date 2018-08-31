@@ -119,8 +119,6 @@
 	background-color:#ffffff;
 	box-shadow: 2px 2px 13px #333;
 	font-size: 0.9em;
-	line-height: 1.2;
-	margin: 10px 0px;
 }
 .detalle_director a{
 	background-color: #567f9c;
@@ -136,7 +134,6 @@
 	box-shadow: 3px 4px 4px #444;
 }
 .detalle_director legend{
-	
 	position:relative;
 	background-color: #5b5f9e;
 	padding: 1px 10px 1px 10px;
@@ -144,8 +141,9 @@
 	color:#ffffff;
 	text-shadow:1px 1px 1px #4a4a4a;
 }
+
 .detalle_director p{
-	margin:2px
+	padding: 2px 0px;
 }
 #director_cargos{
 	margin: 0px;
