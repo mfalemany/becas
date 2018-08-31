@@ -14,6 +14,19 @@ class co_antecedentes
 		return toba::db()->consultar($sql);
 	}
 
+	function get_antec_estudios_afines($filtro = array())
+	{
+		$where = array();
+		if(isset($filtro['nro_documento'])){
+			$where[] = "ant.nro_documento = ".quote($filtro['nro_documento']);
+		}
+		$sql = "SELECT * FROM be_antec_estudios_afines AS ant";
+		if(count($where)){
+			$sql = sql_concatenar_where($sql,$where);
+		}
+		return toba::db()->consultar($sql);
+	}
+
 	function get_campos($campos,$tabla,$condicion,$fila_unica=TRUE)
 	{
 		if(!is_array($campos) || count($campos) == 0 || strlen($tabla) == 0){

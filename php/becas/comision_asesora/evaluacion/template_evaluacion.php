@@ -34,5 +34,6 @@
 	
 	<div id="antecedentes">
 		[dep id=cu_actividades_docentes]
+		[dep id=cu_estudios_afines]
 	</div>
 </div>

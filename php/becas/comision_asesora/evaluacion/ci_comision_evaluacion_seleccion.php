@@ -163,6 +163,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	/** =============================================================================
 	 *              CONFIGURACION DE LOS CUADROS DE ANTECEDENTES
 	 * ============================================================================= */
+	/* =============== ANTECEDENTES DE DOCENCIA =================*/
 	function conf__cu_actividades_docentes(becas_ei_cuadro $cuadro)
 	{
 		$cuadro->desactivar_modo_clave_segura();
@@ -176,6 +177,24 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		
 		
 		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/activ_docente/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
+	/* =============== ESTUDIOS AFINES =================*/
+	function conf__cu_estudios_afines(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_estudios_afines($postulacion));
+	}
+	function servicio__antec_estudio_afin_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_estudios_afines','id_estudio_afin = '.$params['id_estudio_afin']);
+		
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/estudios_afines/".$campos['doc_probatoria'];
 
 		$this->mostrar_pdf($ruta);
 	}

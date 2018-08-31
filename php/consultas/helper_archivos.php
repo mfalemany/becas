@@ -32,7 +32,7 @@ class helper_archivos
 			
 				if($datos_form[$archivo['ef']]){
 					if( ! $this->subir_archivo($datos_form[$archivo['ef']],utf8_encode($ruta),$archivo['nombre'])){
-						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretar? General de Ciencia y T?ica');
+						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretaría General de Ciencia y Técnica');
 					}else{
 						$datos_form[$archivo['ef']] = $archivo['nombre'];
 					}
@@ -82,7 +82,7 @@ class helper_archivos
 					//se sube el nuevo archivo
 					if( ! $this->subir_archivo($item[$nombre_input],$ruta,utf8_encode($nombre))){
 						//se utiliza substr y strlen para quitar el ".pdf" al final del nombre de la actividad
-						toba::notificacion()->agregar("No se pudo subir la documentaci? probatoria correspondiente a la actividad: ".substr($nombre,0,(strlen($nombre)-4) ) );
+						toba::notificacion()->agregar("No se pudo subir la documentación probatoria correspondiente a la actividad: ".substr($nombre,0,(strlen($nombre)-4) ) );
 					}
 					$estado_actual_ml[$fila][$nombre_input] = $nombre;
 				}else{
