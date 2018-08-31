@@ -9,7 +9,7 @@
 			</p>
 		</div>
 		<table class='tabla' id='tabla_resumen_beca'>
-			<caption>Resumen de la solicitud</caption>
+			<caption>Detalles de la solicitud</caption>
 			<tr>
 				<td>Nombre del Postulante:</td><td colspan="3">{{nombre_postulante}} ({{cuil}})</td>
 			</tr>
@@ -17,7 +17,7 @@
 				<td>Estudiante/Egresado de:</td><td colspan="3">{{carrera}}</td>
 			</tr>
 			<tr>
-				<td>Tipo de Beca</td><td>{{tipo_beca}}</td>
+				<td>Tipo de Beca:</td><td>{{tipo_beca}}</td>
 				<td>Carpeta Nro:</td><td>{{nro_carpeta}}</td>
 			</tr>
 			<tr>	
@@ -25,13 +25,14 @@
 			</tr>
 		</table>
 	</div>
-	<div id="direccion">
-		{{direccion}}
-	</div>
 	<div id="plan_trabajo">
 		<a href="{{enlace_plan_trab}}" target="_BLANK">Descargar el Plan de Trabajo</a>	
 	</div>
+	<div id="direccion">
+		{{direccion}}
+	</div>
+	
 	<div id="antecedentes">
-		
+		[dep id=cu_actividades_docentes]
 	</div>
 </div>

@@ -1,11 +1,11 @@
 <fieldset class="detalle_director">
 	<legend>{{rol}}</legend>
-	<p>Apellido y Nombres: <span class="etiqueta_info" id="director">{{ayn}}</span> 
-		(DNI: {{dni}})</p>
-	<p>Cat. Incentivos: {{categoria_inc}}</p>
-	<p>Cat. Conicet: {{categoria_con}}</p>
-	<p>CVAr: <a href="{{enlace_cvar}}" target="_BLANK" class="enlace">Ver ahora</a></p>
-	<p>Cargos:</p>
+	<p><b>Apellido y Nombres:</b> <span class="etiqueta_info" id="director">{{ayn}}</span> 
+		(<b>DNI:</b> {{dni}})</p>
+	<p><b>Cat. Incentivos:</b> {{categoria_inc}}</p>
+	<p><b>Cat. Conicet:</b> {{categoria_con}}</p>
+	<p><b>CVAr:</b> <a href="{{enlace_cvar}}" target="_BLANK" class="enlace">Ver ahora</a></p>
+	<p><b>Cargos:</b></p>
 	<ul id="director_cargos">
 		{{cargos}}
 	</ul>

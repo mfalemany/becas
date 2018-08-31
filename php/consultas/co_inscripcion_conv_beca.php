@@ -276,7 +276,6 @@ class co_inscripcion_conv_beca
 
 	function get_detalles_director($inscripcion, $tipo = 'dir')
 	{
-		$cat_incentivos = array(1=>'Categoría I',2=>'Categoría II',3=>'Categoría III',4=>'Categoría IV',5=>'Categoría V')
 		$sql = "SELECT 
 					insc.nro_documento_".$tipo." AS nro_documento, 
 					per.apellido, 

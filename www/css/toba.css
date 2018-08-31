@@ -112,20 +112,28 @@
 }
 
 /* FIELDSET "Detalle de Director" */
+#direccion{
+	margin: 15px 0px;
+}
 .detalle_director{
 	background-color:#ffffff;
 	box-shadow: 2px 2px 13px #333;
+	font-size: 0.9em;
 	line-height: 1.2;
-	margin-top: 10px;
+	margin: 10px 0px;
 }
 .detalle_director a{
-	background-color: #629de6;
+	background-color: #567f9c;
+	border-radius: 4px;
+	box-shadow: 2px 3px 4px #222;
     color: #FFF;
     font-weight: bold;
-    border-radius: 4px;
-    padding: 2px 10px;
+    padding: 0px 10px;
     text-shadow: 1px 1px 1px #333;
     text-decoration: none;
+}
+.detalle_director a:hover{
+	box-shadow: 3px 4px 4px #444;
 }
 .detalle_director legend{
 	
@@ -184,7 +192,7 @@
 	
 }
 #evaluacion_beca #datos_beca #titulo_plan_beca{
-	font-size: 2em;
+	font-size: 1.8em;
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;
@@ -210,39 +218,47 @@
     text-shadow: 1px 1px 2px #fff;
     border-radius: 4px;
 }
-#tabla_resumen_beca, #tabla_resumen_direccion{
+/* RESUMEN DE BECA - PANTALLA DEL EVALUADOR */
+#tabla_resumen_beca{
+	font-size: 15px;
+}
+#tabla_resumen_beca{
 	width: 70%;
 	min-width: 400px;
 	margin: 20px auto;
 }
 
-#tabla_resumen_beca tr td, #tabla_resumen_direccion tr td{
+#tabla_resumen_beca tr td{
 	font-weight: bold;
 }
-#tabla_resumen_beca tr td:nth-child(odd), #tabla_resumen_direccion tr td:nth-child(odd){
+#tabla_resumen_beca tr td:nth-child(odd){
 	text-align: right;
 	font-size: 1.1em;
 	color:#bf1717;
 }
-#tabla_resumen_beca tr td:nth-child(even), #tabla_resumen_direccion tr td:nth-child(even){
+#tabla_resumen_beca tr td:nth-child(even){
 	text-align: left;
 
 }
-#evaluacion_beca #datos_postulante{
-	
-}
-
-#evaluacion_beca #datos_postulante{
-	
-}
-#evaluacion_beca #datos_direccion{
-	
-}
 #evaluacion_beca #plan_trabajo{
-	
+		
 }
-#evaluacion_beca #antecedentes{
-	
+#evaluacion_beca #plan_trabajo a{
+	background-color: #567f9c;
+	border-radius: 4px;
+	box-shadow: 3px 4px 7px #333;
+	color: #FFF;
+	display:block;
+	font-weight: bold;
+	margin: 0px auto;
+	padding: 8px 0px;
+	text-align:center;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px #222;
+	width: 50%;
+}
+#evaluacion_beca #plan_trabajo a:hover{
+	box-shadow: 5px 6px 9px #333;
 }
 
 /* TABLAS */
@@ -263,7 +279,7 @@
 }
 .tabla caption{
 	padding: 3px;
-	background-color: #4e4e4e;
+	background-color: #a54a4a;
 	color:white;
 	
 }

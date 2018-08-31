@@ -1,1 +1,1 @@
-<li class='{{clase_css}}'>{{cargo}} ({{dedicacion}}) en {{dependencia}} (desde el {{fecha_desde}} al {{fecha_hasta}})</li>
+<li class='{{clase_css}}'>{{descripcion}} en {{dependencia_desc}} ({{fecha_desde}} hasta {{fecha_hasta}})</li>
