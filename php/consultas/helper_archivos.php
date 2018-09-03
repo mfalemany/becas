@@ -59,14 +59,14 @@ class helper_archivos
 		foreach($estado_actual_ml as $fila => $item){
 			
 			//se genera el nombre del archivo
-			$nombre = '';
+			/*$nombre = '';
 			foreach($campos_nombre_archivo as $campo){
 				//agrega un gui? medio entre cada palabra del nombre
 				if(strlen($nombre)>0){
 					$nombre .= "-";
 				}
 				$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
-			}
+			}*/
 			//Genero un nombre único para el archivo PDF
 			$tmp = microtime();
 			$tmp = explode(' ',$tmp);
