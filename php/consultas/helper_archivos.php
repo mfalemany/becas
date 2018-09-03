@@ -54,19 +54,15 @@ class helper_archivos
 	 */
 	function procesar_ml_con_archivos($estado_inicial_ml,&$estado_actual_ml,$ruta,$campos_nombre_archivo,$nombre_input)
 	{
-		//para cada linea de actividad docente
+		//campos_nombre_archivo ya no se usa... habria que modificar en todas las llamadas para eliminarlo
+
+		//para cada linea
 		foreach($estado_actual_ml as $fila => $item){
 			
 			//se genera el nombre del archivo
-			$nombre = '';
-			foreach($campos_nombre_archivo as $campo){
-				//agrega un gui? medio entre cada palabra del nombre
-				if(strlen($nombre)>0){
-					$nombre .= "-";
-				}
-				$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
-			}
-			$nombre .= '.pdf'; 
+			$nombre = explode(' ',microtime());
+			$micro = substr($nombre[0],2,8);
+			$nombre = $nombre[1].$micro.".pdf";
 
 			// =========== ALTA Y MODIFICACI? ===============
 			

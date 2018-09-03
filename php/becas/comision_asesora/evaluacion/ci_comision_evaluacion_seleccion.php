@@ -30,8 +30,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$filtro = ($this->s__filtro) ? $this->s__filtro : array();
 		
 		//Solo inscripciones cerradas y admitidas
-		//$filtro['admisible'] =  'S';
-		//$filtro['estado'] = 'C';
+		$filtro['admisible'] =  'S';
+		$filtro['estado'] = 'C';
 
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 	}
@@ -193,11 +193,65 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$params = toba::memoria()->get_parametros();
 		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_estudios_afines','id_estudio_afin = '.$params['id_estudio_afin']);
 		
-		
 		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/estudios_afines/".$campos['doc_probatoria'];
 
 		$this->mostrar_pdf($ruta);
 	}
+
+	/* =============== ANTECEDENTES DE BECAS OBTENIDAS =================*/
+	function conf__cu_becas_obtenidas(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_becas_obtenidas($postulacion));
+	}
+
+	function servicio__antec_becas_obtenidas_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_becas_obtenidas','id_beca_obtenida = '.$params['id_beca_obtenida']);
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/becas_obtenidas/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
+	/* =============== ANTECEDENTES DE TRABAJOS PUBLICADOS =================*/
+	function conf__cu_trabajos_publicados(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_trabajos_publicados($postulacion));
+	}
+
+	function servicio__antec_trabajos_publicados_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_trabajos_publicados','id_trabajo_publicado = '.$params['id_trabajo_publicado']);
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/trabajos_publicados/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
+	/* =============== ANTECEDENTES DE PRESENTACIÓN EN REUNIONES =================*/
+	function conf__cu_present_reuniones(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_present_reuniones($postulacion));
+	}
+
+	function servicio__antec_present_reuniones_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_present_reuniones','id_present_reunion = '.$params['id_present_reunion']);
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/presentacion_reuniones/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
 
 
 

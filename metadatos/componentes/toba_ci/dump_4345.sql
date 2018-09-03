@@ -126,6 +126,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
+	'3054', --dep_id
+	'4345', --objeto_consumidor
+	'4353', --objeto_proveedor
+	'cu_becas_obtenidas', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
 	'3053', --dep_id
 	'4345', --objeto_consumidor
 	'4352', --objeto_proveedor
@@ -142,6 +154,30 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'4345', --objeto_consumidor
 	'4347', --objeto_proveedor
 	'cu_postulaciones', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'3056', --dep_id
+	'4345', --objeto_consumidor
+	'4355', --objeto_proveedor
+	'cu_present_reuniones', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'3055', --dep_id
+	'4345', --objeto_consumidor
+	'4354', --objeto_proveedor
+	'cu_trabajos_publicados', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -249,6 +285,27 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'4345', --objeto_ci
 	'1', --orden
 	'3053'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1929', --pantalla
+	'4345', --objeto_ci
+	'2', --orden
+	'3054'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1929', --pantalla
+	'4345', --objeto_ci
+	'3', --orden
+	'3055'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1929', --pantalla
+	'4345', --objeto_ci
+	'4', --orden
+	'3056'  --dep_id
 );
 
 ------------------------------------------------------------
