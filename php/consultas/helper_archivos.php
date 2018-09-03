@@ -71,7 +71,7 @@ class helper_archivos
 				$tmp = microtime();
 				$tmp = explode(' ',$tmp);
 				$micro = substr($tmp[0],2,8);
-				$nombre = $tmp[1].$micro;
+				$nombre = $tmp[1].$micro.".pdf";
 			} else{
 				$nombre .= '.pdf'; 		
 			}
