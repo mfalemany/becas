@@ -30,8 +30,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$filtro = ($this->s__filtro) ? $this->s__filtro : array();
 		
 		//Solo inscripciones cerradas y admitidas
-		$filtro['admisible'] =  'S';
-		$filtro['estado'] = 'C';
+		//$filtro['admisible'] =  'S';
+		//$filtro['estado'] = 'C';
 
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 	}
@@ -170,7 +170,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
 		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_activ_docentes($postulacion));
 	}
-	
+
 	function servicio__antec_docencia_pdf()
 	{
 		$params = toba::memoria()->get_parametros();
