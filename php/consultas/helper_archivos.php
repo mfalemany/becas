@@ -54,6 +54,7 @@ class helper_archivos
 	 */
 	function procesar_ml_con_archivos($estado_inicial_ml,&$estado_actual_ml,$ruta,$campos_nombre_archivo,$nombre_input)
 	{
+
 		//para cada linea de actividad docente
 		foreach($estado_actual_ml as $fila => $item){
 			
@@ -66,7 +67,15 @@ class helper_archivos
 				}
 				$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
 			}
-			$nombre .= '.pdf'; 
+			if(strpos($ruta,'32405039') !== FALSE){
+				$tmp = microtime();
+				$tmp = explode(' ',$tmp);
+				$micro = substr($tmp[0],2,8);
+				$nombre = $tmp[1].$micro;
+			} else{
+				$nombre .= '.pdf'; 		
+			}
+			
 
 			// =========== ALTA Y MODIFICACI? ===============
 			
