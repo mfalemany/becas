@@ -170,11 +170,11 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
 		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_activ_docentes($postulacion));
 	}
+	
 	function servicio__antec_docencia_pdf()
 	{
 		$params = toba::memoria()->get_parametros();
 		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_activ_docentes','id_antecedente = '.$params['id_antecedente']);
-		
 		
 		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/activ_docente/".$campos['doc_probatoria'];
 

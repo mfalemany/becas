@@ -25,7 +25,7 @@ class form_admisibilidad extends becas_ei_formulario
 		$this->generar_html_ef('admisible');
 		$this->generar_html_ef('beca_otorgada');
 		if($insc['archivo_insc_posgrado']){
-			echo "<div style='margin:10px auto 10px auto; text-align:center;'><a href='".$ruta."/Insc. o Compromiso Posgrado.pdf"."' class='enlace_boton' target='_BLANK'>Ver inscripción/compromiso a posgrado</a></div>";
+			echo "<div style='margin:10px auto 10px auto; text-align:center;'><a href='".$ruta."Insc. o Compromiso Posgrado.pdf"."' class='enlace_boton' target='_BLANK'>Ver inscripción/compromiso a posgrado</a></div>";
 		}
 	}
 
