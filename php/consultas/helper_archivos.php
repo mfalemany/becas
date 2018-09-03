@@ -67,14 +67,12 @@ class helper_archivos
 				}
 				$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
 			}
-			if(strpos($ruta,'32405039') !== FALSE){
-				$tmp = microtime();
-				$tmp = explode(' ',$tmp);
-				$micro = substr($tmp[0],2,8);
-				$nombre = $tmp[1].$micro.".pdf";
-			} else{
-				$nombre .= '.pdf'; 		
-			}
+			//Genero un nombre único para el archivo PDF
+			$tmp = microtime();
+			$tmp = explode(' ',$tmp);
+			$micro = substr($tmp[0],2,8);
+			$nombre = $tmp[1].$micro.".pdf";
+			
 			
 
 			// =========== ALTA Y MODIFICACI? ===============
