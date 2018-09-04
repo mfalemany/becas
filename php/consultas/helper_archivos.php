@@ -54,19 +54,26 @@ class helper_archivos
 	 */
 	function procesar_ml_con_archivos($estado_inicial_ml,&$estado_actual_ml,$ruta,$campos_nombre_archivo,$nombre_input)
 	{
+
 		//para cada linea de actividad docente
 		foreach($estado_actual_ml as $fila => $item){
 			
 			//se genera el nombre del archivo
-			$nombre = '';
+			/*$nombre = '';
 			foreach($campos_nombre_archivo as $campo){
 				//agrega un gui? medio entre cada palabra del nombre
 				if(strlen($nombre)>0){
 					$nombre .= "-";
 				}
 				$nombre .=  ($item[$campo['nombre']]) ? $item[$campo['nombre']] : $campo['defecto'];
-			}
-			$nombre .= '.pdf'; 
+			}*/
+			//Genero un nombre único para el archivo PDF
+			$tmp = microtime();
+			$tmp = explode(' ',$tmp);
+			$micro = substr($tmp[0],2,8);
+			$nombre = $tmp[1].$micro.".pdf";
+			
+			
 
 			// =========== ALTA Y MODIFICACI? ===============
 			
