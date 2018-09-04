@@ -252,6 +252,81 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$this->mostrar_pdf($ruta);
 	}
 
+	/* =============== ANTECEDENTES DE CONOCIMIENTO IDIOMAS =================*/
+	function conf__cu_idiomas(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_conocimiento_idiomas($postulacion));
+	}
+
+	function servicio__antec_conocimiento_idiomas_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_conoc_idiomas','id_conocimiento_idioma = '.$params['id_conocimiento_idioma']);
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/conocimiento_idiomas/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
+	/* =============== ANTECEDENTES DE OTRAS ACTIVIDADES =================*/
+	function conf__cu_otras_actividades(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_otras_actividades($postulacion));
+	}
+
+	function servicio__antec_otras_actividades_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		ei_arbol($params);
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_otras_actividades','id_otra_actividad = '.$params['id_otra_actividad']);
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/otras_actividades/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
+	/* =============== ANTECEDENTES DE PARTICIPACION EN DICTADO DE CURSOS =================*/
+	function conf__cu_part_dict_cursos(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_particip_dict_cursos($postulacion));
+	}
+
+	function servicio__antec_particip_dict_cursos_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		ei_arbol($params);
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_particip_dict_cursos','id_particip_cursos = '.$params['id_particip_cursos']);
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/part_dict_cursos/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
+	/* =============== ANTECEDENTES DE PARTICIPACION EN DICTADO DE CURSOS =================*/
+	function conf__cu_cursos_perfeccionamiento(becas_ei_cuadro $cuadro)
+	{
+		$cuadro->desactivar_modo_clave_segura();
+		$postulacion = $this->get_datos('inscripcion_conv_beca')->get();
+		$cuadro->set_datos(toba::consulta_php('co_antecedentes')->get_antec_cursos_perfeccionamiento($postulacion));
+	}
+
+	function servicio__antec_cursos_perfeccionamiento_pdf()
+	{
+		$params = toba::memoria()->get_parametros();
+		ei_arbol($params);
+		$campos = toba::consulta_php('co_antecedentes')->get_campos(array('doc_probatoria','nro_documento'),'be_antec_cursos_perfec_aprob','id_curso_perfec_aprob = '.$params['id_curso_perfec_aprob']);
+		
+		$ruta = $this->ruta_documentos."/doc_probatoria/".$campos['nro_documento']."/cursos_perfec_aprob/".$campos['doc_probatoria'];
+
+		$this->mostrar_pdf($ruta);
+	}
+
 
 
 

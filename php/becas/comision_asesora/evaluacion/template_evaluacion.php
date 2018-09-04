@@ -34,9 +34,21 @@
 	
 	<div id="antecedentes">
 		[dep id=cu_actividades_docentes]
+		<br>
 		[dep id=cu_estudios_afines]
+		<br>
 		[dep id=cu_becas_obtenidas]
+		<br>
 		[dep id=cu_trabajos_publicados]
+		<br>
 		[dep id=cu_present_reuniones]
+		<br>
+		[dep id=cu_idiomas]
+		<br>
+		[dep id=cu_otras_actividades]
+		<br>
+		[dep id=cu_part_dict_cursos]
+		<br>
+		[dep id=cu_cursos_perfeccionamiento]
 	</div>
 </div>
