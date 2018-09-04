@@ -90,6 +90,7 @@ class ci_cambiar_clave extends becas_ci
 		}
 		$form->ef('mail')->set_estado($this->s__datos['mail']);
 		$form->set_solo_lectura(array('mail','nro_documento'));
+		$form->desactivar_efs(array('archivo_cvar','archivo_cuil','archivo_titulo_grado'));
 	}
 
 	function evt__form_persona__modificacion($datos){
