@@ -30,7 +30,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$filtro = ($this->s__filtro) ? $this->s__filtro : array();
 		
 		//Solo inscripciones cerradas y admitidas
-		$filtro['admisible'] =  'S';
+		$filtro['admisible'] = 'S';
 		$filtro['estado'] = 'C';
 
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));

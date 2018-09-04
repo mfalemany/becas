@@ -55,7 +55,7 @@ class ci_inscripcion extends becas_ci
 
 	}
 
-	function conf_evt__cuadro__generar_comprobante(toba_evento_usuario $evento, $fila)
+	/*function conf_evt__cuadro__generar_comprobante(toba_evento_usuario $evento, $fila)
 	{
 		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$fila);
 		if(count($clave) == 0){
@@ -69,7 +69,7 @@ class ci_inscripcion extends becas_ci
 			$evento->mostrar();
 		}
 		//si el estado es cerrado, hay que mostrar el boton
-	}
+	}*/
 
 	function resetear()
 	{

@@ -62,6 +62,7 @@ class co_inscripcion_conv_beca
 			insc.nro_carpeta,
 			insc.observaciones,
 			insc.estado,
+			case insc.estado when 'A' then 'Abierta' when 'C' then 'Cerrada' else 'No definido' end as estado_desc,
 			insc.cant_fojas,
 			insc.es_titular,
 			lugtrab.nombre AS lugar_trabajo_becario

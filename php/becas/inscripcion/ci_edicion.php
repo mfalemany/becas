@@ -183,17 +183,17 @@ class ci_edicion extends becas_ci
 		
 		//esta funcion carga los datos del director (si es posible encontrarlo en wl WS o en la base local). En caso contrario env? al usuario a la pantalla de carga de datos de director
 		if( ! $this->existe_persona($datos['nro_documento_dir'])){
-			throw new toba_error('El Nro. de Documento del director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretar? General de Ciencia y T?nica para obtener una soluci?.');
+			throw new toba_error('El Nro. de Documento del director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
 		}
 		if($datos['nro_documento_codir']){
 			if( ! $this->existe_persona($datos['nro_documento_codir'])){
-				throw new toba_error('El Nro. de Documento del Co-Director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretar? General de Ciencia y T?nica para obtener una soluci?.');
+				throw new toba_error('El Nro. de Documento del Co-Director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
 			}
 		}
 
 		if($datos['nro_documento_subdir']){
 			if( ! $this->existe_persona($datos['nro_documento_subdir'])){
-				throw new toba_error('El Nro. de Documento del Sub-Director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretar? General de Ciencia y T?nica para obtener una soluci?.');
+				throw new toba_error('El Nro. de Documento del Sub-Director ingresado no se corresponde con ninguna persona registrada en el sistema. Por favor, Comuniquese con la Secretaría General de Ciencia y Técnica para obtener una solución.');
 			}
 		}
 
@@ -205,7 +205,7 @@ class ci_edicion extends becas_ci
 			));
 			$this->set_pantalla('pant_alumno');
 
-			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ning?n alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuaci?.');
+			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ning?n alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
 		}
 
 	}

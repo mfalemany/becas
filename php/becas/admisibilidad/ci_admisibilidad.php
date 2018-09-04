@@ -31,6 +31,7 @@ class ci_admisibilidad extends becas_ci
 	function conf__cu_solicitudes(becas_ei_cuadro $cuadro)
 	{
 		$filtro = (isset($this->s__filtro) ? $this->s__filtro : array());
+		$filtro['estado'] = 'C';
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 	}
 
@@ -154,7 +155,7 @@ class ci_admisibilidad extends becas_ci
 		/* ============================================================================ */
 
 		//obtengo los detalles del tipo de beca seleccionado
-		$det_tipo_beca = toba::consulta_php('co_tipos_beca')->get_tipos_beca($insc['id_tipo_beca']);
+		$det_tipo_beca = toba::consulta_php('co_tipos_beca')->get_tipos_beca(array('id_tipo_beca'=>$insc['id_tipo_beca']));
 		if(count($det_tipo_beca)){
 			$det_tipo_beca = $det_tipo_beca[0];
 		}
@@ -212,6 +213,7 @@ class ci_admisibilidad extends becas_ci
 								<p class='".$clase_css_edad." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
 								<p class='".$clase_css_dedic." centrado'>Mayor Dedicación</p>
 								<p class='".$clase_css_categ." centrado'>Grado/Categoría</p>";
+
 		//si el tipo de beca requiere inscripción a posgrado, se muestra la validación
 		if(isset($clase_css_insc_posgrado)){
 			$template .= 		"<p class='".$clase_css_insc_posgrado." centrado'>Inscripción o compromiso a un posgrado</p>";
