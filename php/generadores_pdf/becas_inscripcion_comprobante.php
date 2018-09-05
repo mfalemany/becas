@@ -114,12 +114,12 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->AddPage('Portrait','A4');
 		$this->junta($caratula,$params);
 
+		//informe de archivos subidos
+		$this->informe_archivos_subidos($caratula);
+
 		//agrego otra hoja
 		$this->AddPage('Portrait','A4');
 		$this->talon_postulante($caratula,$params);
-
-		
-		$this->informe_archivos_subidos($caratula);
 			
 	}
 
@@ -212,7 +212,7 @@ class Becas_inscripcion_comprobante extends FPDF
 
 		//Linea para corte
 		$this->Ln();
-		$this->Cell($ancho,$alto_linea,'','T',1,'C',false);
+		$this->Cell($ancho,$alto_linea,'Recorte sobre esta linea, y pegue la caratula en la tapa de su carpeta.','T',1,'C',false);
 	}
 
 	function encabezado_nota()
@@ -725,10 +725,11 @@ De no ser otorgada la beca, la documentación deberá ser retirada dentro de los t
 			$this->Cell(190,6,"Total de archivos cargados: ".$total,1,1,'C',true);
 			$this->Ln();
 			
-			$this->setX(140);
-			$this->Cell(50 ,19,'',1,1,'',false);
-			$this->setX(140);
-			$this->Cell(50,6,'Firma del postulante',1,0,'C',false);
+			$this->SetFont('','B',9);
+			$this->setX(90);
+			$this->Cell(100,19,'',1,1,'',false);
+			$this->setX(90);
+			$this->Cell(100,6,'Firma y aclaración del postulante',1,0,'C',false);
 			
 
 
