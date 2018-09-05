@@ -28,6 +28,7 @@ class Becas_inscripcion_comprobante extends FPDF
 		$caratula = array('tipo_beca'              => $datos['beca']['tipo_beca'],
 						  'requiere_posgrado'      => $datos['beca']['requiere_insc_posgrado'],
 						  'nombre_dependencia'     => $datos['postulante']['nombre_dependencia'],
+						  'nro_documento'          => $datos['postulante']['nro_documento'],
 						  'postulante'             => $datos['postulante']['apellido'].', '.$datos['postulante']['nombres'],
 						  'cuil'                   => $datos['postulante']['cuil'],
 						  'director'               => $datos['director']['apellido'].', '.$datos['director']['nombres'],
@@ -117,7 +118,9 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->AddPage('Portrait','A4');
 		$this->talon_postulante($caratula,$params);
 
-
+		
+		$this->informe_archivos_subidos($caratula);
+			
 	}
 
 	function caratula($datos,$params)
@@ -664,6 +667,77 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->setFont('','',8);
 		$this->MultiCell($ancho_total,$alto_fila,'-En caso de ser otorgada la beca, se deberá realizar el acto de toma de posesión antes del 1 de Marzo de '.(intval(date("Y"))+1).'-
 De no ser otorgada la beca, la documentación deberá ser retirada dentro de los treinta (30) días corridos de dictada la Resolución de adjudicación del Consejo Superior. Caso contrario será destruida..-','BLR','L',true);	
+	}
+
+
+	function informe_archivos_subidos($datos)
+	{
+		$archivos = toba::consulta_php('co_antecedentes')->get_informe_archivos_subidos($datos['nro_documento']);
+
+		if(count($archivos)){
+			//agrego otra hoja
+			$this->AddPage('Portrait','A4');
+
+			//Nombre legible de las tablas consultadas
+			$tabs = array('be_antec_activ_docentes'         => 'Actividades Docentes',
+							'be_antec_becas_obtenidas'      => 'Becas Obtenidas',
+							'be_antec_conoc_idiomas'        => 'Conocimiento de Idiomas',
+							'be_antec_cursos_perfec_aprob'  => 'Cursos de Perfeccionamiento Aprobados',
+							'be_antec_estudios_afines'      => 'Estudios Afines',
+							'be_antec_otras_actividades'    => 'Otras Actividades',
+							'be_antec_particip_dict_cursos' => 'Participación en el Dictado de Cursos',
+							'be_antec_present_reuniones'   => 'Presentación en Reuniones de Comunicaciones Científicas',
+							'be_antec_trabajos_publicados'  => 'Trabajos Publicados'
+						);
+			//maneja un contador con el total de archivos subidos
+			$total = 0;
+
+			
+			$this->SetFont('','B',12);
+			$this->SetFillColor(200,200,200);
+			$this->Cell(190,7,"Resumen de Documentación Probatoria Cargada",1,1,'C',true);
+			$this->Cell(150,5,$datos['postulante'],1,0,'C',false);
+			$this->Cell(40,5,$datos['nro_carpeta'],1,1,'C',false);
+			$this->Ln();
+
+			foreach($archivos as $categoria => $documentacion){
+				$this->SetFont('','B',12);
+				$this->SetFillColor(200,200,200);
+				//Nombre de la categoría donde fue subido el archivo
+				$this->Cell(190,6,$tabs[$categoria],1,1,'C',true);
+				
+				$this->SetFont('','',8);
+				$this->SetFillColor(256,256,256);
+
+				$parcial = 1;
+				foreach($documentacion as $archivo){
+					$desc = (strlen($archivo['descripcion']) > 90) ? substr($archivo['descripcion'],0,90)."(...)" : $archivo['descripcion'];
+					$doc  = (strlen($archivo['doc_probatoria']) > 30) ? substr($archivo['doc_probatoria'],0,30)."(...).pdf" : $archivo['doc_probatoria'];
+					$this->Cell(130,5,$parcial.") ".$desc,1,0,'L',false);
+					$parcial++;
+					$total++;
+					$this->Cell(60,5,$doc,1,1,'C',true);
+				}
+			}
+
+			$this->SetFont('','B',10);
+			$this->SetFillColor(200,200,200);
+			$this->Cell(190,6,"Total de archivos cargados: ".$total,1,1,'C',true);
+			$this->Ln();
+			
+			$this->setX(140);
+			$this->Cell(50 ,19,'',1,1,'',false);
+			$this->setX(140);
+			$this->Cell(50,6,'Firma del postulante',1,0,'C',false);
+			
+
+
+
+
+
+			
+		}
+		
 	}
 
 	function Header()

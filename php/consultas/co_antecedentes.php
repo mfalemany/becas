@@ -134,6 +134,38 @@ class co_antecedentes
 		
 	}
 
+	function get_informe_archivos_subidos($nro_documento)
+	{
+		$sql = "select institucion||' - '||cargo as descripcion, doc_probatoria, 'be_antec_activ_docentes' as tabla from be_antec_activ_docentes as descripcion where nro_documento = '$nro_documento'
+				union
+				select institucion||' - '||tipo_beca||' ('||fecha_desde||' a '||fecha_hasta||')' as descripcion, doc_probatoria, 'be_antec_becas_obtenidas' as tabla from be_antec_becas_obtenidas where nro_documento = '$nro_documento'
+				union
+				select idioma as descripcion, doc_probatoria , 'be_antec_conoc_idiomas' as tabla from be_antec_conoc_idiomas where nro_documento = '$nro_documento'
+				union
+				select tema as descripcion, doc_probatoria, 'be_antec_cursos_perfec_aprob' as tabla from be_antec_cursos_perfec_aprob where nro_documento = '$nro_documento'
+				union
+				select titulo as descripcion, doc_probatoria, 'be_antec_estudios_afines' as tabla from be_antec_estudios_afines where nro_documento = '$nro_documento'
+				union
+				select titulo_tema as descripcion, doc_probatoria, 'be_antec_otras_actividades' as tabla from be_antec_otras_actividades where nro_documento = '$nro_documento'
+				union
+				select fecha||' - '||institucion as descripcion, doc_probatoria, 'be_antec_particip_dict_cursos' as tabla from be_antec_particip_dict_cursos where nro_documento = '$nro_documento'
+				union
+				select titulo_trabajo as descripcion, doc_probatoria, 'be_antec_present_reuniones' as tabla from be_antec_present_reuniones where nro_documento = '$nro_documento'
+				union
+				select datos_publicacion as descripcion, doc_probatoria, 'be_antec_trabajos_publicados' as tabla from be_antec_trabajos_publicados where nro_documento = '$nro_documento'";
+		$archivos = toba::db()->consultar($sql);
+		if(count($archivos)){
+			foreach ($archivos as $archivo) {
+				$resumen[$archivo['tabla']][] = array('descripcion'=>$archivo['descripcion'],
+														'doc_probatoria' => $archivo['doc_probatoria']);
+			}
+			return $resumen;
+		}else{
+			return array();
+		}
+
+	}
+
 }
 
 ?>
