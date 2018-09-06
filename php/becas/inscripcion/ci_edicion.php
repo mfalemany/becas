@@ -171,8 +171,9 @@ class ci_edicion extends becas_ci
 		//se asignan los datos del formulario al datos_dabla
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set($datos);
 		$estado = ($this->s__insc_actual['estado']) ? $this->s__insc_actual['estado'] : 'A';
+		$fecha_hora = ($this->s__insc_actual['fecha_hora']) ? $this->s__insc_actual['fecha_hora'] : date('Y-m-d H:i:s');
 		$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array( 'estado'      => $estado,
-																			'fecha_hora'  => date('Y-m-d H:i:s'),
+																			'fecha_hora'  => $fecha_hora,
 																			'es_titular'  => 'S',
 																			'puntaje'     => $this->calcular_puntaje()
 																			
@@ -205,7 +206,7 @@ class ci_edicion extends becas_ci
 			));
 			$this->set_pantalla('pant_alumno');
 
-			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ning?n alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
+			throw new toba_error('El Nro. de Documento del alumno ingresado no se corresponde con ningún alumno registrado en el sistema. Por favor, complete los datos personales solicitados a continuación.');
 		}
 
 	}

@@ -1189,8 +1189,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'carrera_posgrado', --identificador
 	'ef_editable', --elemento_formulario
 	'carrera_posgrado', --columnas
-	'0', --obligatorio
-	'0', --oculto_relaja_obligatorio
+	'1', --obligatorio
+	'1', --oculto_relaja_obligatorio
 	'14', --orden
 	'Carrera Posgrado', --etiqueta
 	NULL, --etiqueta_estilo
@@ -1269,8 +1269,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'nombre_inst_posgrado', --identificador
 	'ef_editable', --elemento_formulario
 	'nombre_inst_posgrado', --columnas
-	'0', --obligatorio
-	'0', --oculto_relaja_obligatorio
+	'1', --obligatorio
+	'1', --oculto_relaja_obligatorio
 	'16', --orden
 	'Universidad (Posgrado)', --etiqueta
 	NULL, --etiqueta_estilo
@@ -1349,8 +1349,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'titulo_carrera_posgrado', --identificador
 	'ef_editable', --elemento_formulario
 	'titulo_carrera_posgrado', --columnas
-	'0', --obligatorio
-	'0', --oculto_relaja_obligatorio
+	'1', --obligatorio
+	'1', --oculto_relaja_obligatorio
 	'17', --orden
 	'Titulo Carrera Posgrado', --etiqueta
 	NULL, --etiqueta_estilo
@@ -1829,8 +1829,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'fecha_insc_posgrado', --identificador
 	'ef_editable_fecha', --elemento_formulario
 	'fecha_insc_posgrado', --columnas
-	'0', --obligatorio
-	'0', --oculto_relaja_obligatorio
+	'1', --obligatorio
+	'1', --oculto_relaja_obligatorio
 	'15', --orden
 	'Fecha Insc. Posgrado', --etiqueta
 	NULL, --etiqueta_estilo
@@ -2389,21 +2389,21 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'archivo_insc_posgrado', --identificador
 	'ef_upload', --elemento_formulario
 	'archivo_insc_posgrado', --columnas
-	'0', --obligatorio
-	'0', --oculto_relaja_obligatorio
+	'1', --obligatorio
+	'1', --oculto_relaja_obligatorio
 	'27', --orden
 	'Constancia de Insc. a Posgrado', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
-	NULL, --colapsado
-	NULL, --desactivado
+	'0', --colapsado
+	'0', --desactivado
 	NULL, --estilo
 	NULL, --total
 	NULL, --inicializacion
-	NULL, --permitir_html
-	NULL, --deshabilitar_rest_func
+	'0', --permitir_html
+	'0', --deshabilitar_rest_func
 	NULL, --estado_defecto
-	NULL, --solo_lectura
+	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
 	NULL, --carga_metodo
 	NULL, --carga_clase

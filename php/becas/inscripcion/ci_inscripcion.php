@@ -114,10 +114,10 @@ class ci_inscripcion extends becas_ci
 			
 			//verifico campos obligatorios (por si no se recorrieron todas las solapas)
 			$alumno = $this->get_datos('alumno','persona')->get();
-			if(!$alumno['archivo_cuil']){
+			/*if(!$alumno['archivo_cuil']){
 				$this->dep('ci_edicion')->set_pantalla('pant_alumno');
 				throw new toba_error("No se ha cargado la constancia de CUIL del solicitante");
-			}
+			}*/
 			$this->get_datos('alumno')->sincronizar();
 			$this->get_datos('inscripcion')->sincronizar();
 			
