@@ -50,5 +50,7 @@
 		[dep id=cu_part_dict_cursos]
 		<br>
 		[dep id=cu_cursos_perfeccionamiento]
+		<br>
+		[dep id=form_evaluacion]
 	</div>
 </div>

@@ -147,7 +147,7 @@ class ci_edicion extends becas_ci
 						  		'nombre'      => 'Cert. Analitico.pdf'
 								);
 		$efs_archivos[] = array('ef'          => 'archivo_insc_posgrado',
-							  	'descripcion' => 'Const. Inscripci? a Posgrado(o compromiso) ',
+							  	'descripcion' => 'Const. Inscripcion a Posgrado(o compromiso) ',
 							  	'nombre'      => 'Insc. o Compromiso Posgrado.pdf'
 								);
 		toba::consulta_php('helper_archivos')->procesar_campos($efs_archivos,$datos,$ruta);

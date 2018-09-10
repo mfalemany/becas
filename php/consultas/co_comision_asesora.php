@@ -23,5 +23,21 @@ class co_comision_asesora
 		return toba::db()->consultar($sql);
 	}
 
+	function get_criterios_evaluacion($inscripcion)
+	{
+		$where = array();
+		if(isset($inscripcion['id_convocatoria'])){
+			$where[] = 'cri.id_convocatoria = '.$inscripcion['id_convocatoria'];
+		}
+		if(isset($inscripcion['id_tipo_beca'])){
+			$where[] = 'cri.id_tipo_beca = '.$inscripcion['id_tipo_beca'];
+		}
+		$sql = "SELECT * FROM be_tipo_beca_criterio_eval AS cri";
+		if(count($where)){
+			$sql = sql_concatenar_where($sql,$where);
+		}
+		return toba::db()->consultar($sql);
+	}
+
 }
 ?>

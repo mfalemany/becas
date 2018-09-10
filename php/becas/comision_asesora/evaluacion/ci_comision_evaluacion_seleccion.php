@@ -327,6 +327,27 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$this->mostrar_pdf($ruta);
 	}
 
+	//-----------------------------------------------------------------------------------
+	//---- form_evaluacion --------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_evaluacion(becas_ei_formulario $form)
+	{
+		$insc = $this->get_datos('inscripcion_conv_beca')->get();
+		$efs = toba::consulta_php('co_comision_asesora')->get_criterios_evaluacion($insc);
+		ei_arbol($efs);
+		
+		foreach ($efs as $criterio) {
+			//Establezco los limites inferior y superior para el EF
+			$params = array('edit_rango'=>'[0..'.$criterio['puntaje_maximo'].']');
+			$form->agregar_ef($criterio['id_criterio_evaluacion'],'ef_editable_numero',$criterio['criterio_evaluacion'],$criterio['id_criterio_evaluacion'],$params);
+		}
+	}
+
+	function evt__form_evaluacion__modificacion($datos)
+	{
+	}
+
 
 
 
@@ -339,6 +360,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	{	
 		header("Location: ".utf8_encode($archivo));
 	}
+
+	
 
 }
 ?>
