@@ -103,7 +103,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --auto_reset
 	'100%', --ancho
 	'150px', --ancho_etiqueta
-	'0', --expandir_descripcion
+	'1', --expandir_descripcion
 	NULL, --campo_bl
 	NULL, --scroll
 	NULL, --filas
@@ -794,7 +794,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'8', --orden
 	'Carrera', --etiqueta
 	NULL, --etiqueta_estilo
-	'La lista de carreras disponible depende de la "Dependencia" que haya elegido.', --descripcion
+	'La lista de carreras disponible depende de la facultad que haya elegido.', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo
@@ -811,7 +811,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_dt
 	'18', --carga_consulta_php
 	NULL, --carga_sql
-	'becas', --carga_fuente
+	'sap', --carga_fuente
 	NULL, --carga_lista
 	'id_carrera', --carga_col_clave
 	'carrera', --carga_col_desc
@@ -1034,7 +1034,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'12', --orden
 	'Prom Hist. Egresados', --etiqueta
 	NULL, --etiqueta_estilo
-	NULL, --descripcion
+	'Promedio histórico de los egresados de los últimos 5 (cinco) años (incluye materias reprobadas).', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo
@@ -1829,7 +1829,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'fecha_insc_posgrado', --identificador
 	'ef_editable_fecha', --elemento_formulario
 	'fecha_insc_posgrado', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'15', --orden
 	'Fecha Insc. Posgrado', --etiqueta

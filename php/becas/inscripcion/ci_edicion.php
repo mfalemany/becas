@@ -112,8 +112,16 @@ class ci_edicion extends becas_ci
 			$form->set_datos($this->s__insc_actual);
 
 			//se completa el label que contiene el nombre y apellido del director
-			$director = $this->s__insc_actual['nro_documento_dir'];
-			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($director)));
+			$form->set_datos(array('director'=>toba::consulta_php('co_personas')->get_ayn($this->s__insc_actual['nro_documento_dir'])));
+
+			//se completa el label que contiene el nombre y apellido del codirector
+			if($this->s__insc_actual['nro_documento_codir']){
+				$form->set_datos(array('codirector'=>toba::consulta_php('co_personas')->get_ayn($this->s__insc_actual['nro_documento_codir'])));	
+			}
+			//se completa el label que contiene el nombre y apellido del subdirector
+			if($this->s__insc_actual['nro_documento_subdir']){
+				$form->set_datos(array('subdirector'=>toba::consulta_php('co_personas')->get_ayn($this->s__insc_actual['nro_documento_subdir'])));	
+			}
 
 			$efs_involucrados = array('archivo_insc_posgrado','titulo_carrera_posgrado','nombre_inst_posgrado','carrera_posgrado','fecha_insc_posgrado');
 			//verifico si el tipo de beca requiere o no una inscripcion a posgrado.

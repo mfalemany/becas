@@ -88,7 +88,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		//busco todos los detalles de la postulación
 		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_comprobante($seleccion);
 		
-		
+		$puntaje = 'ALGOOO';
+		//$puntaje = ($detalles['puntaje']) ? "<h1 style='text-align:center'>Puntaje Inicial: ".$detalles['puntaje']."</h1>" : "";
 		/* EL TEMPLATE COMPLETO SE ARMA EN FORMA ESCALONADA: EN EL NIVEL MAS BAJO, SE GENERA EL TEMPLATE CON LOS CARGOS DEL DIRECTOR (CO-DIRECTOR Y/O SUB-DIRECTO). ESE MINI-TEMPLATE SE EMBEBE DENTRO DEL TEMPLATE DE DIRECTOR, Y LUEGO, AMBOS DENTRO DEL TEMPLATE COMPLETO */
 
 		//ruta al plan de trabajo
@@ -104,7 +105,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			'tipo_beca'         => ucwords(strtolower($detalles['beca']['tipo_beca'])),
 			'nro_carpeta'       => $detalles['beca']['nro_carpeta'],
 			'area_conocimiento' => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
-			'enlace_plan_trab'  => urldecode($plan)
+			'enlace_plan_trab'  => urldecode($plan),
+			'puntaje_inicial'   => $puntaje
 		);
 
 		//Obtengo los detalles del director de esta solicitud y genero el template con sus datos
@@ -126,6 +128,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		foreach ($datos as $clave => $valor) {
 			$template_completo = str_replace("{{".$clave."}}",$valor,$template_completo);
 		}
+		var_dump($template_completo);
 		$pantalla->set_template($template_completo);
 	}
 
