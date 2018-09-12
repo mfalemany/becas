@@ -39,5 +39,15 @@ class co_comision_asesora
 		return toba::db()->consultar($sql);
 	}
 
+	function get_criterio_descripcion($id_criterio_evaluacion)
+	{
+		return toba::db()->consultar_fila("SELECT criterio_evaluacion FROM be_tipo_beca_criterio_eval WHERE id_criterio_evaluacion = ".quote($id_criterio_evaluacion));
+	}
+
+	function get_puntaje_maximo($id_criterio_evaluacion)
+	{
+		return toba::db()->consultar_fila("SELECT puntaje_maximo FROM be_tipo_beca_criterio_eval WHERE id_criterio_evaluacion = ".quote($id_criterio_evaluacion));
+	}
+
 }
 ?>

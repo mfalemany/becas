@@ -51,6 +51,8 @@
 		<br>
 		[dep id=cu_cursos_perfeccionamiento]
 		<br>
-		[dep id=form_evaluacion]
+		[dep id=form_evaluacion_criterios]
+		<br>
+		[dep id=form_evaluacion_fijo]
 	</div>
 </div>

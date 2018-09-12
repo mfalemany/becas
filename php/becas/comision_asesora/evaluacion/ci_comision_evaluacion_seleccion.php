@@ -21,6 +21,22 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$this->set_pantalla('pant_seleccion');
 	}
 
+	function evt__guardar()
+	{
+		try {
+
+			$this->get_datos()->sincronizar();	
+			$this->get_datos()->resetear();
+			$this->set_pantalla('pant_seleccion');
+		}catch(toba_error_db $e){
+			toba::notificacion()->agregar($e->get_mensaje_motor(),'error');
+		}catch (Exception $e) {
+			toba::notificacion()->agregar($e->getMessage(),'error');
+		}
+		
+		
+	}
+
 	//-----------------------------------------------------------------------------------
 	//---- cu_postulaciones -------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -106,7 +122,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		}
 		
 		//Armo el template completo
-		$template_completo = file_get_contents(__DIR__.'/template_evaluacion.php');
+		$template_completo = file_get_contents(__DIR__.'/templates/template_evaluacion.php');
 		foreach ($datos as $clave => $valor) {
 			$template_completo = str_replace("{{".$clave."}}",$valor,$template_completo);
 		}
@@ -132,7 +148,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			'cargos'        => $lista_cargos,
 
 		);
-		$template_director = file_get_contents(__DIR__.'/template_director.php');
+		$template_director = file_get_contents(__DIR__.'/templates/template_director.php');
 		foreach ($datos_template_director as $clave => $valor) {
 			$template_director = str_replace("{{".$clave."}}",$valor,$template_director);
 		}
@@ -145,7 +161,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		//por cada cargo, se agrega una nueva linea al template
 		foreach ($cargos as $cargo){
 			//se obtiene el template vacío
-			$template_cargos = file_get_contents(__DIR__.'/template_cargo.php');
+			$template_cargos = file_get_contents(__DIR__.'/templates/template_cargo.php');
 			$cargo['clase_css'] = ($cargo['fecha_hasta'] >= date('Y-m-d')) ? 'cargo_vigente' : ''; 
 			$cargo['fecha_desde'] = (new DateTime($cargo['fecha_desde']))->format('d-m-Y');
 			$cargo['fecha_hasta'] = (new DateTime($cargo['fecha_hasta']))->format('d-m-Y');
@@ -331,25 +347,47 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	//---- form_evaluacion --------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 
-	function conf__form_evaluacion(becas_ei_formulario $form)
+	function conf__form_evaluacion_fijo(becas_ei_formulario $form)
 	{
+		$dictamen = $this->get_datos('be_dictamen')->get();
+		if($dictamen){
+			$form->set_datos($dictamen);
+		}	
+	}
+
+	function evt__form_evaluacion_fijo__modificacion($datos)
+	{
+		$datos['tipo_dictamen'] = 'C';
+		$datos['fecha'] = (isset($datos['fecha'])) ? $datos['fecha'] : date('Y-m-d');
+		$this->get_datos('be_dictamen')->set($datos);
+	}
+
+	function conf__form_evaluacion_criterios(becas_ei_formulario_ml $ml)
+	{
+		//obtengo los detalles de la postulación y los criterios de evaluación que le corresponden por su tipo
 		$insc = $this->get_datos('inscripcion_conv_beca')->get();
-		$efs = toba::consulta_php('co_comision_asesora')->get_criterios_evaluacion($insc);
-		ei_arbol($efs);
+		$criterios = toba::consulta_php('co_comision_asesora')->get_criterios_evaluacion($insc);
 		
-		foreach ($efs as $criterio) {
-			//Establezco los limites inferior y superior para el EF
-			$params = array('edit_rango'=>'[0..'.$criterio['puntaje_maximo'].']');
-			$form->agregar_ef($criterio['id_criterio_evaluacion'],'ef_editable_numero',$criterio['criterio_evaluacion'],$criterio['id_criterio_evaluacion'],$params);
+		//si ya existe una evaluacion previa, solo la asigno al formulario ML
+		$filas = $this->get_datos('be_dictamen_detalle')->get_filas();
+		if($filas){
+			$ml->set_datos($filas);
+		}else{
+			//si no existe una evaluación previa, genero las filas con los criterios que le corresponde
+			foreach($criterios as $criterio){
+				$ml->agregar_registro(array('id_criterio_evaluacion'=>$criterio['id_criterio_evaluacion'],
+											  'criterio_evaluacion' =>$criterio['criterio_evaluacion'],
+											  'puntaje'             =>'',
+											  'puntaje_maximo'      =>$criterio['puntaje_maximo']));
+			}
 		}
 	}
 
-	function evt__form_evaluacion__modificacion($datos)
+	function evt__form_evaluacion_criterios__modificacion($datos)
 	{
+		$this->get_datos('be_dictamen_detalle')->procesar_filas($datos);
+
 	}
-
-
-
 
 	function get_datos($tabla = NULL)
 	{

@@ -10,6 +10,10 @@ class co_inscripcion_conv_beca
 		if(isset($filtro['nro_documento'])){
 			$where[] = 'insc.nro_documento = '.quote($filtro['nro_documento']);	
 		}
+		if(isset($filtro['postulante'])){
+			$where[] = 'becario.apellido||becario.nombres ILIKE '.quote('%'.$filtro['postulante'].'%');	
+		}
+
 		if(isset($filtro['id_convocatoria'])){
 			$where[] = 'insc.id_convocatoria = '.quote($filtro['id_convocatoria']);	
 		}
@@ -45,6 +49,7 @@ class co_inscripcion_conv_beca
 			conv.convocatoria,
 			insc.fecha_hora,
 			insc.admisible,
+			case (insc.admisible) when 'S' then 'Admitido' when 'N' then 'No admitido' else 'Sin admisibilidad' end as admisible_desc,
 			insc.puntaje,
 			insc.beca_otorgada,
 			area.nombre as area_conocimiento,
