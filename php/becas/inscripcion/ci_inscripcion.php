@@ -11,7 +11,7 @@ class ci_inscripcion extends becas_ci
 		}
 		//si el usuario es becario, solo puede ver sus propias inscripciones
 		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
-			if($this->existe_dependencia('form_filtro')){
+			if($this->pantalla()->existe_dependencia('form_filtro')){
 				$this->pantalla('pant_seleccion')->eliminar_dep('form_filtro');	
 			}
 			
