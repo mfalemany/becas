@@ -105,7 +105,7 @@ class co_inscripcion_conv_beca
 		//se obtiene el prefijo de carpeta para el tipo de beca actual
 		$prefijo = toba::consulta_php('co_tipos_beca')->get_campo('prefijo_carpeta',$id_tipo_beca);
 		if(!$prefijo){
-			throw new toba_error("No se ha definido un prefijo de carpeta para el tipo de beca seleccionado. Por favor, pongase en contacto con la Secretar? General de Ciencia y T?ica");
+			throw new toba_error("No se ha definido un prefijo de carpeta para el tipo de beca seleccionado. Por favor, pongase en contacto con la Secretaría General de Ciencia y Técnica");
 		}
 		// Esta consulta retorna un string con formato json conteniendo todos los numeros de carpetas existentes.
 		$sql = "SELECT array_to_json(array_agg(nro_carpeta)) as existentes
@@ -309,6 +309,21 @@ class co_inscripcion_conv_beca
 					LIMIT 1";
 		return toba::db()->consultar_fila($sql);
 
+	}
+
+	public function abrir_solicitud($filtro=array())
+	{
+		if(isset($filtro['nro_documento']) && isset($filtro['id_convocatoria']) && isset($filtro['id_tipo_beca'])){
+			$sql = "UPDATE be_inscripcion_conv_beca SET estado = 'A'
+					 WHERE nro_documento = ".quote($filtro['nro_documento'])." 
+					 AND id_convocatoria = ".quote($filtro['id_convocatoria'])." 
+					 AND id_tipo_beca = ".quote($filtro['id_tipo_beca']);	
+			return toba::db()->ejecutar($sql);
+		}else{
+			return FALSE;
+		}
+	
+		
 	}
 }
 ?>

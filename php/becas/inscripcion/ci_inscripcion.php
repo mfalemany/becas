@@ -1,6 +1,7 @@
 <?php
 class ci_inscripcion extends becas_ci
 {
+	protected $s__filtro;
 	function conf()
 	{
 		//si no existen convocatorias con inscripcion abierta, elimino el evento 'agregar (Nueva Inscripcion'
@@ -8,12 +9,16 @@ class ci_inscripcion extends becas_ci
 			$this->pantalla()->eliminar_evento('agregar');
 			$this->dep('cuadro')->agregar_notificacion('No existen convocatorias con periodo de inscripción abierto');
 		}
+		//si el usuario es becario, solo puede ver sus propias inscripciones
+		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
+			$this->pantalla('pant_seleccion')->eliminar_dep('form_filtro');
+		}
 	}
 	//---- Cuadro Inscripciones ------------------------------------------------------------
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
-		$filtro = array();
+		$filtro = (isset($this->s__filtro)) ? $this->s__filtro : array();
 		
 		//si el usuario es becario, solo puede ver sus propias inscripciones
 		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
@@ -25,11 +30,11 @@ class ci_inscripcion extends becas_ci
 
 	function evt__cuadro__seleccion($datos)
 	{
-		//se carga la relaci? de "Alumno"
+		//se carga la relación  de "Alumno"
 		$alumno = array('nro_documento'=>$datos['nro_documento']);
 		$this->get_datos('alumno')->cargar($alumno);
 
-		//se cargan los detalles de la inscripci?
+		//se cargan los detalles de la inscripción
 		$this->get_datos('inscripcion')->cargar($datos);
 
 		$this->set_pantalla('pant_edicion');
@@ -129,7 +134,7 @@ class ci_inscripcion extends becas_ci
 					break;
 				
 				default:
-					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_mensaje_motor());	
+					toba::notificacion()->agregar('Ocurrió un error inesperado al intentar guardar la inscripción. por favor, comuniquese con la Secretaría General de Ciencia y Técnica para solucionarlo (cyt.unne@gmail.com). Código de error: '.$e->get_mensaje_motor());	
 					break;
 			}
 		}catch(toba_error $e){
@@ -214,6 +219,25 @@ class ci_inscripcion extends becas_ci
 		
 	}
 
+	//-----------------------------------------------------------------------------------
+	//---- cuadro -----------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function evt__cuadro__abrir($seleccion)
+	{
+		toba::consulta_php('co_inscripcion_conv_beca')->abrir_solicitud($seleccion);
+	}
+
+	function conf_evt__cuadro__abrir(toba_evento_usuario $evento, $fila)
+	{
+		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
+			$evento->ocultar();
+		}
+	}
+
+	//-----------------------------------------------------------------------------------
+	
+
 	function &get_datos($relacion, $tabla = NULL)
 	{
 		$datos = FALSE;
@@ -232,6 +256,29 @@ class ci_inscripcion extends becas_ci
 
 	}
 
+
+	
+
+	//-----------------------------------------------------------------------------------
+	//---- form_filtro ------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_filtro(becas_ei_formulario $form)
+	{
+		if(isset($this->s__filtro)){
+			$form->set_datos($this->s__filtro);
+		}
+	}
+
+	function evt__form_filtro__filtrar($datos)
+	{
+		$this->s__filtro = $datos;
+	}
+
+	function evt__form_filtro__cancelar()
+	{
+		unset($this->s__filtro);
+	}
 
 }
 ?>
