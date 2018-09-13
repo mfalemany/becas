@@ -592,8 +592,8 @@ class Becas_inscripcion_comprobante extends FPDF
 		$this->SetFont('','B');
 		$this->Cell($ancho_titulo,$alto_fila,'Área','B',0,'R',false);	
 		$this->SetFont('','');
-		$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,'CS. NATURALES Y EXACTAS','B',1,'L',false);
-		//$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,$datos['area_conocimiento'],1,1,'L',false);
+		$this->Cell((($ancho_total - $ancho_titulo*2)/2),$alto_fila,$datos['area_conocimiento'],'B',1,'L',false);
+		
 
 		//Area de conocimiento, convocatoria y numero de carpeta
 		$this->SetFont('','B');
