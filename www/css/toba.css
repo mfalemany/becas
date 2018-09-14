@@ -258,6 +258,12 @@
 #evaluacion_beca #plan_trabajo a:hover{
 	box-shadow: 5px 6px 9px #333;
 }
+#puntaje_inicial{
+	text-align:center;
+	background-color: #ff7575;
+	color: #FFF;
+	text-shadow: 1px 1px 1px #000;
+}
 
 /* TABLAS */
 .tabla{

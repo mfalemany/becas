@@ -23,6 +23,22 @@ class co_comision_asesora
 		return toba::db()->consultar($sql);
 	}
 
+	function get_integrantes_comision($filtro)
+	{
+		if(isset($filtro['id_convocatoria']) && isset($filtro['id_area_conocimiento'])){
+			$sql = "SELECT per.apellido||', '||per.nombres AS evaluador, inte.nro_documento
+					FROM be_comision_asesora_integrante AS inte
+					LEFT JOIN sap_personas AS per ON per.nro_documento = inte.nro_documento
+					WHERE id_convocatoria = ".quote($filtro['id_convocatoria'])."
+					AND id_area_conocimiento = ".quote($filtro['id_area_conocimiento'])."
+					ORDER BY 1";
+
+			return toba::db()->consultar($sql);
+		}else{
+			return FALSE;
+		}
+	}
+
 	function get_criterios_evaluacion($inscripcion)
 	{
 		$where = array();
@@ -47,6 +63,11 @@ class co_comision_asesora
 	function get_puntaje_maximo($id_criterio_evaluacion)
 	{
 		return toba::db()->consultar_fila("SELECT puntaje_maximo FROM be_tipo_beca_criterio_eval WHERE id_criterio_evaluacion = ".quote($id_criterio_evaluacion));
+	}
+
+	function get_ayn_evaluador($nro_documento)
+	{
+		return toba::db()->consultar_fila("SELECT apellido||', '||nombres FROM sap_personas WHERE nro_documento = ".quote($nro_documento));
 	}
 
 }

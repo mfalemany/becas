@@ -88,8 +88,9 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		//busco todos los detalles de la postulación
 		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_comprobante($seleccion);
 		
-		$puntaje = 'ALGOOO';
-		//$puntaje = ($detalles['puntaje']) ? "<h1 style='text-align:center'>Puntaje Inicial: ".$detalles['puntaje']."</h1>" : "";
+		//si el tipo de beca contempla el puntaje académico, lo muestro al evaluador
+		$puntaje = ($detalles['beca']['suma_puntaje_academico'] == 'S') ? "<h1 id='puntaje_inicial'>Puntaje Inicial: ".$detalles['postulante']['puntaje']."</h1>" : "";
+		
 		/* EL TEMPLATE COMPLETO SE ARMA EN FORMA ESCALONADA: EN EL NIVEL MAS BAJO, SE GENERA EL TEMPLATE CON LOS CARGOS DEL DIRECTOR (CO-DIRECTOR Y/O SUB-DIRECTO). ESE MINI-TEMPLATE SE EMBEBE DENTRO DEL TEMPLATE DE DIRECTOR, Y LUEGO, AMBOS DENTRO DEL TEMPLATE COMPLETO */
 
 		//ruta al plan de trabajo
@@ -128,7 +129,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		foreach ($datos as $clave => $valor) {
 			$template_completo = str_replace("{{".$clave."}}",$valor,$template_completo);
 		}
-		var_dump($template_completo);
+
 		$pantalla->set_template($template_completo);
 	}
 
@@ -392,6 +393,34 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 
 	}
 
+	//-----------------------------------------------------------------------------------
+	//---- ml_evaluadores ---------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_evaluadores(becas_ei_formulario $form)
+	{
+		//obtengo los detalles de la inscripcion
+		$insc = $this->get_datos('inscripcion_conv_beca')->get();
+		$evaluadores = toba::consulta_php('co_comision_asesora')->get_integrantes_comision($insc);
+		ei_arbol($evaluadores);
+		foreach ($evaluadores as $evaluador) {
+			$lista[] = "(".$evaluador['nro_documento'].") - ".$evaluador['evaluador'];
+		}
+		ei_arbol($lista);
+		$form->set_datos(array('evaluador'=>'pepe,tito,raul'));
+
+		
+		
+		
+	}
+
+	function evt__form_evaluadores__modificacion($datos)
+	{
+		
+	}
+
+	
+
 	function get_datos($tabla = NULL)
 	{
 		return ($tabla) ? $this->dep('datos')->tabla($tabla) : $this->dep('datos');
@@ -403,6 +432,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	}
 
 	
+
+
 
 }
 ?>
