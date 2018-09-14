@@ -23,20 +23,26 @@ class co_comision_asesora
 		return toba::db()->consultar($sql);
 	}
 
-	function get_integrantes_comision($filtro)
+	function get_integrantes_comision($filtro = array())
 	{
-		if(isset($filtro['id_convocatoria']) && isset($filtro['id_area_conocimiento'])){
-			$sql = "SELECT per.apellido||', '||per.nombres AS evaluador, inte.nro_documento
-					FROM be_comision_asesora_integrante AS inte
-					LEFT JOIN sap_personas AS per ON per.nro_documento = inte.nro_documento
-					WHERE id_convocatoria = ".quote($filtro['id_convocatoria'])."
-					AND id_area_conocimiento = ".quote($filtro['id_area_conocimiento'])."
-					ORDER BY 1";
-
-			return toba::db()->consultar($sql);
-		}else{
+		//obtengo los integrantes de la comisión a la que pertenece el usuario actualmente logueado
+		$sql = "SELECT id_convocatoria,id_area_conocimiento 
+				FROM be_comision_asesora_integrante AS inte
+				WHERE nro_documento = '17248342'
+				--WHERE nro_documento = ".quote(toba::usuario()->get_id())."
+				AND id_convocatoria = (SELECT MAX(id_convocatoria) FROM be_convocatoria_beca)";
+		$datos = toba::db()->consultar_fila($sql);
+		
+		if(!count($datos)){
 			return FALSE;
 		}
+		$sql = "SELECT inte.nro_documento, per.apellido||', '||per.nombres AS evaluador
+				FROM be_comision_asesora_integrante AS inte
+				LEFT JOIN sap_personas AS per ON per.nro_documento = inte.nro_documento
+				WHERE id_convocatoria = ".quote($datos['id_convocatoria'])."
+				AND id_area_conocimiento = ".quote($datos['id_area_conocimiento'])."
+				ORDER BY 2";
+		return toba::db()->consultar($sql);
 	}
 
 	function get_criterios_evaluacion($inscripcion)

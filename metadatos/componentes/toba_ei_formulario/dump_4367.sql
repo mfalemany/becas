@@ -135,13 +135,13 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'8869', --objeto_ei_formulario_fila
 	'4367', --objeto_ei_formulario
 	'becas', --objeto_ei_formulario_proyecto
-	'evaluador', --identificador
+	'evaluadores', --identificador
 	'ef_multi_seleccion_doble', --elemento_formulario
-	'evaluador', --columnas
+	'evaluadores', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
-	'Evaluador', --etiqueta
+	'Evaluadores', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	'0', --colapsado
@@ -154,18 +154,18 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --estado_defecto
 	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
-	NULL, --carga_metodo
+	'get_integrantes_comision', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
-	NULL, --carga_consulta_php
+	'34', --carga_consulta_php
 	NULL, --carga_sql
-	NULL, --carga_fuente
+	'sap', --carga_fuente
 	NULL, --carga_lista
-	NULL, --carga_col_clave
-	NULL, --carga_col_desc
+	'nro_documento', --carga_col_clave
+	'evaluador', --carga_col_desc
 	NULL, --carga_maestros
-	NULL, --carga_cascada_relaj
+	'0', --carga_cascada_relaj
 	'0', --cascada_mantiene_estado
 	'0', --carga_permite_no_seteado
 	NULL, --carga_no_seteado
@@ -208,7 +208,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --selec_serializar
 	NULL, --selec_cant_columnas
 	NULL, --upload_extensiones
-	NULL, --punto_montaje
+	'22', --punto_montaje
 	NULL  --placeholder
 );
 --- FIN Grupo de desarrollo 0

@@ -85,10 +85,10 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	{
 		//Obtengo el array con las claves seleccionadas por el usuario
 		$seleccion = $this->get_datos('inscripcion_conv_beca')->get();
-		//busco todos los detalles de la postulación
+		//busco todos los detalles de la postulaci?
 		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_comprobante($seleccion);
 		
-		//si el tipo de beca contempla el puntaje académico, lo muestro al evaluador
+		//si el tipo de beca contempla el puntaje acad?ico, lo muestro al evaluador
 		$puntaje = ($detalles['beca']['suma_puntaje_academico'] == 'S') ? "<h1 id='puntaje_inicial'>Puntaje Inicial: ".$detalles['postulante']['puntaje']."</h1>" : "";
 		
 		/* EL TEMPLATE COMPLETO SE ARMA EN FORMA ESCALONADA: EN EL NIVEL MAS BAJO, SE GENERA EL TEMPLATE CON LOS CARGOS DEL DIRECTOR (CO-DIRECTOR Y/O SUB-DIRECTO). ESE MINI-TEMPLATE SE EMBEBE DENTRO DEL TEMPLATE DE DIRECTOR, Y LUEGO, AMBOS DENTRO DEL TEMPLATE COMPLETO */
@@ -96,7 +96,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		//ruta al plan de trabajo
 		$plan = $this->ruta_documentos.'/becas/doc_por_convocatoria/'.$detalles['beca']['convocatoria']."/".$detalles['beca']['tipo_beca']."/".$detalles['postulante']['nro_documento']."/Plan de Trabajo.pdf";
 		
-		//la variable datos contendrá todos los valores que irán al template
+		//la variable datos contendr?todos los valores que ir? al template
 		$datos = array(
 			'titulo_plan_beca'  => $detalles['beca']['titulo_plan_beca'],
 			'proyecto_nombre'   => $detalles['proyecto']['proyecto'],
@@ -141,7 +141,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$lista_cargos = $this->armar_template_cargos($cargos);
 		
 		//Armo el template de director
-		$cat_incentivos = array(1=>'Categoría I',2=>'Categoría II',3=>'Categoría III',4=>'Categoría IV',5=>'Categoría V');
+		$cat_incentivos = array(1=>'Categor? I',2=>'Categor? II',3=>'Categor? III',4=>'Categor? IV',5=>'Categor? V');
 		$datos_template_director = array(
 			'rol'           => $rol,
 			'ayn'           => $director['apellido'].", ".$director['nombres'],
@@ -164,7 +164,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$lista_cargos = "";
 		//por cada cargo, se agrega una nueva linea al template
 		foreach ($cargos as $cargo){
-			//se obtiene el template vacío
+			//se obtiene el template vac?
 			$template_cargos = file_get_contents(__DIR__.'/templates/template_cargo.php');
 			$cargo['clase_css'] = ($cargo['fecha_hasta'] >= date('Y-m-d')) ? 'cargo_vigente' : ''; 
 			$cargo['fecha_desde'] = (new DateTime($cargo['fecha_desde']))->format('d-m-Y');
@@ -254,7 +254,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$this->mostrar_pdf($ruta);
 	}
 
-	/* =============== ANTECEDENTES DE PRESENTACIÓN EN REUNIONES =================*/
+	/* =============== ANTECEDENTES DE PRESENTACI? EN REUNIONES =================*/
 	function conf__cu_present_reuniones(becas_ei_cuadro $cuadro)
 	{
 		$cuadro->desactivar_modo_clave_segura();
@@ -368,7 +368,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 
 	function conf__form_evaluacion_criterios(becas_ei_formulario_ml $ml)
 	{
-		//obtengo los detalles de la postulación y los criterios de evaluación que le corresponden por su tipo
+		//obtengo los detalles de la postulaci? y los criterios de evaluaci? que le corresponden por su tipo
 		$insc = $this->get_datos('inscripcion_conv_beca')->get();
 		$criterios = toba::consulta_php('co_comision_asesora')->get_criterios_evaluacion($insc);
 		
@@ -377,7 +377,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		if($filas){
 			$ml->set_datos($filas);
 		}else{
-			//si no existe una evaluación previa, genero las filas con los criterios que le corresponde
+			//si no existe una evaluaci? previa, genero las filas con los criterios que le corresponde
 			foreach($criterios as $criterio){
 				$ml->agregar_registro(array('id_criterio_evaluacion'=>$criterio['id_criterio_evaluacion'],
 											  'criterio_evaluacion' =>$criterio['criterio_evaluacion'],
@@ -399,23 +399,19 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 
 	function conf__form_evaluadores(becas_ei_formulario $form)
 	{
-		//obtengo los detalles de la inscripcion
-		$insc = $this->get_datos('inscripcion_conv_beca')->get();
-		$evaluadores = toba::consulta_php('co_comision_asesora')->get_integrantes_comision($insc);
-		ei_arbol($evaluadores);
-		foreach ($evaluadores as $evaluador) {
-			$lista[] = "(".$evaluador['nro_documento'].") - ".$evaluador['evaluador'];
+		$datos = $this->get_datos('be_dictamen')->get();
+		
+		if($datos){
+			$evaluadores = explode("/",$datos['evaluadores']);
+			$form->set_datos(array('evaluadores'=>$evaluadores));
 		}
-		ei_arbol($lista);
-		$form->set_datos(array('evaluador'=>'pepe,tito,raul'));
-
-		
-		
-		
 	}
 
 	function evt__form_evaluadores__modificacion($datos)
 	{
+		$evaluadores = implode('/',$datos['evaluadores']);
+
+		$this->get_datos('be_dictamen')->set(array('evaluadores'=>$evaluadores,'usuario_id'=>toba::usuario()->get_id()));
 		
 	}
 
