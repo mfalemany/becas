@@ -51,7 +51,7 @@ class co_tipos_beca
 				LEFT JOIN be_tipos_convocatoria as tc on tc.id_tipo_convocatoria = cb.id_tipo_convocatoria
 				LEFT JOIN be_tipos_beca as tb on tb.id_tipo_convocatoria = cb.id_tipo_convocatoria
 				WHERE cb.id_convocatoria = ".quote($id_convocatoria)."
-				AND tb.estado = 'A'";
+				AND estado = 'A'";
 		return toba::db()->consultar($sql);
 	}
 

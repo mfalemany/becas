@@ -74,12 +74,6 @@ INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, i
 	'becas', --proyecto
 	'admin', --usuario_grupo_acc
 	NULL, --item_id
-	'3596'  --item
-);
-INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
-	'becas', --proyecto
-	'admin', --usuario_grupo_acc
-	NULL, --item_id
 	'3597'  --item
 );
 INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
@@ -129,12 +123,6 @@ INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, i
 	'admin', --usuario_grupo_acc
 	NULL, --item_id
 	'3607'  --item
-);
-INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
-	'becas', --proyecto
-	'admin', --usuario_grupo_acc
-	NULL, --item_id
-	'3608'  --item
 );
 INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
 	'becas', --proyecto
@@ -207,12 +195,6 @@ INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, i
 	'admin', --usuario_grupo_acc
 	NULL, --item_id
 	'3642'  --item
-);
-INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
-	'becas', --proyecto
-	'admin', --usuario_grupo_acc
-	NULL, --item_id
-	'3644'  --item
 );
 INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
 	'becas', --proyecto

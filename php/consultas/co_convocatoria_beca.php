@@ -54,7 +54,7 @@ class co_convocatoria_beca
 		
 	}
 
-	function existen_inscripciones($id_convocatoria,$id_tipo_beca)
+	function existen_inscripciones($id_convocatoria,$id_tipo_beca = NULL)
 	{
 		$sql = "SELECT count(*) AS cantidad 
 		FROM be_inscripcion_conv_beca 
