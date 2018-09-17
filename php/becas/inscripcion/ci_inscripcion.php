@@ -14,7 +14,6 @@ class ci_inscripcion extends becas_ci
 			if($this->pantalla()->existe_dependencia('form_filtro')){
 				$this->pantalla('pant_seleccion')->eliminar_dep('form_filtro');	
 			}
-			
 		}
 	}
 	//---- Cuadro Inscripciones ------------------------------------------------------------
