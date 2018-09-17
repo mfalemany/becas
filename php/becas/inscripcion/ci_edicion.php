@@ -18,11 +18,17 @@ class ci_edicion extends becas_ci
 			//obtengo los datos de la inscripcion
 			$this->s__insc_actual = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 
-			//si la inscripci? no est?abierta...
+			//si la inscripción no está abierta...
 			if($this->s__insc_actual['estado'] != 'A'){
 				$this->bloquear_formularios();
 				$this->controlador()->pantalla()->agregar_evento('ver_comprobante');
 
+			}
+			//Si el tipo de beca de la solicitud actual, se encuentra inactivo, el solicitante ya no podrá realizar modificaciones a la misma
+			$estado = toba::consulta_php('co_tipos_beca')->get_campo('estado',$this->s__insc_actual['id_tipo_beca']);
+			//Estado == INACTIVO??
+			if($estado == 'I'){
+				$this->bloquear_formularios();
 			}
 		}else{
 			unset($this->s__insc_actual);
