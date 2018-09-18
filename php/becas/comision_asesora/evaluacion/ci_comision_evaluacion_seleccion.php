@@ -141,7 +141,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$lista_cargos = $this->armar_template_cargos($cargos);
 		
 		//Armo el template de director
-		$cat_incentivos = array(1=>'Categor? I',2=>'Categor? II',3=>'Categor? III',4=>'Categor? IV',5=>'Categor? V');
+		$cat_incentivos = array(1=>'Categoría I',2=>'Categoría II',3=>'Categoría III',4=>'Categoría IV',5=>'Categoría V');
 		$datos_template_director = array(
 			'rol'           => $rol,
 			'ayn'           => $director['apellido'].", ".$director['nombres'],
