@@ -400,7 +400,6 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	function conf__form_evaluadores(becas_ei_formulario $form)
 	{
 		$datos = $this->get_datos('be_dictamen')->get();
-		
 		if($datos){
 			$evaluadores = explode("/",$datos['evaluadores']);
 			$form->set_datos(array('evaluadores'=>$evaluadores));

@@ -167,4 +167,32 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'0', --externa
 	'be_dictamen'  --tabla
 );
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'4362', --objeto
+	'2226', --col_id
+	'evaluadores', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'1000', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'be_dictamen'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'4362', --objeto
+	'2227', --col_id
+	'usuario_id', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'20', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'be_dictamen'  --tabla
+);
 --- FIN Grupo de desarrollo 0
