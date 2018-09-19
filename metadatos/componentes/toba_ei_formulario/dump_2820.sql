@@ -136,7 +136,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'2820', --objeto_ei_formulario
 	'becas', --objeto_ei_formulario_proyecto
 	'nro_documento', --identificador
-	'ef_combo_editable', --elemento_formulario
+	'ef_editable', --elemento_formulario
 	'nro_documento', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
