@@ -36,6 +36,11 @@ class co_convocatoria_beca
 		return toba::db()->consultar($sql);
 	}
 
+	function get_convocatorias_todas($filtro = array())
+	{
+		return $this->get_convocatorias($filtro,FALSE);
+	}
+
 	function get_anios_convocatorias()
 	{
 		$sql = "select distinct extract(year from fecha_desde) as anio 
