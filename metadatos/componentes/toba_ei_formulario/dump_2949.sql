@@ -310,7 +310,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'ef_combo', --elemento_formulario
 	'id_convocatoria', --columnas
 	'1', --obligatorio
-	'0', --oculto_relaja_obligatorio
+	'1', --oculto_relaja_obligatorio
 	'1', --orden
 	'Convocatoria', --etiqueta
 	NULL, --etiqueta_estilo
@@ -325,13 +325,13 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --estado_defecto
 	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
-	'get_convocatorias', --carga_metodo
+	NULL, --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
 	'31', --carga_consulta_php
 	NULL, --carga_sql
-	'becas', --carga_fuente
+	'sap', --carga_fuente
 	NULL, --carga_lista
 	'id_convocatoria', --carga_col_clave
 	'convocatoria', --carga_col_desc
@@ -390,7 +390,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'ef_combo', --elemento_formulario
 	'id_tipo_beca', --columnas
 	'1', --obligatorio
-	'0', --oculto_relaja_obligatorio
+	'1', --oculto_relaja_obligatorio
 	'2', --orden
 	'Tipo Beca', --etiqueta
 	NULL, --etiqueta_estilo

@@ -36,16 +36,17 @@ class ci_edicion extends becas_ci
 			$this->controlador()->pantalla()->eliminar_evento('eliminar');
 		}
 		
-		
+		//se carga solamente si se está editando una inscripción existente
+		unset($this->s__convocatoria);
 
-		//si se est?modificando una inscripci?, es necesario validar algunas cosas...
+		//si se está modificando una inscripción, es necesario validar algunas cosas...
 		if(isset($this->s__insc_actual)){
 			//y los datos de la convocatoria
 			$conv = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$this->s__insc_actual['id_convocatoria']));
-			$conv = array_shift($conv);
+			$this->s__convocatoria = array_shift($conv);
 			
-			//si ya pas?la fecha de fin de la convocatoria, no se puede editar la inscripcion
-			if($conv['fecha_hasta'] < date('Y-m-d')){
+			//si ya pasó la fecha de fin de la convocatoria, no se puede editar la inscripcion
+			if($this->s__convocatoria['fecha_hasta'] < date('Y-m-d')){
 				//bloqueo el formulario para evitar que se modifiquen  los datos
 				$this->dep('form_inscripcion')->agregar_notificacion('No se pueden modificar los datos de la inscripción debido a que finalizó la convocatoria.','warning');
 				$this->bloquear_formularios();
@@ -64,6 +65,7 @@ class ci_edicion extends becas_ci
 			//si es un usuario normal, solo puede cargar una solicitud para s?mismo
 			$this->dep('form_inscripcion')->ef('nro_documento')->set_estado(toba::usuario()->get_id());
 			$this->dep('form_inscripcion')->set_solo_lectura(array('nro_documento'));
+
 		}
 		
 
@@ -105,15 +107,25 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-
 		//ei_arbol($this->s__convocatoria);
 		//asigno la convocatoria seleccionada por el usuario previamente
 		//$form->ef('id_convocatoria')->set_estado($this->s__convocatoria);
 
+		//Si la convocatoria está cerrada, obtengo todas las convocatorias para llenar el combo de selección de convocatoria (Sirve para cuando se quiere ver una postulación antigua).
+		$convs = (!isset($this->s__convocatoria) || $this->s__convocatoria['fecha_hasta'] < date('Y-m-d')) ? 
+					toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array(),FALSE) :
+					toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array(),TRUE);
+		$opciones['nopar'] = '-- Seleccione --'; 
+		foreach ($convs as $conv) {
+			$opciones[$conv['id_convocatoria']] = $conv['convocatoria']; 
+		}
+
+		$form->ef('id_convocatoria')->set_opciones($opciones);
+
 		if(isset($this->s__insc_actual)){
 			//se bloquean las opciones de convocatorias para que el usuario no pueda modicarlos
 			$form->set_solo_lectura(array('id_tipo_beca','id_convocatoria'));
-
+			
 			//asigno los datos al formulario
 			$form->set_datos($this->s__insc_actual);
 
@@ -403,6 +415,7 @@ class ci_edicion extends becas_ci
 		if(isset($datos['cuil'])){
 			$datos['cuil'] = str_replace("-","",$datos['cuil']);
 		}
+
 		$this->procesar_cvar_director($datos);
 		$this->sincronizar_datos_persona($datos);
 	}
@@ -911,10 +924,9 @@ class ci_edicion extends becas_ci
 		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
 
 		$this->get_datos('alumno','persona')->set($datos);
-		$this->get_datos('alumno','persona')->sincronizar();
 
 		$this->get_datos('alumno','persona')->resetear();
-		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$this->s__insc_actual['nro_documento']));
+		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
 	}
 
 	//-----------------------------------------------------------------------------------
