@@ -8,6 +8,7 @@ class ci_edicion extends becas_ci
 	//protected $s__detalles_inscripcion;
 	function conf()
 	{
+		$es_admin = in_array('admin',toba::usuario()->get_perfiles_funcionales());
 		//recupero la convocatoria seleccionada por el usuario
 		/*if(toba::memoria()->get_dato('id_convocatoria')){
 			$this->s__convocatoria = toba::memoria()->get_dato('id_convocatoria');
@@ -45,8 +46,8 @@ class ci_edicion extends becas_ci
 			$conv = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array('id_convocatoria'=>$this->s__insc_actual['id_convocatoria']));
 			$this->s__convocatoria = array_shift($conv);
 			
-			//si ya pasó la fecha de fin de la convocatoria, no se puede editar la inscripcion
-			if($this->s__convocatoria['fecha_hasta'] < date('Y-m-d')){
+			//si ya pasó la fecha de fin de la convocatoria, no se puede editar la inscripcion (salvo que llame pekermannnn o seas administrador)
+			if(($this->s__convocatoria['fecha_hasta'] < date('Y-m-d')) && (!$es_admin) ){
 				//bloqueo el formulario para evitar que se modifiquen  los datos
 				$this->dep('form_inscripcion')->agregar_notificacion('No se pueden modificar los datos de la inscripción debido a que finalizó la convocatoria.','warning');
 				$this->bloquear_formularios();
@@ -61,7 +62,7 @@ class ci_edicion extends becas_ci
 			}
 		}
 		//si se est?cargando una nueva inscripci?, se valida si es un usuario normal o un admin
-		if( ! in_array('admin',toba::usuario()->get_perfiles_funcionales())){
+		if( ! $es_admin){
 			//si es un usuario normal, solo puede cargar una solicitud para s?mismo
 			$this->dep('form_inscripcion')->ef('nro_documento')->set_estado(toba::usuario()->get_id());
 			$this->dep('form_inscripcion')->set_solo_lectura(array('nro_documento'));
