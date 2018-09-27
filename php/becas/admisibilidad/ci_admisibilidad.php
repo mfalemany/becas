@@ -49,6 +49,8 @@ class ci_admisibilidad extends becas_ci
 	function conf__form_admisibilidad(becas_ei_formulario $form)
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+
+		
 		if($insc){
 			//se calcula el porcentaje de aprobacion y la cantidad de materias que adeuda para egresar.
 			if(isset($insc['materias_aprobadas']) && isset($insc['materias_plan'])){
@@ -56,6 +58,8 @@ class ci_admisibilidad extends becas_ci
 				$insc['mat_para_egresar'] = $insc['materias_plan'] - $insc['materias_aprobadas'];
 			}
 			$persona = toba::consulta_php('co_personas')->get_personas(array('nro_documento'=>$insc['nro_documento']));
+			//muestro el nombre y apellido del postulante
+			$form->agregar_notificacion("Postulante:" . $persona[0]['apellido'].', '.$persona[0]['nombres'],'info');
 			if(count($persona)){
 				$insc['es_egresado'] = ($persona[0]['archivo_titulo_grado']) ? 'Si' : 'No';
 			}else{
