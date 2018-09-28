@@ -58,14 +58,15 @@ class ci_admisibilidad extends becas_ci
 				$insc['mat_para_egresar'] = $insc['materias_plan'] - $insc['materias_aprobadas'];
 			}
 			$persona = toba::consulta_php('co_personas')->get_personas(array('nro_documento'=>$insc['nro_documento']));
+			
 			//muestro el nombre y apellido del postulante
 			$form->agregar_notificacion("Postulante:" . $persona[0]['apellido'].', '.$persona[0]['nombres'],'info');
+			
 			if(count($persona)){
 				$insc['es_egresado'] = ($persona[0]['archivo_titulo_grado']) ? 'Si' : 'No';
 			}else{
 				$insc['es_egresado'] = 'No';
 			}
-
 			$form->set_datos($insc);
 		}
 	}
@@ -191,6 +192,8 @@ class ci_admisibilidad extends becas_ci
 			}else{
 				$clase_css_insc_posgrado = 'etiqueta_error';		
 			}
+		}else{
+			unset($clase_css_insc_posgrado);
 		}
 
 		//se valida si la beca exige inscripción a un posgrado (o compromiso)

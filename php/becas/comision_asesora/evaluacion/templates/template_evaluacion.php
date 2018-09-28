@@ -51,11 +51,13 @@
 		<br>
 		[dep id=cu_cursos_perfeccionamiento]
 		<br>
-		{{puntaje_inicial}}
+		<h1 id='puntaje_inicial'>Puntaje Inicial: <span id='puntaje_inicial_valor'>{{puntaje_inicial}}</span></h1>
 		[dep id=form_evaluacion_criterios]
 		<br>
 		[dep id=form_evaluacion_fijo]
 		<br>
 		[dep id=form_evaluadores]
+		<br>
+		<h1 id='puntaje_final'>Puntaje Final: <span id='puntaje_final_valor'>{{puntaje_final}}</span></h1>
 	</div>
 </div>

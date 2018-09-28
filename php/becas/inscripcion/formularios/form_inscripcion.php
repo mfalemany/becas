@@ -114,7 +114,11 @@ class form_inscripcion extends becas_ei_formulario
 			
 			if(this.ef('anio_ingreso').get_estado() > new Date().getFullYear()){
 				notificacion.agregar('El año de ingreso no puede ser posterior al año actual');
-				false;
+				return false;
+			}
+			if(this.ef('materias_aprobadas').get_estado() > this.ef('materias_plan').get_estado()){
+				notificacion.agregar('El postulante no puede tener mas materias aprobadas de las que tiene el Plan de Estudios');
+				return false;
 			}
 			
 			return true;
@@ -134,11 +138,21 @@ class form_inscripcion extends becas_ei_formulario
 		}
 		function datos_posgrado(requerir){
 			if(!requerir){
+				{$this->objeto_js}.ef('archivo_insc_posgrado').set_estado('');
 				{$this->objeto_js}.ef('archivo_insc_posgrado').desactivar();
+				
+				{$this->objeto_js}.ef('nombre_inst_posgrado').set_estado('');
 				{$this->objeto_js}.ef('nombre_inst_posgrado').desactivar();
+				
+				{$this->objeto_js}.ef('carrera_posgrado').set_estado('');
 				{$this->objeto_js}.ef('carrera_posgrado').desactivar();
+				
+				{$this->objeto_js}.ef('fecha_insc_posgrado').set_estado('');	
 				{$this->objeto_js}.ef('fecha_insc_posgrado').desactivar();	
+				
+				{$this->objeto_js}.ef('titulo_carrera_posgrado').set_estado('');
 				{$this->objeto_js}.ef('titulo_carrera_posgrado').desactivar();	
+				
 			}else{
 				{$this->objeto_js}.ef('archivo_insc_posgrado').activar();
 				{$this->objeto_js}.ef('nombre_inst_posgrado').activar();

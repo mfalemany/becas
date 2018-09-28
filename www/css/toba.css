@@ -259,8 +259,21 @@
 	box-shadow: 5px 6px 9px #333;
 }
 #puntaje_inicial{
-	text-align:center;
+	
 	background-color: #ff7575;
+	color: #FFF;
+	font-size: 1.5em;
+	text-align:center;
+	text-shadow: 1px 1px 1px #000;
+
+}
+#puntaje_final{
+	text-align:center;
+	background: #f85032;
+	background: -moz-linear-gradient(top, #f85032 0%, #f6290c 20%, #f16f5c 43%, #e73827 100%);
+	background: -webkit-linear-gradient(top, #f85032 0%,#f6290c 20%,#f16f5c 43%,#e73827 100%);
+	background: linear-gradient(to bottom, #f85032 0%,#f6290c 20%,#f16f5c 43%,#e73827 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f85032', endColorstr='#e73827',GradientType=0 );
 	color: #FFF;
 	text-shadow: 1px 1px 1px #000;
 }

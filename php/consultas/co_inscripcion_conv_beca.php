@@ -76,7 +76,14 @@ class co_inscripcion_conv_beca
 			case insc.estado when 'A' then 'Abierta' when 'C' then 'Cerrada' else 'No definido' end as estado_desc,
 			insc.cant_fojas,
 			insc.es_titular,
-			lugtrab.nombre AS lugar_trabajo_becario
+			lugtrab.nombre AS lugar_trabajo_becario,
+			((coalesce(insc.puntaje,0)) + (SELECT coalesce(SUM(det.puntaje),0) 
+							from be_dictamen_detalle as det
+							where tipo_dictamen = 'C'
+							and det.nro_documento = insc.nro_documento
+							and det.id_tipo_beca = insc.id_tipo_beca
+							and det.id_convocatoria = insc.id_convocatoria)
+			) as puntaje_final
 		FROM be_inscripcion_conv_beca as insc	
 		LEFT JOIN be_convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
 		LEFT JOIN sap_personas as becario on becario.nro_documento = insc.nro_documento
@@ -194,7 +201,14 @@ class co_inscripcion_conv_beca
 				insc.materias_plan,
 				insc.materias_aprobadas,
 				insc.puntaje,
-				carr.carrera
+				carr.carrera,
+				((coalesce(insc.puntaje,0)) + (SELECT coalesce(SUM(det.puntaje),0) 
+							from be_dictamen_detalle as det
+							where tipo_dictamen = 'C'
+							and det.nro_documento = insc.nro_documento
+							and det.id_tipo_beca = insc.id_tipo_beca
+							and det.id_convocatoria = insc.id_convocatoria)
+				) as puntaje_final
 				FROM be_inscripcion_conv_beca AS insc
 				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia

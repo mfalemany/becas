@@ -89,7 +89,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_comprobante($seleccion);
 		
 		//si el tipo de beca contempla el puntaje acad?ico, lo muestro al evaluador
-		$puntaje = ($detalles['beca']['suma_puntaje_academico'] == 'S') ? "<h1 id='puntaje_inicial'>Puntaje Inicial: ".$detalles['postulante']['puntaje']."</h1>" : "";
+		$puntaje = ($detalles['beca']['suma_puntaje_academico'] == 'S') ? $detalles['postulante']['puntaje'] : "";
 		
 		/* EL TEMPLATE COMPLETO SE ARMA EN FORMA ESCALONADA: EN EL NIVEL MAS BAJO, SE GENERA EL TEMPLATE CON LOS CARGOS DEL DIRECTOR (CO-DIRECTOR Y/O SUB-DIRECTO). ESE MINI-TEMPLATE SE EMBEBE DENTRO DEL TEMPLATE DE DIRECTOR, Y LUEGO, AMBOS DENTRO DEL TEMPLATE COMPLETO */
 
@@ -107,7 +107,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			'nro_carpeta'       => $detalles['beca']['nro_carpeta'],
 			'area_conocimiento' => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
 			'enlace_plan_trab'  => urldecode($plan),
-			'puntaje_inicial'   => $puntaje
+			'puntaje_inicial'   => $puntaje,
+			'puntaje_final'		=> $detalles['postulante']['puntaje_final']
 		);
 
 		//Obtengo los detalles del director de esta solicitud y genero el template con sus datos
