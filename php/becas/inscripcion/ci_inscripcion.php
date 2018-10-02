@@ -42,6 +42,29 @@ class ci_inscripcion extends becas_ci
 		$this->set_pantalla('pant_edicion');
 	}
 
+	function evt__cuadro__ver_seguimiento($seleccion)
+	{
+		$this->get_datos('inscripcion')->cargar($seleccion);
+		$this->set_pantalla('pant_seguimiento');
+
+	}
+
+	function conf_evt__cuadro__ver_seguimiento(toba_evento_usuario $evento, $fila)
+	{
+		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$fila);
+		if(!$clave){
+			$evento->ocultar();
+			return;
+		}
+		//Si la postulación tiene al menos la admisibilidad hecha, entonces el usuario puede ver el botón
+		$tiene_admisibilidad = toba::consulta_php('co_inscripcion_conv_beca')->get_campo(array('admisible'),$clave);
+		if(in_array($tiene_admisibilidad[0]['admisible'],array('S','N') ) ){
+			$evento->mostrar();
+		}else{
+			$evento->ocultar();	
+		}
+	}
+
 	function servicio__generar_comprobante()
 	{
 		$params = toba::memoria()->get_parametros();
@@ -281,6 +304,8 @@ class ci_inscripcion extends becas_ci
 	{
 		unset($this->s__filtro);
 	}
+
+	
 
 }
 ?>
