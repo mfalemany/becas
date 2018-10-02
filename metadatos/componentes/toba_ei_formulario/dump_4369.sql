@@ -82,7 +82,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	'<p>La admisibilidad es el proceso donde se verifica que el postulante cumpla con todas las condiciones y requisitos necesarios (establecidos en el <a href="http://www.unne.edu.ar/component/joomdoc/trabajando/becas-de-investigacion/nuevo-reglamento-de-becas-investigacion/download?Itemid=491" target="_BLANK">Reglamento</a>).</p><p>[ef id=admisible]</p><p>[ef id=observaciones]</p>', --template
+	'<p class="caja_info_warning"><u>ADMISIBILIDAD</u>: La admisibilidad es el proceso donde se verifica que el postulante cumpla con todas las condiciones y requisitos necesarios (establecidos en el <a href="http://www.unne.edu.ar/component/joomdoc/trabajando/becas-de-investigacion/nuevo-reglamento-de-becas-investigacion/download?Itemid=491" target="_BLANK">Reglamento</a>).</p><p>[ef id=admisible]</p><p>[ef id=observaciones]</p>', --template
 	NULL  --template_impresion
 );
 
@@ -215,8 +215,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --edit_mascara
 	NULL, --edit_unidad
 	NULL, --edit_rango
-	'6', --edit_filas
-	'40', --edit_columnas
+	'4', --edit_filas
+	'90', --edit_columnas
 	NULL, --edit_wrap
 	'0', --edit_resaltar
 	'0', --edit_ajustable
