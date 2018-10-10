@@ -31,10 +31,10 @@ class co_comision_asesora
 				WHERE nro_documento = ".quote(toba::usuario()->get_id())."
 				--WHERE nro_documento = ".quote(toba::usuario()->get_id())."
 				AND id_convocatoria = (SELECT MAX(id_convocatoria) FROM be_convocatoria_beca)";
+
 		$datos = toba::db()->consultar_fila($sql);
-		
-		if(!count($datos)){
-			return FALSE;
+		if(!$datos){
+			return array();
 		}
 		$sql = "SELECT inte.nro_documento, per.apellido||', '||per.nombres AS evaluador
 				FROM be_comision_asesora_integrante AS inte

@@ -283,8 +283,9 @@
 	background-color: #ff7575;
 	color: #FFF;
 	font-size: 1.5em;
-	text-align:center;
+	text-align:left;
 	text-shadow: 1px 1px 1px #000;
+	padding-left: 10px;
 
 }
 #puntaje_final{

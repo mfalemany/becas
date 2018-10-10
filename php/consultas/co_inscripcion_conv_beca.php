@@ -83,7 +83,15 @@ class co_inscripcion_conv_beca
 							and det.nro_documento = insc.nro_documento
 							and det.id_tipo_beca = insc.id_tipo_beca
 							and det.id_convocatoria = insc.id_convocatoria)
-			) as puntaje_final
+			) as puntaje_final,
+			(select case when count(*) = 0 then 'N' else 'S' end as evaluado
+				from be_dictamen_detalle as det
+				where tipo_dictamen = 'C'
+				and det.nro_documento = insc.nro_documento
+				and det.id_tipo_beca = insc.id_tipo_beca
+				and det.id_convocatoria = insc.id_convocatoria
+			) as evaluado
+
 		FROM be_inscripcion_conv_beca as insc	
 		LEFT JOIN be_convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
 		LEFT JOIN sap_personas as becario on becario.nro_documento = insc.nro_documento

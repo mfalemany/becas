@@ -120,6 +120,10 @@ class helper_archivos
 	{
 		return '/mnt/datos/cyt/';
 	}
+	function url_base()
+	{
+		return '/becas/1.0/documentos/';
+	}
 
 }
 

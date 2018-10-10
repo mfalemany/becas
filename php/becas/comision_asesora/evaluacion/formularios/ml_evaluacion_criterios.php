@@ -1,10 +1,17 @@
 <?php
 class ml_evaluacion_criterios extends becas_ei_formulario_ml
 {
+	
+	function ini()
+	{
+		$url_base = toba::consulta_php('helper_archivos')->url_base();
+		$tpl_reglamento = "<a href='{$url_base}becas/estaticos/reglamento.pdf' TARGET='_BLANK'>Ver reglamento</a>";
+		$tpl_pautas = "<a href='{$url_base}becas/estaticos/pautas.pdf' TARGET='_BLANK'>Ver pautas de evaluación</a>";
+		$this->agregar_notificacion($tpl_reglamento."&nbsp;&nbsp;-&nbsp;&nbsp;".$tpl_pautas,'info');
+	}
 	//-----------------------------------------------------------------------------------
 	//---- JAVASCRIPT -------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
-
 	function extender_objeto_js()
 	{
 		echo "

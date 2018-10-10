@@ -50,9 +50,21 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$filtro['estado'] = 'C';
 
 		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
+			//Si no es administrador, solo le muestro la última convocatoria y solo su area de conocimiento
+			$this->dep('form_filtro')->ef('id_convocatoria')->set_estado('1');
 			$filtro['id_area_conocimiento'] = toba::consulta_php('co_comision_asesora')->get_area_conocimiento_evaluador(toba::usuario()->get_id());	
 			$this->dep('form_filtro')->ef('id_area_conocimiento')->set_estado($filtro['id_area_conocimiento']);
-			$this->dep('form_filtro')->set_solo_lectura(array('id_area_conocimiento'));
+
+			//ESTA LINEA HAY QUE ELIMINAR.... ES SOLO TEMPORAL
+			$this->dep('form_filtro')->ef('id_tipo_beca')->set_estado(1);
+
+
+			$this->dep('form_filtro')->set_solo_lectura(array('id_convocatoria','id_area_conocimiento','id_tipo_beca'));
+
+			//quito la columna de puntajes
+			$cuadro->eliminar_columnas(array('puntaje_final'));
+		}else{
+			$cuadro->eliminar_columnas(array('evaluado'));
 		}
 		
 
@@ -419,7 +431,6 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	function evt__form_evaluadores__modificacion($datos)
 	{
 		$evaluadores = implode('/',$datos['evaluadores']);
-
 		$this->get_datos('be_dictamen')->set(array('evaluadores'=>$evaluadores,'usuario_id'=>toba::usuario()->get_id()));
 		
 	}
@@ -434,6 +445,15 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	function mostrar_pdf($archivo)
 	{	
 		header("Location: ".utf8_encode($archivo));
+	}
+
+	function extender_objeto_js()
+	{
+
+		echo "$(document).ready(function(){
+				$('body,html').animate({scrollTop : 0}, 500);
+				return;
+			})";
 	}
 
 	
