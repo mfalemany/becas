@@ -20,16 +20,25 @@
 	font-size: 1.1em;
 	color: #22F;
 }
+/* info_admisibilidad es la clase del contenedor en la pantalla de seguimiento de solicitud*/
+#info_admisibilidad label{
+	font-size: 1.6em;
+	text-align: right;
+	display: table-cell;
+	vertical-align: middle;
+	padding-right: 7px;
+}
 .caja_info_warning{
-	    font-size: 1.1em;
-	    font-weight: bold;
-	    padding: 5px;
-	    background-color: #FFF;
-	    color: #ec5835;
-	    box-shadow: 0px 0px 5px #222;
-	    box-sizing: border-box;
-	    text-align: center;
-	    width: 95%;
+	font-size: 1.1em;
+	font-weight: bold;
+	padding: 5px;
+	background-color: #FFF;
+	color: #bb0b0b;
+	box-shadow: 0px 0px 5px #222;
+	box-sizing: border-box;
+	width: 95%;
+	padding: 5px 0px 5px 15px;
+	line-height: 1.6em;
 }
 .etiqueta_success{
 	font-weight: bold;

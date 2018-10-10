@@ -28,7 +28,7 @@ class co_comision_asesora
 		//obtengo los integrantes de la comisión a la que pertenece el usuario actualmente logueado
 		$sql = "SELECT id_convocatoria,id_area_conocimiento 
 				FROM be_comision_asesora_integrante AS inte
-				WHERE nro_documento = '17248342'
+				WHERE nro_documento = ".quote(toba::usuario()->get_id())."
 				--WHERE nro_documento = ".quote(toba::usuario()->get_id())."
 				AND id_convocatoria = (SELECT MAX(id_convocatoria) FROM be_convocatoria_beca)";
 		$datos = toba::db()->consultar_fila($sql);
@@ -74,6 +74,31 @@ class co_comision_asesora
 	function get_ayn_evaluador($nro_documento)
 	{
 		return toba::db()->consultar_fila("SELECT apellido||', '||nombres FROM sap_personas WHERE nro_documento = ".quote($nro_documento));
+	}
+
+	function get_detalles_dictamen($inscripcion)
+	{
+		$sql = "select det.id_criterio_evaluacion, cri.criterio_evaluacion, det.puntaje as asignado, cri.puntaje_maximo, dic.justificacion_puntajes, dic.evaluadores
+			from be_dictamen as dic
+			left join be_dictamen_detalle as det 
+			    on det.tipo_dictamen = dic.tipo_dictamen
+			    and det.nro_documento = dic.nro_documento
+			    and det.id_tipo_beca = dic.id_tipo_beca
+			    and det.id_convocatoria = dic.id_convocatoria
+			left join be_tipo_beca_criterio_eval as cri on cri.id_criterio_evaluacion = det.id_criterio_evaluacion
+			WHERE dic.nro_documento = ".quote($inscripcion['nro_documento'])."
+			AND dic.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+			AND dic.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
+			AND dic.tipo_dictamen = 'C'";
+		return toba::db()->consultar($sql);
+	}
+
+	//retorna el id de area de conocimiento del usuario recibido como parámetro
+	function get_area_conocimiento_evaluador($nro_documento)
+	{
+		$sql = "SELECT id_area_conocimiento FROM be_comision_asesora_integrante WHERE nro_documento = ".quote($nro_documento);
+		$resultado = toba::db()->consultar_fila($sql);
+		return (count($resultado)) ? $resultado['id_area_conocimiento'] : '';
 	}
 
 }

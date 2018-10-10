@@ -1,5 +1,5 @@
 <?php
-class ci_comision_evaluacion_seleccion extends becas_ci
+class ci_junta_coordinadora extends becas_ci
 {
 	protected $s__filtro;
 	protected $ruta_documentos; //url
@@ -48,13 +48,6 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		//Solo inscripciones cerradas y admitidas
 		$filtro['admisible'] = 'S';
 		$filtro['estado'] = 'C';
-
-		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
-			$filtro['id_area_conocimiento'] = toba::consulta_php('co_comision_asesora')->get_area_conocimiento_evaluador(toba::usuario()->get_id());	
-			$this->dep('form_filtro')->ef('id_area_conocimiento')->set_estado($filtro['id_area_conocimiento']);
-			$this->dep('form_filtro')->set_solo_lectura(array('id_area_conocimiento'));
-		}
-		
 
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 	}
@@ -132,15 +125,32 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			$datos['direccion'] .= $this->armar_template_direccion($director,'Sub-Director');
 		}
 
-		$datos['formularios_evaluacion'] = file_get_contents(__DIR__.'/templates/template_eval_comision.php');
+		$dictamen_comision = $this->armar_template_dictamen_comision($seleccion);
+		$tmp = file_get_contents(__DIR__.'/../comision_asesora/evaluacion/templates/template_eval_junta.php');
 		
+		//agrego el template de los formularios para la evaluacion
+		$datos['formularios_evaluacion'] = str_replace('{{dictamen_comision}}',$dictamen_comision,$tmp);
+
 		//Armo el template completo
-		$template_completo = file_get_contents(__DIR__.'/templates/template_evaluacion.php');
+		$template_completo = file_get_contents(__DIR__.'/../comision_asesora/evaluacion/templates/template_evaluacion.php');
 		foreach ($datos as $clave => $valor) {
 			$template_completo = str_replace("{{".$clave."}}",$valor,$template_completo);
 		}
 
 		$pantalla->set_template($template_completo);
+	}
+
+	function armar_template_dictamen_comision($seleccion)
+	{
+		//armo el template del dictamen de la comision asesora
+		$dictamen_comision = toba::consulta_php('co_comision_asesora')->get_detalles_dictamen($seleccion);
+		$template_dictamen_comision = '<table>';
+		foreach($dictamen_comision as $criterio){
+			$template_dictamen_comision .= "<tr><td style='text-align:right;'><b><u>".$criterio['criterio_evaluacion']."</u></b>: </td><td>".$criterio['asignado']." (Máximo: ".$criterio['puntaje_maximo'].")</td></tr>";
+		}
+		$template_dictamen_comision .= "<tr><td style='text-align:right;'><b><u>Justificación de Puntajes asignados</u></b>:</td><td>".$dictamen_comision[0]['justificacion_puntajes']."</td></tr></table>";		
+		return $template_dictamen_comision;
+		
 	}
 
 	function armar_template_direccion($director,$rol)
@@ -162,7 +172,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			'cargos'        => $lista_cargos,
 
 		);
-		$template_director = file_get_contents(__DIR__.'/templates/template_director.php');
+		$template_director = file_get_contents(__DIR__.'/../comision_asesora/evaluacion/templates/template_director.php');
 		foreach ($datos_template_director as $clave => $valor) {
 			$template_director = str_replace("{{".$clave."}}",$valor,$template_director);
 		}
@@ -175,7 +185,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		//por cada cargo, se agrega una nueva linea al template
 		foreach ($cargos as $cargo){
 			//se obtiene el template vac?
-			$template_cargos = file_get_contents(__DIR__.'/templates/template_cargo.php');
+			$template_cargos = file_get_contents(__DIR__.'/../comision_asesora/evaluacion/templates/template_cargo.php');
 			$cargo['clase_css'] = ($cargo['fecha_hasta'] >= date('Y-m-d')) ? 'cargo_vigente' : ''; 
 			$cargo['fecha_desde'] = (new DateTime($cargo['fecha_desde']))->format('d-m-Y');
 			$cargo['fecha_hasta'] = (new DateTime($cargo['fecha_hasta']))->format('d-m-Y');
@@ -366,14 +376,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$dictamen = $this->get_datos('be_dictamen')->get();
 		if($dictamen){
 			$form->set_datos($dictamen);
-		}	
-	}
-
-	function evt__form_evaluacion_fijo__modificacion($datos)
-	{
-		$datos['tipo_dictamen'] = 'C';
-		$datos['fecha'] = (isset($datos['fecha'])) ? $datos['fecha'] : date('Y-m-d');
-		$this->get_datos('be_dictamen')->set($datos);
+		}
+		$form->set_solo_lectura();	
 	}
 
 	function conf__form_evaluacion_criterios(becas_ei_formulario_ml $ml)
@@ -395,36 +399,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 											  'puntaje_maximo'      =>$criterio['puntaje_maximo']));
 			}
 		}
+		$ml->set_solo_lectura();
 	}
-
-	function evt__form_evaluacion_criterios__modificacion($datos)
-	{
-		$this->get_datos('be_dictamen_detalle')->procesar_filas($datos);
-
-	}
-
-	//-----------------------------------------------------------------------------------
-	//---- ml_evaluadores ---------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-
-	function conf__form_evaluadores(becas_ei_formulario $form)
-	{
-		$datos = $this->get_datos('be_dictamen')->get();
-		if($datos){
-			$evaluadores = explode("/",$datos['evaluadores']);
-			$form->set_datos(array('evaluadores'=>$evaluadores));
-		}
-	}
-
-	function evt__form_evaluadores__modificacion($datos)
-	{
-		$evaluadores = implode('/',$datos['evaluadores']);
-
-		$this->get_datos('be_dictamen')->set(array('evaluadores'=>$evaluadores,'usuario_id'=>toba::usuario()->get_id()));
-		
-	}
-
-	
 
 	function get_datos($tabla = NULL)
 	{
@@ -435,10 +411,6 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 	{	
 		header("Location: ".utf8_encode($archivo));
 	}
-
-	
-
-
-
 }
+
 ?>
