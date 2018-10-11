@@ -279,14 +279,12 @@
 	box-shadow: 5px 6px 9px #333;
 }
 #puntaje_inicial{
-	
-	background-color: #ff7575;
+	background-color: #a54a4a;
 	color: #FFF;
 	font-size: 1.5em;
 	text-align:left;
-	text-shadow: 1px 1px 1px #000;
+	text-shadow: 1px 1px 1px #4c4c4c;
 	padding-left: 10px;
-
 }
 #puntaje_final{
 	text-align:center;
