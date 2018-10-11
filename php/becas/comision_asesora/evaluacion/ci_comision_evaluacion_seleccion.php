@@ -50,13 +50,14 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$filtro['estado'] = 'C';
 
 		if(!in_array('admin',toba::usuario()->get_perfiles_funcionales())){
-			//Si no es administrador, solo le muestro la última convocatoria y solo su area de conocimiento
+			//Si no es administrador, solo le muestro la ?ltima convocatoria y solo su area de conocimiento
 			$this->dep('form_filtro')->ef('id_convocatoria')->set_estado('1');
 			$filtro['id_area_conocimiento'] = toba::consulta_php('co_comision_asesora')->get_area_conocimiento_evaluador(toba::usuario()->get_id());	
 			$this->dep('form_filtro')->ef('id_area_conocimiento')->set_estado($filtro['id_area_conocimiento']);
 
 			//ESTA LINEA HAY QUE ELIMINAR.... ES SOLO TEMPORAL
 			$this->dep('form_filtro')->ef('id_tipo_beca')->set_estado(1);
+			$filtro['id_tipo_beca'] = '1';
 
 
 			$this->dep('form_filtro')->set_solo_lectura(array('id_convocatoria','id_area_conocimiento','id_tipo_beca'));
@@ -67,7 +68,6 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			$cuadro->eliminar_columnas(array('evaluado'));
 		}
 		
-
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 	}
 
@@ -163,7 +163,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		$lista_cargos = $this->armar_template_cargos($cargos);
 		
 		//Armo el template de director
-		$cat_incentivos = array(1=>'Categoría I',2=>'Categoría II',3=>'Categoría III',4=>'Categoría IV',5=>'Categoría V');
+		$cat_incentivos = array(1=>'Categor? I',2=>'Categor? II',3=>'Categor? III',4=>'Categor? IV',5=>'Categor? V');
 		$datos_template_director = array(
 			'rol'           => $rol,
 			'ayn'           => $director['apellido'].", ".$director['nombres'],
