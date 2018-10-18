@@ -27,8 +27,15 @@ class ml_evaluacion_criterios extends becas_ei_formulario_ml
 				}
 				
 			}
-			final = asignados + parseFloat($('#puntaje_inicial_valor').html());
-			$('#puntaje_final_valor').html(parseFloat(final).toFixed(3));
+
+			
+			if(!isNaN(parseFloat($('#puntaje_inicial_valor').html()))){
+				final = asignados + parseFloat($('#puntaje_inicial_valor').html());
+				$('#puntaje_final_valor').html(parseFloat(final).toFixed(3));	
+			}else{
+				$('#puntaje_final_valor').html(parseFloat(asignados).toFixed(2));	
+			}
+			
 			
 		}
 
