@@ -55,12 +55,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			$filtro['id_area_conocimiento'] = toba::consulta_php('co_comision_asesora')->get_area_conocimiento_evaluador(toba::usuario()->get_id());	
 			$this->dep('form_filtro')->ef('id_area_conocimiento')->set_estado($filtro['id_area_conocimiento']);
 
-			//ESTA LINEA HAY QUE ELIMINAR.... ES SOLO TEMPORAL
-			$this->dep('form_filtro')->ef('id_tipo_beca')->set_estado(1);
-			$filtro['id_tipo_beca'] = '1';
-
-
-			$this->dep('form_filtro')->set_solo_lectura(array('id_convocatoria','id_area_conocimiento','id_tipo_beca'));
+			$this->dep('form_filtro')->set_solo_lectura(array('id_convocatoria','id_area_conocimiento'));
 
 			//quito la columna de puntajes
 			$cuadro->eliminar_columnas(array('puntaje_final'));
