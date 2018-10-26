@@ -231,9 +231,9 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'3085', --dep_id
+	'3093', --dep_id
 	'4373', --objeto_consumidor
-	'4347', --objeto_proveedor
+	'4376', --objeto_proveedor
 	'cu_postulaciones', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
@@ -271,6 +271,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'4373', --objeto_consumidor
 	'4348', --objeto_proveedor
 	'datos', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'3091', --dep_id
+	'4373', --objeto_consumidor
+	'4361', --objeto_proveedor
+	'form_evaluacion_criterios', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -418,15 +430,15 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'becas', --proyecto
 	'1935', --pantalla
 	'4373', --objeto_ci
-	'11', --orden
+	'9', --orden
 	'3089'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'becas', --proyecto
-	'1936', --pantalla
+	'1935', --pantalla
 	'4373', --objeto_ci
-	'1', --orden
-	'3085'  --dep_id
+	'10', --orden
+	'3091'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'becas', --proyecto
@@ -434,6 +446,13 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'4373', --objeto_ci
 	'0', --orden
 	'3086'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becas', --proyecto
+	'1936', --pantalla
+	'4373', --objeto_ci
+	'1', --orden
+	'3093'  --dep_id
 );
 
 ------------------------------------------------------------

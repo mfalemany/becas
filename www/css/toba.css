@@ -331,6 +331,15 @@
 	border-bottom: 1px solid #CCC;
 }
 
+/* TABLA DE RESUMEN DEL DICTAMEN DE LA COMISION ASESORA*/
+#tabla_dictamen_comision tr td{
+	border-collapse: collapse;
+	border-bottom: 1px solid grey;
+}
+#tabla_dictamen_comision tr td:nth-child(1){
+	width: 300px;
+}
+
 .cargo_vigente{
 	color:#008400;
 }
