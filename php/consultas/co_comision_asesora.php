@@ -93,6 +93,27 @@ class co_comision_asesora
 		return toba::db()->consultar($sql);
 	}
 
+	function get_dictamen($inscripcion)
+	{
+		$sql = "select *, 
+			        array_to_string( 
+			            (select array_agg(upper(apellido)||', '||nombres) as evaluador 
+			            from sap_personas 
+			            --where nro_documento = any (string_to_array(dic.evaluadores,'/'))
+			            where nro_documento = any (string_to_array(dic.evaluadores,'/'))) 
+			        ,'/') as evaluadores,
+			        per.apellido||', '||per.nombres as usuario
+
+
+			    from be_dictamen as dic
+			    left join sap_personas as per on per.nro_documento = dic.usuario_id
+			    where dic.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+			    and dic.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
+			    and dic.nro_documento = ".quote($inscripcion['nro_documento'])."
+			    and dic.tipo_dictamen = 'C'";
+		return toba::db()->consultar_fila($sql);
+	}
+
 	//retorna el id de area de conocimiento del usuario recibido como parámetro
 	function get_area_conocimiento_evaluador($nro_documento)
 	{
