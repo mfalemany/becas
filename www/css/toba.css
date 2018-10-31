@@ -279,10 +279,10 @@
 	box-shadow: 5px 6px 9px #333;
 }
 #puntaje_inicial{
-	background-color: #a54a4a;
+	background-color: #3f7971;
 	color: #FFF;
 	font-size: 1.5em;
-	text-align:left;
+	text-align:center;
 	text-shadow: 1px 1px 1px #4c4c4c;
 	padding-left: 10px;
 }
@@ -332,6 +332,9 @@
 }
 
 /* TABLA DE RESUMEN DEL DICTAMEN DE LA COMISION ASESORA*/
+#tabla_dictamen_comision{
+	width: 100%;
+}
 #tabla_dictamen_comision tr td{
 	border-collapse: collapse;
 	border-bottom: 1px solid grey;

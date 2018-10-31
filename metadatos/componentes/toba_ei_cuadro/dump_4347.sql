@@ -289,7 +289,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'becas', --objeto_cuadro_proyecto
 	'4347', --objeto_cuadro
 	'1853', --objeto_cuadro_col
-	'puntaje_final', --clave
+	'puntaje_comision', --clave
 	'6', --orden
 	'Puntaje', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo

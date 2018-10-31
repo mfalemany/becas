@@ -289,9 +289,9 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'becas', --objeto_cuadro_proyecto
 	'4376', --objeto_cuadro
 	'1860', --objeto_cuadro_col
-	'puntaje_final', --clave
+	'puntaje_comision', --clave
 	'6', --orden
-	'Puntaje final', --titulo
+	'Puntaje Comisión', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'col-cen-s1', --estilo
 	NULL, --ancho
@@ -322,7 +322,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'1861', --objeto_cuadro_col
 	'evaluado_junta', --clave
 	'7', --orden
-	'Evaluado?', --titulo
+	'Rectificado?', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'col-cen-s1', --estilo
 	NULL, --ancho

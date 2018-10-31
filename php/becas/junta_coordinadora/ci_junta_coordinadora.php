@@ -104,7 +104,7 @@ class ci_junta_coordinadora extends becas_ci
 		//ruta al plan de trabajo
 		$plan = $this->ruta_documentos.'/becas/doc_por_convocatoria/'.$detalles['beca']['convocatoria']."/".$detalles['beca']['tipo_beca']."/".$detalles['postulante']['nro_documento']."/Plan de Trabajo.pdf";
 		
-		//la variable datos contendr?todos los valores que ir? al template
+		//la variable datos contendrá todos los valores que van al template
 		$datos = array(
 			'titulo_plan_beca'  => $detalles['beca']['titulo_plan_beca'],
 			'proyecto_nombre'   => $detalles['proyecto']['proyecto'],
@@ -115,7 +115,8 @@ class ci_junta_coordinadora extends becas_ci
 			'nro_carpeta'       => $detalles['beca']['nro_carpeta'],
 			'area_conocimiento' => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
 			'enlace_plan_trab'  => urldecode($plan),
-			'puntaje_inicial'   => $puntaje
+			'puntaje_inicial'   => $puntaje,
+			'tipo_dictamen'     => 'Junta Coordinadora'
 			
 		);
 
@@ -133,7 +134,10 @@ class ci_junta_coordinadora extends becas_ci
 			$datos['direccion'] .= $this->armar_template_direccion($director,'Sub-Director');
 		}
 
+		/* TEMPLATE DICTAMEN COMISIÓN */
 		$dictamen_comision = $this->armar_template_dictamen_comision($this->s__solicitud);
+		
+
 		$tmp = file_get_contents(__DIR__.'/../comision_asesora/evaluacion/templates/template_eval_junta.php');
 		
 		//agrego el template de los formularios para la evaluacion
@@ -150,20 +154,27 @@ class ci_junta_coordinadora extends becas_ci
 
 	function armar_template_dictamen_comision($seleccion)
 	{
-		$seleccion['puntaje'] = ($seleccion['puntaje']) ? $seleccion['puntaje'] : 0;
+		//Preparo una variable que me va a servir como filtro en la consulta para obtener el puntaje de la postulacion
+		$filtro = $seleccion;
+		//le saco el indice 'tipo_dictamen' por no formar parte de la tabla de inscripciones
+		unset($filtro['tipo_dictamen']);
+		$puntaje = toba::consulta_php('co_inscripcion_conv_beca')->get_campo('puntaje',$filtro);
+		$puntaje = (count($puntaje)) ? $puntaje[0]['puntaje'] : 0;
+
 		//armo el template del dictamen de la comision asesora
-		$dictamen_comision = toba::consulta_php('co_comision_asesora')->get_detalles_dictamen($seleccion);
-		$template_dictamen_comision = '<table id=\'tabla_dictamen_comision\'>';
-		$asignado = 0;
-		foreach($dictamen_comision as $criterio){
-			$template_dictamen_comision .= "<tr><td style='text-align:right;'><b>".$criterio['criterio_evaluacion']."</b>: </td><td>".$criterio['asignado']." (Máximo: ".$criterio['puntaje_maximo'].")</td></tr>";
-			$asignado += $criterio['asignado'];
-		}
-		$template_dictamen_comision .= "<tr><td style='text-align:right;'><b>Justificación de Puntajes asignados</b>:</td><td>".$dictamen_comision[0]['justificacion_puntajes']."</td></tr>";
-		$asignado += $seleccion['puntaje'];
-		$template_dictamen_comision .= "<tr><td style='text-align:right;'><b>Puntaje final alcanzado:</b></td><td>$asignado</td></tr></table>";		
-		return $template_dictamen_comision;
-		
+		$datos = array('asignado'=>0,'puntaje'=>$puntaje);
+		$datos['dictamen_comision'] = toba::consulta_php('co_comision_asesora')->get_detalles_dictamen($seleccion);
+
+		$archivo_tpl = __DIR__.'/../comision_asesora/evaluacion/templates/template_dictamen_comision.php';
+		return $this->armar_template($archivo_tpl,$datos);
+	}
+
+	function armar_template($archivo,$datos)
+	{	
+		extract($datos);
+		ob_start();
+		include $archivo;
+		return ob_get_clean();
 	}
 
 	function armar_template_direccion($director,$rol)
@@ -373,12 +384,14 @@ class ci_junta_coordinadora extends becas_ci
 
 	function conf__form_evaluacion_junta(becas_ei_formulario $form)
 	{
-		
+
+		$form->set_datos($this->get_datos('be_dictamen')->get());
 	}
 
 	function evt__form_evaluacion_junta__modificacion($datos)
 	{
-		
+		$datos = array_merge($this->s__solicitud,$datos,array('fecha'=>date('Y-m-d'),'usuario_id'=>toba::usuario()->get_id()));
+		$this->get_datos('be_dictamen')->set($datos);
 	}
 
 	function conf__form_evaluacion_criterios(becas_ei_formulario_ml $ml)
@@ -400,15 +413,7 @@ class ci_junta_coordinadora extends becas_ci
 	}
 	function evt__form_evaluacion_criterios__modificacion($datos)
 	{
-		//si no existe un dictamen de junta previo, guardo los detalles de inscripcion 
-		if(!$this->get_datos('be_dictamen')->get_filas()){
-			$dictamen = $this->s__solicitud;
-			$dictamen['fecha'] = date('Y-m-d');
-			$dictamen['usuario_id'] = toba::usuario()->get_id();
-			$this->get_datos('be_dictamen')->nueva_fila($dictamen);
-		}
 		$this->get_datos('be_dictamen_detalle')->procesar_filas($datos);	
-		
 	}
 
 	function get_datos($tabla = NULL)
@@ -419,6 +424,15 @@ class ci_junta_coordinadora extends becas_ci
 	function mostrar_pdf($archivo)
 	{	
 		header("Location: ".utf8_encode($archivo));
+	}
+
+	function extender_objeto_js()
+	{
+		echo "$(document).ready(function(){
+				$('body,html').animate({scrollTop : 0}, 500);
+				return;
+			})
+			";
 	}
 }
 

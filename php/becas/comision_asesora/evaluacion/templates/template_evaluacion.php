@@ -51,9 +51,9 @@
 		<br>
 		[dep id=cu_cursos_perfeccionamiento]
 		<br>
-		<h1 id='puntaje_inicial'>Puntaje por antecedentes académicos: <span id='puntaje_inicial_valor'>{{puntaje_inicial}}</span></h1>
+		<h1 id='puntaje_inicial'>Puntaje inicial (por antecedentes académicos): <span id='puntaje_inicial_valor'>{{puntaje_inicial}}</span></h1> 
 		{{formularios_evaluacion}}
 		
-		<h1 id='puntaje_final'>Puntaje Final: <span id='puntaje_final_valor'>{{puntaje_final}}</span></h1>
+		<h1 id='puntaje_final'>Puntaje Final {{tipo_dictamen}}: <span id='puntaje_final_valor'>{{puntaje_final}}</span></h1>
 	</div>
 </div>

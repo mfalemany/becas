@@ -59,7 +59,7 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			$this->dep('form_filtro')->set_solo_lectura(array('id_convocatoria','id_area_conocimiento'));
 
 			//quito la columna de puntajes
-			$cuadro->eliminar_columnas(array('puntaje_final'));
+			$cuadro->eliminar_columnas(array('puntaje_comision'));
 		}else{
 			$cuadro->eliminar_columnas(array('evaluado_comision'));
 		}
@@ -125,7 +125,8 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			'area_conocimiento' => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
 			'enlace_plan_trab'  => urldecode($plan),
 			'puntaje_inicial'   => $puntaje,
-			'puntaje_final'		=> $detalles['postulante']['puntaje_final']
+			'puntaje_final'		=> $detalles['postulante']['puntaje_comision'],
+			'tipo_dictamen'     => 'Comisión'
 		);
 
 		//Obtengo los detalles del director de esta solicitud y genero el template con sus datos

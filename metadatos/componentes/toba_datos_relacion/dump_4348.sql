@@ -53,7 +53,7 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 	'22', --punto_montaje
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'1', --sinc_susp_constraints
+	'0', --sinc_susp_constraints
 	'1', --sinc_orden_automatico
 	'1'  --sinc_lock_optimista
 );
