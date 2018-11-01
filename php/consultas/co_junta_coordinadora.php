@@ -24,6 +24,7 @@ class co_junta_coordinadora
 				    select  insc.id_convocatoria,
 				    		insc.id_tipo_beca,
 				    		insc.id_area_conocimiento,
+				    		ac.nombre as area_conocimiento,
 				    		per.nro_documento,
 				            per.apellido||', '||per.nombres as postulante,
 				            tipbec.tipo_beca,
@@ -60,6 +61,7 @@ class co_junta_coordinadora
 				    left join be_tipos_beca as tipbec on tipbec.id_tipo_beca = insc.id_tipo_beca
 				    left join sap_dependencia as dep on dep.id = insc.id_dependencia
 				    left join sap_dependencia as lugtrab on lugtrab.id = insc.lugar_trabajo_becario
+				    left join sap_area_conocimiento as ac on ac.id = insc.id_area_conocimiento
 				    where insc.estado = 'C'
 				    and insc.admisible = 'S'
 				    and exists(
