@@ -24,5 +24,5 @@ Participaron de la evaluación:
 	<li ><?php echo $evaluador; ?></li>
 <?php endforeach; ?>
 </ul>
-(La evaluación se realizó con el usuario <?php echo $dictamen['usuario_id']; ?> (<?php echo $dictamen['usuario']; ?>))
 <?php endif; ?>
+(La evaluación se realizó con el usuario <?php echo $dictamen['usuario_id']; ?> (<?php echo $dictamen['usuario']; ?>))

@@ -95,7 +95,7 @@ class co_comision_asesora
 
 	function get_dictamen($inscripcion)
 	{
-		$sql = "select *, 
+		$sql = "select dic.nro_documento, dic.id_convocatoria, dic.id_tipo_beca, dic.justificacion_puntajes, dic.usuario_id,  
 			        array_to_string( 
 			            (select array_agg(upper(apellido)||', '||nombres) as evaluador 
 			            from sap_personas 

@@ -173,8 +173,8 @@ class ci_junta_coordinadora extends becas_ci
 		//armo el template del dictamen de la comision asesora
 		$datos = array('asignado'=>0,'puntaje'=>$puntaje);
 		$datos['dictamen_detalles'] = toba::consulta_php('co_comision_asesora')->get_detalles_dictamen($seleccion);
+		
 		$datos['dictamen'] = toba::consulta_php('co_comision_asesora')->get_dictamen($seleccion);
-
 		$archivo_tpl = __DIR__.'/../comision_asesora/evaluacion/templates/template_dictamen_comision.php';
 		return $this->armar_template($archivo_tpl,$datos);
 	}
