@@ -49,7 +49,16 @@ class ci_junta_coordinadora extends becas_ci
 		$filtro['admisible'] = 'S';
 		$filtro['estado'] = 'C';
 
-		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
+		$datos = toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro);
+		foreach($datos as $indice => $inscripcion){
+			if($inscripcion['puntaje'] != $inscripcion['puntaje_junta']){
+				$datos[$indice]['puntaje_final'] = $inscripcion['puntaje_junta'];
+			}else{
+				$datos[$indice]['puntaje_final'] = $inscripcion['puntaje_comision'];
+			}
+		}
+		
+		$cuadro->set_datos($datos);
 	}
 
 	function evt__cu_postulaciones__seleccion($seleccion)

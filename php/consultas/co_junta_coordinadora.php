@@ -20,6 +20,10 @@ class co_junta_coordinadora
 		if(isset($filtro['id_dependencia'])){
 			$where[] = 'id_dependencia = '.quote($filtro['id_dependencia']);
 		}
+		if(isset($filtro['lugar_trabajo_becario'])){
+			$where[] = 'lugar_trabajo_becario = '.quote($filtro['lugar_trabajo_becario']);
+		}
+
 	
 		$sql = "select *, 
 				    (case when (puntaje_junta <> 'No asignado') then puntaje_junta else puntaje_comision::varchar end)::decimal as puntaje_final
@@ -34,6 +38,7 @@ class co_junta_coordinadora
 				            dep.nombre as facultad,
 				            dep.id as id_dependencia,
 				            lugtrab.nombre as lugar_trabajo,
+				            insc.lugar_trabajo_becario,
 				            dir.apellido||', '||dir.nombres as director,
 				            case when (insc.puntaje < 0) then 'No corresponde' when (insc.puntaje >= 0) then insc.puntaje::varchar end as puntaje,
 				           insc.puntaje+(select sum(puntaje) 
