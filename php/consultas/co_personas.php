@@ -6,10 +6,10 @@ class co_personas
 	{
 		$where = array();
 		if (isset($filtro['nro_documento'])) {
-		
 			if( ! $this->existe_persona($filtro['nro_documento'])){
 				return array();
 			}
+
 			$where[] = "per.nro_documento ILIKE ".quote("%{$filtro['nro_documento']}%");
 		}
 		if (isset($filtro['apellido'])) {

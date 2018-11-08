@@ -373,8 +373,8 @@ class co_inscripcion_conv_beca
 		}else{
 			return FALSE;
 		}
-	
-		
 	}
+
+	
 }
 ?>

@@ -2,6 +2,30 @@
 class ci_seguimiento extends becas_ci
 {
 	//-----------------------------------------------------------------------------------
+	//---- Configuraciones --------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__pant_inicial(toba_ei_pantalla $pantalla)
+	{
+		//defino la ubicación del archivo template
+		$ubicacion_template = __DIR__ . '/templates/template_seguimiento.php';
+
+		//obtengo todos los datos necesarios para el seguimiento de la solicitud
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		
+		if(count($insc)){
+			$datos = toba::consulta_php('co_comision_asesora')->get_detalles_seguimiento($insc);
+			$datos['publicar_adm'] = toba::consulta_php('co_convocatoria_beca')->get_campo('publicar_admisibilidad',$insc['id_convocatoria']);
+			$datos['publicar_res'] = toba::consulta_php('co_convocatoria_beca')->get_campo('publicar_resultados',$insc['id_convocatoria']);
+		}
+
+		
+		
+		$template = $this->armar_template($ubicacion_template,$datos);
+		$pantalla->set_template($template);
+	}
+
+	//-----------------------------------------------------------------------------------
 	//---- form_seguimiento -------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 
@@ -27,6 +51,8 @@ class ci_seguimiento extends becas_ci
 		return $datos;
 
 	}
+
+	
 
 }
 ?>

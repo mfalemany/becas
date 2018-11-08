@@ -122,5 +122,38 @@ class co_comision_asesora
 		return (count($resultado)) ? $resultado['id_area_conocimiento'] : '';
 	}
 
+	/**
+	 * Obtiene todos los detalles que se le muestran al postulante en la opción de seguimiento. Esto incluye el resultado de la admisibilidad, la evaluación de comision y junta
+	 */
+	function get_detalles_seguimiento($inscripcion)
+	{
+		$sql = "SELECT admisible, observaciones
+					FROM be_inscripcion_conv_beca 
+					WHERE nro_documento = ".quote($inscripcion['nro_documento'])."
+					AND id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
+					AND id_convocatoria = ".quote($inscripcion['id_convocatoria']);
+		$adm = toba::db()->consultar_fila($sql);
+		$sql = "SELECT 
+					(SELECT puntaje FROM be_inscripcion_conv_beca WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria) AS puntaje_inicial,
+					(SELECT sum(puntaje) FROM be_dictamen_detalle WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria AND tipo_dictamen = 'C') AS puntaje_comision,
+					(SELECT justificacion_puntajes FROM be_dictamen WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria AND tipo_dictamen = 'C') AS justificacion_comision,
+					(SELECT sum(puntaje) FROM be_dictamen_detalle WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria AND tipo_dictamen = 'J') AS puntaje_junta,
+					(SELECT justificacion_puntajes FROM be_dictamen WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria AND tipo_dictamen = 'J') AS justificacion_junta,
+					array_to_string( 
+					    (SELECT array_agg(upper(apellido)||', '||nombres) AS evaluador 
+					    FROM sap_personas 
+					    WHERE nro_documento = ANY (string_to_array(dic.evaluadores,'/'))) 
+					,'/') AS evaluadores
+				FROM be_dictamen AS dic
+				WHERE dic.nro_documento = ".quote($inscripcion['nro_documento'])."
+				AND dic.id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
+				AND dic.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+				AND tipo_dictamen = 'C'";
+		$dic = toba::db()->consultar_fila($sql);
+		return array('admisibilidad' => $adm, 'dictamen' => $dic);
+	}
+
+	
+
 }
 ?>
