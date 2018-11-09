@@ -127,13 +127,48 @@ class co_comision_asesora
 	 */
 	function get_detalles_seguimiento($inscripcion)
 	{
-		$sql = "SELECT admisible, observaciones
-					FROM be_inscripcion_conv_beca 
-					WHERE nro_documento = ".quote($inscripcion['nro_documento'])."
-					AND id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
-					AND id_convocatoria = ".quote($inscripcion['id_convocatoria']);
+		$where  = "WHERE padre.nro_documento = ".quote($inscripcion['nro_documento'])."
+					AND padre.id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
+					AND padre.id_convocatoria = ".quote($inscripcion['id_convocatoria']);
+
+		$sql = "SELECT admisible, observaciones FROM be_inscripcion_conv_beca AS padre $where"; 
 		$adm = toba::db()->consultar_fila($sql);
-		$sql = "SELECT 
+
+		$sql = "SELECT puntaje FROM be_inscripcion_conv_beca as padre $where";
+		$inscripcion = toba::db()->consultar_fila($sql);
+
+		/* DICTAMEN DE COMISION */
+		$sql = "SELECT justificacion_puntajes as justificacion,
+				array_to_string( 
+					    (SELECT array_agg(upper(apellido)||', '||nombres) AS evaluador 
+					    FROM sap_personas 
+					    WHERE nro_documento = ANY (string_to_array(padre.evaluadores,'/'))) 
+					,'/') AS evaluadores
+			  FROM be_dictamen AS padre $where AND padre.tipo_dictamen = 'C'";
+		$datos['comision'] = toba::db()->consultar_fila($sql);
+
+			
+		$sql = "SELECT  cri.criterio_evaluacion, cri.puntaje_maximo, padre.puntaje
+				FROM be_dictamen_detalle as padre
+				LEFT JOIN be_tipo_beca_criterio_eval as cri USING (id_convocatoria, id_tipo_beca, id_criterio_evaluacion)
+				$where 
+				AND padre.tipo_dictamen = 'C'";
+		$datos['comision']['detalles'] = toba::db()->consultar($sql);
+
+		/* DICTAMEN DE JUNTA */
+		$sql = "SELECT justificacion_puntajes as justificacion FROM be_dictamen as padre $where AND padre.tipo_dictamen = 'J'";
+		$datos['junta'] = toba::db()->consultar_fila($sql);
+
+		$sql = "SELECT  cri.criterio_evaluacion, cri.puntaje_maximo, padre.puntaje
+				FROM be_dictamen_detalle as padre
+				LEFT JOIN be_tipo_beca_criterio_eval as cri USING (id_convocatoria, id_tipo_beca, id_criterio_evaluacion)
+				$where 
+				AND padre.tipo_dictamen = 'J'";
+		$datos['junta']['detalles'] = toba::db()->consultar($sql);
+		return array('admisibilidad' => $adm, 'dictamen' => $datos, 'inscripcion' => $inscripcion);
+	}
+
+	/*$sql = "SELECT 
 					(SELECT puntaje FROM be_inscripcion_conv_beca WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria) AS puntaje_inicial,
 					(SELECT sum(puntaje) FROM be_dictamen_detalle WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria AND tipo_dictamen = 'C') AS puntaje_comision,
 					(SELECT justificacion_puntajes FROM be_dictamen WHERE nro_documento = dic.nro_documento AND id_tipo_beca = dic.id_tipo_beca AND id_convocatoria = dic.id_convocatoria AND tipo_dictamen = 'C') AS justificacion_comision,
@@ -148,10 +183,7 @@ class co_comision_asesora
 				WHERE dic.nro_documento = ".quote($inscripcion['nro_documento'])."
 				AND dic.id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
 				AND dic.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
-				AND tipo_dictamen = 'C'";
-		$dic = toba::db()->consultar_fila($sql);
-		return array('admisibilidad' => $adm, 'dictamen' => $dic);
-	}
+				AND tipo_dictamen = 'C'";*/
 
 	
 
