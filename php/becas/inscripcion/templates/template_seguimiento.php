@@ -33,81 +33,82 @@
 <h1 style="text-align: center;">No hay movimientos de la solicitud para mostrar</h1>
 <?php endif; ?>
 
+<?php if($datos['publicar_res'] == 'S') : ?>
+	<?php if(count($datos['dictamen']['comision']['detalles'])) : ?>
+		<br><br>
+		<fieldset>
+			<legend>Comisión Asesora</legend>
+			<div style='font-size: 1.5em; padding-left: 20px; color:#39397d;'>
 
+			<?php $puntaje_inicial = ($datos['inscripcion']['puntaje'] > 0) ? $datos['inscripcion']['puntaje'] : 0; ?>
 
-
-<?php if(count($datos['dictamen']['comision']['detalles'])) : ?>
-	<br><br>
-	<fieldset>
-		<legend>Comisión Asesora</legend>
-		<div style='font-size: 1.5em; padding-left: 20px; color:#39397d;'>
-
-		<?php $puntaje_inicial = ($datos['inscripcion']['puntaje'] > 0) ? $datos['inscripcion']['puntaje'] : 0; ?>
-
-		<p><u><b>Puntaje por antecedentes académicos:</b></u> <?php echo $puntaje_inicial; ?></p>
-		<p>
-			<u><b>Puntaje asignado por Comisión Asesora:</b></u> 
-			<ul>
-				<?php $puntaje_comision = 0; ?>
-				<?php foreach($datos['dictamen']['comision']['detalles'] as $detalle): ?>
-				<li><b><?php echo $detalle['criterio_evaluacion']; ?></b>: 
-					<?php echo $detalle['puntaje']; ?> puntos (de un máximo de 
-					<?php echo $detalle['puntaje_maximo']; ?>)
-					<?php $puntaje_comision += $detalle['puntaje']; ?>
-				</li>
-				<?php endforeach; ?>
-			</ul>
-		</p>
-		<p>
-			<u><b>Justificación de los puntajes asignados:</b></u> 
-			<?php echo $datos['dictamen']['comision']['justificacion']; ?>
-		</p>
-		<?php if(count($datos['dictamen']['comision']['evaluadores'])) : ?>
-		<p>
-			<u><b>Participaron de la evaluación:</b></u>
-			<ul>
-				<?php foreach(explode('/',$datos['dictamen']['comision']['evaluadores']) as $evaluador): ?>
-				<li><?php echo $evaluador; ?></li>
-				<?php endforeach; ?>
-			</ul>
-		</p>
-		<?php endif; ?>
-	</div>
-	</fieldset>
-<?php endif; ?>
-<?php if(count($datos['dictamen']['junta']['detalles'])) : ?>
-	<br><br>
-	<fieldset>
-		<legend>Junta Coordinadora</legend>
-		<div style='font-size: 1.5em; padding-left: 20px; color:#39397d;'>
+			<p><u><b>Puntaje por antecedentes académicos:</b></u> <?php echo $puntaje_inicial; ?></p>
 			<p>
-			<u><b>Puntaje asignado por Junta Coordinadora:</b></u> 
-			<ul>
-				<?php $puntaje_junta = 0; ?>
-				<?php foreach($datos['dictamen']['junta']['detalles'] as $detalle): ?>
-				<li><b><?php echo $detalle['criterio_evaluacion']; ?></b>: 
-					<?php echo $detalle['puntaje']; ?> puntos (de un máximo de 
-					<?php echo $detalle['puntaje_maximo']; ?>)
-					<?php $puntaje_junta += $detalle['puntaje']; ?>
-				</li>
-				<?php endforeach; ?>
-			</ul>
+				<u><b>Puntaje asignado por Comisión Asesora:</b></u> 
+				<ul>
+					<?php $puntaje_comision = 0; ?>
+					<?php foreach($datos['dictamen']['comision']['detalles'] as $detalle): ?>
+					<li><b><?php echo $detalle['criterio_evaluacion']; ?></b>: 
+						<?php echo $detalle['puntaje']; ?> puntos (de un máximo de 
+						<?php echo $detalle['puntaje_maximo']; ?>)
+						<?php $puntaje_comision += $detalle['puntaje']; ?>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+			</p>
 			<p>
 				<u><b>Justificación de los puntajes asignados:</b></u> 
-				<?php echo $datos['dictamen']['junta']['justificacion']; ?>
+				<?php echo $datos['dictamen']['comision']['justificacion']; ?>
 			</p>
-		</p>
+			<?php if(count($datos['dictamen']['comision']['evaluadores'])) : ?>
+			<p>
+				<u><b>Participaron de la evaluación:</b></u>
+				<ul>
+					<?php foreach(explode('/',$datos['dictamen']['comision']['evaluadores']) as $evaluador): ?>
+					<li><?php echo $evaluador; ?></li>
+					<?php endforeach; ?>
+				</ul>
+			</p>
+			<?php endif; ?>
 		</div>
-	</fieldset>
-<?php endif; ?>		
+		</fieldset>
+	<?php endif; ?>
+	<?php if(count($datos['dictamen']['junta']['detalles'])) : ?>
+		<br><br>
+		<fieldset>
+			<legend>Junta Coordinadora</legend>
+			<div style='font-size: 1.5em; padding-left: 20px; color:#39397d;'>
+				<p>
+				<u><b>Puntaje asignado por Junta Coordinadora:</b></u> 
+				<ul>
+					<?php $puntaje_junta = 0; ?>
+					<?php foreach($datos['dictamen']['junta']['detalles'] as $detalle): ?>
+					<li><b><?php echo $detalle['criterio_evaluacion']; ?></b>: 
+						<?php echo $detalle['puntaje']; ?> puntos (de un máximo de 
+						<?php echo $detalle['puntaje_maximo']; ?>)
+						<?php $puntaje_junta += $detalle['puntaje']; ?>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+				<p>
+					<u><b>Justificación de los puntajes asignados:</b></u> 
+					<?php echo $datos['dictamen']['junta']['justificacion']; ?>
+				</p>
+			</p>
+			</div>
+		</fieldset>
+	<?php endif; ?>	
 
 
 
-<?php 
-	if(count($datos['dictamen']['comision']['detalles'])) :
-		$puntos = (isset($puntaje_junta)) ? ($puntaje_junta+$puntaje_inicial) : ($puntaje_comision+$puntaje_inicial);
- ?>
-<h2 style="text-align: center; color:#F11; text-shadow: 0px 0px 2px #848484; background-color:#FFF; font-size: 2.5em;">Puntaje Total Alcanzado: <?php echo $puntos; ?> puntos.
-		</h2>
 
-<?php endif; ?>
+	<?php 
+		if(count($datos['dictamen']['comision']['detalles'])) :
+			$puntos = (isset($puntaje_junta)) ? ($puntaje_junta+$puntaje_inicial) : ($puntaje_comision+$puntaje_inicial);
+	 ?>
+	<h2 style="text-align: center; color:#F11; text-shadow: 0px 0px 2px #848484; background-color:#FFF; font-size: 2.5em;">Puntaje Total Alcanzado: <?php echo $puntos; ?> puntos.
+			</h2>
+
+	<?php endif; ?>
+
+<?php endif; ?>	
