@@ -99,15 +99,16 @@
 		</fieldset>
 	<?php endif; ?>	
 
-
-
-
 	<?php 
 		if(count($datos['dictamen']['comision']['detalles'])) :
 			$puntos = (isset($puntaje_junta)) ? ($puntaje_junta+$puntaje_inicial) : ($puntaje_comision+$puntaje_inicial);
 	 ?>
-	<h2 style="text-align: center; color:#F11; text-shadow: 0px 0px 2px #848484; background-color:#FFF; font-size: 2.5em;">Puntaje Total Alcanzado: <?php echo $puntos; ?> puntos.
-			</h2>
+
+	<?php $color = ($datos['admisibilidad']['beca_otorgada'] == 'S') ? '#17a50e' : '#F11'; ?>
+	<h2 style="text-align: center; color:<?php echo $color; ?>; text-shadow: 0px 0px 2px #848484; background-color:#FFF; font-size: 2.5em;">
+		<?php echo ($datos['admisibilidad']['beca_otorgada'] == 'S') ? 'Beca Otorgada! ' : 'Beca NO otorgada. '; ?>
+		Puntaje Total Alcanzado: <?php echo $puntos; ?> puntos.
+	</h2>
 
 	<?php endif; ?>
 

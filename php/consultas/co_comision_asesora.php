@@ -131,7 +131,7 @@ class co_comision_asesora
 					AND padre.id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
 					AND padre.id_convocatoria = ".quote($inscripcion['id_convocatoria']);
 
-		$sql = "SELECT admisible, observaciones FROM be_inscripcion_conv_beca AS padre $where"; 
+		$sql = "SELECT admisible, beca_otorgada, observaciones FROM be_inscripcion_conv_beca AS padre $where"; 
 		$adm = toba::db()->consultar_fila($sql);
 
 		$sql = "SELECT puntaje FROM be_inscripcion_conv_beca as padre $where";
