@@ -37,10 +37,12 @@ class co_inscripcion_conv_beca
 			}
 			
 		}
+		if(isset($filtro['beca_otorgada'])){
+			$where[] = "insc.beca_otorgada = ".quote($filtro['beca_otorgada']);
+		}
 		if(isset($filtro['estado'])){
 			$where[] = 'insc.estado = '.quote($filtro['estado']);	
 		}
-
 
 		$sql = "SELECT
 			insc.id_dependencia,
@@ -119,7 +121,7 @@ class co_inscripcion_conv_beca
 		LEFT JOIN sap_area_conocimiento as area ON (insc.id_area_conocimiento = area.id)
 		LEFT JOIN be_carreras as carr ON (insc.id_carrera = carr.id_carrera)
 		LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario
-		ORDER BY admisible";
+		ORDER BY admisible,becario";
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);
 		}

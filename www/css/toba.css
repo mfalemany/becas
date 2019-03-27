@@ -87,6 +87,10 @@
 .centrado{
 	text-align: center;
 }
+.box-centrado{
+	margin: 0px auto;
+	width: 100%;
+}
 .sombreado{
 	margin: 0px;
 	background-color:#585c98;
