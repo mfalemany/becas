@@ -39,7 +39,7 @@ class ci_otorgamiento extends becas_ci
 	function conf__form_filtro(becas_ei_formulario $form)
 	{	
 		if(isset($this->s__filtro)){
-			$form->set_datos($filtro);
+			$form->set_datos($this->s__filtro);
 		}
 	}
 

@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[3674]--  Otorgamiento 
+--[3674]--  Otorgamiento Masivo 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Otorgamiento', --nombre
+	'Otorgamiento Masivo', --nombre
 	NULL, --descripcion
 	'22', --punto_montaje
 	NULL, --actividad_accion
