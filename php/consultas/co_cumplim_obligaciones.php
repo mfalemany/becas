@@ -1,7 +1,8 @@
 <?php
 class co_cumplim_obligaciones
 {
-	public $meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+/*	public $meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+
 	function get_cumplimientos($filtro=array())
 	{
 		$where = array();
@@ -56,6 +57,72 @@ class co_cumplim_obligaciones
 			$meses[] = array('mes'=>$i,'descripcion'=>$this->meses[$i-1]);
 		}
 		return $meses;
+	}*/
+
+
+	function get_becarios_vigentes($dir)
+	{
+		$sql = "SELECT per.nro_documento, 
+					per.apellido||', '||per.nombres AS becario, 
+					ins.id_dependencia, 
+					ins.id_convocatoria,
+					dep.nombre AS dependencia,
+					ins.id_tipo_beca,
+					tb.tipo_beca,
+					ot.fecha_desde,
+					ot.fecha_hasta
+				FROM be_becas_otorgadas AS ot
+				LEFT JOIN be_inscripcion_conv_beca AS ins 
+					ON ins.nro_documento = ot.nro_documento
+					AND ins.id_convocatoria = ot.id_convocatoria
+					AND ins.id_tipo_beca = ot.id_tipo_beca
+				LEFT JOIN sap_personas AS per ON per.nro_documento = ins.nro_documento
+				LEFT JOIN sap_dependencia AS dep ON dep.id = ins.id_dependencia
+				LEFT JOIN be_tipos_beca AS tb ON tb.id_tipo_beca = ins.id_tipo_beca
+				WHERE ins.nro_documento_dir = ".quote($dir);
+		return toba::db()->consultar($sql);
+	}
+
+	function get_duracion_meses_beca($inscripcion)
+	{
+		$sql = "SELECT 
+					--Extraigo la cantidad de años de la beca, y lo multiplico por 12 (para pasarlo a meses)
+					(EXTRACT(YEAR FROM AGE(fecha_hasta,fecha_desde))*12) +
+					--y le sumo los meses restantes
+					(EXTRACT(MONTH FROM AGE(fecha_hasta,fecha_desde))) AS duracion
+				FROM be_becas_otorgadas AS bo
+				WHERE bo.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."
+				AND bo.id_tipo_beca = ".quote($inscripcion['id_tipo_beca'])."
+				AND bo.nro_documento = ".quote($inscripcion['nro_documento']);
+		$res = toba::db()->consultar_fila($sql);
+		return $res['duracion'];
+
+	}
+
+	function mes_cumplido($beca,$mes,$anio)
+	{
+		$sql = "SELECT * 
+				FROM be_cumplimiento_obligacion
+				WHERE nro_documento = ".quote($beca['nro_documento'])."
+				AND id_tipo_beca = ".quote($beca['id_tipo_beca'])."
+				AND id_convocatoria = ".quote($beca['id_convocatoria'])."
+				AND mes = $mes
+				AND anio = $anio";
+		return count(toba::db()->consultar($sql));
+	}
+
+	function marcar_cumplido($cumplido)
+	{
+		$sql = "INSERT INTO be_cumplimiento_obligacion (nro_documento,id_convocatoria,id_tipo_beca,mes,anio,fecha_cumplimiento) 
+			VALUES (".
+				quote($cumplido['nro_documento']).",".
+				quote($cumplido['id_convocatoria']).",".
+				quote($cumplido['id_tipo_beca']).",".
+				quote($cumplido['mes']).",".
+				quote($cumplido['anio']).",".
+				quote(date('Y-m-d')).")";
+		return toba::db()->ejecutar($sql);
+
 	}
 
 }
