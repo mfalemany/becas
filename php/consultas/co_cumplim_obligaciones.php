@@ -79,7 +79,8 @@ class co_cumplim_obligaciones
 				LEFT JOIN sap_personas AS per ON per.nro_documento = ins.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = ins.id_dependencia
 				LEFT JOIN be_tipos_beca AS tb ON tb.id_tipo_beca = ins.id_tipo_beca
-				WHERE ins.nro_documento_dir = ".quote($dir);
+				WHERE (ins.nro_documento_dir = ".quote($dir)." OR ins.nro_documento_codir = ".quote($dir)." OR ins.nro_documento_subdir = ".quote($dir).")";
+				;
 		return toba::db()->consultar($sql);
 	}
 
