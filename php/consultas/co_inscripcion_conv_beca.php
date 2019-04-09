@@ -1,6 +1,7 @@
 <?php
 class co_inscripcion_conv_beca
 {
+	
 	function get_inscripciones($filtro = array())
 	{
 		$where = array();
@@ -131,7 +132,8 @@ class co_inscripcion_conv_beca
 
 	/**
 	 * Obtiene un numero de carpeta que no est?en uso. El nombre de la funci? se debe a que anteriormente la funci? devolv? el ?ltimo n?mero que se hab? asignado (con la intenci? de incrementarlo en una unidad al nuevo registro). Despues, la funci? fue modificada para que, en caso de eliminarse una inscripci? a beca, y exista un "hueco" entre los n?meros de carpeta, esta funci? pueda re-asignarlos y lograr una secuencia limpia.
-	 * Es posible que esta funci? falle (asigne dos numeros de carpeta a un mismo proyecto) cuando se guardan simultaneamente. Se deja a prueba de la primera convocatoria (A? 2018)
+	 * Es posible que esta funci? falle (
+	 * asigne dos numeros de carpeta a un mismo proyecto) cuando se guardan simultaneamente. Se deja a prueba de la primera convocatoria (A? 2018)
 	 * @param integer $id_convocatoria 
 	 * @param integer $id_tipo_beca 
 	 * @return String String formateado para asignar como n?mero de carpeta a una nueva inscripci?.
@@ -375,6 +377,16 @@ class co_inscripcion_conv_beca
 		}else{
 			return FALSE;
 		}
+	}
+
+	function dirige_beca_otorgada($nro_documento)
+	{
+		$sql = "SELECT * FROM be_inscripcion_conv_beca 
+				WHERE (nro_documento_dir = ".quote($nro_documento)." 
+				OR nro_documento_codir = ".quote($nro_documento)." 
+				OR nro_documento_subdir = ".quote($nro_documento).")
+				AND beca_otorgada = 'S'";
+		return count(toba::db()->consultar($sql));
 	}
 
 	

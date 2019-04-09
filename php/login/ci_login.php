@@ -163,6 +163,13 @@ class ci_login extends toba_ci
 			if (toba_autenticacion::es_autenticacion_centralizada($tipo_auth)) {
 				toba::manejador_sesiones()->get_autenticacion()->usar_login_basico();
 			}	
+
+			/* ==============Se asignan los perfiles que correspondan=========================== */
+			if(toba::usuario()->existe_usuario($usuario)){
+				$this->asignar_perfiles($usuario);
+			}
+			/* ==================================================================================*/
+
 			$this->asignar_perfil_usuario_existente($usuario);
 			toba::manejador_sesiones()->login($usuario, $clave);
 
@@ -364,6 +371,70 @@ class ci_login extends toba_ci
 		} catch (Exception $e) {
 			
 		}
+	}
+
+	//--------------------------------------------------------------------------
+	/**
+	 * Funcion que se encarga de analizar el usuario que intenta loguearse y en base a una serie de condiciones decide si es necesario agregarle perfiles funcionales
+	 * @param string $nro_documento Número de documento del usuario actualmente logueado
+	 * @return void
+	 */
+	function asignar_perfiles($nro_documento)
+	{
+		//Obtengo los perfiles actualmente asignados al usuario
+		$perfiles_usuario = toba::usuario($nro_documento)->get_perfiles_funcionales();
+		
+		//Defino todos los perfiles que deben ser evaluados para asignar
+		$perfiles_condiciones = array(
+			'becario' => array(),
+			'director_beca' => array(
+				array('clase' => 'co_inscripcion_conv_beca','metodo' => 'dirige_beca_otorgada','condicion' => "==TRUE")
+			)
+		);
+		
+		//Para cada perfil
+		foreach($perfiles_condiciones as $perfil => $condiciones){
+			//si el usuario no lo tiene asignado todavia...
+			if(!in_array($perfil,$perfiles_usuario)){
+				//realizo la evaluación para ver si corresponde asignarle
+				$corresponde = TRUE;
+				foreach($condiciones as $condicion){
+					extract($condicion);
+					//ejecuto el método que me da la parte izquierda de la condicion
+					$resultado = toba::consulta_php($clase)->$metodo($nro_documento);
+
+					
+					//en caso de que el resultado sea de tipo BOOLEAN, lo paso a string (para la funcion eval())
+					if(is_bool($resultado)){
+						$resultado = ($resultado) ? 'TRUE' : 'FALSE';
+					}
+					if($resultado === NULL){
+						$corresponde = FALSE;
+						break;
+					}
+					//armo la condicion en un solo string
+					$condicion = $resultado.$condicion;
+					//y evalúo
+					
+					if( ! eval("return ($condicion);")){
+						//Si no se cumplió la condición, no está apto para recibir el perfil
+						$corresponde = FALSE;
+						break;
+					}
+				}
+				if($corresponde){
+					try {
+						toba::instancia()->vincular_usuario('becas',$nro_documento,$perfil);
+						//toba::notificacion()->agregar("Se asignaron nuevos perfiles a su usuario. Debe cerrar su sesión e iniciarla nuevamente para que los cambios tengan efecto.");
+					} catch (toba_error_db $e) {
+						
+					}	
+				}
+			}
+
+		}
+
+
 	}
 }
 ?>
