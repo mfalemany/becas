@@ -83,6 +83,11 @@ class ci_cumplimiento_obligaciones extends becas_ci
 		$cumplido = array_merge($seleccion,$this->s__beca);
 		if(toba::consulta_php('co_cumplim_obligaciones')->marcar_cumplido($cumplido)){
 			toba::notificacion()->agregar('Se ha marcado como cumplido!','info');
+			$this->notificar_becario(array('nro_documento' => $this->s__beca['nro_documento'],
+											'mes'          => $seleccion['mes'],
+											'anio'         => $seleccion['anio']
+											)
+									);
 		}
 
 	}
@@ -99,6 +104,17 @@ class ci_cumplimiento_obligaciones extends becas_ci
 			$evento->desactivar();
 			$evento->set_etiqueta('Mes Cumplido!');
 		}
+	}
+
+	protected function notificar_becario($params)
+	{
+		$cuerpo = "<p>La Secretaría General de Ciencia y Técnica de la UNNE le informa que se ha registrado el <b>cumplimiento de obligaciones</b> de su plan de beca, correspondiente al mes de <b>".$this->get_mes_desc($params['mes'])." de ".$params['anio']."</b>.
+			Este mensaje es autogenerado por el Sistema SAP, por favor no lo responda.";
+		$mail = toba::consulta_php('co_personas')->get_campo('mail',$params['nro_documento']);
+		if(!$mail){
+			return;
+		}
+		$mail = new toba_mail($mail,'Cumplimiento de Obligaciones - SGCyT',$cuerpo,'noresponder@unne.edu.ar');
 	}
 }
 ?>

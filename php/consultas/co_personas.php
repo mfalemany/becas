@@ -287,5 +287,12 @@ class co_personas
 
 	}
 
+	function get_campo($campo,$nro_documento)
+	{
+		$sql = "SELECT $campo FROM sap_personas WHERE nro_documento = ".quote($nro_documento)." LIMIT 1";
+		$resultado = toba::db()->consultar_fila($sql);
+		return $resultado[$campo];
+	}
+
 }
 ?>
