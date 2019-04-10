@@ -45,15 +45,16 @@ class ci_cumplimiento_obligaciones extends becas_ci
 		$duracion = toba::consulta_php('co_cumplim_obligaciones')->get_duracion_meses_beca($beca);
 		
 		$desde=date_create($beca['fecha_desde']);
-		$mes = date_format($desde,"m");
-		$anio = date_format($desde,"Y");
+		
+		$mes = $desde->format('m');
+		$anio = $desde->format('Y');
 		
 		for($i=0 ; $i <= $duracion ; $i++ ){
-			if( ! toba::consulta_php('co_cumplim_obligaciones')->mes_cumplido($beca,$mes,$anio)){
-				if(date($anio.'-'.$mes.'-31') < date('Y-m-d')){
-					$meses[] = array('mes'=>$mes,'anio'=>$anio,'mes_desc'=>$this->get_mes_desc($mes));
-				}
-			}
+			if( strtotime($anio."-".$mes."-28") < strtotime(date('Y-m-d')) ){
+				$meses[] = array('mes'      => $mes,
+								 'anio'     => $anio,
+								 'mes_desc' => $this->get_mes_desc($mes));
+			}	
 			if($mes == 12){
 				$mes = 1;
 				$anio++;
@@ -62,7 +63,6 @@ class ci_cumplimiento_obligaciones extends becas_ci
 			}
 		}
 		return $meses;
-
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -71,6 +71,7 @@ class ci_cumplimiento_obligaciones extends becas_ci
 
 	function conf__cu_cumplimientos(becas_ei_cuadro $cuadro)
 	{
+		$cuadro->desactivar_modo_clave_segura();
 		if(!isset($this->s__beca)){
 			throw new toba_error('No se ha seleccionado una beca para la carga de cumplimiento de obligaciones');
 		}
@@ -82,12 +83,22 @@ class ci_cumplimiento_obligaciones extends becas_ci
 		$cumplido = array_merge($seleccion,$this->s__beca);
 		if(toba::consulta_php('co_cumplim_obligaciones')->marcar_cumplido($cumplido)){
 			toba::notificacion()->agregar('Se ha marcado como cumplido!','info');
-			unset($this->s__beca);
-			$this->set_pantalla('pant_seleccion');
 		}
-
 
 	}
 
+	function conf_evt__cu_cumplimientos__seleccion(toba_evento_usuario $evento, $fila)
+	{
+		$periodo = explode('||',$evento->get_parametros());
+		$mes = $periodo[0];
+		$anio = $periodo[1];
+		if(!toba::consulta_php('co_cumplim_obligaciones')->mes_cumplido($this->s__beca,$mes,$anio)){
+			$evento->activar();
+			$evento->set_etiqueta('Marcar como cumplido');
+		}else{
+			$evento->desactivar();
+			$evento->set_etiqueta('Mes Cumplido!');
+		}
+	}
 }
 ?>

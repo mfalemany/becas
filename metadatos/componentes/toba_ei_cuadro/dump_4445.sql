@@ -54,7 +54,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'Marcar como cumplido', --etiqueta
 	'1', --maneja_datos
 	'1', --sobre_fila
-	NULL, --confirmacion
+	'Marcar las obligaciones del mes como cumplidas?', --confirmacion
 	NULL, --estilo
 	'apex', --imagen_recurso_origen
 	'aplicar.png', --imagen
