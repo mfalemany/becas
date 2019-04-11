@@ -115,6 +115,8 @@ class ci_cumplimiento_obligaciones extends becas_ci
 			return;
 		}
 		$mail = new toba_mail($mail,'Cumplimiento de Obligaciones - SGCyT',$cuerpo,'noresponder@unne.edu.ar');
+		//indica que el cuerpo del mail contiene código HTML
+		$mail->set_html(TRUE);
 		$mail->enviar();
 	}
 }
