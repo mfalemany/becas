@@ -30,6 +30,7 @@ class ci_criterios_evaluacion extends becas_ci
 	function conf__cu_convocatorias(becas_ei_cuadro $cuadro)
 	{
 		$cuadro->set_datos(toba::consulta_php('co_convocatoria_beca')->get_convocatorias_todas());
+
 	}
 
 	function evt__cu_convocatorias__seleccion($seleccion)
