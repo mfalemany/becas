@@ -65,14 +65,62 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becas', --proyecto
-	'3046', --dep_id
+	'3189', --dep_id
 	'4343', --objeto_consumidor
-	'4344', --objeto_proveedor
-	'be_tipo_beca_criterio_eval', --identificador
-	'', --parametros_a
+	'2890', --objeto_proveedor
+	'be_convocatoria_beca', --identificador
+	NULL, --parametros_a
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
 	'1'  --orden
 );
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'3046', --dep_id
+	'4343', --objeto_consumidor
+	'4344', --objeto_proveedor
+	'be_tipo_beca_criterio_eval', --identificador
+	'', --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'2'  --orden
+);
 --- FIN Grupo de desarrollo 0
+
+------------------------------------------------------------
+-- apex_objeto_datos_rel_asoc
+------------------------------------------------------------
+
+--- INICIO Grupo de desarrollo 0
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'4343', --objeto
+	'193', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'2890', --padre_objeto
+	'be_convocatoria_beca', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'4344', --hijo_objeto
+	'be_tipo_beca_criterio_eval', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'1'  --orden
+);
+--- FIN Grupo de desarrollo 0
+
+------------------------------------------------------------
+-- apex_objeto_rel_columnas_asoc
+------------------------------------------------------------
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'4343', --objeto
+	'193', --asoc_id
+	'2890', --padre_objeto
+	'1896', --padre_clave
+	'4344', --hijo_objeto
+	'2191'  --hijo_clave
+);
