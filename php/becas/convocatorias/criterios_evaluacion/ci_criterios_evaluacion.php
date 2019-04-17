@@ -54,6 +54,7 @@ class ci_criterios_evaluacion extends becas_ci
 			$form_ml->set_solo_lectura();
 			$form_ml->desactivar_agregado_filas();
 			$form_ml->agregar_notificacion('No se pueden realizar modificaciones debido a que ya existen inscripciones a esta convocatoria','warning');
+			$this->pantalla()->eliminar_evento('guardar');
 		}
 
 	}
