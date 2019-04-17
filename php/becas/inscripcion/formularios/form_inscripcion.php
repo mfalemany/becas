@@ -8,6 +8,7 @@ class form_inscripcion extends becas_ei_formulario
 
 	function extender_objeto_js()
 	{
+		parent::extender_objeto_js();
 		echo "
 		
 		//---- Validacion de EFs -----------------------------------
