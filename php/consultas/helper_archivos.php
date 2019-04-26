@@ -4,7 +4,7 @@ class helper_archivos
 {
 	function subir_archivo($detalles = array(),$carpeta,$nombre_archivo)
 	{
-
+		$nombre_archivo = str_replace(array('/','%','\\','/',':','*','?','<','>','|'), '-', $nombre_archivo);
 		if(!count($detalles)){
 			return;
 		}
