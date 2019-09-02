@@ -108,18 +108,18 @@ class ci_edicion extends becas_ci
 
 	function conf__form_inscripcion(becas_ei_formulario $form)
 	{
-		//ei_arbol($this->s__convocatoria);
-		//asigno la convocatoria seleccionada por el usuario previamente
-		//$form->ef('id_convocatoria')->set_estado($this->s__convocatoria);
-
-		//Si la convocatoria está cerrada, obtengo todas las convocatorias para llenar el combo de selección de convocatoria (Sirve para cuando se quiere ver una postulación antigua).
-		$convs = (!isset($this->s__convocatoria) || $this->s__convocatoria['fecha_hasta'] < date('Y-m-d')) ? 
-					toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array(),FALSE) :
-					toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array(),TRUE);
-		$opciones['nopar'] = '-- Seleccione --'; 
-		foreach ($convs as $conv) {
-			$opciones[$conv['id_convocatoria']] = $conv['convocatoria']; 
+		/* SE EVALÚA SI HAY QUE CARGAR SOLO LA OPCION DE CONVOCATORIA ACTUAL O TODAS LAS ANTERIORES */
+		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		$opciones['nopar'] = '-- Seleccione --';
+		if($insc){
+			$opciones[$insc['id_convocatoria']] = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$insc['id_convocatoria']);
+		}else{
+			$convs = toba::consulta_php('co_convocatoria_beca')->get_convocatorias(array(),TRUE);
+			foreach ($convs as $conv) {
+				$opciones[$conv['id_convocatoria']] = $conv['convocatoria']; 
+			}
 		}
+		/* ================================================================================ */
 
 		$form->ef('id_convocatoria')->set_opciones($opciones);
 
