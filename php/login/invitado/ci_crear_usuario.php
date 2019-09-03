@@ -27,6 +27,7 @@ class ci_crear_usuario extends toba_ci
 
 	function evt__frm_datos_personales__modificacion($datos)
 	{
+		$datos['nro_documento'] = trim(str_replace('.','',$datos['nro_documento']));
 		$this->s__persona = $datos;
 		//var_dump(toba::proyecto()->get_parametro('usuario_subclase')); return false;
 		//verifico la disponibilidad del nombre de usuario
