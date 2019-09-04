@@ -925,6 +925,8 @@ class ci_edicion extends becas_ci
 		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
 
 		$this->get_datos('alumno','persona')->set($datos);
+		$this->get_datos('alumno','persona')->sincronizar();
+
 
 		$this->get_datos('alumno','persona')->resetear();
 		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
