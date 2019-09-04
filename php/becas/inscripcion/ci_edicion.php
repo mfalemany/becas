@@ -943,7 +943,7 @@ class ci_edicion extends becas_ci
 	function evt__form_cat_conicet_director__modificacion($datos)
 	{
 		$datos['nro_documento'] = $this->s__insc_actual['nro_documento_dir'];
-		$this->set_categoria_conicet($datos);
+		$this->set_categoria_conicet($datos);	
 	}
 
 	function conf__form_cat_conicet_codirector(becas_ei_formulario $form)
@@ -977,13 +977,15 @@ class ci_edicion extends becas_ci
 
 	//se usa para setear los tres formularios de categorias conicet
 	private function set_categoria_conicet($datos){
-		$cat = toba::consulta_php('co_cat_conicet_persona')->get_categoria_persona($datos['nro_documento']);
-		if(count($cat)){
-			$this->get_datos(NULL,'cat_conicet_persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
+		if(isset($datos['id_cat_conicet']) && isset($datos['lugar_trabajo'])){
+			$cat = toba::consulta_php('co_cat_conicet_persona')->get_categoria_persona($datos['nro_documento']);
+			if(count($cat)){
+				$this->get_datos(NULL,'cat_conicet_persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
+			}
+			$this->get_datos(NULL,'cat_conicet_persona')->set($datos);
+			$this->get_datos(NULL,'cat_conicet_persona')->sincronizar();
+			$this->get_datos(NULL,'cat_conicet_persona')->resetear();
 		}
-		$this->get_datos(NULL,'cat_conicet_persona')->set($datos);
-		$this->get_datos(NULL,'cat_conicet_persona')->sincronizar();
-		$this->get_datos(NULL,'cat_conicet_persona')->resetear();
 
 	}
 
