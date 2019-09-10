@@ -293,6 +293,7 @@ class ci_edicion extends becas_ci
 		
 		//seteo como obligatorios los campos necesarios
 		$form->ef('archivo_cuil')->set_obligatorio();
+		$form->ef('archivo_dni')->set_obligatorio();
 
 		//desactivo los efs innecesarios para un alumno
 		if($form->existe_ef('id_disciplina')){
@@ -309,6 +310,14 @@ class ci_edicion extends becas_ci
 			if(isset($alu['cuil'])){
 				$alu['cuil'] = str_replace("-","",$alu['cuil']);
 			}
+
+			//El campo archivo_dni no se guarda en la BD, solo se valida con la existencia del archivo
+			$archivo = toba::consulta_php('helper_archivos')->ruta_base()."/docum_personal/".$alu['nro_documento']."/dni.pdf";
+			
+			if(file_exists($archivo)){
+				$alu['archivo_dni'] = 'dni.pdf';
+			}	
+
 			$form->set_datos($alu);
 			
 			$form->set_efs_obligatorios(array('cuil','celular'));
@@ -320,6 +329,8 @@ class ci_edicion extends becas_ci
 			if(isset($alu['nombres'])){
 				$form->set_solo_lectura(array('nombres'));
 			}
+
+
 
 		}
 	}
@@ -334,7 +345,10 @@ class ci_edicion extends becas_ci
 							 	    'nombre'      => 'Titulo Grado.pdf') ,
 							  array('ef'          => 'archivo_cuil',
 							  	    'descripcion' => 'Constancia de CUIL',
-							  	    'nombre'      => 'CUIL.pdf')
+							  	    'nombre'      => 'CUIL.pdf'),
+							  array('ef'          => 'archivo_dni',
+							 	    'descripcion' => 'Copia de DNI',
+							 	    'nombre'      => 'dni.pdf')
 							);
 							 
 		$ruta = 'docum_personal/'.$datos['nro_documento'].'/';
@@ -362,7 +376,7 @@ class ci_edicion extends becas_ci
 			$form->set_datos($director);
 		}
 		$form->set_efs_obligatorios(array('cuil','celular'));
-		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 	}
 
@@ -406,7 +420,7 @@ class ci_edicion extends becas_ci
 			$form->set_datos($director);	
 		}
 		$form->set_efs_obligatorios(array('cuil','celular'));
-		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 		
 	}
@@ -458,7 +472,7 @@ class ci_edicion extends becas_ci
 		
 		
 		$form->set_efs_obligatorios(array('cuil','celular'));
-		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni'));
 		$form->set_solo_lectura(array('nro_documento'));
 	}
 
