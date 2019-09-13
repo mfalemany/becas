@@ -108,7 +108,9 @@ class ci_cambiar_clave extends becas_ci
 	}
 
 	function evt__form_cat_conicet__modificacion($datos){
-		$this->dep('datos')->tabla('be_cat_conicet_persona')->set($datos);
+		if($datos['id_cat_conicet'] && $datos['lugar_trabajo']){
+			$this->dep('datos')->tabla('be_cat_conicet_persona')->set($datos);
+		}
 	}
 
 	function extender_objeto_js()
