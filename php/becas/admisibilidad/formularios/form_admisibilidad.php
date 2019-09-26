@@ -17,7 +17,7 @@ class form_admisibilidad extends becas_ei_formulario
 		$archivo = 'docum_personal/'.$insc['nro_documento'].'/dni.pdf';
 
 		if(file_exists($base.$archivo)){
-			echo "<td><a class='enlace_boton' href='documentos/".$archivo."' target='_BLANK'>Ver DNI</a></td>";
+			echo "<td><a class='enlace_boton' href='/documentos/".$archivo."' target='_BLANK'>Ver DNI</a></td>";
 		}
 
 		if($insc['archivo_insc_posgrado']){
