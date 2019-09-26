@@ -25,7 +25,7 @@ class co_inscripcion_conv_beca
 			$where[] = 'insc.id_tipo_beca = '.quote($filtro['id_tipo_beca']);	
 		}
 		if(isset($filtro['nro_carpeta'])){
-			$where[] = 'lower(insc.nro_carpeta) = lower('.quote($filtro['id_tipo_beca']).")";	
+			$where[] = 'lower(insc.nro_carpeta) = lower('.quote($filtro['nro_carpeta']).")";	
 		}
 		if(isset($filtro['id_tipo_convocatoria'])){
 			$where[] = 'tip_con.id_tipo_convocatoria = '.quote($filtro['id_tipo_convocatoria']);	
