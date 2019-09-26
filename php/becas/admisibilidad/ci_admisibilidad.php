@@ -320,7 +320,6 @@ class ci_admisibilidad extends becas_ci
 	{
 		$this->get_datos('inscripcion')->sincronizar();
 		$this->get_datos('inscripcion')->resetear();
-		$this->disparar_limpieza_memoria();
 		$this->set_pantalla('pant_seleccion');
 
 	}
@@ -328,7 +327,6 @@ class ci_admisibilidad extends becas_ci
 	function evt__volver()
 	{
 		$this->get_datos('inscripcion')->resetear();
-		$this->disparar_limpieza_memoria();
 		$this->set_pantalla('pant_seleccion');
 	}
 
