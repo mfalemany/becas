@@ -24,6 +24,12 @@
 	color: #22F;
 }
 /* info_admisibilidad es la clase del contenedor en la pantalla de seguimiento de solicitud*/
+#tabla_documentacion tr td{
+	vertical-align: middle;
+	min-height: 22px;
+	display: inline-block;
+	margin-left: 10px;
+}
 #info_admisibilidad label{
 	font-size: 1.6em;
 	text-align: right;
@@ -176,12 +182,7 @@
 	margin: 0px;
 }
 
-#enlace_analitico{
-	margin: 0px auto 10px 162px;
-	position:absolute;
-	top: 142px;
-	left: 95px;
-}
+
 .derecha{
 	text-align: right;
 }
