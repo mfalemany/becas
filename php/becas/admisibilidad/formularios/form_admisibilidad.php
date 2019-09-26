@@ -17,6 +17,13 @@ class form_admisibilidad extends becas_ei_formulario
 			echo "<a id='enlace_analitico' class='enlace_boton' href='".$ruta.'Cert. Analitico.pdf'."' target='_BLANK'>Ver analítico</a>";
 		}
 
+		$base = toba::consulta_php('helper_archivos')->ruta_base();
+		$archivo = $base.'docum_personal/'.$insc['nro_documento'].'/dni.pdf';
+
+		if(file_exists($archivo)){
+			echo "<a id='enlace_dni' class='enlace_boton' href='".$archivo."' target='_BLANK'>Ver DNI</a>";
+		}
+
 		$this->generar_html_ef('porcentaje_aprobacion');
 		$this->generar_html_ef('mat_para_egresar');
 		$this->generar_html_ef('archivo_insc_posgrado');
