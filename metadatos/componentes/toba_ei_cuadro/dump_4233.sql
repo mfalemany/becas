@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_ei_cuadro', --clase
 	'22', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'cu_solicitudes', --subclase
+	'becas/admisibilidad/formularios/cu_solicitudes.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'ci_admisibilidad - cu_solicitudes', --nombre
