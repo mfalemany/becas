@@ -42,6 +42,16 @@ class co_docentes
 		return toba::db()->consultar($sql);
 	}
 
+	function buscar_docente_combo_editable($patron)
+	{
+		$sql = "SELECT pe.nro_documento, pe.apellido||', '||pe.nombres as ayn
+				FROM sap_cargos_persona AS cp
+				LEFT JOIN sap_personas AS pe ON pe.nro_documento = cp.nro_documento
+				WHERE pe.apellido ILIKE quitar_acentos('%".$patron."%')
+				OR pe.nombres ILIKE quitar_acentos('%".$patron."%')";
+		return toba::db()->consultar($sql);
+	}
+
 	static function get_ayn($params)
 	{
 		$sql = "SELECT
