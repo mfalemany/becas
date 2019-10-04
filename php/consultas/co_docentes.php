@@ -47,8 +47,8 @@ class co_docentes
 		$sql = "SELECT pe.nro_documento, pe.apellido||', '||pe.nombres as ayn
 				FROM sap_cargos_persona AS cp
 				LEFT JOIN sap_personas AS pe ON pe.nro_documento = cp.nro_documento
-				WHERE pe.apellido ILIKE quitar_acentos('%".$patron."%')
-				OR pe.nombres ILIKE quitar_acentos('%".$patron."%')";
+				WHERE quitar_acentos(pe.apellido) ILIKE quitar_acentos('%".$patron."%')
+				OR quitar_acentos(pe.nombres) ILIKE quitar_acentos('%".$patron."%')";
 		return toba::db()->consultar($sql);
 	}
 
