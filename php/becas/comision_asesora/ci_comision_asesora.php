@@ -6,8 +6,10 @@ class ci_comision_asesora extends becas_ci
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
-		$filtro = (isset($this->s__filtro)) ? $this->s__filtro : array();		
-		$cuadro->set_datos(toba::consulta_php('co_comision_asesora')->get_comisiones_asesoras($filtro));	
+		if(isset($this->s__filtro)){
+			$cuadro->set_datos(toba::consulta_php('co_comision_asesora')->get_comisiones_asesoras($this->s__filtro));
+		} 
+			
 	}
 
 	function evt__cuadro__eliminar($datos)
