@@ -89,6 +89,13 @@ class co_convocatoria_beca
 		}
 		return FALSE;
 	}
+
+	function get_id_ultima_convocatoria()
+	{
+		$sql = "select max(id_convocatoria) as id_convocatoria from be_convocatoria_beca";
+		$resultado = toba::db()->consultar_fila($sql);
+		return ($resultado['id_convocatoria']) ? $resultado['id_convocatoria'] : NULL;
+	}
 	
 
 
