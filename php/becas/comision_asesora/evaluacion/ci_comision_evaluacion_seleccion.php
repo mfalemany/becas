@@ -62,9 +62,9 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 
 			//quito la columna de puntajes
 			$cuadro->eliminar_columnas(array('puntaje_comision'));
-		}else{
+		}/*else{
 			$cuadro->eliminar_columnas(array('evaluado_comision'));
-		}
+		}*/
 		
 		$cuadro->set_datos(toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro));
 	}
