@@ -47,6 +47,9 @@ class co_inscripcion_conv_beca
 		if(isset($filtro['estado'])){
 			$where[] = 'insc.estado = '.quote($filtro['estado']);	
 		}
+		if(isset($filtro['estado_evaluacion'])){
+			$where[] = 'evaluado_comision = '.quote($filtro['estado_evaluacion']);	
+		}
 
 		$sql = "SELECT
 			insc.id_dependencia,
