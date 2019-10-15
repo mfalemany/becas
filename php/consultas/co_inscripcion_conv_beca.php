@@ -48,9 +48,13 @@ class co_inscripcion_conv_beca
 			$where[] = 'insc.estado = '.quote($filtro['estado']);	
 		}
 		if(isset($filtro['estado_evaluacion'])){
-			$where[] = 'evaluado_comision = '.quote($filtro['estado_evaluacion']);	
+			$clausula = ($filtro['estado_evaluacion'] == 'N') ? 'NOT EXISTS' : 'EXISTS';
+			$where[] = "$clausula (SELECT * FROM be_dictamen_detalle as det
+				where tipo_dictamen = 'C'
+				and det.nro_documento = insc.nro_documento
+				and det.id_tipo_beca = insc.id_tipo_beca
+				and det.id_convocatoria = insc.id_convocatoria)";	
 		}
-
 		$sql = "SELECT
 			insc.id_dependencia,
 			dep.nombre as dependencia,
@@ -134,7 +138,7 @@ class co_inscripcion_conv_beca
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);
 		}
-		//echo nl2br($sql);
+
 		return toba::db()->consultar($sql);
 	}
 
