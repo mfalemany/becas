@@ -12,7 +12,7 @@ class co_inscripcion_conv_beca
 			$where[] = 'insc.nro_documento = '.quote($filtro['nro_documento']);	
 		}
 		if(isset($filtro['postulante'])){
-			$where[] = 'becario.apellido||becario.nombres ILIKE '.quote('%'.$filtro['postulante'].'%');	
+			$where[] = 'quitar_acentos(becario.apellido||becario.nombres) ILIKE quitar_acentos('.quote('%'.$filtro['postulante'].'%').")";	
 		}
 
 		if(isset($filtro['id_convocatoria'])){
