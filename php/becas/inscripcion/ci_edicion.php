@@ -946,43 +946,6 @@ class ci_edicion extends becas_ci
 		$this->get_datos('alumno','persona')->cargar(array('nro_documento'=>$datos['nro_documento']));
 	}
 
-	//-----------------------------------------------------------------------------------
-	//---- form_cat_conicet_director ----------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-	function conf__form_cat_conicet_director(becas_ei_formulario $form)
-	{
-		$form->set_datos($this->get_categoria_conicet($this->s__insc_actual['nro_documento_dir']));
-	}
-
-	function evt__form_cat_conicet_director__modificacion($datos)
-	{
-		$datos['nro_documento'] = $this->s__insc_actual['nro_documento_dir'];
-		$this->set_categoria_conicet($datos);	
-	}
-
-	function conf__form_cat_conicet_codirector(becas_ei_formulario $form)
-	{
-		$form->set_datos($this->get_categoria_conicet($this->s__insc_actual['nro_documento_codir']));
-	}
-
-	function evt__form_cat_conicet_codirector__modificacion($datos)
-	{
-		$datos['nro_documento'] = $this->s__insc_actual['nro_documento_codir'];
-		$this->set_categoria_conicet($datos);
-	}
-
-	function conf__form_cat_conicet_subdirector(becas_ei_formulario $form)
-	{
-		$form->set_datos($this->get_categoria_conicet($this->s__insc_actual['nro_documento_subdir']));
-	}
-
-	function evt__form_cat_conicet_subdirector__modificacion($datos)
-	{
-		$datos['nro_documento'] = $this->s__insc_actual['nro_documento_subdir'];
-		$this->set_categoria_conicet($datos);
-	}
-
-	
 	//se usa para llenar los tres formularios de categoria conicet
 	private function get_categoria_conicet($nro_documento)
 	{
