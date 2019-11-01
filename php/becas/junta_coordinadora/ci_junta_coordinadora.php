@@ -5,6 +5,7 @@ class ci_junta_coordinadora extends becas_ci
 	protected $ruta_documentos; //url
 	protected $path_documentos; //ruta local
 	protected $s__solicitud;
+	protected $id_convocatoria;
 	//-----------------------------------------------------------------------------------
 	//---- Configuraciones --------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -14,6 +15,7 @@ class ci_junta_coordinadora extends becas_ci
 		//ubicacion del directorio donde se guardan los documentos
 		$this->ruta_documentos = 'http://becas.cyt.unne.edu.ar/documentos';
 		$this->path_documentos = '/mnt/datos/cyt';
+		$this->id_convocatoria = toba::consulta_php('co_convocatoria_beca')->get_id_ultima_convocatoria();
 	}
 
 	function evt__volver()
@@ -48,6 +50,7 @@ class ci_junta_coordinadora extends becas_ci
 		//Solo inscripciones cerradas y admitidas
 		$filtro['admisible'] = 'S';
 		$filtro['estado'] = 'C';
+		$filtro['id_convocatoria'] = $this->id_convocatoria;
 
 		$datos = toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro);
 		foreach($datos as $indice => $inscripcion){
@@ -81,6 +84,10 @@ class ci_junta_coordinadora extends becas_ci
 
 	function conf__form_filtro(becas_ei_formulario $form)
 	{
+		
+		$this->dep('form_filtro')->ef('id_convocatoria')->set_estado($this->id_convocatoria);
+		$this->dep('form_filtro')->set_solo_lectura(array('id_convocatoria'));
+		$this->s__filtro['id_convocatoria'] = $this->id_convocatoria;
 		if(isset($this->s__filtro)){
 			$form->set_datos($this->s__filtro);
 		}
