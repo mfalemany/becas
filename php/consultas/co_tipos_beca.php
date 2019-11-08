@@ -96,6 +96,13 @@ class co_tipos_beca
 		return toba::db()->consultar($sql);
 	}
 
+	function suma_puntaje_academico($id_tipo_beca)
+	{
+		$sql = "SELECT suma_puntaje_academico FROM be_tipos_beca WHERE id_tipo_beca = ".quote($id_tipo_beca);
+		$resultado = toba::db()->consultar_fila($sql);
+		return ($resultado['suma_puntaje_academico'] == 'S');
+	}
+
 	
 
 

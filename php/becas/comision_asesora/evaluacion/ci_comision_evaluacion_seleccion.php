@@ -54,10 +54,11 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 			//Si no es administrador, solo le muestro la última convocatoria y solo su area de conocimiento
 			$id_convocatoria = toba::consulta_php('co_convocatoria_beca')->get_id_ultima_convocatoria();
 			$this->dep('form_filtro')->ef('id_convocatoria')->set_estado($id_convocatoria);
+
 			$filtro['id_convocatoria'] = $id_convocatoria;
 			$filtro['id_area_conocimiento'] = toba::consulta_php('co_comision_asesora')->get_area_conocimiento_evaluador(toba::usuario()->get_id());	
+			
 			$this->dep('form_filtro')->ef('id_area_conocimiento')->set_estado($filtro['id_area_conocimiento']);
-
 			$this->dep('form_filtro')->set_solo_lectura(array('id_convocatoria','id_area_conocimiento'));
 
 			//quito la columna de puntajes

@@ -906,6 +906,10 @@ class ci_edicion extends becas_ci
 	function calcular_puntaje()
 	{
 		$datos = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
+		//Si es un tipo de beca que no suma puntaje por antecedentes academicos, suma 0.
+		if( ! toba::consulta_php('co_tipos_beca')->suma_puntaje_academico($datos['id_tipo_beca'])){
+			return 0;
+		}
 		if( ! $datos['id_tipo_beca']){
 			return false;
 		}

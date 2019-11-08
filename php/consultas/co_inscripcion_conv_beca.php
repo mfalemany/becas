@@ -138,7 +138,7 @@ class co_inscripcion_conv_beca
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);
 		}
-
+		
 		return toba::db()->consultar($sql);
 	}
 
