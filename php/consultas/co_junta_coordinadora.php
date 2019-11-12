@@ -33,6 +33,7 @@ class co_junta_coordinadora
 				    		insc.id_area_conocimiento,
 				    		ac.nombre as area_conocimiento,
 				    		per.nro_documento,
+				    		per.cuil,
 				            per.apellido||', '||per.nombres as postulante,
 				            tipbec.tipo_beca,
 				            dep.nombre as facultad,
