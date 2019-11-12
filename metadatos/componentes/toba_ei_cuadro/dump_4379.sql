@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_ei_cuadro', --clase
 	'22', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'cu_orden_merito', --subclase
+	'becas/junta_coordinadora/formularios/cu_orden_merito.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Orden de Mérito - cu_orden_merito', --nombre
