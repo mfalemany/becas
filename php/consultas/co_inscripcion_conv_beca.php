@@ -61,10 +61,13 @@ class co_inscripcion_conv_beca
 			insc.id_tipo_beca,
 			tip_bec.tipo_beca,
 			insc.nro_documento,
-			becario.apellido||', '||becario.nombres as becario,
+			initcap(becario.apellido)||', '||initcap(becario.nombres) as becario,
+			becario.cuil as becario_cuil,
 			becario.mail as mail_becario,
-			director.apellido||', '||director.nombres as director,
+			initcap(director.apellido)||', '||initcap(director.nombres) as director,
 			director.mail as mail_director,
+			initcap(codirector.apellido)||', '||initcap(codirector.nombres) as codirector,
+			initcap(subdirector.apellido)||', '||initcap(subdirector.nombres) as subdirector,
 			becario.id_tipo_doc,
 			insc.id_convocatoria,
 			conv.convocatoria,
@@ -85,6 +88,7 @@ class co_inscripcion_conv_beca
 			insc.nombre_inst_posgrado,
 			insc.titulo_carrera_posgrado,
 			insc.archivo_insc_posgrado,
+			insc.area_trabajo,
 			insc.nro_carpeta,
 			insc.observaciones,
 			insc.estado,
@@ -124,8 +128,9 @@ class co_inscripcion_conv_beca
 		FROM be_inscripcion_conv_beca as insc	
 		LEFT JOIN be_convocatoria_beca as conv on conv.id_convocatoria = insc.id_convocatoria
 		LEFT JOIN sap_personas as becario on becario.nro_documento = insc.nro_documento
-		LEFT JOIN sap_personas as director 
-			ON director.nro_documento = insc.nro_documento_dir
+		LEFT JOIN sap_personas as director ON director.nro_documento = insc.nro_documento_dir
+		LEFT JOIN sap_personas as codirector ON codirector.nro_documento = insc.nro_documento_codir
+		LEFT JOIN sap_personas as subdirector ON subdirector.nro_documento = insc.nro_documento_subdir
 		LEFT JOIN be_tipos_beca as tip_bec on tip_bec.id_tipo_beca = insc.id_tipo_beca
 		LEFT JOIN be_tipos_convocatoria as tip_con ON 
 			(tip_con.id_tipo_convocatoria = tip_bec.id_tipo_convocatoria 
