@@ -138,8 +138,13 @@ class co_inscripcion_conv_beca
 		LEFT JOIN sap_dependencia as dep ON (insc.id_dependencia = dep.id)
 		LEFT JOIN sap_area_conocimiento as area ON (insc.id_area_conocimiento = area.id)
 		LEFT JOIN be_carreras as carr ON (insc.id_carrera = carr.id_carrera)
-		LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario
-		ORDER BY admisible,becario";
+		LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario";
+		if(isset($filtro['campos_ordenacion'])){
+			$sql .= " ORDER BY ".$filtro['campos_ordenacion'];
+		}else{
+			$sql .= " ORDER BY admisible,becario";
+		}
+		
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);
 		}
@@ -404,6 +409,28 @@ class co_inscripcion_conv_beca
 				OR nro_documento_subdir = ".quote($nro_documento).")
 				AND beca_otorgada = 'S'";
 		return count(toba::db()->consultar($sql));
+	}
+
+	/**
+	 * Determina si una postulación (en base al tipo de beca) integra el orden de mérito. En el caso de las becas de PREGRADO, se divide por unidad académica y se cuentan los primeros diez. En el caso de Iniciación y Perfeccionamiento, se toman los primeros 10 puntajes
+	 * @param  array $postulante Array con los datos del postulante (debe tener al menos los valores id_tipo_beca,id_convocatoria y nro_documento)
+	 * @return boolean             
+	 */
+	function integra_orden_merito($postulante)
+	{
+		$filtro = array(
+						'limite_resultados' => 10, 
+						'id_convocatoria'   => $postulante['id_convocatoria'],
+						'id_tipo_beca'      => $postulante['id_tipo_beca']
+						);
+		
+		if($postulante['id_tipo_beca'] == 1){
+			$filtro['id_dependencia'] = $postulante['id_dependencia'];
+		}
+
+		$orden = toba::consulta_php('co_junta_coordinadora')->get_orden_merito($filtro);
+
+		return in_array($postulante['nro_documento'],array_column($orden, 'nro_documento'));
 	}
 
 	

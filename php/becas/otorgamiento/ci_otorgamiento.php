@@ -12,10 +12,16 @@ class ci_otorgamiento extends becas_ci
 
 	function conf__ml_postulantes(becas_ei_formulario_ml $form_ml)
 	{
+	
 		$form_ml->agregar_notificacion('Los cambios se aplicarán solo a los registros que tengan la casilla \'Seleccionado\' activada','info');
-		$filtro = array('admisible'=>'S','beca_otorgada'=>'N','id_tipo_beca'=>$this->s__filtro['id_tipo_beca']);
+
+		$filtro = array('admisible'=>'S','beca_otorgada'=>'N','id_tipo_beca'=>$this->s__filtro['id_tipo_beca'],'campos_ordenacion'=>'id_dependencia,becario');
 		$postulantes = toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro);
+
 		foreach($postulantes as $postulante){
+			if(toba::consulta_php('co_inscripcion_conv_beca')->integra_orden_merito($postulante)){
+				$postulante['seleccionado'] = 1;	
+			}
 			$form_ml->agregar_registro($postulante);
 		}
 	}

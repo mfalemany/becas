@@ -24,6 +24,7 @@ class co_junta_coordinadora
 			$where[] = 'lugar_trabajo_becario = '.quote($filtro['lugar_trabajo_becario']);
 		}
 
+
 	
 		$sql = "select *, 
 				    (case when (puntaje_junta <> 'No asignado') then puntaje_junta else puntaje_comision::varchar end)::decimal as puntaje_final
@@ -84,6 +85,9 @@ class co_junta_coordinadora
 				    )
 				) as tmp
 			order by puntaje_final desc";
+		if(isset($filtro['limite_resultados']) && is_numeric($filtro['limite_resultados']) ){
+			$sql .= " LIMIT ".$filtro['limite_resultados'];	
+		}
 			
 		if(count($where)){
 			$sql = sql_concatenar_where($sql,$where);
