@@ -23,6 +23,9 @@ class co_junta_coordinadora
 		if(isset($filtro['lugar_trabajo_becario'])){
 			$where[] = 'lugar_trabajo_becario = '.quote($filtro['lugar_trabajo_becario']);
 		}
+		if(isset($filtro['beca_otorgada'])){
+			$where[] = 'beca_otorgada = '.quote($filtro['beca_otorgada']);
+		}
 
 
 	
@@ -32,6 +35,7 @@ class co_junta_coordinadora
 				    select  insc.id_convocatoria,
 				    		insc.id_tipo_beca,
 				    		insc.id_area_conocimiento,
+				    		insc.beca_otorgada,
 				    		ac.nombre as area_conocimiento,
 				    		per.nro_documento,
 				    		per.cuil,
@@ -40,6 +44,7 @@ class co_junta_coordinadora
 				            dep.nombre as facultad,
 				            dep.id as id_dependencia,
 				            lugtrab.nombre as lugar_trabajo,
+				            case when insc.id_tipo_beca in (2,3) then lugtrab.nombre else dep.nombre end as lugar,
 				            insc.lugar_trabajo_becario,
 				            dir.apellido||', '||dir.nombres as director,
 				            case when (insc.puntaje < 0) then 'No corresponde' when (insc.puntaje >= 0) then insc.puntaje::varchar end as puntaje,
@@ -83,16 +88,26 @@ class co_junta_coordinadora
 				        and id_convocatoria = insc.id_convocatoria 
 				        and id_tipo_beca = insc.id_tipo_beca
 				    )
-				) as tmp
-			order by puntaje_final desc";
-		if(isset($filtro['limite_resultados']) && is_numeric($filtro['limite_resultados']) ){
-			$sql .= " LIMIT ".$filtro['limite_resultados'];	
+				) as tmp";
+			if(isset($filtro['campos_ordenacion'])){
+				foreach ($filtro['campos_ordenacion'] as $campo => $orden) {
+					$criterios_orden[] = $campo." ".$orden;
+				}
+				$sql .= " order by ".implode(', ',$criterios_orden);
+			}else{
+				$sql .= " order by puntaje_final DESC";
+			}
+
+			
+		if(isset($filtro['cantidad_becas']) && is_numeric($filtro['cantidad_becas']) ){
+			$sql .= " LIMIT ".$filtro['cantidad_becas'];	
 		}
 			
 		if(count($where)){
 			$sql = sql_concatenar_where($sql,$where);
 		}
 		return toba::db()->consultar($sql);
+		
 	}
 
 }

@@ -15,13 +15,40 @@ class ci_otorgamiento extends becas_ci
 	
 		$form_ml->agregar_notificacion('Los cambios se aplicarán solo a los registros que tengan la casilla \'Seleccionado\' activada','info');
 
-		$filtro = array('admisible'=>'S','beca_otorgada'=>'N','id_tipo_beca'=>$this->s__filtro['id_tipo_beca'],'campos_ordenacion'=>'id_dependencia,becario');
-		$postulantes = toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro);
+		$filtro = $this->s__filtro;
+		//Si la distribución de las becas es por facultad, los resultados se muestran ordenados de esa manera
+		if($filtro['distribucion'] == 'F'){
+			$filtro['campos_ordenacion'] = array('id_dependencia'=>'desc','puntaje_final'=>'desc');
+		}
 
+		unset($filtro['cantidad_becas']);
+		$postulantes = toba::consulta_php('co_junta_coordinadora')->get_orden_merito($filtro);
+
+		$primeros = array();
+						
 		foreach($postulantes as $postulante){
-			if(toba::consulta_php('co_inscripcion_conv_beca')->integra_orden_merito($postulante)){
-				$postulante['seleccionado'] = 1;	
+			if($filtro['distribucion'] == 'F'){
+				$lugar = $postulante['lugar'];
+				
+				//Se calculan los primeros N por facultad (se calcula solo una vez)
+				if(! isset($primeros[$lugar])){
+					$primeros[$lugar] = array_filter($postulantes,function($p) use ($lugar){
+						return ($p['lugar'] == $lugar);
+					});
+					$primeros[$lugar] = array_slice($primeros[$lugar],0,$this->s__filtro['cantidad_becas']);
+				}
+				//Si está entre los primeros N, se lo marca como seleccionado
+				if(in_array($postulante['nro_documento'],array_column($primeros[$lugar],'nro_documento'))){
+					$postulante['seleccionado'] = 1;	
+				}
+			}else{
+				$primeros = array_slice($postulantes,0,$this->s__filtro['cantidad_becas']);	
+				//Lo mismo, pero en un ranking general (cuando no es por facultad)
+				if(in_array($postulante['nro_documento'],array_column($primeros,'nro_documento'))){
+					$postulante['seleccionado'] = 1;	
+				}
 			}
+			
 			$form_ml->agregar_registro($postulante);
 		}
 	}

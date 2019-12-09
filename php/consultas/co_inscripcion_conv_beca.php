@@ -410,29 +410,5 @@ class co_inscripcion_conv_beca
 				AND beca_otorgada = 'S'";
 		return count(toba::db()->consultar($sql));
 	}
-
-	/**
-	 * Determina si una postulación (en base al tipo de beca) integra el orden de mérito. En el caso de las becas de PREGRADO, se divide por unidad académica y se cuentan los primeros diez. En el caso de Iniciación y Perfeccionamiento, se toman los primeros 10 puntajes
-	 * @param  array $postulante Array con los datos del postulante (debe tener al menos los valores id_tipo_beca,id_convocatoria y nro_documento)
-	 * @return boolean             
-	 */
-	function integra_orden_merito($postulante)
-	{
-		$filtro = array(
-						'limite_resultados' => 10, 
-						'id_convocatoria'   => $postulante['id_convocatoria'],
-						'id_tipo_beca'      => $postulante['id_tipo_beca']
-						);
-		
-		if($postulante['id_tipo_beca'] == 1){
-			$filtro['id_dependencia'] = $postulante['id_dependencia'];
-		}
-
-		$orden = toba::consulta_php('co_junta_coordinadora')->get_orden_merito($filtro);
-
-		return in_array($postulante['nro_documento'],array_column($orden, 'nro_documento'));
-	}
-
-	
 }
 ?>
