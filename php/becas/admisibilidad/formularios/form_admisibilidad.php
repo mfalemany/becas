@@ -27,6 +27,12 @@ class form_admisibilidad extends becas_ei_formulario
 			echo "<td><a href='".$ruta."Insc. o Compromiso Posgrado.pdf"."' class='enlace_boton' target='_BLANK'>Insc./Compromiso Posgrado</a></td>";
 		}
 
+		//Constancia de CUIL
+		$archivo = 'docum_personal/'.$insc['nro_documento'].'/CUIL.pdf';
+		if(file_exists($base.$archivo)){
+			echo "<td><a class='enlace_boton' href='/documentos/".$archivo."' target='_BLANK'>Ver DNI</a></td>";
+		}
+
 		echo "</tr><tr>";
 		//================= SECCION CVAR DIRECTORES ===================================
 		$ruta = toba::consulta_php('helper_archivos')->ruta_base();
