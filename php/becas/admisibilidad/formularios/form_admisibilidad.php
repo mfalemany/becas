@@ -9,6 +9,7 @@ class form_admisibilidad extends becas_ei_formulario
 		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
 		
 		$base = "/documentos/";
+		$ruta_base = toba::consulta_php('helper_archivos')->ruta_base();
 
 		//ANALITICO
 		if($insc['archivo_analitico']){
@@ -18,8 +19,9 @@ class form_admisibilidad extends becas_ei_formulario
 
 		//COPIA DNI
 		$archivo = 'docum_personal/'.$insc['nro_documento'].'/dni.pdf';
-		if(file_exists($base.$archivo)){
-			echo "<td><a class='enlace_boton' href='/documentos/".$archivo."' target='_BLANK'>Ver DNI</a></td>";
+
+		if(file_exists($ruta_base.$archivo)){
+			echo "<td><a class='enlace_boton' href='".$base.$archivo."' target='_BLANK'>Ver DNI</a></td>";
 		}
 
 		//INSCRIPCION A POSGRADO
@@ -29,8 +31,8 @@ class form_admisibilidad extends becas_ei_formulario
 
 		//Constancia de CUIL
 		$archivo = 'docum_personal/'.$insc['nro_documento'].'/CUIL.pdf';
-		if(file_exists($base.$archivo)){
-			echo "<td><a class='enlace_boton' href='/documentos/".$archivo."' target='_BLANK'>Ver DNI</a></td>";
+		if(file_exists($ruta_base.$archivo)){
+			echo "<td><a class='enlace_boton' href='".$base.$archivo."' target='_BLANK'>Ver CUIL</a></td>";
 		}
 
 		echo "</tr><tr>";
