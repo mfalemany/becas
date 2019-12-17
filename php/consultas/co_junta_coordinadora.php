@@ -24,7 +24,7 @@ class co_junta_coordinadora
 			$where[] = 'lugar_trabajo_becario = '.quote($filtro['lugar_trabajo_becario']);
 		}
 		if(isset($filtro['beca_otorgada'])){
-			$where[] = 'beca_otorgada = '.quote($filtro['beca_otorgada']);
+			$where[] = 'not exists (select * from be_becas_otorgadas where nro_documento = tmp.nro_documento and id_convocatoria = tmp.id_convocatoria and id_tipo_beca = tmp.id_tipo_beca)';
 		}
 
 
@@ -36,10 +36,19 @@ class co_junta_coordinadora
 				    		insc.id_tipo_beca,
 				    		insc.id_area_conocimiento,
 				    		insc.beca_otorgada,
+				    		bo.fecha_desde,
+				    		bo.fecha_hasta,
+				    		bo.fecha_toma_posesion,
+				    		bo.nro_resol,
+				    		bo.estado as estado_beca_otorgada,
+				    		case bo.estado 
+				    			when 'A' then 'Otorgada' 
+				    			when 'B' then 'Baja' 
+				    			else 'No otorgada' end as estado_beca_otorgada_desc,
 				    		ac.nombre as area_conocimiento,
 				    		per.nro_documento,
 				    		per.cuil,
-				            per.apellido||', '||per.nombres as postulante,
+				            upper(per.apellido)||', '||initcap(per.nombres) as postulante,
 				            tipbec.tipo_beca,
 				            dep.nombre as facultad,
 				            dep.id as id_dependencia,
@@ -78,6 +87,10 @@ class co_junta_coordinadora
 				    left join sap_dependencia as dep on dep.id = insc.id_dependencia
 				    left join sap_dependencia as lugtrab on lugtrab.id = insc.lugar_trabajo_becario
 				    left join sap_area_conocimiento as ac on ac.id = insc.id_area_conocimiento
+				    left join be_becas_otorgadas AS bo ON 
+				    	bo.id_convocatoria = insc.id_convocatoria AND
+				    	bo.id_tipo_beca = insc.id_tipo_beca AND
+				    	bo.nro_documento = insc.nro_documento
 				    where insc.estado = 'C'
 				    and insc.admisible = 'S'
 				    and exists(

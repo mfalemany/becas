@@ -15,7 +15,7 @@ class ci_otorgamiento extends becas_ci
 	
 		$form_ml->agregar_notificacion('Los cambios se aplicarán solo a los registros que tengan la casilla \'Seleccionado\' activada','info');
 
-		$filtro = $this->s__filtro;
+		$filtro = array_merge(array('beca_otorgada' => 'N'), $this->s__filtro);
 		//Si la distribución de las becas es por facultad, los resultados se muestran ordenados de esa manera
 		if($filtro['distribucion'] == 'F'){
 			$filtro['campos_ordenacion'] = array('id_dependencia'=>'desc','puntaje_final'=>'desc');
@@ -26,7 +26,7 @@ class ci_otorgamiento extends becas_ci
 
 		$primeros = array();
 						
-		foreach($postulantes as $postulante){
+		foreach($postulantes as $fila => $postulante){
 			if($filtro['distribucion'] == 'F'){
 				$lugar = $postulante['lugar'];
 				
@@ -48,13 +48,18 @@ class ci_otorgamiento extends becas_ci
 					$postulante['seleccionado'] = 1;	
 				}
 			}
-			
-			$form_ml->agregar_registro($postulante);
+			$form_ml->agregar_registro($postulante);	
+			//$datos[] = $postulante;
+
 		}
+		//$form_ml->set_datos($datos);
+		//$this->get_datos('becas_otorgadas')->cargar_con_datos($datos);
+
 	}
 
 	function evt__ml_postulantes__modificacion($datos)
 	{
+		
 		foreach($datos as $clave => $postulante){
 			if($datos[$clave]['seleccionado']){
 				$datos[$clave] = array_merge($postulante,$this->s__filtro);
@@ -62,6 +67,7 @@ class ci_otorgamiento extends becas_ci
 				unset($datos[$clave]);
 			}
 		}
+		
 		$this->get_datos('becas_otorgadas')->procesar_filas($datos);
 		
 	}
@@ -95,6 +101,8 @@ class ci_otorgamiento extends becas_ci
 	function evt__guardar()
 	{
 		$this->get_datos()->sincronizar();
+		$this->get_datos()->resetear();
+		$this->set_pantalla('pant_seleccion');
 	}
 
 	function evt__cancelar()
