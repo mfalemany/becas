@@ -60,7 +60,7 @@ class co_cumplim_obligaciones
 	}*/
 
 
-	function get_becarios_vigentes($dir)
+	function get_becarios_vigentes($dir = NULL)
 	{
 		$sql = "SELECT per.nro_documento, 
 					per.apellido||', '||per.nombres AS becario, 
@@ -78,9 +78,10 @@ class co_cumplim_obligaciones
 					AND ins.id_tipo_beca = ot.id_tipo_beca
 				LEFT JOIN sap_personas AS per ON per.nro_documento = ins.nro_documento
 				LEFT JOIN sap_dependencia AS dep ON dep.id = ins.id_dependencia
-				LEFT JOIN be_tipos_beca AS tb ON tb.id_tipo_beca = ins.id_tipo_beca
-				WHERE (ins.nro_documento_dir = ".quote($dir)." OR ins.nro_documento_codir = ".quote($dir)." OR ins.nro_documento_subdir = ".quote($dir).")";
-				;
+				LEFT JOIN be_tipos_beca AS tb ON tb.id_tipo_beca = ins.id_tipo_beca ";
+				if($dir){
+					$sql .= "WHERE (ins.nro_documento_dir = ".quote($dir)." OR ins.nro_documento_codir = ".quote($dir)." OR ins.nro_documento_subdir = ".quote($dir).")";
+				}
 		return toba::db()->consultar($sql);
 	}
 

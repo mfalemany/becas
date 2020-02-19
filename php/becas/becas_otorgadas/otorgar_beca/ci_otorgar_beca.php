@@ -67,18 +67,22 @@ class ci_otorgar_beca extends becas_ci
 
 	function conf__form_otorgar(becas_ei_formulario $form)
 	{
-		$datos = $this->get_datos('becas_otorgadas')->get();
+		$postulante = $this->get_datos('inscripcion_conv_beca')->get();
 		
 		//Para obtener las descripciones
-		$filtro = array('id_convocatoria'=>$datos['id_convocatoria'],'nro_documento'=>$datos['nro_documento'],'id_tipo_beca'=>$datos['id_tipo_beca']);
+		$filtro = array('id_convocatoria'=> $postulante['id_convocatoria'],
+						'nro_documento'  => $postulante['nro_documento'],
+						'id_tipo_beca'   => $postulante['id_tipo_beca']);
+		
+		//Obtengo las descripciones
+		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro);
+		$detalles = array_shift($detalles);
 
+		$datos = $this->get_datos('becas_otorgadas')->get();
 		if($datos){
-			//Obtengo las descripciones
-			$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_inscripciones($filtro);
-			
-			$detalles = array_merge($detalles[0],$datos);
-			$form->set_datos($detalles);
+			$detalles = array_merge($detalles,$datos);
 		}
+		$form->set_datos($detalles);
 	}
 
 	function evt__form_otorgar__modificacion($datos)

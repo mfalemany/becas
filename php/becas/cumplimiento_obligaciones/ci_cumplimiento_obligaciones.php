@@ -21,7 +21,7 @@ class ci_cumplimiento_obligaciones extends becas_ci
 	function conf__cu_seleccion(becas_ei_cuadro $cuadro)
 	{
 		$cuadro->agregar_notificacion('Seleccione un becario para poder registrar cumplimiento de obligaciones','info');
-		$dir = toba::usuario()->get_id();
+		$dir = ( ! in_array('admin', toba::usuario()->get_perfiles_funcionales()) ) ? toba::usuario()->get_id() : NULL;
 		$cuadro->set_datos(toba::consulta_php('co_cumplim_obligaciones')->get_becarios_vigentes($dir));
 	}
 
