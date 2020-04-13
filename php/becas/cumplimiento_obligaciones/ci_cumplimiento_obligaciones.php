@@ -119,5 +119,21 @@ class ci_cumplimiento_obligaciones extends becas_ci
 		$mail->set_html(TRUE);
 		$mail->enviar();
 	}
+	//-----------------------------------------------------------------------------------
+	//---- Configuraciones --------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__pant_edicion(toba_ei_pantalla $pantalla)
+	{
+		
+		$becario = toba::consulta_php('co_personas')->get_ayn($this->s__beca['nro_documento']);
+		$template = '
+		<div class="centrado"><h3 style="color:#ca2121; font-size:1.7em; margin:3px 0px;">'.$becario.'</h3></div>
+		<div style="width: 50%; margin: 10px auto">
+			[dep id=cu_cumplimientos]
+		</div>';
+		$pantalla->set_template($template);
+	}
+
 }
 ?>
