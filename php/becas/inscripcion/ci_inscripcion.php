@@ -79,7 +79,6 @@ class ci_inscripcion extends becas_ci
 			return;
 		}
 		$detalles = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_comprobante($clave);
-		//ei_arbol($detalles);
 		$reporte = new becas_inscripcion_comprobante($detalles);
 		$reporte->mostrar();
 

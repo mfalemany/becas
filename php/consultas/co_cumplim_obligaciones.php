@@ -85,6 +85,15 @@ class co_cumplim_obligaciones
 		return toba::db()->consultar($sql);
 	}
 
+	function get_cumplimientos($nro_documento,$id_convocatoria,$id_tipo_beca){
+		$sql = "SELECT * 
+				FROM be_cumplimiento_obligacion
+				WHERE nro_documento = ".quote($nro_documento)."
+				AND id_convocatoria = ".quote($id_convocatoria)."
+				AND id_tipo_beca = ".quote($id_tipo_beca);
+		return toba::db()->consultar($sql);
+	}
+
 	function get_duracion_meses_beca($inscripcion)
 	{
 		$sql = "SELECT 
@@ -126,6 +135,8 @@ class co_cumplim_obligaciones
 		return toba::db()->ejecutar($sql);
 
 	}
+
+
 
 }
 ?>

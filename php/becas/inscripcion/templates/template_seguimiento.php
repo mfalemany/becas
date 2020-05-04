@@ -109,7 +109,23 @@
 		<?php echo ($datos['admisibilidad']['beca_otorgada'] == 'S') ? 'Beca Otorgada! ' : 'Beca NO otorgada. '; ?>
 		Puntaje Total Alcanzado: <?php echo $puntos; ?> puntos.
 	</h2>
-
+	<?php endif; ?>
+	<br><br>
+	<?php if(count($datos['cumplimientos'])): ?>
+		<fieldset>
+			<legend>Cumplimiento de Obligaciones</legend>
+			<div style='font-size: 1.5em; padding-left: 20px; color:#39397d;'>
+				<p>Las obligaciones de los meses que se detallan a continuación fueron marcados por su director como cumplidas.</p>
+			</div>
+			<ul>
+				<?php foreach($datos['cumplimientos'] as $cumplimiento): ?>
+					<li style="font-size: 1.1em; font-weight: bold; padding: 4px 0px;">
+						<?php echo $this->get_mes_desc($cumplimiento['mes']); ?> de <?php echo $cumplimiento['anio'] ?>
+					</li>
+				<?php endforeach; ?>		
+			</ul>
+			
+		</fieldset>
 	<?php endif; ?>
 
 <?php endif; ?>	

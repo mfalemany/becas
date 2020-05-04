@@ -127,6 +127,10 @@ class co_comision_asesora
 	 */
 	function get_detalles_seguimiento($inscripcion)
 	{
+		$cumplimientos = toba::consulta_php('co_cumplim_obligaciones')->get_cumplimientos(
+			$inscripcion['nro_documento'],$inscripcion['id_convocatoria'],$inscripcion['id_tipo_beca']
+		);
+		
 		$where  = "WHERE padre.nro_documento = ".quote($inscripcion['nro_documento'])."
 					AND padre.id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
 					AND padre.id_convocatoria = ".quote($inscripcion['id_convocatoria']);
@@ -165,7 +169,14 @@ class co_comision_asesora
 				$where 
 				AND padre.tipo_dictamen = 'J'";
 		$datos['junta']['detalles'] = toba::db()->consultar($sql);
-		return array('admisibilidad' => $adm, 'dictamen' => $datos, 'inscripcion' => $inscripcion);
+
+		
+		return array(
+			'admisibilidad' => $adm, 
+			'dictamen'      => $datos, 
+			'inscripcion'   => $inscripcion, 
+			'cumplimientos' => $cumplimientos
+		);
 	}
 
 	/*$sql = "SELECT 
