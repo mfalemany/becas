@@ -90,7 +90,8 @@ class co_cumplim_obligaciones
 				FROM be_cumplimiento_obligacion
 				WHERE nro_documento = ".quote($nro_documento)."
 				AND id_convocatoria = ".quote($id_convocatoria)."
-				AND id_tipo_beca = ".quote($id_tipo_beca);
+				AND id_tipo_beca = ".quote($id_tipo_beca)."
+				ORDER BY anio DESC, mes DESC";
 		return toba::db()->consultar($sql);
 	}
 
