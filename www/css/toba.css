@@ -1,3 +1,8 @@
+/* EVITA EL BORDE NEGRO EN LOS INPUT DESPUES
+DE LA ACTUALIZACIÓN EN CHROME */
+input:focus, select:focus, textarea:focus, option {
+    outline: 1px solid #a8e9ff !important;
+}
 .ei-cuadro-fila{
 	padding: 7px 3px;
 }
