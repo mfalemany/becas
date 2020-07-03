@@ -87,7 +87,18 @@ class ci_otorgar_beca extends becas_ci
 
 	function evt__form_otorgar__modificacion($datos)
 	{
+		$this->get_datos('inscripcion_conv_beca')->set(
+			array(
+				'nro_documento_dir'    => $datos['nro_documento_dir'],
+				'nro_documento_codir'  => $datos['nro_documento_codir'],
+				'nro_documento_subdir' => $datos['nro_documento_subdir']
+			)
+		);
+		//Se agrega esta linea porque sino da error de concurrencia
+		//Cuando trata de actualizar becas_otorgadas, su fila padre ya cambió 
+		$this->get_datos('inscripcion_conv_beca')->sincronizar();
 		$this->get_datos('becas_otorgadas')->set($datos);
+
 	}
 
 	//-----------------------------------------------------------------------------------

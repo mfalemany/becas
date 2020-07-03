@@ -90,7 +90,7 @@ class co_personas
 		if($nro_documento){
 			$sql .= " AND per.nro_documento = ".quote($nro_documento);
 		}
-		if($id_tipo_doc){
+		if(isset($id_tipo_doc) && $id_tipo_doc) {
 			$sql .= " AND per.id_tipo_doc = ".quote($id_tipo_doc);
 		}
 		if($apellido){
@@ -112,7 +112,7 @@ class co_personas
 	static function get_ayn($nro_documento)
 	{
 		$sql = "SELECT
-			per.apellido||', '||per.nombres as persona
+			per.apellido||', '||per.nombres||' (DNI: '||per.nro_documento||')' as persona
 		FROM sap_personas as per
 		WHERE per.nro_documento = ".quote($nro_documento);
 		$resultado = toba::db()->consultar_fila($sql);
