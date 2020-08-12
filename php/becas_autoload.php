@@ -39,6 +39,8 @@ class becas_autoload
 		'becas_servicio_web' => 'extension_toba/componentes/becas_servicio_web.php',
 		'FPDF' => '3ros/fpdf/fpdf.php',
 		'becas_inscripcion_comprobante' => 'generadores_pdf/becas_inscripcion_comprobante.php',
+		//'pdfparser' => '3ros/pdfparser/vendor/autoload.php',
+		'ProcesadorRecibos' => '3ros/procesadorRecibos.php'
 	);
 }
 ?>
