@@ -2,6 +2,17 @@
 
 class helper_archivos
 {
+	function get_recibos_sueldo($nro_documento){
+		$ruta = '/mnt/datos/cyt/recibos_sueldo/';
+		$dir = opendir($ruta);
+		$recibos = array();
+		while ($archivo = readdir($dir)){
+			if(preg_match('/'.$nro_documento.'/',$archivo)){
+				$recibos[] = $archivo;
+			}
+		}
+		return $recibos;
+	}
 	function subir_archivo($detalles = array(),$carpeta,$nombre_archivo)
 	{
 		$nombre_archivo = str_replace(array('/','%','\\','/',':','*','?','<','>','|'), '-', $nombre_archivo);

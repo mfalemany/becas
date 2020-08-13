@@ -18,15 +18,9 @@ class ProcesadorRecibos{
 			}
 		}
 	}
-	function encontrar_mes($texto){
-		$meses = array('enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre');	
-		foreach ($meses as $indice => $mes) {
-			$pos = strpos($texto,$mes);
-			if($pos && $pos >= 0){
-				//El texto de los recibos dice por ejemplo: enerode2020. Con esto, se obtiene el mes y el año
-				return substr($texto,($pos+strlen($mes)+2),4)."-".str_pad($indice+1,2,'0',STR_PAD_LEFT).$mes;
-			}
-		} die;
+	function encontrar_fecha($texto){
+		$pos = strpos($texto,'fecha:');
+		return ($pos && $pos >= 0) ? substr($texto,($pos+6),10) : FALSE;
 	}
 
 	/**
@@ -58,10 +52,11 @@ class ProcesadorRecibos{
 			$texto = $this->lector->parseFile($archivo['tmp_name']);
 			$texto = str_replace(' ','',strtolower($texto->getText()));
 			$dni = $this->encontrar_dni($texto);
-			$mes = $this->encontrar_mes($texto);
+			$fecha = $this->encontrar_fecha($texto);
 			$recibo = $this->encontrar_nro_recibo($texto);
-			if($dni && $mes && $recibo){
-				if( ! move_uploaded_file($archivo['tmp_name'],"/mnt/datos/cyt/recibos_sueldo/{$dni}_{$recibo}_{$mes}.pdf")){
+			if($dni && $fecha && $recibo){
+				$fecha = str_replace('/','-',$fecha);
+				if( ! move_uploaded_file($archivo['tmp_name'],"/mnt/datos/cyt/recibos_sueldo/{$dni}_{$recibo}_{$fecha}.pdf")){
 					$errores[] = array('motivo' => 'Error al mover el archivo','archivo' => $archivos['name'][$i]);
 				}
 			}else{
