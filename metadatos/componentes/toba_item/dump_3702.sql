@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[3689]--  Otorgar/Modificar una beca 
+--[3702]--  Carga Masiva 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -10,10 +10,10 @@
 INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre, carpeta, nivel_acceso, solicitud_tipo, pagina_tipo_proyecto, pagina_tipo, actividad_buffer_proyecto, actividad_buffer, actividad_patron_proyecto, actividad_patron, nombre, descripcion, punto_montaje, actividad_accion, menu, orden, solicitud_registrar, solicitud_obs_tipo_proyecto, solicitud_obs_tipo, solicitud_observacion, solicitud_registrar_cron, prueba_directorios, zona_proyecto, zona, zona_orden, zona_listar, imagen_recurso_origen, imagen, parametro_a, parametro_b, parametro_c, publico, redirecciona, usuario, exportable, creacion, retrasar_headers) VALUES (
 	NULL, --item_id
 	'becas', --proyecto
-	'3689', --item
+	'3702', --item
 	NULL, --padre_id
 	'becas', --padre_proyecto
-	'3688', --padre
+	'3701', --padre
 	'0', --carpeta
 	'0', --nivel_acceso
 	'web', --solicitud_tipo
@@ -23,12 +23,12 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Otorgar/Modificar una beca', --nombre
+	'Carga Masiva', --nombre
 	NULL, --descripcion
 	'22', --punto_montaje
 	NULL, --actividad_accion
 	'1', --menu
-	'10', --orden
+	NULL, --orden
 	'0', --solicitud_registrar
 	NULL, --solicitud_obs_tipo_proyecto
 	NULL, --solicitud_obs_tipo
@@ -48,19 +48,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --redirecciona
 	NULL, --usuario
 	'0', --exportable
-	'2019-12-13 12:30:34', --creacion
+	'2020-08-21 18:07:32', --creacion
 	'0'  --retrasar_headers
 );
 --- FIN Grupo de desarrollo 0
-
-------------------------------------------------------------
--- apex_item_objeto
-------------------------------------------------------------
-INSERT INTO apex_item_objeto (item_id, proyecto, item, objeto, orden, inicializar) VALUES (
-	NULL, --item_id
-	'becas', --proyecto
-	'3689', --item
-	'4530', --objeto
-	'0', --orden
-	NULL  --inicializar
-);
