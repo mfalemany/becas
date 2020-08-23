@@ -158,7 +158,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
-	'38', --carga_consulta_php
+	NULL, --carga_consulta_php
 	NULL, --carga_sql
 	'sap', --carga_fuente
 	NULL, --carga_lista

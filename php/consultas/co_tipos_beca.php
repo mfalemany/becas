@@ -12,6 +12,7 @@ class co_tipos_beca
 			tip.id_tipo_beca,
 			tip_con.tipo_convocatoria,
 			tip.tipo_beca,
+			'('||tip_con.tipo_convocatoria||') '||tip.tipo_beca as tipo_conv_tipo_beca,
 			tip.duracion_meses,
 			tip.meses_present_avance,
 			tip.cupo_maximo,

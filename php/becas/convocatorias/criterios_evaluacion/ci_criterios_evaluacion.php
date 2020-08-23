@@ -2,6 +2,7 @@
 class ci_criterios_evaluacion extends becas_ci
 {
 	protected $s__conv_tiene_inscripciones;
+	protected $s__convocatoria_seleccionada;
 	//-----------------------------------------------------------------------------------
 	//---- Eventos ----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -35,6 +36,7 @@ class ci_criterios_evaluacion extends becas_ci
 
 	function evt__cu_convocatorias__seleccion($seleccion)
 	{
+		$this->s__convocatoria_seleccionada = $seleccion['id_convocatoria'];
 		$this->s__conv_tiene_inscripciones = toba::consulta_php('co_convocatoria_beca')->existen_inscripciones($seleccion['id_convocatoria']);
 		$this->get_datos()->cargar($seleccion);
 		$this->set_pantalla('pant_edicion');
@@ -43,6 +45,9 @@ class ci_criterios_evaluacion extends becas_ci
 	//-----------------------------------------------------------------------------------
 	//---- ml_criterios -----------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
+	function get_tipos_beca(){
+		return toba::consulta_php('co_tipos_beca')->get_tipos_beca_por_convocatoria($this->s__convocatoria_seleccionada);
+	}
 
 	function conf__ml_criterios(becas_ei_formulario_ml $form_ml)
 	{
