@@ -46,7 +46,9 @@ class co_antecedentes
 		if(isset($filtro['nro_documento'])){
 			$where[] = "ant.nro_documento = ".quote($filtro['nro_documento']);
 		}
-		$sql = "SELECT * FROM be_antec_trabajos_publicados AS ant";
+		$sql = "SELECT ant.*, tip.tipo_publicacion 
+				FROM be_antec_trabajos_publicados AS ant
+				LEFT JOIN sap_tipo_publicacion AS tip ON tip.id_tipo_publicacion = ant.id_tipo_publicacion";
 		if(count($where)){
 			$sql = sql_concatenar_where($sql,$where);
 		}
@@ -60,7 +62,9 @@ class co_antecedentes
 		if(isset($filtro['nro_documento'])){
 			$where[] = "ant.nro_documento = ".quote($filtro['nro_documento']);
 		}
-		$sql = "SELECT * FROM be_antec_present_reuniones AS ant";
+		$sql = "SELECT ant.*, tip.tipo_comunicacion
+				FROM be_antec_present_reuniones AS ant
+				LEFT JOIN sap_tipo_comunicacion_cient AS tip ON tip.id_tipo_comunicacion = ant.id_tipo_comunicacion";
 		if(count($where)){
 			$sql = sql_concatenar_where($sql,$where);
 		}

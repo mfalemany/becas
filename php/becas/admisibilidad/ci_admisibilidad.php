@@ -207,6 +207,21 @@ class ci_admisibilidad extends becas_ci
 				}
 			}
 		}
+		/* ================================= PARAMETRO MINIMO MATERIAS =============================== */
+		//Si la beca es de PRE-GRADO
+		if($insc['id_tipo_beca'] == 1){
+			$minimo_exigido = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('beca_pregrado_porcentaje_min_aprobacion');
+			if($minimo_exigido){
+				$clase_css_minimo_materias = 'etiqueta_success';
+				$porcentaje_aprobacion = $insc['materias_aprobadas'] / $insc['materias_plan'] * 100;
+				if(floatval($porcentaje_aprobacion) < floatval($minimo_exigido)){
+					$clase_css_minimo_materias = 'etiqueta_error';
+				}
+			}else{
+				$this->dep('form_admisibilidad')->agregar_notificacion('No se estableció un minimo exigible de materias aprobadas (parametro beca_pregrado_porcentaje_min_aprobacion en "tablas básicas" de SAP)','warning');
+			}
+		}
+
 
 
 		$template = "<table width='100%'>
@@ -214,6 +229,7 @@ class ci_admisibilidad extends becas_ci
 							<td style='vertical-align:'>
 								[dep id=form_admisibilidad]
 								[dep id=ml_requisitos]
+
 								<p class='".$clase_css_edad." centrado'>Edad del aspirante al 31 de Diciembre: ".$edad_asp." años.</p>
 								<p class='".$clase_css_dedic." centrado'>Mayor Dedicación</p>
 								<p class='".$clase_css_categ." centrado'>Grado/Categoría</p>";
@@ -222,9 +238,13 @@ class ci_admisibilidad extends becas_ci
 		if(isset($clase_css_insc_posgrado)){
 			$template .= 		"<p class='".$clase_css_insc_posgrado." centrado'>Inscripción o compromiso a un posgrado</p>";
 		}
+
 		//si el tipo de beca requiere un limite de materias adeudadas, se muestra la validacion
 		if(isset($clase_css_adeuda_materias)){
-			$template .= 		"<p class='".$clase_css_adeuda_materias." centrado'>Cantidad de materias que adeuda</p>";
+			$template .= "<p class='".$clase_css_adeuda_materias." centrado'>Cantidad de materias que adeuda</p>";
+		}
+		if(isset($clase_css_minimo_materias)){
+			$template .= "<p class='".$clase_css_minimo_materias." centrado'>Cantidad de materias aprobadas en su plan de estudios</p>";	
 		}							
 		$template .=		"</td>
 							<td style='vertical-align: top;'>

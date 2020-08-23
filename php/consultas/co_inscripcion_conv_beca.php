@@ -413,5 +413,25 @@ class co_inscripcion_conv_beca
 				AND beca_otorgada = 'S'";
 		return count(toba::db()->consultar($sql));
 	}
+
+	/*
+	Obtiene todos los tipos de publicación (para la pestaña "Trabajos Publicados")
+	 */
+	function get_tipos_publicacion()
+	{
+		$sql = "SELECT id_tipo_publicacion, tipo_publicacion FROM sap_tipo_publicacion WHERE disponible_becas = '1'";
+		return toba::db()->consultar($sql);
+	}
+
+		/*
+	Obtiene todos los tipos de comunicación científica (para la pestaña "Present. Reuniones Científicas")
+	 */
+	function get_tipos_comunicacion_cient()
+	{
+		$sql = "SELECT id_tipo_comunicacion, tipo_comunicacion FROM sap_tipo_comunicacion_cient";
+		return toba::db()->consultar($sql);
+	}
+
+	
 }
 ?>

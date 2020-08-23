@@ -11,8 +11,12 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 
 	function conf()
 	{
-		//ubicacion del directorio donde se guardan los documentos
-		$this->ruta_documentos = 'http://becas.cyt.unne.edu.ar/documentos';
+		//ubicacion del directorio donde se guardan los documentos (si tiene barra al final, se quita)
+		$base_documentos = toba::consulta_php('helper_archivos')->url_base();
+		if(substr($base_documentos,strlen($base_documentos)-1,1) === '/'){
+			$base_documentos = substr($base_documentos,0,strlen($base_documentos)-1);
+		}
+		$this->ruta_documentos = 'http://'.$_SERVER['HTTP_HOST'].$base_documentos;
 		$this->path_documentos = '/mnt/datos/cyt';
 	}
 

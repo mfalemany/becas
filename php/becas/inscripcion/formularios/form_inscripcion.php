@@ -70,7 +70,7 @@ class form_inscripcion extends becas_ei_formulario
 				if(this.ef('nro_documento').get_estado().length){
 					var params = {nro_documento : this.ef('nro_documento').get_estado(),
 								  id_tipo_beca  : this.ef('id_tipo_beca').get_estado()};
-					{$this->controlador()->objeto_js}.ajax('validar_edad',params,this,alertar_edad);
+					{$this->controlador()->objeto_js}.ajax('validar_edad',params,this,alertar_error);
 				}
 			}
 		}
@@ -81,7 +81,31 @@ class form_inscripcion extends becas_ei_formulario
 				notificacion.ventana_modal();
 				notificacion.limpiar();
 			}
-		}	
+		}
+		function alertar_error(respuesta){
+			console.log(respuesta);
+			if(respuesta.error){
+				notificacion.agregar(respuesta.mensaje,'error');
+				notificacion.ventana_modal();
+				notificacion.limpiar();
+				}else{
+					console.log(respuesta.mensaje);
+				}
+		}
+
+		{$this->objeto_js}.evt__materias_aprobadas__procesar = function(es_inicial)
+		{
+			if( ! es_inicial){
+				if(this.ef('id_tipo_beca').get_estado() != 1){
+					return;
+				}
+				if(this.ef('materias_aprobadas').get_estado() && this.ef('materias_plan').get_estado()){
+					var params = {materias_aprobadas : this.ef('materias_aprobadas').get_estado(),
+								  materias_plan      : this.ef('materias_plan').get_estado()};
+					{$this->controlador()->objeto_js}.ajax('validar_minimo_materias_exigidas',params,this,alertar_error);
+				}
+			}
+		}
 		
 		// ================== VALIDACIONES AL MOMENTO DE SUBMIT =======================================
 		

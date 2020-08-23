@@ -165,6 +165,7 @@ class ci_edicion extends becas_ci
 
 	function evt__form_inscripcion__modificacion($datos)
 	{
+
 		/* ================== UPLOAD DEL CERTIFICADO ANAL?ICO =================== */
 		$conv = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$datos['id_convocatoria']);
 		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$datos['id_tipo_beca']);
@@ -868,8 +869,24 @@ class ci_edicion extends becas_ci
 	{
 		//$mensaje = ($this->edad_permitida_para_beca($params['id_tipo_doc'],$params['nro_documento'],$params['id_tipo_beca']))? TRUE : FALSE;
 		$permitida = $this->edad_permitida_para_beca($params['nro_documento'],$params['id_tipo_beca']);
-		$respuesta->set($permitida);
+		if( ! $permitida){
+			$respuesta->set(array('error'=>1,'mensaje'=>'La persona indicada como postulante supera la edad límite para el tipo de beca al que intenta inscribirse. Esto hará que la inscripción resulte inadmisible.' ));
+		}else{
+			$respuesta->set(array('error'=>0,'mensaje'=>'La edad del postulante es correcta'));
+		}
 		
+	}
+
+	function ajax__validar_minimo_materias_exigidas($params, toba_ajax_respuesta $respuesta)
+	{
+		$exigido = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('beca_pregrado_porcentaje_min_aprobacion');
+		if($exigido){
+			if( ($params['materias_aprobadas'] / $params['materias_plan'] * 100) < floatval($exigido) ){
+				$respuesta->set(array('error'=>1,'mensaje'=>"Usted no cumple con el $exigido% de materias aprobadas exigidas para este tipo de becas. Por ello, su postulación podría resultar no admitida"));
+			}else{
+				$respuesta->set(array('error'=>0,'mensaje'=>'El postulante tiene las materias minimas exigidas'));
+			}
+		}
 	}
 
 	function ajax__requiere_inscripcion_posgrado($params, toba_ajax_respuesta $respuesta)

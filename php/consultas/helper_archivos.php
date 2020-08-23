@@ -32,7 +32,8 @@ class helper_archivos
 
 	function eliminar_archivo($archivo)
 	{
-		unlink($archivo);
+		$base = $this->ruta_base();
+		unlink($base.$archivo);
 	}
 
 	function procesar_campos($efs_archivos,&$datos_form,$ruta)
@@ -92,7 +93,7 @@ class helper_archivos
 				if($item[$nombre_input]){
 					//en el caso de una modificaci?, se elimina el archivo previo
 					if(isset($estado_inicial_ml)){
-						if($estado_inicial_ml[$nombre_input]){
+						if(array_key_exists($nombre_input, $estado_inicial_ml) && $estado_inicial_ml[$nombre_input]){
 							$this->eliminar_archivo($ruta,$estado_inicial_ml[$nombre_input]);	
 						}
 					}
