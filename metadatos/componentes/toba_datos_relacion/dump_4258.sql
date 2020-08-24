@@ -50,7 +50,7 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 	'0', --debug
 	NULL, --clave
 	'2', --ap
-	NULL, --punto_montaje
+	'22', --punto_montaje
 	NULL, --ap_clase
 	NULL, --ap_archivo
 	'0', --sinc_susp_constraints
@@ -73,6 +73,54 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
-	NULL  --orden
+	'1'  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becas', --proyecto
+	'3317', --dep_id
+	'4258', --objeto_consumidor
+	'4575', --objeto_proveedor
+	'sap_dependencia_autoridad', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'2'  --orden
 );
 --- FIN Grupo de desarrollo 0
+
+------------------------------------------------------------
+-- apex_objeto_datos_rel_asoc
+------------------------------------------------------------
+
+--- INICIO Grupo de desarrollo 0
+INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
+	'becas', --proyecto
+	'4258', --objeto
+	'216', --asoc_id
+	NULL, --identificador
+	'becas', --padre_proyecto
+	'4257', --padre_objeto
+	'sap_dependencia', --padre_id
+	NULL, --padre_clave
+	'becas', --hijo_proyecto
+	'4575', --hijo_objeto
+	'sap_dependencia_autoridad', --hijo_id
+	NULL, --hijo_clave
+	NULL, --cascada
+	'1'  --orden
+);
+--- FIN Grupo de desarrollo 0
+
+------------------------------------------------------------
+-- apex_objeto_rel_columnas_asoc
+------------------------------------------------------------
+INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
+	'becas', --proyecto
+	'4258', --objeto
+	'216', --asoc_id
+	'4257', --padre_objeto
+	'2062', --padre_clave
+	'4575', --hijo_objeto
+	'2634'  --hijo_clave
+);

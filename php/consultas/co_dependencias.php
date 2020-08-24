@@ -43,5 +43,10 @@ class co_dependencias
 
 	}
 
+	function get_cargos_dependencia()
+	{
+		return toba::db()->consultar("SELECT * FROM sap_dependencia_cargos");
+	}
+
 }
 ?>

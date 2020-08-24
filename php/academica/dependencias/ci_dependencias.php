@@ -86,6 +86,22 @@ class ci_dependencias extends becas_ci
 		$this->resetear();
 	}
 
-}
+	//-----------------------------------------------------------------------------------
+	//---- ml_autoridades ---------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
 
+	function conf__ml_autoridades(becas_ei_formulario_ml $form_ml)
+	{
+		$datos = $this->dep('datos')->tabla('sap_dependencia_autoridad')->get_filas();
+		if($datos){
+			$form_ml->set_datos($datos);
+		}
+	}
+
+	function evt__ml_autoridades__modificacion($datos)
+	{
+		$this->dep('datos')->tabla('sap_dependencia_autoridad')->procesar_filas($datos);
+	}
+
+}
 ?>
