@@ -20,6 +20,7 @@ class ci_inscripcion extends becas_ci
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
+		$cuadro->desactivar_modo_clave_segura();
 		$filtro = (isset($this->s__filtro)) ? $this->s__filtro : array();
 		
 		//si el usuario es becario, solo puede ver sus propias inscripciones
@@ -51,17 +52,12 @@ class ci_inscripcion extends becas_ci
 
 	function conf_evt__cuadro__ver_seguimiento(toba_evento_usuario $evento, $fila)
 	{
-		$clave = toba_ei_cuadro::recuperar_clave_fila('2948',$fila);
-		if(!$clave){
-			$evento->ocultar();
-			return;
-		}
-		//Si la postulación tiene al menos la admisibilidad hecha, entonces el usuario puede ver el botón
-		$tiene_admisibilidad = toba::consulta_php('co_inscripcion_conv_beca')->get_campo(array('admisible'),$clave);
-		if(in_array($tiene_admisibilidad[0]['admisible'],array('S','N') ) ){
+		list($nro_documento,$id_convocatoria,$id_tipo_beca) = explode('||',$evento->get_parametros());
+		$estado = toba::consulta_php('co_inscripcion_conv_beca')->get_estado_solicitud($id_convocatoria,$id_tipo_beca,$nro_documento);
+		if($estado == 'C'){
 			$evento->mostrar();
 		}else{
-			$evento->ocultar();	
+			$evento->ocultar();
 		}
 	}
 

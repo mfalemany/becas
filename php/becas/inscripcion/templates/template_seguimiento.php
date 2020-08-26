@@ -1,3 +1,18 @@
+<div>
+	<fieldset>
+		<legend>Aval de la Unidad Académica</legend>
+		<div style='font-size: 1.2em;'>
+			<?php $estados_aval = array(0=>'La Unidad Académica todavía no otorgó su aval',
+										1=>'La Secretaría correspondiente a su Unidad Académica ya avaló su postulación, pero falta el aval del Decanato.',
+										2=>'Su solicitud fue avalada por su Unidad Académica!'); 
+			$resultado_aval = (array_key_exists($datos['estado_aval'], $estados_aval)) ? $estados_aval[$datos['estado_aval']] : 'Su solicitud no fue avalada por su Unidad Académica. Por lo tanto no será admitida';
+			?>
+
+			<p style='font-size:1.4em;'><b><u>Aval de la solicitud:</u></b> <?php echo $resultado_aval; ?></p>
+		</div>
+		
+	</fieldset>
+</div>
 <?php if($datos['publicar_adm'] == 'S') : ?>
 <div>
 	<fieldset>
@@ -30,7 +45,7 @@
 	</fieldset>
 </div>
 <?php else: ?>
-<h1 style="text-align: center;">No hay movimientos de la solicitud para mostrar</h1>
+<!-- <h1 style="text-align: center;">No hay movimientos de la solicitud para mostrar</h1> -->
 <?php endif; ?>
 
 <?php if($datos['publicar_res'] == 'S') : ?>

@@ -17,6 +17,7 @@ class ci_seguimiento extends becas_ci
 			$datos = toba::consulta_php('co_comision_asesora')->get_detalles_seguimiento($insc);
 			$datos['publicar_adm'] = toba::consulta_php('co_convocatoria_beca')->get_campo('publicar_admisibilidad',$insc['id_convocatoria']);
 			$datos['publicar_res'] = toba::consulta_php('co_convocatoria_beca')->get_campo('publicar_resultados',$insc['id_convocatoria']);
+			$datos['estado_aval'] = toba::consulta_php('co_inscripcion_conv_beca')->get_estado_aval_solicitud($insc);
 		}
 		
 
