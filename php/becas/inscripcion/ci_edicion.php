@@ -377,7 +377,7 @@ class ci_edicion extends becas_ci
 			$form->set_datos($director);
 		}
 		$form->set_efs_obligatorios(array('cuil','celular'));
-		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni','id_nivel_academico'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 	}
 
@@ -421,7 +421,7 @@ class ci_edicion extends becas_ci
 			$form->set_datos($director);	
 		}
 		$form->set_efs_obligatorios(array('cuil','celular'));
-		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni','id_nivel_academico'));
 		$form->set_solo_lectura(array('nro_documento','apellido','nombres'));
 		
 	}
@@ -473,7 +473,7 @@ class ci_edicion extends becas_ci
 		
 		
 		$form->set_efs_obligatorios(array('cuil','celular'));
-		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni'));
+		$form->desactivar_efs(array('id_tipo_doc','fecha_nac','telefono','id_localidad','archivo_titulo_grado','archivo_cuil','archivo_dni','id_nivel_academico'));
 		$form->set_solo_lectura(array('nro_documento'));
 	}
 
@@ -493,6 +493,7 @@ class ci_edicion extends becas_ci
 	function conf__form_plan_trabajo(becas_ei_formulario $form)
 	{
 		if($this->get_datos('inscripcion','plan_trabajo')->get()){
+			ei_arbol($this->get_datos('inscripcion','plan_trabajo')->get());
 			$form->set_datos($this->get_datos('inscripcion','plan_trabajo')->get());
 		}
 	}
