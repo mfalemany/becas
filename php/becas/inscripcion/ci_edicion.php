@@ -493,7 +493,6 @@ class ci_edicion extends becas_ci
 	function conf__form_plan_trabajo(becas_ei_formulario $form)
 	{
 		if($this->get_datos('inscripcion','plan_trabajo')->get()){
-			ei_arbol($this->get_datos('inscripcion','plan_trabajo')->get());
 			$form->set_datos($this->get_datos('inscripcion','plan_trabajo')->get());
 		}
 	}
