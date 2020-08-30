@@ -41,7 +41,7 @@ class co_grupos
 	}
 
 	function get_grupos_combo_editable($patron){
-		return $this->get_grupos(array('patron'=>$patron),1);
+		return $this->get_grupos(array('patron'=>$patron));
 	}
 
 }

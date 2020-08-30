@@ -240,8 +240,9 @@ class co_inscripcion_conv_beca
 		$sql = "SELECT estado 
 				FROM be_inscripcion_conv_beca 
 				WHERE id_convocatoria = ".quote($id_convocatoria)."
-				AND id_convocatoria = ".quote($id_convocatoria)."
-				AND id_convocatoria = ".quote($id_convocatoria);
+				AND id_tipo_beca = ".quote($id_tipo_beca)."
+				AND nro_documento = ".quote($nro_documento);
+
 		$resultado = toba::db()->consultar_fila($sql);
 		return $resultado['estado'];
 	}

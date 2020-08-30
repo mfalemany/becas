@@ -14,12 +14,13 @@
 	</fieldset>
 </div>
 <?php if($datos['publicar_adm'] == 'S') : ?>
+<?php setlocale(LC_TIME,'es_AR.UTF-8');?>
 <div>
 	<fieldset>
 		<legend>Admisibilidad</legend>
 		<div id="info_admisibilidad">
 			<p class="caja_info_warning">
-				<u>ADMISIBILIDAD</u>: La admisibilidad es el proceso donde se verifica que el postulante cumpla con todas las condiciones y requisitos necesarios (establecidos en el <a href="http://www.unne.edu.ar/component/joomdoc/trabajando/becas-de-investigacion/nuevo-reglamento-de-becas-investigacion/download?Itemid=491" target="_BLANK">Reglamento</a>).&nbsp;Plazo para la presentaci&oacute;n de pedidos de reconsideraci&oacute;n: martes 9 de octubre 2018 por Mesa de Entrada y Salida de Rectorado con nota dirigida a la Dra. Leoni, Mar&iacute;a Silvia.
+				<u>ADMISIBILIDAD</u>: La admisibilidad es el proceso donde se verifica que el postulante cumpla con todas las condiciones y requisitos necesarios (establecidos en el <a href="http://www.unne.edu.ar/component/joomdoc/trabajando/becas-de-investigacion/nuevo-reglamento-de-becas-investigacion/download?Itemid=491" target="_BLANK">Reglamento</a>).&nbsp;Plazo para la presentaci&oacute;n de pedidos de reconsideraci&oacute;n: <?php echo strftime('%A %d de %B de %Y',strtotime($datos['fecha_limite_reconsideracion'])); ?> por Mesa de Entrada y Salida de Rectorado con nota dirigida a <?php echo ($datos['genero_secretario'] == 'M') ? 'el' : 'la'; ?> <?php echo $datos['nombre_secretario']; ?>
 			</p>
 		</div>
 
