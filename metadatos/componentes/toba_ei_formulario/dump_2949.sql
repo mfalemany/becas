@@ -1989,7 +1989,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_grupo', --identificador
 	'ef_combo_editable', --elemento_formulario
 	'id_grupo', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'5', --orden
 	'Grupo de Investigación', --etiqueta
