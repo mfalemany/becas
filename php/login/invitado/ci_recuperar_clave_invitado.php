@@ -37,7 +37,7 @@ class ci_recuperar_clave_invitado extends toba_ci
 
 
 		$mail = new toba_mail($datos_usuario['email'],'Recuperación de Contraseña',$cuerpo,'rhcyt');
-		$mail->set_configuracion_smtp('instalacion');
+		$mail->set_configuracion_smtp('instalacion2');
 		$mail->set_remitente('RR.HH. SGCyT');	
 		$mail->set_reply('rhcyt@unne.edu.ar');
 		$mail->set_html();
