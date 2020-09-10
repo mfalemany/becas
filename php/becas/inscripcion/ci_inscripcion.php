@@ -174,14 +174,14 @@ class ci_inscripcion extends becas_ci
 			array(
 				'pantalla'     => 'Director',
 				'campo'        => 'nro_documento_dir',
-				'obligatorios' => array('sexo','cuil','mail','celular','nivel_academico','id_disciplina','archivo_cvar')
+				'obligatorios' => array('sexo','cuil','mail','celular','id_disciplina','archivo_cvar')
 			)
 		);
 		if($inscripcion['nro_documento_codir']){
 			$obligatorios[] = array(
 				'pantalla'     => 'Co-Director',
 				'campo'        => 'nro_documento_codir',
-				'obligatorios' => array('sexo','cuil','mail','celular','nivel_academico','id_disciplina','archivo_cvar')
+				'obligatorios' => array('sexo','cuil','mail','celular','id_disciplina','archivo_cvar')
 			);
 		}
 
@@ -189,7 +189,7 @@ class ci_inscripcion extends becas_ci
 			$obligatorios[] = array(
 				'pantalla'     => 'Sub-Director',
 				'campo'        => 'nro_documento_subdir',
-				'obligatorios' => array('sexo','cuil','mail','celular','nivel_academico','id_disciplina','archivo_cvar')
+				'obligatorios' => array('sexo','cuil','mail','celular','id_disciplina','archivo_cvar')
 			);
 		}
 			
