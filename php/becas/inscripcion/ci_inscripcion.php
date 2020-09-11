@@ -230,7 +230,11 @@ class ci_inscripcion extends becas_ci
 			$mensaje .= "</ul>";
 			throw new toba_error('Faltan datos por completar: '.$mensaje);
 		}else{
-			toba::notificacion()->agregar('Se ha cerrado correctamente la solicitud. En la parte inferior de esta pantalla puede descargar el comprobante de inscripción, el cual debe ser entregado a la SGCyT.','info');
+			$mensaje = "<div>
+				<div style='font-size:2.3em; text-align: center; color: red;'>IMPORTANTE</div>
+				<div style='font-size:1.4em;'>Se ha cerrado correctamente su solicitud. NO ES NECESARIO IMPRIMIR EL FORMULARIO. Los avales de su postulación se realizarán completamente en linea. Por favor, comuniquese con su director para que lo haga desde su cuenta de SAP.</div>";
+			/*toba::notificacion()->agregar('Se ha cerrado correctamente la solicitud. En la parte inferior de esta pantalla puede descargar el comprobante de inscripción, el cual debe ser entregado a la SGCyT.','info');*/
+			toba::notificacion()->agregar($mensaje,'info');
 			$this->get_datos('inscripcion','inscripcion_conv_beca')->set(array('estado'=>'C'));
 			$this->evt__guardar();
 		}
