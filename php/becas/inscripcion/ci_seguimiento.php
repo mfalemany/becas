@@ -30,6 +30,20 @@ class ci_seguimiento extends becas_ci
 		$pantalla->set_template($template);
 	}
 
+	function get_estado_aval_desc($aval, $tipo_aval){
+		if($aval){
+			if($aval[$tipo_aval] === TRUE){
+				return "Avalado";
+			}elseif($aval[$tipo_aval] === FALSE){
+				return "No Avalado (rechazado)";
+			}else{
+				return "Todavía no se registró el aval";
+			}
+		}else{
+			return "Todavía no se registró el aval";
+		}
+	}
+
 	//-----------------------------------------------------------------------------------
 	//---- form_seguimiento -------------------------------------------------------------
 	//-----------------------------------------------------------------------------------

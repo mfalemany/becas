@@ -1,14 +1,16 @@
 <div>
 	<fieldset>
-		<legend>Aval de la Unidad Académica</legend>
+		<legend>Avales de la Postulación</legend>
 		<div style='font-size: 1.2em;'>
-			<?php $estados_aval = array(0=>'La Unidad Académica todavía no otorgó su aval',
-										1=>'La Secretaría correspondiente a su Unidad Académica ya avaló su postulación, pero falta el aval del Decanato.',
-										2=>'Su solicitud fue avalada por su Unidad Académica!'); 
-			$resultado_aval = (array_key_exists($datos['estado_aval'], $estados_aval)) ? $estados_aval[$datos['estado_aval']] : 'Su solicitud no fue avalada por su Unidad Académica. Por lo tanto no será admitida';
-			?>
-
-			<p style='font-size:1.4em;'><b><u>Aval de la solicitud:</u></b> <?php echo $resultado_aval; ?></p>
+			<p>Aval de el/la director/a de la beca:	
+				<span class="etiqueta_info"><?php echo $this->get_estado_aval_desc($datos['estado_aval'], 'aval_director'); ?></span>
+			</p>
+			<p>Aval de la Secretaría de Investigación:	
+				<span class="etiqueta_info"><?php echo $this->get_estado_aval_desc($datos['estado_aval'], 'aval_secretaria'); ?></span>
+			</p>
+			<p>Aval del Decanato:	
+				<span class="etiqueta_info"><?php echo $this->get_estado_aval_desc($datos['estado_aval'], 'aval_decanato'); ?></span>
+			</p>
 		</div>
 		
 	</fieldset>
@@ -145,3 +147,4 @@
 	<?php endif; ?>
 
 <?php endif; ?>	
+

@@ -2,33 +2,13 @@
 class co_inscripcion_conv_beca
 {
 	function get_estado_aval_solicitud($inscripcion){
-		$sql = "SELECT aval_secretaria, aval_decanato 
+		$sql = "SELECT aval_secretaria, aval_decanato, aval_director 
 			FROM be_inscripcion_avales 
 			WHERE nro_documento = ".quote($inscripcion['nro_documento'])."
 			AND id_tipo_beca    = ".quote($inscripcion['id_tipo_beca'])."
 			AND id_convocatoria = ".quote($inscripcion['id_convocatoria']);
-		$resultado = toba::db()->consultar_fila($sql);
-		//retorna 4 posibles estados: 
-		//	0 - No se ha registrado un aval
-		//	1 - Ya fue avalado por la Secretaría correspondiente
-		//	2 - Ya fue avalado por el Decanato (Estado final)
-		//	FALSE - La solicitud fue rechazada (se realizó el proceso de aval, pero fue negativo)
-		if( ! $resultado){
-			return 0;
-		}
-		
-		switch (array_values($resultado)) {
-			case array(true,null):
-				return 1;
-				break;
-			case array(true,true):
-				return 2;
-				break;
-			case array(true,false):
-			case array(false,null):
-				return FALSE;
-				break;
-		}
+		return toba::db()->consultar_fila($sql);
+	
 	}
 
 	function get_inscripciones($filtro = array())
