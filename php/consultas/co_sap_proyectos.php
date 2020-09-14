@@ -3,7 +3,9 @@ class co_sap_proyectos
 {
 	function get_proyectos($patron)
 	{
-		$sql = "SELECT id, descripcion FROM sap_proyectos WHERE descripcion ILIKE ".quote("%".$patron."%");
+		$sql = "SELECT id, descripcion 
+				FROM sap_proyectos 
+				WHERE quitar_acentos(descripcion) ILIKE '%'||quitar_acentos(".quote($patron).")||'%'";
 		return toba::db()->consultar($sql);
 	}
 
