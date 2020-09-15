@@ -8,6 +8,9 @@ class ci_edicion extends becas_ci
 	//protected $s__detalles_inscripcion;
 	function conf()
 	{
+		$this->agregar_notificacion('<b>Información importante</b>: una vez que cierre su postulación, su director/a deberá acceder al sistema (con su respectivo usuario) para avalar la postulación. De la misma manera lo harán el Secretario de Investigación y el Decano de la unidad académica correspondiente. <br> 
+			<div class="centrado"><img src="img/coronavirus1.png" height="36px" width="36px"></div>
+			<div style="color:#F00; text-align:center; font-weight:bold;">No debe imprimir, firmar ni presentar ninguna documentación en papel.</div><div class="centrado">Todo el proceso se realiza 100% en linea.</div>','warning');
 		$es_admin = in_array('admin',toba::usuario()->get_perfiles_funcionales());
 		//recupero la convocatoria seleccionada por el usuario
 		/*if(toba::memoria()->get_dato('id_convocatoria')){

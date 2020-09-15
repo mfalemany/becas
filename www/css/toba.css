@@ -394,6 +394,11 @@ input:focus, select:focus, textarea:focus, option {
 	color:#A22;
 }
 
+.ei-barra-sup-desc-warning{
+	background-color: #ffffc4;
+	font-size: 1.4em;
+}
+
 @media (max-width: 850px) {
   #logo_inicio{
     	
