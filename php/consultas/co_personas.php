@@ -130,7 +130,7 @@ class co_personas
 	 * @param  varchar $tipo          El par?etro tipo indica que tipo de persona se busca. En caso de ser alumno, si no se lo encuentra en la BD local, se lo importa desde el WS (a la base de personas y alumnos). En cambio, si se est?buscando un docente, y no se lo encuentra en local, se realiza el mismo proceso de busqueda en el WS pero luego se lo guarda en la tabla de personas y en la de docentes
 	 * @return boolean                Retorna true en caso de encontrar la persona (en local o en el ws). Falso en caso contrario
 	 */
-	function existe_persona($nro_documento)
+	function existe_persona($nro_documento,$busca_en_ws = TRUE)
 	{
 		if(!$nro_documento){
 			return false;
@@ -138,11 +138,13 @@ class co_personas
 		if($this->existe_en_local($nro_documento)){
 			return true;
 		}else{
-			$persona = $this->buscar_en_ws($nro_documento); 
-			if($persona){
-				return $this->guardar_en_local($persona);
-			}else{
-				return false;
+			if($busca_en_ws){
+				$persona = $this->buscar_en_ws($nro_documento); 
+				if($persona){
+					return $this->guardar_en_local($persona);
+				}else{
+					return false;
+				}
 			}
 		}
 	}
@@ -194,11 +196,18 @@ class co_personas
 			$datos['nro_documento'] = $guarani['nro_doc'];
 			$datos['apellido'] = utf8_decode(ucwords(strtolower($guarani['apellido'])));
 			$datos['nombres'] = utf8_decode(ucwords(strtolower($guarani['nombres'])));
-			$datos['fecha_nac'] = ($guarani['fecha_nac']) ? $guarani['fecha_nac'] : $datos['fecha_nac'];
+			if($guarani['fecha_nac']){
+				//Si la fecha viene en formato dd/mm/aaaa se invierte
+				if(substr($guarani['fecha_nac'],2,1) == '/'){
+					$partes = explode('/',$guarani['fecha_nac']);
+					$datos['fecha_nac'] = "{$partes[2]}-{$partes[1]}-{$partes[0]}";
+				}else{
+					$datos['fecha_nac'] = $guarani['fecha_nac'];
+				}
+			}
 			$datos['mail'] = ($guarani['email']) ? strtolower($guarani['email']) : '';
 			$datos['sexo'] = ($guarani['sexo']) ? $guarani['sexo'] : '';
-			$datos['cuil'] = 'XX'.$guarani['nro_doc']."X";
-
+			$datos['cuil'] = null;
 		}
 		
 		extract($datos);

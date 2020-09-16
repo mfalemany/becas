@@ -1,6 +1,31 @@
 <?php
 class co_inscripcion_conv_beca
 {
+	function existe_beca_otorgada($nro_documento, $id_convocatoria, $id_tipo_beca){
+		$sql = "SELECT *
+				FROM be_becas_otorgadas
+				WHERE id_convocatoria = ".quote($id_convocatoria)."
+				AND id_tipo_beca = ".quote($id_tipo_beca)."
+				AND nro_documento = ".quote($nro_documento)."
+				LIMIT 1";
+
+		$resultado = toba::db()->consultar_fila($sql);
+		return ($resultado !== FALSE);
+	}
+
+	function existe_inscripcion($nro_documento, $id_convocatoria, $id_tipo_beca){
+		$sql = "SELECT *
+				FROM be_inscripcion_conv_beca 
+				WHERE id_convocatoria = ".quote($id_convocatoria)."
+				AND id_tipo_beca = ".quote($id_tipo_beca)."
+				AND nro_documento = ".quote($nro_documento)."
+				LIMIT 1";
+
+		$resultado = toba::db()->consultar_fila($sql);
+		return ($resultado !== FALSE);
+	}
+
+
 	function get_estado_aval_solicitud($inscripcion){
 		$sql = "SELECT aval_secretaria, aval_decanato, aval_director 
 			FROM be_inscripcion_avales 
