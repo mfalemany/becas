@@ -90,9 +90,10 @@ class co_convocatoria_beca
 		return FALSE;
 	}
 
-	function get_id_ultima_convocatoria()
+	function get_id_ultima_convocatoria($solo_propias = FALSE)
 	{
 		$sql = "select max(id_convocatoria) as id_convocatoria from be_convocatoria_beca";
+		$sql .= ($solo_propias) ? ' where id_tipo_convocatoria = 3' : '';
 		$resultado = toba::db()->consultar_fila($sql);
 		return ($resultado['id_convocatoria']) ? $resultado['id_convocatoria'] : NULL;
 	}

@@ -1,6 +1,15 @@
 <?php
 class co_comision_asesora
 {
+	function es_integrante_comision_asesora($nro_documento)
+	{
+		$sql = "select * from be_comision_asesora_integrante where id_convocatoria = (
+					select max(id_convocatoria) from be_convocatoria_beca where id_tipo_convocatoria = 3
+				) and nro_documento = " . quote($nro_documento);
+
+		$resultado = toba::db()->consultar($sql);
+		return (count($resultado) > 0);
+	}
 
 	function get_comisiones_asesoras($filtro = array())
 	{
@@ -30,7 +39,7 @@ class co_comision_asesora
 				FROM be_comision_asesora_integrante AS inte
 				WHERE nro_documento = ".quote(toba::usuario()->get_id())."
 				--WHERE nro_documento = ".quote(toba::usuario()->get_id())."
-				AND id_convocatoria = (SELECT MAX(id_convocatoria) FROM be_convocatoria_beca)";
+				AND id_convocatoria = (SELECT MAX(id_convocatoria) FROM be_convocatoria_beca WHERE id_tipo_convocatoria = 3)";
 
 		$datos = toba::db()->consultar_fila($sql);
 		if(!$datos){

@@ -296,7 +296,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'4361', --objeto_ei_formulario
 	'becas', --objeto_ei_formulario_proyecto
 	'id_criterio_evaluacion', --identificador
-	'ef_fijo', --elemento_formulario
+	'ef_oculto', --elemento_formulario
 	'id_criterio_evaluacion', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio

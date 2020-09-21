@@ -389,7 +389,10 @@ class ci_login extends toba_ci
 			'becario' => array(),
 			'director_beca' => array(
 				array('clase' => 'co_inscripcion_conv_beca','metodo' => 'dirige_beca_otorgada','condicion' => "==TRUE")
-			)
+			)/*,
+			'integrante_comision_asesora' => array(
+				array('clase' => 'co_comision_asesora','metodo' => 'es_integrante_comision_asesora','condicion' => "===TRUE")
+			)*/
 		);
 		
 		//Para cada perfil
