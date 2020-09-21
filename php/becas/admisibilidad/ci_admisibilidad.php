@@ -106,6 +106,22 @@ class ci_admisibilidad extends becas_ci
 	{
 		$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
 		
+		/* =========================== AVALES ============================ */
+		$avales = toba::consulta_php('co_inscripcion_conv_beca')->get_estado_aval_solicitud($insc);
+		if($avales){
+			$avales_tmp = $avales;
+			$aval_completo = array_reduce($avales_tmp, function($estado,$aval){
+				return ($estado && $aval) ;
+			}, TRUE);
+			if( ! $aval_completo){
+				$this->mostrar_estado_avales($avales);
+				return;
+			}
+		}else{
+			toba::notificacion()->agregar('Esta postulación no recibió ningun aval','error');
+		}
+
+
 		/* esta variable va a contener todo lo necesario para determinar si la solicitud es admisible.
 		   Se compone de los datos de cargos del director y codirector, edad del aspirante, porcentaje
 		   de materias aprobadas del alumno, materias que adeuda para recibirse, si está inscripto a un posgrado,
@@ -353,7 +369,7 @@ class ci_admisibilidad extends becas_ci
 
 
 	//-----------------------------------------------------------------------------------
-	//---- Datos ------------------------------------------------------------------------
+	//---- AUXILIARES -------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------	
 
 
@@ -373,6 +389,21 @@ class ci_admisibilidad extends becas_ci
 			}
 		}
 	}
+
+	function mostrar_estado_avales($avales){
+		$dir = ($avales['aval_director']) ? "Avalado" : "No avalado";
+		$sec = ($avales['aval_secretaria']) ? "Avalado" : "No avalado";
+		$dec = ($avales['aval_decanato']) ? "Avalado" : "No avalado";
+		$msg = "Esta postulación no tuvo alguno de los avales necesarios:
+				<table border=1 style='margin: 10px auto; border-collapse: collapse;'>
+					<tr><td style='padding: 5px;'>Director Beca: </td><td style='padding: 5px;'>$dir</td></tr>
+					<tr><td style='padding: 5px;'>Sec. Investigación: </td><td style='padding: 5px;'>$sec</td></tr>
+					<tr><td style='padding: 5px;'>Decanato/Dir. Instituto: </td><td style='padding: 5px;'>$dec</td></tr>
+				</table>";
+		toba::notificacion()->agregar($msg);
+	}
+
+
 
 
 
