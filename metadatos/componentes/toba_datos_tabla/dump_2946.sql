@@ -200,10 +200,10 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'2946', --objeto
 	'1851', --col_id
 	'justif_codirector', --columna
-	'C', --tipo
+	'X', --tipo
 	'0', --pk
 	'', --secuencia
-	'400', --largo
+	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa
