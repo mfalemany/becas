@@ -115,7 +115,7 @@ class ci_admisibilidad extends becas_ci
 			}, TRUE);
 			if( ! $aval_completo){
 				$this->mostrar_estado_avales($avales);
-				return;
+				//return;
 			}
 		}else{
 			toba::notificacion()->agregar('Esta postulación no recibió ningun aval','error');
