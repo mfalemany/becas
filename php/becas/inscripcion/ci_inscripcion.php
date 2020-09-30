@@ -169,7 +169,7 @@ class ci_inscripcion extends becas_ci
 			array(
 				'pantalla'     => 'Alumno',
 				'campo'        => 'nro_documento',
-				'obligatorios' => array('sexo','cuil','mail','fecha_nac','celular','archivo_cuil')
+				'obligatorios' => array('sexo','cuil','mail','fecha_nac','celular','archivo_cuil','archivo_dni')
 			),
 			array(
 				'pantalla'     => 'Director',
