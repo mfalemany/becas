@@ -134,7 +134,7 @@ class ci_admisibilidad extends becas_ci
 
 		/* ================================== DIRECTOR ================================ */
 		$det = toba::consulta_php('co_personas')->get_resumen_director($insc['nro_documento_dir']);
-		$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_dir']);
+		$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_dir'],TRUE);
 		$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
 		$resumen_dir = $this->mostrar_detalles_director($detalles);
 		/* ============================================================================ */
@@ -148,7 +148,7 @@ class ci_admisibilidad extends becas_ci
 		/* ================================= CODIRECTOR =============================== */
 		if($insc['nro_documento_codir']){
 			$det = toba::consulta_php('co_personas')->get_resumen_director($insc['nro_documento_codir']);
-			$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_codir']);
+			$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_codir'],TRUE);
 			$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
 			$resumen_codir = $this->mostrar_detalles_director($detalles);	
 		
@@ -156,14 +156,13 @@ class ci_admisibilidad extends becas_ci
 			$this->set_datos_admisibilidad($datos_admisibilidad,$det,$detalles_cargos);
 		}
 		/* ============================================================================ */
-
 		unset($det);
 		unset($detalles_cargos);
 
 		/* ================================= SUBDIRECTOR =============================== */
 		if($insc['nro_documento_subdir']){
 			$det = toba::consulta_php('co_personas')->get_resumen_director($insc['nro_documento_subdir']);
-			$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_subdir']);
+			$detalles_cargos = toba::consulta_php('co_cargos_persona')->get_cargos_persona($insc['nro_documento_subdir'],TRUE);
 			$detalles = array_merge($det,array('cargos'=>$detalles_cargos));
 			$resumen_subdir = $this->mostrar_detalles_director($detalles);	
 
@@ -190,7 +189,7 @@ class ci_admisibilidad extends becas_ci
 		$clase_css_dedic = ($datos_admisibilidad['mayor_dedicacion']) ? "etiqueta_success" : "etiqueta_error";
 
 		//si no tiene una categoria de incentivos 1, 2 o 3
-		if( ! $datos_admisibilidad['cat_incentivos'] <= 3){
+		if($datos_admisibilidad['cat_incentivos'] > 3){
 			//debe ser magister o doctor (nivel academico 6 o 6)
 			if($datos_admisibilidad['nivel_academico'] >= 5){
 				$clase_css_categ = "etiqueta_success";
