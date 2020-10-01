@@ -189,7 +189,7 @@ class ci_admisibilidad extends becas_ci
 		$clase_css_dedic = ($datos_admisibilidad['mayor_dedicacion']) ? "etiqueta_success" : "etiqueta_error";
 
 		//si no tiene una categoria de incentivos 1, 2 o 3
-		if($datos_admisibilidad['cat_incentivos'] > 3){
+		if($datos_admisibilidad['cat_incentivos'] === null || $datos_admisibilidad['cat_incentivos'] > 3){
 			//debe ser magister o doctor (nivel academico 6 o 6)
 			if($datos_admisibilidad['nivel_academico'] >= 5){
 				$clase_css_categ = "etiqueta_success";
