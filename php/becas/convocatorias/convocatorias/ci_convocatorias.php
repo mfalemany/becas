@@ -48,7 +48,9 @@ class ci_convocatorias extends becas_ci
 	function conf__formulario(toba_ei_formulario $form)
 	{
 		if ($this->dep('datos')->esta_cargada()) {
-			$form->set_datos($this->dep('datos')->tabla('convocatoria_beca')->get());
+			$datos = $this->dep('datos')->tabla('convocatoria_beca')->get();
+			
+			$form->set_datos($datos);
 			$form->set_solo_lectura(array('id_tipo_convocatoria'));
 		} else {
 			$this->pantalla()->eliminar_evento('eliminar');
