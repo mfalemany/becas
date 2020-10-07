@@ -15,7 +15,7 @@ class ci_junta_coordinadora extends becas_ci
 		//ubicacion del directorio donde se guardan los documentos
 		$this->ruta_documentos = 'http://becas.cyt.unne.edu.ar/documentos';
 		$this->path_documentos = '/mnt/datos/cyt';
-		$this->id_convocatoria = toba::consulta_php('co_convocatoria_beca')->get_id_ultima_convocatoria();
+		$this->id_convocatoria = toba::consulta_php('co_convocatoria_beca')->get_id_ultima_convocatoria(TRUE);
 	}
 
 	function evt__volver()
