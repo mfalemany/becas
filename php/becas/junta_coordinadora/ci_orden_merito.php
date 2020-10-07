@@ -2,16 +2,20 @@
 class ci_orden_merito extends becas_ci
 {
 	protected $s__filtro;
+
+	function conf()
+	{
+		$id_conv = toba::consulta_php('co_convocatoria_beca')->get_id_ultima_convocatoria(TRUE);
+		$filtro = array('id_convocatoria'=>$id_conv);
+		$this->s__filtro = (isset($this->s__filtro)) ? array_merge($this->s__filtro,$filtro) : $filtro;
+	}
 	//-----------------------------------------------------------------------------------
 	//---- cu_orden_merito --------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 
 	function conf__cu_orden_merito(becas_ei_cuadro $cuadro)
 	{
-		$id_conv = toba::consulta_php('co_convocatoria_beca')->get_id_ultima_convocatoria(TRUE);
-		$filtro = array('id_convocatoria'=>$id_conv);
-		$filtro = (isset($this->s__filtro)) ? array_merfe($this->s__filtro,$filtro) : $filtro;
-		$datos = toba::consulta_php('co_junta_coordinadora')->get_orden_merito($filtro);
+		$datos = toba::consulta_php('co_junta_coordinadora')->get_orden_merito($this->s__filtro);
 		$cuadro->set_datos($datos);
 	}
 
