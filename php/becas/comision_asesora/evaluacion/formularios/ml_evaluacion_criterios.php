@@ -19,15 +19,11 @@ class ml_evaluacion_criterios extends becas_ei_formulario_ml
 		
 		function actualizar_total()
 		{
-			var asignados = 0;
-			for (id_fila in filas) {
-				var puntaje = {$this->objeto_js}.ef('puntaje').ir_a_fila(filas[id_fila]).get_estado();
-				if($.isNumeric(puntaje)){
-					asignados += puntaje;	
-				}
-				
-			}
-
+			//Hace una sumatoria de todos los campos de texto de puntaje (obtiene todos los textbox, con map obtiene la propiedad value de cada uno, y con reduce hace la suma);
+			asignados = Array.from(
+				document.querySelectorAll('input[id*=criteriospuntaje]'))
+				.map( elem => parseFloat(elem.value) || 0 )
+				.reduce( (acum,actual) => acum+actual);
 			
 			if(!isNaN(parseFloat($('#puntaje_inicial_valor').html()))){
 				final = asignados + parseFloat($('#puntaje_inicial_valor').html());
@@ -43,12 +39,13 @@ class ml_evaluacion_criterios extends becas_ei_formulario_ml
 		for (id_fila in filas) {
 			{$this->objeto_js}.ef('puntaje').ir_a_fila(filas[id_fila]).cuando_cambia_valor('actualizar_total()');
 		}	
-		
+
 		{$this->objeto_js}.evt__puntaje__validar = function(fila)
 		{
 			asignado = this.ef('puntaje').ir_a_fila(fila).get_estado();
 			maximo = this.ef('puntaje_maximo').ir_a_fila(fila).get_estado()
-			this.ef('puntaje').set_error('El puntaje asignado es mayor al máximo permitido (o el campo está vacío)');
+			this.ef('puntaje').ir_a_fila(fila)._rango = [[0,true],[maximo,true]];
+			this.ef('puntaje').set_error('El puntaje asignado está fuera de los límites permitidos');
 			return (asignado <= maximo) && (asignado >= 0) && (asignado.toString().length > 0);
 		}
 
