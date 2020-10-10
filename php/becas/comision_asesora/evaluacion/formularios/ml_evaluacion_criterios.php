@@ -44,9 +44,14 @@ class ml_evaluacion_criterios extends becas_ei_formulario_ml
 		{
 			asignado = this.ef('puntaje').ir_a_fila(fila).get_estado();
 			maximo = this.ef('puntaje_maximo').ir_a_fila(fila).get_estado()
-			this.ef('puntaje').ir_a_fila(fila)._rango = [[0,true],[maximo,true]];
-			this.ef('puntaje').set_error('El puntaje asignado está fuera de los límites permitidos');
-			return (asignado <= maximo) && (asignado >= 0) && (asignado.toString().length > 0);
+			//this.ef('puntaje').ir_a_fila(fila)._rango = [[0,true],[maximo,true]];
+			
+			if( (asignado >= 0) && (asignado <= maximo) && (asignado.toString().length > 0) ){
+				return true;
+			}else{
+				this.ef('puntaje').ir_a_fila(fila).set_error('El puntaje asignado está fuera de los límites permitidos');
+				return false;	
+			}
 		}
 
 		";
