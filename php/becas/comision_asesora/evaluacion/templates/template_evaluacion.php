@@ -23,6 +23,9 @@
 			<tr>	
 				<td>Área de Conocimiento</td><td colspan="3">{{area_conocimiento}}</td>
 			</tr>
+			<tr>	
+				<td>Grupo de Investigación</td><td colspan="3">{{denominacion_grupo}}</td>
+			</tr>
 		</table>
 	</div>
 	<div id="plan_trabajo">

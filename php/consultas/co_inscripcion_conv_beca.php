@@ -334,8 +334,12 @@ class co_inscripcion_conv_beca
 						insc.area_trabajo,
 						tipbec.requiere_insc_posgrado,
 						tipbec.suma_puntaje_academico,
-						tipbec.puntaje_academico_maximo
+						tipbec.puntaje_academico_maximo,
+						gr.denominacion as denominacion_grupo,
+						gr.fecha_inicio as fecha_inicio_grupo,
+						gr.fecha_fin as fecha_fin_grupo
 				FROM be_inscripcion_conv_beca AS insc
+				LEFT JOIN sap_grupo AS gr on gr.id_grupo = insc.id_grupo
 				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 				LEFT JOIN be_tipos_beca AS tipbec ON tipbec.id_tipo_beca = insc.id_tipo_beca
 				LEFT JOIN sap_area_conocimiento AS areacon ON areacon.id = insc.id_area_conocimiento

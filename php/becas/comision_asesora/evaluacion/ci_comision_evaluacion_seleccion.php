@@ -122,19 +122,20 @@ class ci_comision_evaluacion_seleccion extends becas_ci
 		
 		//la variable datos contendr?todos los valores que ir? al template
 		$datos = array(
-			'titulo_plan_beca'  => $detalles['beca']['titulo_plan_beca'],
-			'proyecto_nombre'   => $detalles['proyecto']['proyecto'],
-			'nombre_postulante' => $detalles['postulante']['apellido'].", ".$detalles['postulante']['nombres'],
-			'cuil'              => $detalles['postulante']['cuil'],
-			'carrera'           => $detalles['postulante']['carrera'],
-			'tipo_beca'         => ucwords(strtolower($detalles['beca']['tipo_beca'])),
-			'nro_carpeta'       => $detalles['beca']['nro_carpeta'],
-			'area_conocimiento' => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
-			'enlace_plan_trab'  => urldecode($plan),
-			'puntaje_inicial'   => $puntaje,
-			'puntaje_final'		=> $detalles['postulante']['puntaje_comision'],
-			'tipo_dictamen'     => 'Comisión'
+			'titulo_plan_beca'   => $detalles['beca']['titulo_plan_beca'],
+			'proyecto_nombre'    => $detalles['proyecto']['proyecto'],
+			'nombre_postulante'  => $detalles['postulante']['apellido'].", ".$detalles['postulante']['nombres'],
+			'cuil'               => $detalles['postulante']['cuil'],
+			'carrera'            => $detalles['postulante']['carrera'],
+			'tipo_beca'          => ucwords(strtolower($detalles['beca']['tipo_beca'])),
+			'nro_carpeta'        => $detalles['beca']['nro_carpeta'],
+			'area_conocimiento'  => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
+			'enlace_plan_trab'   => urldecode($plan),
+			'puntaje_inicial'    => $puntaje,
+			'puntaje_final'		 => $detalles['postulante']['puntaje_comision'],
+			'tipo_dictamen'      => 'Comisión'
 		);
+		$datos['denominacion_grupo'] = ($detalles['beca']['denominacion_grupo']) ? $detalles['beca']['denominacion_grupo'] : 'No incluído en un grupo de investigación';
 
 		//Obtengo los detalles del director de esta solicitud y genero el template con sus datos
 		$director = toba::consulta_php('co_inscripcion_conv_beca')->get_detalles_director($this->s__solicitud);
