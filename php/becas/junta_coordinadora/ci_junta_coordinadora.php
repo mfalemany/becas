@@ -122,17 +122,18 @@ class ci_junta_coordinadora extends becas_ci
 		
 		//la variable datos contendrá todos los valores que van al template
 		$datos = array(
-			'titulo_plan_beca'  => $detalles['beca']['titulo_plan_beca'],
-			'proyecto_nombre'   => $detalles['proyecto']['proyecto'],
-			'nombre_postulante' => $detalles['postulante']['apellido'].", ".$detalles['postulante']['nombres'],
-			'cuil'              => $detalles['postulante']['cuil'],
-			'carrera'           => $detalles['postulante']['carrera'],
-			'tipo_beca'         => ucwords(strtolower($detalles['beca']['tipo_beca'])),
-			'nro_carpeta'       => $detalles['beca']['nro_carpeta'],
-			'area_conocimiento' => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
-			'enlace_plan_trab'  => urldecode($plan),
-			'puntaje_inicial'   => $puntaje,
-			'tipo_dictamen'     => 'Junta Coordinadora'
+			'titulo_plan_beca'   => $detalles['beca']['titulo_plan_beca'],
+			'proyecto_nombre'    => $detalles['proyecto']['proyecto'],
+			'nombre_postulante'  => $detalles['postulante']['apellido'].", ".$detalles['postulante']['nombres'],
+			'cuil'               => $detalles['postulante']['cuil'],
+			'carrera'            => $detalles['postulante']['carrera'],
+			'tipo_beca'          => ucwords(strtolower($detalles['beca']['tipo_beca'])),
+			'nro_carpeta'        => $detalles['beca']['nro_carpeta'],
+			'area_conocimiento'  => ucwords(strtolower($detalles['beca']['area_conocimiento'])),
+			'enlace_plan_trab'   => urldecode($plan),
+			'puntaje_inicial'    => $puntaje,
+			'tipo_dictamen'      => 'Junta Coordinadora',
+			'denominacion_grupo' => ($detalles['beca']['denominacion_grupo']) ? $detalles['beca']['denominacion_grupo'] : 'No incluído en un grupo de investigación' 
 			
 		);
 
@@ -433,6 +434,21 @@ class ci_junta_coordinadora extends becas_ci
 		$this->get_datos('be_dictamen_detalle')->procesar_filas($datos);	
 	}
 
+	//-----------------------------------------------------------------------------------
+	//---- form_justif_comision ---------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_justif_comision(becas_ei_formulario $form)
+	{
+		$datos = $this->get_datos('be_dictamen')->get();
+		$datos = toba::consulta_php('co_comision_asesora')->get_dictamen($this->s__solicitud);
+		$form->set_datos($datos);
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- Auxiliares -------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
 	function get_datos($tabla = NULL)
 	{
 		return ($tabla) ? $this->dep('datos')->tabla($tabla) : $this->dep('datos');
@@ -451,6 +467,7 @@ class ci_junta_coordinadora extends becas_ci
 			})
 			";
 	}
-}
 
+
+}
 ?>

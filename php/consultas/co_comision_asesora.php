@@ -111,9 +111,12 @@ class co_comision_asesora
 			            --where nro_documento = any (string_to_array(dic.evaluadores,'/'))
 			            where nro_documento = any (string_to_array(dic.evaluadores,'/'))) 
 			        ,'/') as evaluadores,
-			        per.apellido||', '||per.nombres as usuario
-
-
+			        per.apellido||', '||per.nombres as usuario,
+			    	originalidad, 
+					claridad_formulacion_obj,
+					adecuacion_disenio,
+					factibilidad,
+					calidad_de_propuesta
 			    from be_dictamen as dic
 			    left join sap_personas as per on per.nro_documento = dic.usuario_id
 			    where dic.id_convocatoria = ".quote($inscripcion['id_convocatoria'])."

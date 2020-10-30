@@ -6,6 +6,7 @@
 <fieldset>
 	<legend style='font-size: 3em;'>Dictamen de la Junta Coordinadora</legend>
 	[dep id=form_evaluacion_criterios]
+	[dep id=form_justif_comision]
 	[dep id=form_evaluacion_junta]
 		
 </fieldset>
