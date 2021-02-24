@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[4589]--  DT - be_avance_beca 
+--[4589]--  DT - be_informe_beca 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'DT - be_avance_beca', --nombre
+	'DT - be_informe_beca', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -53,7 +53,7 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'be_avance_beca', --tabla
+	'be_informe_beca', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
@@ -72,21 +72,21 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4589', --objeto
-	'2690', --col_id
-	'id_avance', --columna
+	'2702', --col_id
+	'id_informe', --columna
 	'E', --tipo
 	'1', --pk
 	'be_avance_beca_id_avance_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	NULL, --externa
-	'be_avance_beca'  --tabla
+	'0', --externa
+	'be_informe_beca'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4589', --objeto
-	'2691', --col_id
+	'2703', --col_id
 	'fecha_presentacion', --columna
 	'F', --tipo
 	'0', --pk
@@ -94,27 +94,27 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	NULL, --externa
-	'be_avance_beca'  --tabla
+	'0', --externa
+	'be_informe_beca'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4589', --objeto
-	'2692', --col_id
-	'tipo_avance', --columna
+	'2704', --col_id
+	'tipo_informe', --columna
 	'C', --tipo
 	'0', --pk
 	'', --secuencia
 	'1', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	NULL, --externa
-	'be_avance_beca'  --tabla
+	'0', --externa
+	'be_informe_beca'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4589', --objeto
-	'2693', --col_id
+	'2705', --col_id
 	'nro_documento', --columna
 	'C', --tipo
 	'0', --pk
@@ -122,13 +122,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'15', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	NULL, --externa
-	'be_avance_beca'  --tabla
+	'0', --externa
+	'be_informe_beca'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4589', --objeto
-	'2694', --col_id
+	'2706', --col_id
 	'id_convocatoria', --columna
 	'E', --tipo
 	'0', --pk
@@ -136,13 +136,13 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	NULL, --externa
-	'be_avance_beca'  --tabla
+	'0', --externa
+	'be_informe_beca'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becas', --objeto_proyecto
 	'4589', --objeto
-	'2695', --col_id
+	'2707', --col_id
 	'id_tipo_beca', --columna
 	'E', --tipo
 	'0', --pk
@@ -150,7 +150,21 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	NULL, --externa
-	'be_avance_beca'  --tabla
+	'0', --externa
+	'be_informe_beca'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becas', --objeto_proyecto
+	'4589', --objeto
+	'2708', --col_id
+	'nro_informe', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'be_informe_beca'  --tabla
 );
 --- FIN Grupo de desarrollo 0

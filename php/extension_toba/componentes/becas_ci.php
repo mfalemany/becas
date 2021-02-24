@@ -13,5 +13,13 @@ class becas_ci extends toba_ci
 		include $archivo;
 		return ob_get_clean();
 	}
+	protected function soy_admin()
+	{
+		return in_array('admin', toba::usuario()->get_perfiles_funcionales());
+	}
+	function get_datos($tabla = NULL)
+	{
+		return $tabla ? $this->dep('datos')->tabla($tabla) : $this->dep('datos');
+	}
 }
 ?>
