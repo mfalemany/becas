@@ -80,9 +80,12 @@ class co_informes
 		$sql = "SELECT (oto.fecha_desde::date + (( (
 						SELECT meses_present_avance 
 						FROM be_tipos_beca 
-						WHERE id_tipo_beca = oto.id_tipo_beca)  * $nro_informe)*31)::integer 
+						WHERE id_tipo_beca = oto.id_tipo_beca)  * $nro_informe)*30)::integer 
 					) AS fecha_debe_ser_presentado
-				FROM be_becas_otorgadas as oto";
+				FROM be_becas_otorgadas as oto
+				WHERE oto.id_convocatoria = " . quote($postulacion['id_convocatoria']) . "
+				AND oto.id_tipo_beca = " . quote($postulacion['id_tipo_beca']) . "
+				AND oto.nro_documento = " . quote($postulacion['nro_documento']);
 		$resultado = toba::db()->consultar_fila($sql);
 		return (isset($resultado['fecha_debe_ser_presentado'])) ? $resultado['fecha_debe_ser_presentado'] : NULL;
 	}
@@ -112,7 +115,7 @@ class co_informes
 				'id_convocatoria'           => $postulacion['id_convocatoria'],
 				'id_tipo_beca'              => $postulacion['id_tipo_beca'],
 				'nro_documento'             => $postulacion['nro_documento'],
-				'nro_avance'                => $i, 
+				'nro_informe'               => $i, 
 				'tipo_informe'              => $tipo_informe,
 				'estado'                    => ($estado['existe']) ? 'Presentado' : 'No presentado', 
 				'fecha_debe_ser_presentado' => $estado['fecha_debe_ser_presentado'],

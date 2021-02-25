@@ -17,9 +17,14 @@ class becas_ci extends toba_ci
 	{
 		return in_array('admin', toba::usuario()->get_perfiles_funcionales());
 	}
-	function get_datos($tabla = NULL)
+	protected function get_datos($tabla = NULL)
 	{
 		return $tabla ? $this->dep('datos')->tabla($tabla) : $this->dep('datos');
+	}
+	protected function fecha_dmy($fecha_ymd)
+	{
+		$fecha = new Datetime($fecha_ymd);
+		return $fecha->format('d-m-Y');
 	}
 }
 ?>

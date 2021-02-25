@@ -82,7 +82,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'4589', --objeto_proveedor
 	'informe_beca', --identificador
 	NULL, --parametros_a
-	NULL, --parametros_b
+	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
 	'3'  --orden

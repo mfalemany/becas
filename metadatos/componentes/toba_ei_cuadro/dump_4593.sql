@@ -90,7 +90,7 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 	NULL, --titulo
 	NULL, --subtitulo
 	NULL, --sql
-	'id_convocatoria,id_tipo_beca,nro_documento', --columnas_clave
+	'id_convocatoria,id_tipo_beca,nro_documento,nro_informe', --columnas_clave
 	NULL, --columna_descripcion
 	'0', --clave_dbr
 	NULL, --archivos_callbacks
@@ -134,7 +134,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'becas', --objeto_cuadro_proyecto
 	'4593', --objeto_cuadro
 	'2045', --objeto_cuadro_col
-	'nro_avance', --clave
+	'nro_informe', --clave
 	'1', --orden
 	'Nro. Informe', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo

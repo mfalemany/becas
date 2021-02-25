@@ -3,7 +3,8 @@
 class helper_archivos
 {
 	function get_recibos_sueldo($nro_documento){
-		$ruta = '/mnt/datos/cyt/recibos_sueldo/';
+		$ruta_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
+		$ruta = $ruta_base . '/recibos_sueldo/';
 		$dir = opendir($ruta);
 		$recibos = array();
 		while ($archivo = readdir($dir)){
@@ -19,21 +20,22 @@ class helper_archivos
 		if(!count($detalles)){
 			return;
 		}
+		$ruta_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
 		
-		if( ! is_dir($this->ruta_base().$carpeta)){
-			if( ! mkdir($this->ruta_base().$carpeta,0777,TRUE)){
+		if( ! is_dir($ruta_base . "/" . $carpeta)){
+			if( ! mkdir($ruta_base . "/" . $carpeta,0777,TRUE)){
 				throw new toba_error('No se puede crear el directorio '.$carpeta.' en el directorio navegable del servidor. Por favor, pongase en contacto con el administrador del sistema');
 				return false;
 			}
 		}
 		$archivo = toba::proyecto()->get_www_temp($detalles['name']);
-		return move_uploaded_file($detalles['tmp_name'], $this->ruta_base().$carpeta."/".$nombre_archivo);
+		return move_uploaded_file($detalles['tmp_name'], $ruta_base."/".$carpeta."/".$nombre_archivo);
 	}
 
 	function eliminar_archivo($archivo)
 	{
-		$base = $this->ruta_base();
-		unlink($base.$archivo);
+		$base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
+		unlink($base. "/" .$archivo);
 	}
 
 	function procesar_campos($efs_archivos,&$datos_form,$ruta)
