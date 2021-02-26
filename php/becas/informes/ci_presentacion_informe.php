@@ -1,6 +1,18 @@
 <?php
 class ci_presentacion_informe extends becas_ci
 {
+	//Contiene un array del tipo ('plazo'=>'tipo_informes_permitidos'). Ej: array('P'=>'T','E'=>'A'): para presentacion, todos. Para evaluacion, solo de avances 
+	private $tipos_informe_permitidos;
+
+	//-----------------------------------------------------------------------------------
+	//---- Configuraciones --------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+	function conf(){
+		$plazos = toba::consulta_php('co_informes')->get_plazos(TRUE);
+		if(count($plazos)){
+			$this->tipos_informe_permitidos = array_column($plazos, 'tipo_informes','tipo_plazo');
+		}
+	}
 
 	//-----------------------------------------------------------------------------------
 	//---- Eventos ----------------------------------------------------------------------
@@ -38,6 +50,11 @@ class ci_presentacion_informe extends becas_ci
 
 	function conf__cu_informes(becas_ei_cuadro $cuadro)
 	{
+		$cuadro->desactivar_modo_clave_segura();
+		if( ! toba::consulta_php('co_informes')->hay_plazo_abierto_informes('P')){
+			$cuadro->set_eof_mensaje('No hay plazos vigentes para la presentación de informes de becas');
+			return;	
+		} 
 		$otorgada = $this->get_datos('becas_otorgadas')->get();
 		$cuadro->set_titulo(sprintf('Duracion de la beca: del %s al %s',$this->fecha_dmy($otorgada['fecha_desde']),$this->fecha_dmy($otorgada['fecha_hasta'])));
 		$cuadro->set_datos(toba::consulta_php('co_informes')->get_informes_postulacion($otorgada));
@@ -52,7 +69,18 @@ class ci_presentacion_informe extends becas_ci
 
 	function conf_evt__cu_informes__presentar(toba_evento_usuario $evento, $fila)
 	{
-		//Aca hay que validar la fecha de presentacion para mostrar/ocultar el evento
+		$params = explode('||',$evento->get_parametros());
+		//Si no hay plazos de presentación abiertos, no se muestra el botón
+		if( ! isset($this->tipos_informe_permitidos['P']) ){
+			$evento->ocultar();
+		}else{
+			//Si el tipo de informe actual, está dentro de los permitidos en el plazo abierto actualmente...
+			if($params[4] == $this->tipos_informe_permitidos['P'] || $this->tipos_informe_permitidos['P'] == 'T'){
+				$evento->mostrar();
+			}else{
+				$evento->ocultar();
+			}
+		}
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -77,7 +105,7 @@ class ci_presentacion_informe extends becas_ci
 		}
 	}
 
-	function evt__form_informe_beca__modificacion($datos)
+	function evt__form_informe_beca__guardar($datos)
 	{
 
 		if(isset($datos['archivo']) && $datos['archivo']){
@@ -91,6 +119,11 @@ class ci_presentacion_informe extends becas_ci
 			
 			toba::consulta_php('helper_archivos')->subir_archivo();
 		}
+	}
+
+	function evt__form_informe_beca__volver()
+	{
+		$this->set_pantalla('pant_seleccion_informe');
 	}
 
 }

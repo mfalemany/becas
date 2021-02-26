@@ -225,9 +225,21 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --eventos
 	NULL, --subclase
 	NULL, --subclase_archivo
-	NULL, --template
+	'<div style="width:50%; margin: 5px auto; font-size:1.4em;">
+	<p><b><u>Importante:</u></b> El archivo que presente debe ser PDF, y debe contener los siguientes items</p>
+	<ul>
+		<li>
+			Evaluacion del director</li>
+		<li>
+			Desarrollo de actividades</li>
+		<li>
+			Otras cosas</li>
+	</ul>
+</div>
+<div style="width:50%; margin: 30px auto;">
+	[dep id=form_informe_beca]</div>', --template
 	NULL, --template_impresion
-	NULL  --punto_montaje
+	'22'  --punto_montaje
 );
 --- FIN Grupo de desarrollo 0
 

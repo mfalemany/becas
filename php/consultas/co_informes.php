@@ -44,27 +44,7 @@ class co_informes
 		$meses_present_avance = toba::consulta_php('co_tipos_beca')->get_campo('meses_present_avance',$id_tipo_beca);
 		return intval($duracion_meses / $meses_present_avance);
 	}
-	private function get_where_informe($postulacion,$nro_informe)
-	{
-		//Datos necesarios para buscar un informe de beca
-		if( ! (isset($postulacion['id_convocatoria']) && 
-			isset($postulacion['id_tipo_beca']) && 
-			isset($postulacion['nro_documento'])) ){
-			throw new toba_error('No se recibieron los datos necesarios para buscar el informe de beca.');
-		}
-		//Condiciones
-		$where[] = 'id_convocatoria = ' . quote($postulacion['id_convocatoria']);
-		$where[] = 'id_tipo_beca = '    . quote($postulacion['id_tipo_beca']);
-		$where[] = 'nro_documento = '   . quote($postulacion['nro_documento']);
-		$where[] = 'nro_informe = '     . quote($nro_informe);
-		return $where;
-	}
 
-	private function existe_informe($postulacion, $nro_informe){
-		$where = $this->get_where_informe($postulacion, $nro_informe);
-		$sql = sql_concatenar_where("SELECT * FROM be_informe_beca LIMIT 1",$where);
-		return (count(toba::db()->consultar($sql)) > 0);
-	}
 	private function get_estado_evaluacion($postulacion,$nro_informe)
 	{
 		$where = $this->get_where_informe($postulacion, $nro_informe);
@@ -90,6 +70,76 @@ class co_informes
 		return (isset($resultado['fecha_debe_ser_presentado'])) ? $resultado['fecha_debe_ser_presentado'] : NULL;
 	}
 
+	function get_informes_postulacion($postulacion)
+	{
+		//Acá hay que ver como devuelvo un array con los informes que debe presentar la postulacion (solo aquellos para los cuales ya llegó la fecha)
+		$cant_informes = $this->get_cantidad_informes($postulacion['id_tipo_beca']);
+		$informes = array();
+		for($i=1; $i <= $cant_informes; $i++){
+			$estado = $this->estado_informe($postulacion,$i);
+
+			//Algunas variaciones dependiendo del tipo de informe (avance o final)
+			if($i == $cant_informes){
+				$tipo_informe = array('id'=>'F','desc'=>'Final');
+				//Si el informe es final, tiene 60 dias desde la fecha de fin de beca para presentar el informe
+				$fecha = new Datetime($estado['fecha_debe_ser_presentado']);
+				$fecha = $fecha->add(new DateInterval('P60D'));
+				$fecha_debe_ser_presentado = $fecha->format('Y-m-d');
+			}else{
+				$tipo_informe = array('id'=>'A','desc'=>'Avance');
+				$fecha_debe_ser_presentado = $estado['fecha_debe_ser_presentado'];
+			}
+			
+			$informes[] = array(
+				'id_convocatoria'           => $postulacion['id_convocatoria'],
+				'id_tipo_beca'              => $postulacion['id_tipo_beca'],
+				'nro_documento'             => $postulacion['nro_documento'],
+				'nro_informe'               => $i, 
+				'tipo_informe'              => $tipo_informe['desc'],
+				'id_tipo_informe'           => $tipo_informe['id'],
+				'estado'                    => ($estado['existe']) ? 'Presentado' : 'No presentado', 
+				'fecha_debe_ser_presentado' => $fecha_debe_ser_presentado,
+				'estado_eval'               => $estado['estado_eval']
+			);
+		}
+		return $informes;
+	}
+
+	function get_plazos($solo_vigentes = FALSE, $tipo_plazo = FALSE, $tipo_informes = FALSE)
+	{
+		$sql = "SELECT * FROM be_informe_plazos";
+		if($solo_vigentes){
+			$where[] = "CURRENT_DATE BETWEEN fecha_desde AND fecha_hasta";
+		}
+		if($tipo_plazo){
+			$where[] = "tipo_plazo = " . quote($tipo_plazo);
+		}
+		
+		if($tipo_informes){
+			$where[] = "tipo_informes = " . quote($tipo_informes);
+		}
+		
+		
+		$sql = sql_concatenar_where($sql,$where);
+		return toba::db()->consultar($sql);
+	}
+
+	private function get_where_informe($postulacion,$nro_informe)
+	{
+		//Datos necesarios para buscar un informe de beca
+		if( ! (isset($postulacion['id_convocatoria']) && 
+			isset($postulacion['id_tipo_beca']) && 
+			isset($postulacion['nro_documento'])) ){
+			throw new toba_error('No se recibieron los datos necesarios para buscar el informe de beca.');
+		}
+		//Condiciones
+		$where[] = 'id_convocatoria = ' . quote($postulacion['id_convocatoria']);
+		$where[] = 'id_tipo_beca = '    . quote($postulacion['id_tipo_beca']);
+		$where[] = 'nro_documento = '   . quote($postulacion['nro_documento']);
+		$where[] = 'nro_informe = '     . quote($nro_informe);
+		return $where;
+	}
+
 	protected function estado_informe($postulacion,$nro_informe)
 	{
 		$estado = array('existe'=>FALSE,'estado_eval'=>NULL,'fecha_debe_ser_presentado'=>NULL);
@@ -103,27 +153,20 @@ class co_informes
 		return $estado;
 	}
 
-	function get_informes_postulacion($postulacion)
-	{
-		//Acá hay que ver como devuelvo un array con los informes que debe presentar la postulacion (solo aquellos para los cuales ya llegó la fecha)
-		$cant_informes = $this->get_cantidad_informes($postulacion['id_tipo_beca']);
-		$informes = array();
-		for($i=1; $i <= $cant_informes; $i++){
-			$tipo_informe = ($i == $cant_informes) ? 'Final' : 'Avance';
-			$estado = $this->estado_informe($postulacion,$i);
-			$informes[] = array(
-				'id_convocatoria'           => $postulacion['id_convocatoria'],
-				'id_tipo_beca'              => $postulacion['id_tipo_beca'],
-				'nro_documento'             => $postulacion['nro_documento'],
-				'nro_informe'               => $i, 
-				'tipo_informe'              => $tipo_informe,
-				'estado'                    => ($estado['existe']) ? 'Presentado' : 'No presentado', 
-				'fecha_debe_ser_presentado' => $estado['fecha_debe_ser_presentado'],
-				'estado_eval'               => $estado['estado_eval']
-			);
-		}
-		return $informes;
+	private function existe_informe($postulacion, $nro_informe){
+		$where = $this->get_where_informe($postulacion, $nro_informe);
+		$sql = sql_concatenar_where("SELECT * FROM be_informe_beca LIMIT 1",$where);
+		return (count(toba::db()->consultar($sql)) > 0);
 	}
+
+	public function hay_plazo_abierto_informes($tipo_plazo)
+	{
+		return count($this->get_plazos(TRUE,$tipo_plazo));
+	}
+
+
+	
+
 
 }
 

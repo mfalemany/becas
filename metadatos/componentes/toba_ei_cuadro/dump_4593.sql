@@ -90,7 +90,7 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 	NULL, --titulo
 	NULL, --subtitulo
 	NULL, --sql
-	'id_convocatoria,id_tipo_beca,nro_documento,nro_informe', --columnas_clave
+	'id_convocatoria,id_tipo_beca,nro_documento,nro_informe,id_tipo_informe', --columnas_clave
 	NULL, --columna_descripcion
 	'0', --clave_dbr
 	NULL, --archivos_callbacks
