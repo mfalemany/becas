@@ -92,6 +92,8 @@ class ci_presentacion_informe extends becas_ci
 		$informe = $this->get_datos('informe_beca')->get();
 
 		$ruta_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
+		$url_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('url_base_documentos');
+
 		if( ! ($ruta_base && strlen($ruta_base) >0 && is_dir($ruta_base))){
 			throw new toba_error('No está definido el parámetro \'ruta_base_documentos\' en la configuración del sistema (o no es una ruta válida)');
 		}
@@ -100,25 +102,30 @@ class ci_presentacion_informe extends becas_ci
 			$informe['id_tipo_beca'],
 			$informe['nro_documento'],
 			$informe['nro_informe']);
-		if(file_exists($sub_ruta)){
-			$form->set_datos(array('archivo'=>$informe['nro_informe'].".pdf"));
+
+		$informe['archivo'] = (file_exists($ruta_base . $sub_ruta));
+
+		if($informe['archivo']){
+			$form->agregar_notificacion('Ya existe un documento cargado. Si quiere reemplazarlo, haga click en el botón "Cambiar el archivo", y luego seleccione uno nuevo.','warning');
 		}
+		$form->set_datos($informe);
 	}
 
 	function evt__form_informe_beca__guardar($datos)
 	{
-
-		if(isset($datos['archivo']) && $datos['archivo']){
+		if(isset($datos['archivo']) && $datos['archivo']['size'] > 0){
+			if(mime_content_type($datos['archivo']['tmp_name']) != 'application/pdf'){
+				throw new toba_error("El archivo que intenta cargar no es un documento PDF válido");
+			}
+			$carpeta = sprintf("/becas/doc_por_convocatoria/%s/%s/%s/informes",$datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['nro_documento']);
 			
-			//validar TIPO MIME DE ARCHIVOç
-			
-			$carpeta = sprintf("/becas/doc_por_convocatoria/%s/%s/%s/informes",
-			$informe['id_convocatoria'],
-			$informe['id_tipo_beca'],
-			$informe['nro_documento']);
-			
-			toba::consulta_php('helper_archivos')->subir_archivo();
+			if(toba::consulta_php('helper_archivos')->subir_archivo($datos['archivo'],$carpeta,$datos['nro_informe'].'.pdf')){
+				toba::notificacion()->agregar('Informe cargado con éxito!','info');
+			}else{
+				toba::notificacion()->agregar('Ocurrió un error al intentar presentar el informe','error');
+			}
 		}
+
 	}
 
 	function evt__form_informe_beca__volver()

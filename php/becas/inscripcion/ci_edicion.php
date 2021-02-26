@@ -170,9 +170,7 @@ class ci_edicion extends becas_ci
 	{
 
 		/* ================== UPLOAD DEL CERTIFICADO ANAL?ICO =================== */
-		$conv = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$datos['id_convocatoria']);
-		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$datos['id_tipo_beca']);
-		$ruta = 'becas/doc_por_convocatoria/'.$conv.'/'.$tipo_beca.'/'.$datos['nro_documento'].'/';
+		$ruta = 'becas/doc_por_convocatoria/'.$datos['id_convocatoria'].'/'.$datos['id_tipo_beca'].'/'.$datos['nro_documento'].'/';
 		$efs_archivos[] = array('ef'          => 'archivo_analitico',
 						  		'descripcion' => 'Certificado Analitico',
 						  		'nombre'      => 'Cert. Analitico.pdf'
@@ -316,7 +314,8 @@ class ci_edicion extends becas_ci
 			}
 
 			//El campo archivo_dni no se guarda en la BD, solo se valida con la existencia del archivo
-			$archivo = toba::consulta_php('helper_archivos')->ruta_base()."/docum_personal/".$alu['nro_documento']."/dni.pdf";
+			$ruta_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
+			$archivo = $ruta_base."/docum_personal/".$alu['nro_documento']."/dni.pdf";
 			
 			if(file_exists($archivo)){
 				$alu['archivo_dni'] = 'dni.pdf';
@@ -505,12 +504,8 @@ class ci_edicion extends becas_ci
 		if($datos['doc_probatoria']){
 			//detalles de la inscripcion
 			$insc = $this->get_datos('inscripcion','inscripcion_conv_beca')->get();
-			//nombre de la convocatoria
-			$convocatoria = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$insc['id_convocatoria']);
-			//nombre del tipo de beca
-			$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
 			//conformaci? de la ruta donde se almacenar?el plan de trabajo
-			$ruta = 'becas/doc_por_convocatoria/'.$convocatoria.'/'.$tipo_beca.'/'.$insc['nro_documento'].'/';
+			$ruta = 'becas/doc_por_convocatoria/'.$insc['id_convocatoria'].'/'.$insc['id_tipo_beca'].'/'.$insc['nro_documento'].'/';
 			//campos que contienen archivos
 			$efs_archivos = array(array('ef'          => 'doc_probatoria',
 										'descripcion' => 'Plan de Trabajo',

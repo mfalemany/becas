@@ -46,7 +46,7 @@ class helper_archivos
 			
 				if($datos_form[$archivo['ef']]){
 					if( ! $this->subir_archivo($datos_form[$archivo['ef']],utf8_encode($ruta),$archivo['nombre'])){
-						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretar? General de Ciencia y T?nica');
+						toba::notificacion()->agregar('No se pudo cargar el archivo '.$archivo['descripcion'].'. Por favor, intentelo nuevamente. Si el problema persiste, pongase en contacto con la Secretaría General de Ciencia y Ténica');
 					}else{
 						$datos_form[$archivo['ef']] = $archivo['nombre'];
 					}
@@ -130,14 +130,14 @@ class helper_archivos
 		}
 	}
 
-	function ruta_base()
+/*	function ruta_base()
 	{
 		return '/mnt/datos/cyt/';
 	}
 	function url_base()
 	{
 		return '/documentos/';
-	}
+	}*/
 
 }
 

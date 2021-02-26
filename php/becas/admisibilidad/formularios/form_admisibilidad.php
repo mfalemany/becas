@@ -8,8 +8,9 @@ class form_admisibilidad extends becas_ei_formulario
 		$conv = toba::consulta_php('co_convocatoria_beca')->get_campo('convocatoria',$insc['id_convocatoria']);
 		$tipo_beca = toba::consulta_php('co_tipos_beca')->get_campo('tipo_beca',$insc['id_tipo_beca']);
 		
-		$base = "/documentos/";
-		$ruta_base = toba::consulta_php('helper_archivos')->ruta_base();
+		$base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('url_base_documentos');
+		$base .= "/";
+		$ruta_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
 
 		//ANALITICO
 		if($insc['archivo_analitico']){
