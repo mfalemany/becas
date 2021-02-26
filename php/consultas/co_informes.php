@@ -47,10 +47,8 @@ class co_informes
 
 	private function get_estado_evaluacion($postulacion,$nro_informe)
 	{
-		$where = $this->get_where_informe($postulacion, $nro_informe);
-		$sql = sql_concatenar_where("SELECT estado_eval FROM be_informe_beca LIMIT 1",$where);
-		$resultado = toba::db()->consultar_fila($sql);
-		return (isset($resultado['estado_eval'])) ? $resultado['estado_eval'] : NULL;
+		//Aca hay que determinar el estado de evaluacion, en base a las evaluaciones realizadas
+		return FALSE;
 	}
 
 	private function get_fecha_debe_ser_presentado($postulacion,$nro_informe)
@@ -95,8 +93,8 @@ class co_informes
 				'id_tipo_beca'              => $postulacion['id_tipo_beca'],
 				'nro_documento'             => $postulacion['nro_documento'],
 				'nro_informe'               => $i, 
-				'tipo_informe'              => $tipo_informe['desc'],
-				'id_tipo_informe'           => $tipo_informe['id'],
+				'tipo_informe'              => $tipo_informe['id'],
+				'tipo_informe_desc'         => $tipo_informe['desc'],
 				'estado'                    => ($estado['existe']) ? 'Presentado' : 'No presentado', 
 				'fecha_debe_ser_presentado' => $fecha_debe_ser_presentado,
 				'estado_eval'               => $estado['estado_eval']

@@ -90,6 +90,7 @@ class ci_presentacion_informe extends becas_ci
 	function conf__form_informe_beca(becas_ei_formulario $form)
 	{
 		$informe = $this->get_datos('informe_beca')->get();
+		
 
 		$ruta_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
 		$url_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('url_base_documentos');
@@ -113,6 +114,8 @@ class ci_presentacion_informe extends becas_ci
 
 	function evt__form_informe_beca__guardar($datos)
 	{
+		$datos['fecha_presentacion'] = date('Y-m-d');
+
 		if(isset($datos['archivo']) && $datos['archivo']['size'] > 0){
 			if(mime_content_type($datos['archivo']['tmp_name']) != 'application/pdf'){
 				throw new toba_error("El archivo que intenta cargar no es un documento PDF válido");
@@ -120,6 +123,9 @@ class ci_presentacion_informe extends becas_ci
 			$carpeta = sprintf("/becas/doc_por_convocatoria/%s/%s/%s/informes",$datos['id_convocatoria'],$datos['id_tipo_beca'],$datos['nro_documento']);
 			
 			if(toba::consulta_php('helper_archivos')->subir_archivo($datos['archivo'],$carpeta,$datos['nro_informe'].'.pdf')){
+				unset($datos['archivo']);
+				$this->get_datos('informe_beca')->set($datos);
+				$this->get_datos()->sincronizar();
 				toba::notificacion()->agregar('Informe cargado con éxito!','info');
 			}else{
 				toba::notificacion()->agregar('Ocurrió un error al intentar presentar el informe','error');
