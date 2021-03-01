@@ -64,11 +64,18 @@ class ci_presentacion_informe extends becas_ci
 	{
 		$this->get_datos('informe_beca')->set($seleccion);
 		$this->set_pantalla('pant_informe');
+		$template = ( in_array($seleccion['id_tipo_beca'], array(2,3)) ) 
+				? file_get_contents( __DIR__ . '/templates/ini_per.html')
+				: file_get_contents( __DIR__ . '/templates/pre.html');
+
+		//var_dump($template); die;
+		$this->pantalla()->set_template($template);
 
 	}
 
 	function conf_evt__cu_informes__presentar(toba_evento_usuario $evento, $fila)
 	{
+
 		$params = explode('||',$evento->get_parametros());
 		//Si no hay plazos de presentación abiertos, no se muestra el botón
 		if( ! isset($this->tipos_informe_permitidos['P']) ){
@@ -76,7 +83,14 @@ class ci_presentacion_informe extends becas_ci
 		}else{
 			//Si el tipo de informe actual, está dentro de los permitidos en el plazo abierto actualmente...
 			if($params[4] == $this->tipos_informe_permitidos['P'] || $this->tipos_informe_permitidos['P'] == 'T'){
-				$evento->mostrar();
+				//Si es un avance, debe haber pasado los seis meses para mostrar (haber pasado la fecha de presentacion)
+				if($params[4] == 'A'){
+					if( strtotime($params[5]) < strtotime(date('Y-m-d')) ){
+						$evento->mostrar();
+					}else{
+						$evento->ocultar();
+					}
+				}
 			}else{
 				$evento->ocultar();
 			}
@@ -90,7 +104,6 @@ class ci_presentacion_informe extends becas_ci
 	function conf__form_informe_beca(becas_ei_formulario $form)
 	{
 		$informe = $this->get_datos('informe_beca')->get();
-		
 
 		$ruta_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('ruta_base_documentos');
 		$url_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('url_base_documentos');
@@ -127,6 +140,7 @@ class ci_presentacion_informe extends becas_ci
 				$this->get_datos('informe_beca')->set($datos);
 				$this->get_datos()->sincronizar();
 				toba::notificacion()->agregar('Informe cargado con éxito!','info');
+				$this->set_pantalla('pant_seleccion_informe');
 			}else{
 				toba::notificacion()->agregar('Ocurrió un error al intentar presentar el informe','error');
 			}
