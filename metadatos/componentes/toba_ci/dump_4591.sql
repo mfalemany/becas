@@ -205,7 +205,8 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --eventos
 	NULL, --subclase
 	NULL, --subclase_archivo
-	NULL, --template
+	'<div style="width:50%; margin: 0px auto;">
+	[dep id=cu_informes]</div>', --template
 	NULL, --template_impresion
 	'22'  --punto_montaje
 );
