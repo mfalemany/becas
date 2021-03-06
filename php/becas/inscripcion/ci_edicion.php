@@ -834,7 +834,7 @@ class ci_edicion extends becas_ci
 		* @param  string $tabla Nombre de la tabla que se desea obtener (null para obtener el datos_relacion)
 		* @return datos_tabla o datos_relacion 
 		*/
-	function get_datos($relacion,$tabla=NULL)
+	function get_datos($relacion=null,$tabla=NULL)
 	{
 		return $this->controlador()->get_datos($relacion,$tabla);
 	}
