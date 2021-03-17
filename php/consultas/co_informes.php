@@ -105,7 +105,14 @@ class co_informes
 
 	function get_plazos($solo_vigentes = FALSE, $tipo_plazo = FALSE, $tipo_informes = FALSE)
 	{
-		$sql = "SELECT * FROM be_informe_plazos";
+		$where = array();
+		$sql = "SELECT *, 
+		CASE tipo_plazo WHEN 'P' THEN 'Presentación' WHEN 'E' THEN 'Evaluación' END as tipo_plazo_desc,
+		CASE tipo_informes 
+			WHEN 'A' THEN 'Avance' 
+			WHEN 'F' THEN 'Finales'
+			WHEN 'T' THEN 'Todos' END as tipo_informes_desc
+		FROM be_informe_plazos";
 		if($solo_vigentes){
 			$where[] = "CURRENT_DATE BETWEEN fecha_desde AND fecha_hasta";
 		}
@@ -117,8 +124,9 @@ class co_informes
 			$where[] = "tipo_informes = " . quote($tipo_informes);
 		}
 		
-		
-		$sql = sql_concatenar_where($sql,$where);
+		if(count($where)){
+			$sql = sql_concatenar_where($sql,$where);
+		}
 		return toba::db()->consultar($sql);
 	}
 
