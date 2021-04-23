@@ -9,7 +9,14 @@ class co_becas_otorgadas
 			insc.nro_documento,
 			insc.id_convocatoria,
 			insc.id_tipo_beca,
+			oto.fecha_desde,
+			oto.fecha_hasta,
+			oto.fecha_toma_posesion,
+			oto.nro_resol,
+			per.nro_documento,
 			per.apellido||', '||per.nombres AS postulante,
+			insc.nro_documento_dir,
+			dir.apellido||', '||dir.nombres AS director,
 			conv.convocatoria,
 			tb.tipo_beca,
 			dep.nombre AS dependencia
@@ -17,6 +24,7 @@ class co_becas_otorgadas
 		LEFT JOIN be_inscripcion_conv_beca AS insc USING (id_convocatoria, id_tipo_beca, nro_documento)
 		LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
 		LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
+		LEFT JOIN sap_personas AS dir ON dir.nro_documento = insc.nro_documento_dir
 		LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 		LEFT JOIN be_tipos_beca AS tb ON tb.id_tipo_beca = insc.id_tipo_beca
 		ORDER BY per.apellido, per.nombres";
@@ -28,6 +36,12 @@ class co_becas_otorgadas
 		}
 		if(isset($filtro['id_dependencia']) && $filtro['id_dependencia']){
 			$where[] = "dep.id = ".quote($filtro['id_dependencia']);
+		}
+		if(isset($filtro['solo_vigentes']) && $filtro['solo_vigentes']){
+			$where[] = "current_date BETWEEN oto.fecha_desde AND oto.fecha_hasta";
+		}
+		if(isset($filtro['id_area_conocimiento']) && $filtro['id_area_conocimiento']){
+			$where[] = "insc.id_area_conocimiento = " . quote($filtro['id_area_conocimiento']);
 		}
 		if(isset($filtro['dnis_postulantes']) && $filtro['dnis_postulantes']){
 			$dnis = implode(',',array_map('quote',explode(',',$filtro['dnis_postulantes'])));
