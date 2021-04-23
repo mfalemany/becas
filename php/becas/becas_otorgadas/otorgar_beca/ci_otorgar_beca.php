@@ -94,6 +94,9 @@ class ci_otorgar_beca extends becas_ci
 				'nro_documento_subdir' => $datos['nro_documento_subdir']
 			)
 		);
+		
+		$this->get_datos('inscripcion_conv_beca')->set(array('es_titular'=>$datos['es_titular']));
+		unset($datos['es_titular']);
 		//Se agrega esta linea porque sino da error de concurrencia
 		//Cuando trata de actualizar becas_otorgadas, su fila padre ya cambió 
 		$this->get_datos('inscripcion_conv_beca')->sincronizar();
