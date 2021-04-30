@@ -90,6 +90,8 @@ class ci_presentacion_informe extends becas_ci
 					}else{
 						$evento->ocultar();
 					}
+				}else{
+					$evento->mostrar();
 				}
 			}else{
 				$evento->ocultar();
