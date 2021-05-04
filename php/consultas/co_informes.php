@@ -12,7 +12,9 @@ class co_informes
 					conv.id_convocatoria,
 					conv.convocatoria,
 					tipbec.id_tipo_beca,
-					tipbec.tipo_beca
+					tipbec.tipo_beca,
+					dep.nombre AS dependencia,
+					lugtrab.nombre AS lugar_trabajo
 				FROM be_becas_otorgadas AS oto 
 				LEFT JOIN be_inscripcion_conv_beca AS insc ON (
 					insc.nro_documento = oto.nro_documento 
@@ -22,11 +24,18 @@ class co_informes
 				LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 				LEFT JOIN be_tipos_beca AS tipbec ON tipbec.id_tipo_beca = insc.id_tipo_beca
-				-- Que la beca no haya vencido hace mas de 70  días
-				WHERE (CURRENT_DATE - oto.fecha_hasta) <= 70";
+				LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
+				LEFT JOIN sap_dependencia AS lugtrab ON lugtrab.id = insc.lugar_trabajo_becario
+				-- Que la beca no haya vencido hace mas de 120  días
+				WHERE (CURRENT_DATE - oto.fecha_hasta) <= 120";
 		if(isset($filtro['nro_documento'])){
 			$where[] = "insc.nro_documento = " . quote($filtro['nro_documento']);
-			
+		}
+		if(isset($filtro['becario'])){
+			$where[] = "insc.nro_documento IN (SELECT nro_documento FROM sap_personas WHERE apellido ILIKE " . quote('%'.$filtro['becario'].'%') . " OR nombres ILIKE ". quote('%'.$filtro['becario'].'%') .")";
+		}
+		if(isset($filtro['id_area_conocimiento']) && $filtro['id_area_conocimiento']){
+			$where[] = "insc.id_area_conocimiento = " . quote($filtro['id_area_conocimiento']);
 		}
 		if(count($where)){
 			$sql = sql_concatenar_where($sql,$where);
@@ -68,6 +77,11 @@ class co_informes
 		return (isset($resultado['fecha_debe_ser_presentado'])) ? $resultado['fecha_debe_ser_presentado'] : NULL;
 	}
 
+	/**
+	 * Esta funcion calcula y retorna todos los informes que debe presentar una postulación a lo largo de su vigencia. Para obtener un listado de los informes ya presentados (para la evaluación por ejemplo) use el método get_informes_presentados()
+	 * @param  array $postulacion Array con las claves correspondientes a la postulacion
+	 * @return array              Array con los informes que debe presentar la postulación
+	 */
 	function get_informes_postulacion($postulacion)
 	{
 		//Acá hay que ver como devuelvo un array con los informes que debe presentar la postulacion (solo aquellos para los cuales ya llegó la fecha)
@@ -101,6 +115,34 @@ class co_informes
 			);
 		}
 		return $informes;
+	}
+
+	function get_informes_presentados($postulacion,$solo_evaluables=FALSE)
+	{
+		$cant = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('inf_beca_cant_eval_postivas');
+		if( ! $cant) throw new toba_error('No se ha definido el parámetro "inf_beca_cant_eval_postivas", necesario para la evaluación de informes de becas. Por favor, establezca ese parámetro en las configuraciones del sistema.');
+		
+		$sql = "SELECT *,
+					CASE estado_eval WHEN 'P' THEN 'Pendiente' WHEN 'A' THEN 'Aprobado' END AS estado_eval_desc,
+					CASE eval_usuario WHEN 'A' THEN 'Aprobado' WHEN 'M' THEN 'Solicita Modificaciones' WHEN 'N' THEN 'No aprobado' ELSE 'No evaluado' END as eval_usuario_desc 
+				FROM (
+					SELECT *,
+					CASE ib.tipo_informe WHEN 'A' THEN 'Avance' WHEN 'F' THEN 'Final' END AS tipo_informe_desc,
+					CASE WHEN (SELECT COUNT(*) 
+						FROM be_informe_evaluacion 
+						WHERE resultado = 'A' 
+						AND id_informe = ib.id_informe
+						) >= 3 THEN 'A' ELSE 'P' END AS estado_eval,
+					(SELECT resultado FROM be_informe_evaluacion WHERE id_informe = ib.id_informe AND nro_documento_evaluador = '" . toba::usuario()->get_id()."') AS eval_usuario
+					FROM be_informe_beca AS ib
+					WHERE ib.id_convocatoria = " . quote($postulacion['id_convocatoria']) . "
+					AND ib.id_tipo_beca =      " . quote($postulacion['id_tipo_beca']) . "
+					AND ib.nro_documento =     " . quote($postulacion['nro_documento']);
+					if($solo_evaluables){
+						$sql .= " AND ib.evaluable = true";
+					}
+		$sql .= ") AS tmp";
+		return toba::db()->consultar($sql);
 	}
 
 	function get_plazos($solo_vigentes = FALSE, $tipo_plazo = FALSE, $tipo_informes = FALSE)
