@@ -63,8 +63,10 @@ class co_informes
 	private function get_fecha_debe_ser_presentado($postulacion,$nro_informe)
 	{
 		$where = $this->get_where_informe($postulacion, $nro_informe);
-		//Esta consulta suma los meses (en dias) necesarios para obtener la fecha en que debe ser presentado el informe numero X
-		$sql = "SELECT (oto.fecha_desde::date + (( (
+		//Esta consulta suma los meses (en dias) necesarios para obtener la fecha en que debe ser presentado el informe numero X (si la fecha de ser presentado es posterior a la fecha_hasta, se devuelve esta última (caso de bajas))
+		$sql = "SELECT CASE WHEN fecha_debe_ser_presentado > fecha_hasta THEN fecha_debe_ser_presentado ELSE fecha_hasta END AS fecha_debe_ser_presentado 
+			FROM (
+				SELECT oto.fecha_hasta, (oto.fecha_desde::date + (( (
 						SELECT meses_present_avance 
 						FROM be_tipos_beca 
 						WHERE id_tipo_beca = oto.id_tipo_beca)  * $nro_informe)*30)::integer 
@@ -72,7 +74,8 @@ class co_informes
 				FROM be_becas_otorgadas as oto
 				WHERE oto.id_convocatoria = " . quote($postulacion['id_convocatoria']) . "
 				AND oto.id_tipo_beca = " . quote($postulacion['id_tipo_beca']) . "
-				AND oto.nro_documento = " . quote($postulacion['nro_documento']);
+				AND oto.nro_documento = " . quote($postulacion['nro_documento']) ."
+			) AS tmp";
 		$resultado = toba::db()->consultar_fila($sql);
 		return (isset($resultado['fecha_debe_ser_presentado'])) ? $resultado['fecha_debe_ser_presentado'] : NULL;
 	}
