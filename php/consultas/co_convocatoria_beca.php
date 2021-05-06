@@ -30,7 +30,7 @@ class co_convocatoria_beca
 		LEFT JOIN be_tipos_convocatoria as tip on tip.id_tipo_convocatoria = conv.id_tipo_convocatoria
 		WHERE 1=1";
 		$sql .= $solo_vigentes ? " AND current_date BETWEEN conv.fecha_desde AND conv.fecha_hasta" : "";
-		$sql .= " ORDER BY id_convocatoria DESC";
+		$sql .= " ORDER BY conv.fecha_desde DESC";
 		if (count($where)>0) {
 			$sql = sql_concatenar_where($sql, $where);
 		}
