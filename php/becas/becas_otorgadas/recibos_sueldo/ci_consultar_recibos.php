@@ -53,7 +53,7 @@ class ci_consultar_recibos extends becas_ci
 		$url_base = toba::consulta_php('co_tablas_basicas')->get_parametro_conf('url_base_documentos');
 		$fecha = new Datetime($params['fecha_emision']);
 		$documento = sprintf('%s_%u_%s.pdf',$params['nro_documento'],$params['id_recibo'],$fecha->format('d-m-Y'));
-		header('Location: ' . $url_base . "/" . $documento );
+		header('Location: ' . $url_base . "/recibos_sueldo/" . $documento );
 	}
 }
 
