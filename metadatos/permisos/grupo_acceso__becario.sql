@@ -13,7 +13,7 @@ INSERT INTO apex_usuario_grupo_acc (proyecto, usuario_grupo_acc, nombre, nivel_a
 	NULL, --hora_entrada
 	NULL, --hora_salida
 	NULL, --listar
-	'0', --permite_edicion
+	'1', --permite_edicion
 	NULL  --menu_usuario
 );
 
