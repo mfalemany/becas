@@ -85,6 +85,76 @@ class co_becas_otorgadas
 		}
 		
 	}
+
+	function registrar_recibo($detalles)
+	{
+		if( ! (isset($detalles['nro_documento']) 
+			&& isset($detalles['id_recibo']) 
+			&& isset($detalles['fecha_emision']) 
+		)) {
+			throw new toba_error('No se han recibido los parametros para registrar el recibo de sueldo');
+		}
+		$sql = sprintf("INSERT INTO be_recibos_sueldo VALUES ('%s',%u,'%s') ON CONFLICT DO NOTHING",$detalles['nro_documento'],$detalles['id_recibo'],$detalles['fecha_emision']);
+		return toba::db()->ejecutar($sql);
+	}
+
+	function get_recibos_sueldo($filtro = array())
+	{
+		$where = array();
+		$sql = "SELECT per.apellido||', '||per.nombres AS becario, rec.* 
+				FROM be_recibos_sueldo AS rec
+				LEFT JOIN sap_personas AS per ON per.nro_documento = rec.nro_documento
+				ORDER BY becario";
+		if(isset($filtro['becario']) && $filtro['becario']){
+			$where[] = "per.apellido      ILIKE quitar_acentos(".quote('%'.$filtro['becario'].'%').") OR 
+						per.nombres       ILIKE quitar_acentos(".quote('%'.$filtro['becario'].'%').") OR
+						per.nro_documento ILIKE quitar_acentos(".quote('%'.$filtro['becario'].'%').")"; 
+		}
+		if(isset($filtro['mes']) && $filtro['mes']){
+			$where[] = 'EXTRACT(month FROM rec.fecha_emision) = ' . quote($filtro['mes']);
+		}
+		if(isset($filtro['anio']) && $filtro['anio']){
+			$where[] = 'EXTRACT(year FROM rec.fecha_emision) = ' . quote($filtro['anio']);
+		}
+		if(count($where)){
+			$sql = sql_concatenar_where($sql,$where);
+		}
+		return toba::db()->consultar($sql);
+	}
+
+	function borrar_recibos($filtro = array())
+	{
+		if(count($filtro) == 0) throw new toba_error('No se pueden eliminar recibos de sueldo sin establecer un criterio de filtro');
+		$where = array();
+		$sql = 'SELECT * FROM be_recibos_sueldo';
+		if(isset($filtro['mes']) && $filtro['mes']){
+			$where[] = "extract(month from fecha_emision) = {$filtro['mes']}";
+		}
+		if(isset($filtro['anio']) && $filtro['anio']){
+			$where[] = "extract(year from fecha_emision) = {$filtro['anio']}";
+		}
+		if(count($where)){
+			$sql = sql_concatenar_where($sql,$where);
+		}
+		$recibos = toba::db()->consultar($sql);
+		
+		if(count($recibos) == 0) return;
+
+		foreach($recibos as $recibo){
+			$fecha = new Datetime($recibo['fecha_emision']);
+			$archivo = sprintf('%s_%u_%s.pdf',$recibo['nro_documento'],$recibo['id_recibo'],$fecha->format('d-m-Y'));
+			toba::consulta_php('helper_archivos')->eliminar_archivo('recibos_sueldo/'.$archivo);
+			toba::db()->ejecutar('DELETE FROM be_recibos_sueldo WHERE id_recibo = '.quote($recibo['id_recibo']));
+		}
+	}
+	/**
+	 * Obtiene todods los años distintos para los cuales hay recibos de sueldo (se usa para filtros)
+	 * @return array Array con todos los años distintos
+	 */
+	function get_anios_recibos_sueldo()
+	{
+		return toba::db()->consultar("SELECT DISTINCT EXTRACT(year FROM fecha_emision) AS anio FROM be_recibos_sueldo");
+	}
 }
 
 ?>

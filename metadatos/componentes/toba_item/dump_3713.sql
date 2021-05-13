@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[3698]--  Subir recibos 
+--[3713]--  Consultar 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -10,7 +10,7 @@
 INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre, carpeta, nivel_acceso, solicitud_tipo, pagina_tipo_proyecto, pagina_tipo, actividad_buffer_proyecto, actividad_buffer, actividad_patron_proyecto, actividad_patron, nombre, descripcion, punto_montaje, actividad_accion, menu, orden, solicitud_registrar, solicitud_obs_tipo_proyecto, solicitud_obs_tipo, solicitud_observacion, solicitud_registrar_cron, prueba_directorios, zona_proyecto, zona, zona_orden, zona_listar, imagen_recurso_origen, imagen, parametro_a, parametro_b, parametro_c, publico, redirecciona, usuario, exportable, creacion, retrasar_headers) VALUES (
 	NULL, --item_id
 	'becas', --proyecto
-	'3698', --item
+	'3713', --item
 	NULL, --padre_id
 	'becas', --padre_proyecto
 	'3712', --padre
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Subir recibos', --nombre
+	'Consultar', --nombre
 	NULL, --descripcion
 	'22', --punto_montaje
 	NULL, --actividad_accion
@@ -48,7 +48,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --redirecciona
 	NULL, --usuario
 	'0', --exportable
-	'2020-08-12 19:25:27', --creacion
+	'2021-05-13 12:28:40', --creacion
 	'0'  --retrasar_headers
 );
 --- FIN Grupo de desarrollo 0
@@ -59,8 +59,8 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 INSERT INTO apex_item_objeto (item_id, proyecto, item, objeto, orden, inicializar) VALUES (
 	NULL, --item_id
 	'becas', --proyecto
-	'3698', --item
-	'4569', --objeto
+	'3713', --item
+	'4624', --objeto
 	'0', --orden
 	NULL  --inicializar
 );

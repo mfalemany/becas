@@ -1,6 +1,7 @@
 <?php
 class ci_subir_recibos extends becas_ci
 {
+	protected $s__filtro;
 	//-----------------------------------------------------------------------------------
 	//---- form_subir_recibos -----------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -21,6 +22,20 @@ class ci_subir_recibos extends becas_ci
 		}
 	}
 
+	//-----------------------------------------------------------------------------------
+	//---- form_borrado -----------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function evt__form_borrado__borrar($datos)
+	{
+		try {
+			toba::consulta_php('co_becas_otorgadas')->borrar_recibos($datos);
+			toba::notificacion()->info('Se borraron los recibos con éxito!');
+		} catch (toba_error $e) {
+			toba::notificacion()->error('Ocurrió el siguiente error: ' . $e->get_mensaje());
+		}
+	}
+
 	function extender_objeto_js(){
 		echo "
 		const boton = document.getElementById('form_4570_form_subir_recibos_subir');
@@ -30,6 +45,10 @@ class ci_subir_recibos extends becas_ci
 		})";
 	}
 
-}
+	
 
+
+
+
+}
 ?>

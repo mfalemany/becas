@@ -34,7 +34,7 @@ class ProcesadorRecibos{
 
 		for($i = 0; $i < count($archivos['name']); $i++){
 			//Si no es un PDF o tuvo error
-			if($archivos['type'][$i] != 'application/pdf' || $archivos['error'][$i] != 0){
+			if(mime_content_type($archivos['tmp_name'][$i]) != 'application/pdf' || $archivos['error'][$i] != 0){
 				$errores[] = array('motivo' => 'No es un PDF o tiene errores', 'archivo' => $archivos['name'][$i]);
 				continue;
 			}
@@ -58,6 +58,14 @@ class ProcesadorRecibos{
 				$fecha = str_replace('/','-',$fecha);
 				if( ! move_uploaded_file($archivo['tmp_name'],"/mnt/datos/cyt/recibos_sueldo/{$dni}_{$recibo}_{$fecha}.pdf")){
 					$errores[] = array('motivo' => 'Error al mover el archivo','archivo' => $archivos['name'][$i]);
+				}else{
+					$fecha_ymd = new Datetime($fecha);
+					$fecha_ymd = $fecha_ymd->format('Y-m-d');
+					toba::consulta_php('co_becas_otorgadas')->registrar_recibo(
+						array('nro_documento' => $dni,
+							  'id_recibo'     => $recibo,
+							  'fecha_emision' => $fecha_ymd)
+					);
 				}
 			}else{
 				$errores[] = array('motivo' => 'No se pudieron obtener los parametros del PDF', 'archivo' => $archivos['name'][$i]);
