@@ -1,65 +1,12 @@
 <?php
 class co_cumplim_obligaciones
 {
-/*	public $meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
-
-	function get_cumplimientos($filtro=array())
+	//Retorna todos los años distintos donde se registraron cumplimientos de obligaciones. Se usa para filtros
+	function get_anios_cumplimientos()
 	{
-		$where = array();
-		if (isset($filtro['nro_documento'])) {
-			$where[] = "cum.nro_documento = ".quote($filtro['nro_documento']);
-		}
-		if (isset($filtro['mes'])) {
-			$where[] = "cum.mes = ".quote($filtro['mes']);
-		}
-		if (isset($filtro['anio'])) {
-			$where[] = "cum.anio = ".quote($filtro['anio']);
-		}
-		if (isset($filtro['id_tipo_cumpl_oblig'])) {
-			$where[] = "cum.id_tipo_cumpl_oblig = ".quote($filtro['id_tipo_cumpl_oblig']);
-		}
-		$sql = "SELECT
-			cum.id_tipo_doc,
-			per.apellido||', '||per.nombres as becario,
-			cum.nro_documento,
-			cum.mes,
-			CASE mes 
-				WHEN 1 THEN 'Enero'
-				WHEN 2 THEN 'Febrero'
-				WHEN 3 THEN 'Marzo'
-				WHEN 4 THEN 'Abril'
-				WHEN 5 THEN 'Mayo'
-				WHEN 6 THEN 'Junio'
-				WHEN 7 THEN 'Julio'
-				WHEN 8 THEN 'Agosto'
-				WHEN 9 THEN 'Septiembre'
-				WHEN 10 THEN 'Octubre'
-				WHEN 11 THEN 'Noviembre'
-				WHEN 12 THEN 'Diciembre'
-				END as mes_desc,
-			cum.anio,
-			tip.tipo_cumpl_oblig as id_tipo_cumpl_oblig_nombre,
-			cum.fecha_cumplimiento
-		FROM
-			be_cumplimiento_obligacion as cum	
-			LEFT JOIN be_tipo_cumpl_obligacion as tip ON (cum.id_tipo_cumpl_oblig = tip.id_tipo_cumpl_oblig)
-			LEFT JOIN sap_personas as per on per.nro_documento = cum.nro_documento";
-		if (count($where)>0) {
-			$sql = sql_concatenar_where($sql, $where);
-		}
-		return toba::db()->consultar($sql);
+		return toba::db()->consultar('SELECT DISTINCT anio FROM be_cumplimiento_obligacion ORDER BY 1 DESC');
+
 	}
-
-	function get_meses()
-	{
-		$meses = array();
-		for($i=1 ; $i<=12 ; $i++){
-			$meses[] = array('mes'=>$i,'descripcion'=>$this->meses[$i-1]);
-		}
-		return $meses;
-	}*/
-
-
 	function get_becarios_vigentes($dir = NULL)
 	{
 		$sql = "SELECT per.nro_documento, 
@@ -85,8 +32,80 @@ class co_cumplim_obligaciones
 		return toba::db()->consultar($sql);
 	}
 
-	function get_cumplimientos($nro_documento,$id_convocatoria,$id_tipo_beca){
-		$sql = "SELECT * 
+	function get_cumplimientos_mes($filtro = array())
+	{
+		if( ! (isset($filtro['mes']) && isset($filtro['anio']))){
+			throw new toba_error('Debe establecer un mes y año');
+		}
+		$where = array();
+
+		$fecha_ref = sprintf('%s-%02d-01', $filtro['anio'], $filtro['mes']);
+
+		$sql = "SELECT 
+					conv.convocatoria,
+					tb.tipo_beca,
+					insc.nro_documento,
+					per.apellido||', '||per.nombres as postulante,
+					per.mail,
+					insc.nro_documento_dir,
+					dir.apellido||', '||dir.nombres as director,
+					dir.mail AS mail_director,
+					(co.fecha_cumplimiento IS NOT NULL) AS cumplido,
+					co.fecha_cumplimiento,
+					bo.fecha_desde,
+					bo.fecha_hasta
+				FROM be_becas_otorgadas AS bo 
+				LEFT JOIN be_inscripcion_conv_beca AS insc 
+					ON  insc.nro_documento   = bo.nro_documento
+					AND insc.id_convocatoria = bo.id_convocatoria
+					AND insc.id_tipo_beca    = bo.id_tipo_beca
+				LEFT JOIN sap_personas AS per ON per.nro_documento = bo.nro_documento
+				LEFT JOIN sap_personas AS dir ON dir.nro_documento = insc.nro_documento_dir
+				LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = bo.id_convocatoria
+				LEFT JOIN be_tipos_beca AS tb ON tb.id_tipo_beca = bo.id_tipo_beca
+				LEFT JOIN be_cumplimiento_obligacion AS co 
+					ON  co.nro_documento   = bo.nro_documento
+					AND co.id_convocatoria = bo.id_convocatoria
+					AND co.id_tipo_beca    = bo.id_tipo_beca
+					AND co.mes = {$filtro['mes']}
+					AND co.anio = {$filtro['anio']}
+				WHERE " . quote($fecha_ref) . " BETWEEN bo.fecha_desde AND bo.fecha_hasta
+				ORDER BY convocatoria, tipo_beca, postulante";
+
+		if(isset($filtro['id_dependencia']) && $filtro['id_dependencia']){
+			$where[] = "insc.id_dependencia = " . quote($filtro['id_dependencia']);
+		}
+		
+		if(isset($filtro['estado_cumplimiento']) && $filtro['estado_cumplimiento']){
+			if($filtro['estado_cumplimiento'] == 'C'){
+				$where[] = 'co.fecha_cumplimiento IS NOT NULL';
+			}
+			if($filtro['estado_cumplimiento'] == 'N'){
+				$where[] = 'co.fecha_cumplimiento IS NULL';
+			}
+		}
+		if(count($where)){
+			$sql = sql_concatenar_where($sql,$where);
+		}
+		return toba::db()->consultar($sql);
+	}
+
+	function get_cumplimientos_becario($nro_documento,$id_convocatoria,$id_tipo_beca){
+		$sql = "SELECT *,
+					CASE mes 
+						WHEN '01' THEN 'Enero'
+						WHEN '02' THEN 'Febrero'
+						WHEN '03' THEN 'Marzo'
+						WHEN '04' THEN 'Abril'
+						WHEN '05' THEN 'Mayo'
+						WHEN '06' THEN 'Junio'
+						WHEN '07' THEN 'Julio'
+						WHEN '08' THEN 'Agosto'
+						WHEN '09' THEN 'Septiembre'
+						WHEN '10' THEN 'Octubre'
+						WHEN '11' THEN 'Noviembre'
+						WHEN '12' THEN 'Diciembre'
+					END AS mes_desc
 				FROM be_cumplimiento_obligacion
 				WHERE nro_documento = ".quote($nro_documento)."
 				AND id_convocatoria = ".quote($id_convocatoria)."
@@ -110,6 +129,7 @@ class co_cumplim_obligaciones
 		return $res['duracion'];
 
 	}
+	
 
 	function mes_cumplido($beca,$mes,$anio)
 	{

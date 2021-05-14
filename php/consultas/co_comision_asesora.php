@@ -129,7 +129,13 @@ class co_comision_asesora
 	//retorna el id de area de conocimiento del usuario recibido como parámetro
 	function get_area_conocimiento_evaluador($nro_documento)
 	{
-		$sql = "SELECT id_area_conocimiento FROM be_comision_asesora_integrante WHERE nro_documento = ".quote($nro_documento);
+		$sql = "SELECT id_area_conocimiento 
+				FROM be_comision_asesora_integrante 
+				WHERE nro_documento = ".quote($nro_documento) . "
+				AND id_convocatoria = (
+					SELECT MAX(id_convocatoria) 
+					FROM be_comision_asesora_integrante 
+					WHERE nro_documento = " . quote($nro_documento) . ")";
 		$resultado = toba::db()->consultar_fila($sql);
 		return (count($resultado)) ? $resultado['id_area_conocimiento'] : '';
 	}
@@ -139,7 +145,7 @@ class co_comision_asesora
 	 */
 	function get_detalles_seguimiento($inscripcion)
 	{
-		$cumplimientos = toba::consulta_php('co_cumplim_obligaciones')->get_cumplimientos(
+		$cumplimientos = toba::consulta_php('co_cumplim_obligaciones')->get_cumplimientos_becario(
 			$inscripcion['nro_documento'],$inscripcion['id_convocatoria'],$inscripcion['id_tipo_beca']
 		);
 		

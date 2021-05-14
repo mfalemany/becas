@@ -17,6 +17,7 @@ class co_becas_otorgadas
 			per.apellido||', '||per.nombres AS postulante,
 			insc.nro_documento_dir,
 			dir.apellido||', '||dir.nombres AS director,
+			codir.apellido||', '||codir.nombres AS codirector,
 			conv.convocatoria,
 			tb.tipo_beca,
 			dep.nombre AS dependencia
@@ -25,6 +26,7 @@ class co_becas_otorgadas
 		LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
 		LEFT JOIN sap_personas AS per ON per.nro_documento = insc.nro_documento
 		LEFT JOIN sap_personas AS dir ON dir.nro_documento = insc.nro_documento_dir
+		LEFT JOIN sap_personas AS codir ON codir.nro_documento = insc.nro_documento_codir
 		LEFT JOIN be_convocatoria_beca AS conv ON conv.id_convocatoria = insc.id_convocatoria
 		LEFT JOIN be_tipos_beca AS tb ON tb.id_tipo_beca = insc.id_tipo_beca
 		ORDER BY per.apellido, per.nombres";
@@ -47,6 +49,17 @@ class co_becas_otorgadas
 			$dnis = implode(',',array_map('quote',explode(',',$filtro['dnis_postulantes'])));
 			$where[] = "per.nro_documento in ($dnis)";
 		}
+		if(isset($filtro['becario']) && $filtro['becario']){
+			$where[] = "per.apellido       ILIKE quitar_acentos(" .quote('%'.$filtro['becario'].'%'). ")
+					 OR per.nombres        ILIKE quitar_acentos(" .quote('%'.$filtro['becario'].'%'). ")
+					 OR per.nro_documento  ILIKE quitar_acentos(" .quote('%'.$filtro['becario'].'%'). ")";
+		}
+		if(isset($filtro['director']) && $filtro['director']){
+			$where[] = "dir.apellido       ILIKE quitar_acentos(" .quote('%'.$filtro['director'].'%'). ")
+					 OR dir.nombres        ILIKE quitar_acentos(" .quote('%'.$filtro['director'].'%'). ")
+					 OR dir.nro_documento  ILIKE quitar_acentos(" .quote('%'.$filtro['director'].'%'). ")";
+		}
+
 		if(count($where)){
 			$sql = sql_concatenar_where($sql, $where);
 		}
