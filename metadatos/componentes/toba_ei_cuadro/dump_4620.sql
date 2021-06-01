@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_ei_cuadro', --clase
 	'22', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'cu_becas', --subclase
+	'becas/reportes/cu_becas.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'General - cu_becas', --nombre
@@ -63,7 +63,7 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 	'0', --eof_invisible
 	NULL, --eof_customizado
 	'0', --siempre_con_titulo
-	'1', --exportar_paginado
+	'0', --exportar_paginado
 	'1', --exportar
 	'1', --exportar_rtf
 	NULL, --pdf_propiedades
