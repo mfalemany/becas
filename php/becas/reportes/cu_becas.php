@@ -6,7 +6,8 @@ class cu_becas extends becas_ei_cuadro
 		$salida->set_nombre_archivo('Reporte de Becas.xls');
 		$this->agregar_columnas(array(
 			'mail_becario'  => array('clave' => 'mail_becario', 'titulo' => 'Mail Becario'),
-			'mail_director' => array('clave' => 'mail_director','titulo' => 'Mail Director')
+			'mail_director' => array('clave' => 'mail_director','titulo' => 'Mail Director'),
+			'residencia'    => array('clave' => 'residencia',   'titulo' => 'Lugar Residencia'),
 								));
 		parent::vista_excel($salida);
 	}

@@ -22,7 +22,9 @@ class co_becas_otorgadas
 			codir.apellido||', '||codir.nombres AS codirector,
 			conv.convocatoria,
 			tb.tipo_beca,
-			dep.nombre AS dependencia
+			dep.nombre AS dependencia,
+			(SELECT provincia FROM be_provincias WHERE id_provincia = (SELECT id_provincia FROM be_localidades WHERE id_localidad = per.id_localidad)) AS residencia
+
 		FROM be_becas_otorgadas AS oto
 		LEFT JOIN be_inscripcion_conv_beca AS insc USING (id_convocatoria, id_tipo_beca, nro_documento)
 		LEFT JOIN sap_dependencia AS dep ON dep.id = insc.id_dependencia
