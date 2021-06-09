@@ -938,10 +938,10 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_localidad', --identificador
 	'ef_combo_editable', --elemento_formulario
 	'id_localidad', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'12', --orden
-	'Localidad', --etiqueta
+	'Residencia actual', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	'0', --colapsado
